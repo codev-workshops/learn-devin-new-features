@@ -1,0 +1,32 @@
+{
+  "description": "Injector gh-token-keep: a teammate drafts a profile that keeps the GitHub CLI token. Run with --validate.",
+  "profiles": {
+    "kade-gh": {
+      "scope": "org",
+      "enforcement": "recommended",
+      "network": [
+        "registry.npmjs.org",
+        "*.sandbox.paygate.example"
+      ],
+      "git": "full",
+      "gh_token": "keep"
+    },
+    "kade-gh-readonly": {
+      "scope": "org",
+      "enforcement": "recommended",
+      "git": "read-only",
+      "gh_token": "keep"
+    }
+  },
+  "bindings": {
+    "org_default": {
+      "profile": "kade-gh"
+    }
+  },
+  "targets": {
+    "dev-session": {
+      "kind": "session",
+      "binding": "inherit"
+    }
+  }
+}
