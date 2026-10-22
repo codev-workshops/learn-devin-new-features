@@ -1,6 +1,7 @@
 """PostgreSQL repository. Queries are parameterized; job queries are scoped by tenant_id.
 
-CLAIM_SQL is the one cross-tenant query: it picks the next job from the shared queue.
+CLAIM_SQL and EXPIRE_SQL are the cross-tenant queue-maintenance queries (see
+.devin/rules/tenant-isolation.md).
 """
 
 from decimal import Decimal
