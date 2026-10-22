@@ -1,0 +1,216 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 4,
+    "slug": "plugin-engineering",
+    "coach": "coach-04-plugin-engineering"
+  },
+  "learner": "calibration",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T11:30:00Z",
+    "run_index": 1,
+    "transcript": "labs/coach-dryrun/fixtures/generic-mediocre.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 72,
+      "delta_seconds": 12,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-20",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+20)",
+      "target_seconds": 45,
+      "actual_seconds": 57,
+      "delta_seconds": 12,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-70",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+70)",
+      "target_seconds": 45,
+      "actual_seconds": 45,
+      "delta_seconds": 0,
+      "verdict": "on"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Three-minute security-reviewer update",
+      "target_seconds": 180,
+      "actual_seconds": 150,
+      "delta_seconds": -30,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "target_seconds": 90,
+      "actual_seconds": 51,
+      "delta_seconds": -39,
+      "verdict": "under",
+      "question": "A plugin is one more supply chain to secure. Why should I let it run in every session?"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "target_seconds": 90,
+      "actual_seconds": 47,
+      "delta_seconds": -43,
+      "verdict": "under",
+      "question": "Why not just hand each brand team a playbook and skip the packaging?"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "there was a problem in the system and I looked into it with Devin"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "I used Devin to investigate, it found the cause, and then we made a change and tested it"
+    },
+    "evidence": {
+      "status": "weak",
+      "quote": "The error went away after the change, so that told me it was the right thing"
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "Next step is to monitor it"
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 8.9,
+    "filler_count": 6,
+    "filler_rate_per_minute": 0.67,
+    "fillers": [
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "actually",
+        "count": 1
+      },
+      {
+        "word": "um",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "Then I will ask Devin to explain what it found and see if it makes sense, right?"
+    ],
+    "long_pauses": [
+      {
+        "at": "02:10",
+        "seconds": 12,
+        "segment": "checkpoint-20"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "One plugin ships both procedures as skills together with the freeze rule, the push guard hook, the reviewer subagent and the incident MCP",
+      "weight": 8,
+      "mentioned": false,
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "Repository installs follow the branch unless pinned to a SHA, uploads stay pinned to what was uploaded, and a skills-only repo needs no manifest",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "checkpoint-20"
+    },
+    {
+      "id": "mm3",
+      "point": "A new uploaded revision replaces the whole bundle, so a partial zip removes every file it left out",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "checkpoint-70"
+    },
+    {
+      "id": "mm4",
+      "point": "The MCP credential is connected after install through a secret reference and never written into the plugin files",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "Engineers without edit rights can only propose; an admin approves the diff before the shared plugin changes",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "objection-1"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [
+      "\"I think\" (×2 in the framing)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [
+      "So, basically, there was a problem in the system and I looked into it with Devin."
+    ],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 4,
+      "max": 30,
+      "anchor": "None of the 5 must-mention points is stated; nothing is contradicted, the answer is simply content-free (anchor: under 10 = one point or fewer)."
+    },
+    "structure": {
+      "score": 13,
+      "max": 25,
+      "anchor": "Problem, approach, evidence and next step are all findable but thin; the update has no risk and no ask (anchor: 13–17 = parts present but weak)."
+    },
+    "customer_relevance": {
+      "score": 8,
+      "max": 20,
+      "anchor": "Impact appears once (\"some users were affected\", \"maybe a few customers\") with no number, asked for and not given (anchor: 10–13 = some reviewer questions answered; under 6 = feature talk)."
+    },
+    "brevity_and_fluency": {
+      "score": 6,
+      "max": 15,
+      "anchor": "5 of 6 segments off target, 6 fillers (0.67/min), one 12 s pause, one tag question (anchor: 6–8 = two or more segments off; under 4 = most off)."
+    },
+    "recovery": {
+      "score": 4,
+      "max": 10,
+      "anchor": "Objection 1 acknowledged (\"fair question\") with no boundary or evidence; objection 2 deflected to \"next month\" (anchor: 4–6 = partial; objection 2 capped at 4 without a number)."
+    },
+    "total": 35
+  },
+  "stems": [
+    "Lead with the missing top point: \"One plugin ships both procedures as skills together with the freeze rule — and the evidence is …\"",
+    "\"The customers affected were …, and the number is …\"",
+    "\"That's a fair concern; the boundary is …, the evidence is …, and what I can offer is …\""
+  ],
+  "previous_run_comparison": "Calibration run of the generic transcript (labs/coach-dryrun/fixtures/generic-mediocre.md); no previous run."
+}
