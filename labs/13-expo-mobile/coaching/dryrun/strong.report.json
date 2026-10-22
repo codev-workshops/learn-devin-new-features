@@ -1,0 +1,204 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 13,
+    "slug": "expo-mobile",
+    "coach": "coach-13-expo-mobile"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T11:00:00Z",
+    "run_index": 1,
+    "transcript": "labs/13-expo-mobile/coaching/dryrun/strong.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 59,
+      "delta_seconds": -1,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-30",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+30, Android)",
+      "target_seconds": 45,
+      "actual_seconds": 46,
+      "delta_seconds": 1,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-120",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+120, iOS)",
+      "target_seconds": 45,
+      "actual_seconds": 44,
+      "delta_seconds": -1,
+      "verdict": "on"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Update to the product owner",
+      "target_seconds": 180,
+      "actual_seconds": 181,
+      "delta_seconds": 1,
+      "verdict": "on"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (commercial)",
+      "target_seconds": 90,
+      "actual_seconds": 85,
+      "delta_seconds": -5,
+      "verdict": "on"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (technical)",
+      "target_seconds": 90,
+      "actual_seconds": 88,
+      "delta_seconds": -2,
+      "verdict": "on"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "present",
+      "quote": "Customers will see packed and shipped on the order screen of the Kadé app, on Android and on iOS"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "Devin builds Android on its Linux machine, and a macOS child session builds iOS in Xcode"
+    },
+    "evidence": {
+      "status": "present",
+      "quote": "the Linux emulator shows order LH-001004 as packed with its timeline"
+    },
+    "next_step": {
+      "status": "present",
+      "quote": "Ask: may we ship the Android build now and iOS after that check?"
+    },
+    "order_held": true
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 8.4,
+    "filler_count": 0,
+    "filler_rate_per_minute": 0,
+    "fillers": [],
+    "tag_questions": 0,
+    "tag_question_examples": [],
+    "long_pauses": []
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Outcome on both platforms: packed and shipped on the order screen, proven by the same order on the Android emulator and the iOS Simulator",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "The proof is the same packed order, screenshotted on the Android emulator and on the iOS Simulator, side by side",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "Android builds on the Linux session with a KVM-accelerated emulator; iOS needs a separate macOS child session with Xcode and the Simulator",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "iOS waits for a separate macOS child session with Xcode and the Simulator",
+      "belonged_in": "checkpoint-30"
+    },
+    {
+      "id": "mm3",
+      "point": "Expo SDK 54 with Continuous Native Generation: android/ and ios/ come from expo prebuild, are never committed, and drift is fixed by --clean",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "Expo SDK 54 prebuild: ios/ is generated, never committed, and prebuild --clean fixes any drift",
+      "belonged_in": "checkpoint-120"
+    },
+    {
+      "id": "mm4",
+      "point": "Multi-document blueprint, one runs-on linux and one runs-on macos document with a snapshot each; a snapshot mismatch is fixed there",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "the blueprint now has two documents, runs-on linux and runs-on macos, each with its own snapshot",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "kade-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "That module has a JS fallback, so Android gets a harmless no-op instead of a crash",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm6",
+      "point": "Xcode version selected explicitly with DEVELOPER_DIR on the macOS machine",
+      "weight": 3,
+      "mentioned": true,
+      "evidence_quote": "the child pins Xcode 16 with DEVELOPER_DIR",
+      "belonged_in": "checkpoint-120"
+    },
+    {
+      "id": "mm7",
+      "point": "What was not exercised: haptic feel on a physical iPhone, store signing and EAS, live API mode",
+      "weight": 3,
+      "mentioned": true,
+      "evidence_quote": "Not exercised: a physical iPhone, store signing and EAS builds, and live API mode",
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [
+      "When a snapshot was missing the Android SDK we fixed the blueprint, not the machine, so the next engineer boots straight in."
+    ],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 30,
+      "max": 30,
+      "anchor": "All seven points, each in its segment (anchor: 27–30 = all points, accurate)."
+    },
+    "structure": {
+      "score": 23,
+      "max": 25,
+      "anchor": "Outcome → Evidence → Risk → Not exercised → Next → Ask held in the update; the setup sentence is dense (anchor: 22–25 = order held throughout)."
+    },
+    "customer_relevance": {
+      "score": 18,
+      "max": 20,
+      "anchor": "Same order, same status, two phones, and a named duration for the Mac (anchor: 16–20 = outcome first, figures given)."
+    },
+    "brevity_and_fluency": {
+      "score": 13,
+      "max": 15,
+      "anchor": "Every segment within five seconds; no fillers, no long pauses (anchor: 13–15 = on time, clean)."
+    },
+    "recovery": {
+      "score": 8,
+      "max": 10,
+      "anchor": "Both objections followed acknowledge → boundary → evidence → offer (anchor: 8–10 = pattern held twice)."
+    },
+    "total": 92
+  },
+  "stems": [
+    "\"Setup: two blueprint documents, one per platform.\" — split the 38-second setup sentence into two.",
+    "\"The Simulator proves the module is linked, not how it feels.\" — keep this exact risk line; it was your strongest sentence.",
+    "\"Same order, same status, two phones.\" — open the update with it, before \"Outcome:\"."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 13; no previous run to compare with."
+}
