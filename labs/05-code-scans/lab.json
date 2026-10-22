@@ -1,0 +1,100 @@
+{
+  "number": 5,
+  "slug": "code-scans",
+  "title": "Code Scan lifecycle — find the brand leak and the slow Lamp Week page",
+  "feature": "Devin Code Scans: Security Swarm vs performance and accessibility scan types, scan profiles, the Findings tab, Assign to Devin, dismissal, Scan new commits and SARIF export",
+  "duration_minutes": 150,
+  "difficulty": "core",
+  "prerequisites": [
+    "Lab 00 done (or you know the Kadé brands and planted-defect rule)",
+    "Repo connected to your Devin org; `npm ci` done at the root",
+    "Your Devin role includes the Use code scans permission (see section 6)"
+  ],
+  "credentials": {
+    "badge": "full",
+    "matrix": [
+      {
+        "integration": "Devin Code Scans (Security page) — run, read and act on findings",
+        "required": true,
+        "fixture": "Read the committed reference findings in labs/05-code-scans/fixtures/findings.json and the screenshots in labs/05-code-scans/screenshots/",
+        "note": "Needs the org permission Use code scans; code scanning must be enabled for the org"
+      },
+      {
+        "integration": "Devin Code Scans — create or edit shared scan profiles",
+        "required": false,
+        "fixture": "Use an existing profile, or run Security with the defaults and type your focus as extra guidance",
+        "note": "Needs Manage code scans; without it ask an admin to create the profiles you design"
+      },
+      {
+        "integration": "GitHub write access for the Devin app (Assign to Devin opens a PR)",
+        "required": false,
+        "fixture": "Skip the PR step and describe the fix branch you would expect; the facilitator shows a closed demo PR",
+        "note": "The PR must target a throwaway branch or be closed unmerged — never merge a plant fix into main"
+      },
+      {
+        "integration": "Local stack (Postgres, services/api) to confirm a finding",
+        "required": false,
+        "fixture": "Un-skip the matching test in services/api/test/planted.test.ts on a throwaway branch",
+        "note": "Optional: proves a finding is real before you assign it"
+      }
+    ],
+    "fixture_only_story": "Without scan permissions you work from the committed findings export and screenshots: classify every finding (real, duplicate, false positive), choose which one you would assign and which you would dismiss and with what note, then run the drill. You still answer every acceptance criterion in writing; criteria 5–8 are marked observer-only.",
+    "not_exercised": [
+      "Creating scans and profiles without the Manage code scans permission",
+      "Opening the remediation PR without GitHub write access for the Devin app"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "git checkout main && git pull --ff-only",
+      "npm run lab:reset -- 05",
+      "git branch --list 'lab05/*' | xargs -r git branch -D"
+    ],
+    "clean_state": "`main` is at the latest commit with every planted defect intact (`services/api/PLANTED.md`, `apps/web/PLANTED.md`). Your org may already contain the facilitator's reference scans from 22 Oct 2026 — read them but start your own. No open lab-05 remediation PR is yours yet."
+  },
+  "injectors": [
+    {
+      "name": "fixture-false-positive",
+      "when": "while triaging",
+      "behaviour": "The fixtures and contract stub (`scenarios/`, `fixtures/mcp/`, `.env.example`) contain a fake PayGate secret. A scan may flag it as a hard-coded credential. Decide whether it is real, and if not dismiss it with a note a security reviewer would accept."
+    },
+    {
+      "name": "no-new-commits",
+      "when": "right after a scan completes",
+      "behaviour": "Press Scan new commits before anything has landed on main. Observe what happens and explain it to the customer in one sentence."
+    },
+    {
+      "name": "permission-downgrade",
+      "when": "facilitator action, T+60",
+      "behaviour": "The facilitator moves you to a role with Use but not Manage code scans. You can still run scans and assign findings, but the profile editor is read-only. Carry on without asking for the role back."
+    },
+    {
+      "name": "lamp-week-proof",
+      "command": "npm test -w services/api -- -t n-plus-one",
+      "when": "after the performance scan",
+      "behaviour": "On a throwaway branch with the `n-plus-one` test un-skipped, the test reports the statement count for the Lamp Week collection — the number the CTO will ask for."
+    }
+  ],
+  "coach": {
+    "skill": "coach-05-code-scans",
+    "skill_path": ".devin/skills/articulation-05-code-scans/SKILL.md",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
+      { "id": "checkpoint-20", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+20)", "at_minute": 20, "target_seconds": 45 },
+      { "id": "checkpoint-90", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+90)", "at_minute": 90, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "Customer update to the CTO", "target_seconds": 180 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 (technical)", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 (commercial)", "target_seconds": 90 },
+      { "id": "objection-3", "kind": "objection", "label": "Objection 3 (governance)", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — Code Scans", "url": "https://docs.devin.ai/product-guides/code-scans", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Security Swarm", "url": "https://docs.devin.ai/product-guides/security-swarm", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Roles and permissions (Use vs Manage code scans)", "url": "https://docs.devin.ai/admin/roles-and-permissions", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Voice mode", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Skills (cloud discovery and @skills: invocation)", "url": "https://docs.devin.ai/product-guides/skills", "date": "fetched 2026-10-22" },
+    { "title": "OASIS SARIF 2.1.0 specification", "url": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html", "date": "fetched 2026-10-22" }
+  ]
+}
