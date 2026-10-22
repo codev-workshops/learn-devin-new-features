@@ -12,8 +12,7 @@ import {
   splitByH2,
   validateLabJson,
   SECTION_TITLES,
-  CAVEAT,
-} from '../build.mjs';
+  CAVEAT, renderMarkdown } from '../build.mjs';
 
 const labsDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoDir = path.resolve(labsDir, '..');
@@ -100,6 +99,15 @@ describe('rendered lab page', () => {
     expect(html).toContain('<div class="answer-panel" id="answer-panel" tabindex="-1"');
     expect(html).not.toMatch(/localStorage|sessionStorage|document\.cookie|location\.hash/);
     expect(html).toContain("e.key==='Escape'&&shown");
+  });
+
+  it('does not let encoded or control-character-split schemes through isSafeHref', () => {
+    for (const bad of ['java%09script:alert(1)', 'java\u0001script:alert(1)', '%6aavascript:alert(1)', ' \tjavascript:alert(1)', 'vbscript:x', 'data:text/html,x']) {
+      expect(renderMarkdown(`[x](<${bad}>)`)).not.toMatch(/<a /);
+    }
+    for (const ok of ['https://docs.devin.ai/', 'mailto:ops@example.com', '#frag', './rel', '%2Fpath']) {
+      expect(renderMarkdown(`[x](<${ok}>)`)).toMatch(/<a href=/);
+    }
   });
 
   it('neutralises raw HTML, images and unsafe link schemes in lab content', async () => {

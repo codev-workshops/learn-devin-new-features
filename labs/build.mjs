@@ -56,8 +56,20 @@ export class BuildError extends Error {
 // Markdown
 
 // Relative links and fragments are fine; absolute URLs must be http(s) or mailto.
-const hasScheme = (href) => /^\s*[a-z][a-z0-9+.-]*:/i.test(href);
-const isSafeHref = (href) => !hasScheme(href) || /^\s*(https?|mailto):/i.test(href);
+// Browsers strip tabs/newlines and leading controls before parsing the scheme, and a
+// percent-decoded prefix must not smuggle one past us either: judge the decoded,
+// control-stripped form and require any scheme to be http(s) or mailto.
+function canonicalHref(href) {
+  let decoded = href;
+  try {
+    decoded = decodeURIComponent(href);
+  } catch {
+    /* keep the raw href; a malformed escape is not a scheme */
+  }
+  return decoded.replace(/[\u0000-\u0020\u007f-\u009f]/g, '');
+}
+const hasScheme = (href) => /^[a-z][a-z0-9+.-]*:/i.test(canonicalHref(href));
+const isSafeHref = (href) => !hasScheme(href) || /^(https?|mailto):/i.test(canonicalHref(href));
 
 function makeMarked() {
   const marked = new Marked({ gfm: true, breaks: false });
