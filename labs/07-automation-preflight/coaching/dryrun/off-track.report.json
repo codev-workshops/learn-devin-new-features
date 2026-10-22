@@ -1,0 +1,236 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 7,
+    "slug": "automation-preflight",
+    "coach": "coach-07-automation-preflight"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:00:00Z",
+    "run_index": 1,
+    "transcript": "labs/07-automation-preflight/coaching/dryrun/off-track.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 88,
+      "delta_seconds": 28,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-15",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+15)",
+      "target_seconds": 45,
+      "actual_seconds": 26,
+      "delta_seconds": -19,
+      "verdict": "under"
+    },
+    {
+      "segment": "checkpoint-75",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+75)",
+      "target_seconds": 45,
+      "actual_seconds": 22,
+      "delta_seconds": -23,
+      "verdict": "under"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Update to the payments lead",
+      "target_seconds": 180,
+      "actual_seconds": 80,
+      "delta_seconds": -100,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "target_seconds": 90,
+      "actual_seconds": 30,
+      "delta_seconds": -60,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "target_seconds": 90,
+      "actual_seconds": 28,
+      "delta_seconds": -62,
+      "verdict": "under"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "We had too many sessions, so basically I added a filter"
+    },
+    "approach": {
+      "status": "weak",
+      "quote": "I am writing the filter prompt"
+    },
+    "evidence": {
+      "status": "missing",
+      "quote": ""
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "Next I will turn it on"
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 4.6,
+    "filler_count": 9,
+    "filler_rate_per_minute": 1.96,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 3
+      },
+      {
+        "word": "basically",
+        "count": 3
+      },
+      {
+        "word": "you know",
+        "count": 2
+      },
+      {
+        "word": "um",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "so it works, no?"
+    ],
+    "long_pauses": [
+      {
+        "at": "01:48",
+        "seconds": 12,
+        "segment": "checkpoint-15"
+      },
+      {
+        "at": "03:10",
+        "seconds": 14,
+        "segment": "update"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Outcome in numbers: 11 PayGate notifications in, 3 investigations out (evt_lab07_a twice, evt_lab07_c once)",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "It goes from eleven to three, I think, so evt_lab07_a twice and evt_lab07_c once",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "A Preflight script instead of the LLM filter, because deduplication needs memory across events",
+      "weight": 5,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "checkpoint-15"
+    },
+    {
+      "id": "mm3",
+      "point": "STATE_FILE plus item id paygate:event_id with version = replay_seq, so a manual replay counts as a new occurrence",
+      "weight": 5,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "checkpoint-75"
+    },
+    {
+      "id": "mm4",
+      "point": "Transient retries and recoveries are skipped; the final attempt or a non-retryable signature failure goes through",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "Retries before the last attempt and recoveries are skipped, and signature failures go through",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "Timeout set within 1–300 s; a timeout, non-zero exit or invalid output stops the event with no automatic retry",
+      "weight": 4,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm6",
+      "point": "Run now bypasses Preflight, so it does not test the filter",
+      "weight": 3,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm7",
+      "point": "Which parts ran live and which ran on the offline fixture replay",
+      "weight": 3,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [
+      "\"and\" chained five times in the framing"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [
+      "I actually tested it with Run now and it started sessions, so it works, no?"
+    ],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 10,
+      "max": 30,
+      "anchor": "Two of seven points (mm1 hedged, mm4); the dedupe mechanism was wrong and no risks were stated (anchor: 6–11 = two or three points)."
+    },
+    "structure": {
+      "score": 8,
+      "max": 25,
+      "anchor": "The framing was a feature tour; the update had no evidence and no ask (anchor: 6–10 = order lost)."
+    },
+    "customer_relevance": {
+      "score": 7,
+      "max": 20,
+      "anchor": "The numbers came last and were hedged; nothing for finance (anchor: 5–8 = the customer has to dig)."
+    },
+    "brevity_and_fluency": {
+      "score": 4,
+      "max": 15,
+      "anchor": "Every segment off target, the objections 60 s short; nine fillers and two long pauses (anchor: 3–5 = most segments off, fillers over 1/min)."
+    },
+    "recovery": {
+      "score": 3,
+      "max": 10,
+      "anchor": "Both objections dismissed without acknowledgement, evidence or offer (anchor: 0–4 = pattern absent)."
+    },
+    "total": 32
+  },
+  "stems": [
+    "\"Today, … notifications turn into … sessions. After this change, …\" — open with the outcome, not a list of Automation parts.",
+    "\"Same event id and replay number means same investigation.\" — a rule the script enforces, not something a filter \"thinks\".",
+    "\"I acknowledge … The boundary is … The evidence is … I can offer …\" — use all four parts in each objection."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 07; no previous run to compare with."
+}
