@@ -65,6 +65,7 @@ After each injector, ask Devin to rerun the resolver for `money.ts` and explain 
 
 ## Pitfalls
 
+- Assuming a glob scopes by brand. Globs scope by path, and Kadé's brands share `money.ts`, the routes and `apps/web`, so the Trailhead rule also loads for a Lumen change; it must say which brand it applies to (`[brand.applies]`).
 - Expecting the deeper or later file to win. Both are in context; the model sees two instructions and may follow either.
 - A glob written relative to a package instead of the repo root, or with a typo: the rule is dead and nothing warns you.
 - Naming an injector or a sample file `AGENTS.md` inside `labs/` — it would itself become a nested instruction file. That is why the lab ships `nested-conflict.AGENTS.md` and `dot-devin/`.
