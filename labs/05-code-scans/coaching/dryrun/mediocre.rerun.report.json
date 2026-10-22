@@ -164,10 +164,10 @@
     },
     {
       "id": "mm4",
-      "point": "The Lamp Week collection runs two queries per product plus one per variant",
+      "point": "The Lamp Week collection runs three queries per product, 27 for the eight lamps",
       "weight": 4,
       "mentioned": true,
-      "evidence_quote": "So we found the leak and the webhook problem, and the catalog. The Lamp Week collection runs two queries per product plus one per variant, so it is slow when there are many products.",
+      "evidence_quote": "So we found the leak and the webhook problem, and the catalog. The Lamp Week collection runs three queries per product, 27 for the eight lamps, so it is slow when there are many products.",
       "belonged_in": "framing"
     },
     {

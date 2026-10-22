@@ -27,7 +27,7 @@ Planted: twelve fillers, two tag questions, two long pauses ([01:50] 14 s, [05:1
 [03:30] LEARNER: Done.
 --- segment: update ---
 [03:40] COACH: Give me the update as if I were paying for it. Go.
-[03:44] LEARNER: So, the scans ran. Performance said the Lamp Week collection runs two queries per product plus one per variant, which is, like, a lot.
+[03:44] LEARNER: So, the scans ran. Performance said the Lamp Week collection runs three queries per product, 27 for the eight lamps, which is, like, a lot.
 [04:20] COACH: How many findings in total?
 [04:24] LEARNER: Um, many. I didn't count. Security Swarm for the brand leak and the webhook, a performance scan for the catalog, an accessibility scan for the admin console — those are the ones I picked.
 [05:10] (pause 16 s)
