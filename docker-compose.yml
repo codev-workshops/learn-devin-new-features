@@ -19,6 +19,8 @@ services:
       DATABASE_URL: postgres://ldnf:ldnf@postgres:5432/ldnf
       JWT_SECRET: ${JWT_SECRET:-change-me-local-only}
       API_PORT: "3001"
+      # Local training stack: ports bind to 127.0.0.1, so the passwordless demo login stays local.
+      ALLOW_DEMO_LOGIN: "true"
     ports:
       - "127.0.0.1:3001:3001"
     depends_on:

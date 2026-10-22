@@ -12,7 +12,7 @@ def main() -> None:
     config = Config.from_env()
     with psycopg.connect(config.database_url, autocommit=True) as conn:
         run_forever(
-            PostgresRepository(conn),
+            PostgresRepository(conn, config.max_attempts),
             config.export_dir,
             config.max_attempts,
             config.poll_interval_seconds,
