@@ -12,6 +12,7 @@ repos:
         run: |
           export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
           nvm install 22 >/dev/null && nvm alias default 22 >/dev/null
+          corepack enable && corepack prepare pnpm@10.34.7 --activate
       - name: Android SDK (command-line tools, platforms 35/36, emulator, API 35 system image)
         run: |
           export ANDROID_HOME="$HOME/android-sdk"
@@ -35,11 +36,11 @@ repos:
           } >> "$HOME/.bashrc"
           sudo ln -sf "$ANDROID_HOME/platform-tools/adb" /usr/local/bin/adb  # non-interactive shells skip .bashrc
     install_dependencies:
-      - name: npm workspaces
-        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+      - name: pnpm workspaces
+        run: pnpm install --frozen-lockfile
     maintain:
-      - name: Refresh npm workspaces
-        run: npm install --no-audit --no-fund
+      - name: Refresh pnpm workspaces
+        run: pnpm install --frozen-lockfile
     startup:
       - name: Headless Android emulator (KVM)
         run: |
@@ -48,11 +49,11 @@ repos:
             -gpu swiftshader_indirect -no-audio -no-boot-anim -no-snapshot -accel on \
             >/tmp/emulator.log 2>&1 &
     test:
-      - run: npm test --workspace apps/mobile
+      - run: pnpm --filter @harbourline/mobile test
     lint:
-      - run: npm run lint --workspace apps/mobile
+      - run: pnpm --filter @harbourline/mobile run lint
     build:
-      - run: npm run build --workspace apps/mobile
+      - run: pnpm --filter @harbourline/mobile run build
 ---
 # macOS document: iOS toolchain for the optional modules/harbourline-haptics Swift module.
 # Exercised by the W4-13 macOS child on 2026-10-22 with Xcode 26.6 (17F113, iOS SDK 26.5) on
@@ -66,34 +67,35 @@ repos:
       - name: Node 22 via Homebrew (the image default is Node 20; nvm is not installed)
         run: |
           brew list node@22 >/dev/null 2>&1 || brew install node@22
+          /opt/homebrew/opt/node@22/bin/corepack enable && /opt/homebrew/opt/node@22/bin/corepack prepare pnpm@10.34.7 --activate
           grep -q 'opt/node@22/bin' "$HOME/.zprofile" 2>/dev/null ||
             echo 'export PATH="/opt/homebrew/opt/node@22/bin:$PATH"' >> "$HOME/.zprofile"
       - name: CocoaPods
         run: command -v pod >/dev/null || brew install cocoapods
     install_dependencies:
-      - name: npm workspaces
+      - name: pnpm workspaces
         run: |
           export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
-          npm install --no-audit --no-fund
+          pnpm install --frozen-lockfile
       - name: Prebuild iOS project (Continuous Native Generation) and install pods
         run: |
           export PATH="/opt/homebrew/opt/node@22/bin:$PATH" LANG=en_US.UTF-8
           cd apps/mobile
-          npx expo prebuild --platform ios --no-install
+          pnpm exec expo prebuild --platform ios --no-install
           cd ios && pod install
     maintain:
-      - name: Refresh npm workspaces
+      - name: Refresh pnpm workspaces
         run: |
           export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
-          npm install --no-audit --no-fund
+          pnpm install --frozen-lockfile
     test:
       - run: |
           export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
-          npm test --workspace apps/mobile
+          pnpm --filter @harbourline/mobile test
     lint:
       - run: |
           export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
-          npm run lint --workspace apps/mobile
+          pnpm --filter @harbourline/mobile run lint
     build:
       - name: Compile the Swift haptics module into a Release simulator build (JS bundle embedded)
         run: |

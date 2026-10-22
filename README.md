@@ -7,43 +7,43 @@ A production-shaped, deliberately imperfect multi-brand e-commerce fixture (Lume
 ## Quick start
 
 ```bash
-nvm use 22                 # Node 22 + npm 10
-npm install                # all workspaces: apps/*, services/*, packages/*, labs
-npm run db:up              # PostgreSQL 16 from mirror.gcr.io, waits for healthy
-npm run build              # first: services/api seed, tests and lab:reset import the built @harbourline/contracts
-npm run db:migrate && npm run db:seed
-npm run gates              # test, lint, build, labs:build
+nvm use 22                 # Node 22 + pnpm 10
+pnpm install                # all workspaces: apps/*, services/*, packages/*, labs
+pnpm db:up              # PostgreSQL 16 from mirror.gcr.io, waits for healthy
+pnpm build              # first: services/api seed, tests and lab:reset import the built @harbourline/contracts
+pnpm db:migrate && pnpm db:seed
+pnpm gates              # test, lint, build, labs:build
 ```
 
-Before a lab: `npm run lab:reset -- <nn>` (reseeds, then runs the lab's reset step). Labs that inject incidents also need the API and, for the payment-webhook and cart-sweeper injectors, the fulfilment worker:
+Before a lab: `pnpm lab:reset -- <nn>` (reseeds, then runs the lab's reset step). Labs that inject incidents also need the API and, for the payment-webhook and cart-sweeper injectors, the fulfilment worker:
 
 ```bash
-npm run dev -w services/api                                   # http://localhost:3001
+pnpm --filter @harbourline/api run dev                                   # http://localhost:3001
 (cd services/fulfilment-worker && DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline python3 -m fulfilment_worker run)
 ```
 
-Open `labs/index.html` after `npm run labs:build`. Each lab has a hidden answer and a voice articulation coach that the learner starts by hand (`@skills:coach-<nn>-<slug> <handle>`; `npm run coach:dryrun -- <nn>` for the transcript-driven dry run).
+Open `labs/index.html` after `pnpm labs:build`. Each lab has a hidden answer and a voice articulation coach that the learner starts by hand (`@skills:coach-<nn>-<slug> <handle>`; `pnpm coach:dryrun -- <nn>` for the transcript-driven dry run).
 
 ## Labs
 
-| #   | Lab                                                                                                                              | Budget  |
-| --- | -------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| 00  | [Read the brief, write the plan — a Harbourline warm-up](labs/00-sample/brief.md)                                                | 20 min  |
-| 01  | [Onboarding — make Harbourline safe and fast to set up before Monday's new starter](labs/01-onboarding/brief.md)                 | 120 min |
-| 02  | [Guard the database — a lifecycle hook policy for Harbourline](labs/02-lifecycle-hooks/brief.md)                                 | 120 min |
-| 03  | [Customization scopes — standardise checkout review without overriding brand teams](labs/03-customization-scopes/brief.md)       | 90 min  |
-| 04  | [Ship the flash-sale release checklist once — a plugin every brand team installs](labs/04-plugin-engineering/brief.md)           | 120 min |
-| 05  | [Code Scan lifecycle — find the brand leak and the slow Lamp Week page](labs/05-code-scans/brief.md)                             | 150 min |
-| 06  | [Review and remediation — the price-drift fix that touches totals and tax](labs/06-review-remediation/brief.md)                  | 90 min  |
-| 07  | [Automation with Preflight — investigate only real payment-webhook failures](labs/07-automation-preflight/brief.md)              | 120 min |
-| 08  | [Stop the 'charged twice' pile-up — triage #harbourline-bugs and answer in the thread](labs/08-slack-triage/brief.md)            | 90 min  |
-| 09  | [Prove no endpoint leaks across brands — an audit → fix → verify workflow](labs/09-dynamic-workflows/brief.md)                   | 180 min |
-| 10  | [npm and the PayGate sandbox, nothing else — a security floor every session inherits](labs/10-guardrails/brief.md)               | 75 min  |
-| 11  | [ACU governance and analytics — control cost without blocking brand teams](labs/11-acu-analytics/brief.md)                       | 75 min  |
-| 12  | [Oncall investigation — the 02:10 oversell page after the Lamp Week deploy](labs/12-oncall/brief.md)                             | 150 min |
-| 13  | [Expo mobile on iOS and Android — order status on both phones](labs/13-expo-mobile/brief.md)                                     | 180 min |
-| 14  | [Outposts — keep PayGate sandbox keys and the repo inside Harbourline's VPC](labs/14-outposts/brief.md)                          | 120 min |
-| 15  | [Customer capstone — one sealed envelope: an incident, a feature request and a governance constraint](labs/15-capstone/brief.md) | 240 min |
+| #   | Lab                                                                                                                                 | Budget  |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| 00  | [Read the brief, write the plan — a Harbourline warm-up](labs/00-sample/brief.md)                                                   | 20 min  |
+| 01  | [Onboarding — make Harbourline safe and fast to set up before Monday's new starter](labs/01-onboarding/brief.md)                    | 120 min |
+| 02  | [Guard the database — a lifecycle hook policy for Harbourline](labs/02-lifecycle-hooks/brief.md)                                    | 120 min |
+| 03  | [Customization scopes — standardise checkout review without overriding brand teams](labs/03-customization-scopes/brief.md)          | 90 min  |
+| 04  | [Ship the flash-sale release checklist once — a plugin every brand team installs](labs/04-plugin-engineering/brief.md)              | 120 min |
+| 05  | [Code Scan lifecycle — find the brand leak and the slow Lamp Week page](labs/05-code-scans/brief.md)                                | 150 min |
+| 06  | [Review and remediation — the price-drift fix that touches totals and tax](labs/06-review-remediation/brief.md)                     | 90 min  |
+| 07  | [Automation with Preflight — investigate only real payment-webhook failures](labs/07-automation-preflight/brief.md)                 | 120 min |
+| 08  | [Stop the 'charged twice' pile-up — triage #harbourline-bugs and answer in the thread](labs/08-slack-triage/brief.md)               | 90 min  |
+| 09  | [Prove no endpoint leaks across brands — an audit → fix → verify workflow](labs/09-dynamic-workflows/brief.md)                      | 180 min |
+| 10  | [the package registry and the PayGate sandbox, nothing else — a security floor every session inherits](labs/10-guardrails/brief.md) | 75 min  |
+| 11  | [ACU governance and analytics — control cost without blocking brand teams](labs/11-acu-analytics/brief.md)                          | 75 min  |
+| 12  | [Oncall investigation — the 02:10 oversell page after the Lamp Week deploy](labs/12-oncall/brief.md)                                | 150 min |
+| 13  | [Expo mobile on iOS and Android — order status on both phones](labs/13-expo-mobile/brief.md)                                        | 180 min |
+| 14  | [Outposts — keep PayGate sandbox keys and the repo inside Harbourline's VPC](labs/14-outposts/brief.md)                             | 120 min |
+| 15  | [Customer capstone — one sealed envelope: an incident, a feature request and a governance constraint](labs/15-capstone/brief.md)    | 240 min |
 
 Lab 00 is the sample; labs 01–14 each teach one capability; lab 15 is the sealed-envelope capstone. Facilitator pilot results are in [`labs/VALIDATION.md`](labs/VALIDATION.md); cross-lab coach calibration in [`labs/COACH-CALIBRATION.md`](labs/COACH-CALIBRATION.md).
 

@@ -13,7 +13,7 @@ Planted: six fillers (actually ×2, basically ×2, so yeah ×1, you know ×1), o
 
 --- segment: framing ---
 [00:00] COACH: One minute, and I'm not an engineer. What's the problem and what will Devin change? Go.
-[00:04] LEARNER: So, first you install Node, then npm install, then the Python worker, then Docker for Postgres, and then you seed the database.
+[00:04] LEARNER: So, first you install Node, then pnpm install, then the Python worker, then Docker for Postgres, and then you seed the database.
 [00:30] LEARNER: Basically, it takes a new engineer about a week, and one of them reset the shared database.
 [00:52] LEARNER: Devin will set up the blueprint, which is the machine setup, and AGENTS.md is the instructions it reads.
 [01:14] LEARNER: The reset is lab:reset now, it only touches the local database. Done.

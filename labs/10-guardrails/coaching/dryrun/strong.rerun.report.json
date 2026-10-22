@@ -67,7 +67,7 @@
       "segment": "objection-2",
       "kind": "objection",
       "label": "Objection 2 (commercial)",
-      "question": "This will block legitimate npm installs.",
+      "question": "This will block legitimate pnpm installs.",
       "target_seconds": 90,
       "actual_seconds": 92,
       "delta_seconds": 2,
@@ -118,10 +118,10 @@
     },
     {
       "id": "mm2",
-      "point": "Network and MCP access are separate allowlists: npm and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved",
+      "point": "Network and MCP access are separate allowlists: the package registry and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved",
       "weight": 6,
       "mentioned": true,
-      "evidence_quote": "Network and MCP are separate allowlists. I think npm and star-dot-sandbox-dot-paygate go in the host list, and the MCP list stays empty until you approve a server",
+      "evidence_quote": "Network and MCP are separate allowlists. I think registry-dot-npmjs-dot-org and star-dot-sandbox-dot-paygate go in the host list, and the MCP list stays empty until you approve a server",
       "belonged_in": "checkpoint-10"
     },
     {

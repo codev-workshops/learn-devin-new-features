@@ -7,7 +7,7 @@
   "difficulty": "core",
   "prerequisites": [
     "Lab 00 done (or you know the Harbourline brands and planted-defect rule)",
-    "Repo connected to your Devin org; `npm ci` done at the root",
+    "Repo connected to your Devin org; `pnpm install --frozen-lockfile` done at the root",
     "Your Devin role includes the Use code scans permission (see section 6)"
   ],
   "credentials": {
@@ -47,7 +47,7 @@
   "scenarios": {
     "reset": [
       "git checkout main && git pull --ff-only",
-      "npm run lab:reset -- 05",
+      "pnpm lab:reset -- 05",
       "git branch --list 'lab05/*' | xargs -r git branch -D"
     ],
     "clean_state": "`main` is at the latest commit with every planted defect intact (`services/api/PLANTED.md`, `apps/web/PLANTED.md`). Your org may already contain the facilitator's reference scans from 22 Oct 2026 — read them but start your own. No open lab-05 remediation PR is yours yet."
@@ -70,7 +70,7 @@
     },
     {
       "name": "lamp-week-proof",
-      "command": "npm test -w services/api -- -t n-plus-one",
+      "command": "pnpm --filter @harbourline/api test -t n-plus-one",
       "when": "after the performance scan",
       "behaviour": "On a throwaway branch with the `n-plus-one` test un-skipped, the test reports the statement count for the Lamp Week collection — the number the CTO will ask for."
     }

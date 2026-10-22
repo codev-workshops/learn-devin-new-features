@@ -6,7 +6,7 @@
   "duration_minutes": 20,
   "difficulty": "intro",
   "prerequisites": [
-    "Repo cloned locally and `npm install` done at the root",
+    "Repo cloned locally and `pnpm install` done at the root",
     "Read the root README.md once"
   ],
   "credentials": {

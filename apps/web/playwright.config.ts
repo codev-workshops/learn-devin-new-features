@@ -14,7 +14,7 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: `npm run preview -- --port ${port}`,
+    command: `pnpm preview --port ${port}`,
     port,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

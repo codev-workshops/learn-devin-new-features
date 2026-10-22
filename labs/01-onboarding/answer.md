@@ -10,7 +10,7 @@ The two numbers to know: Devin automatically includes the **first 16 KiB of each
 2. **Audit the blueprint against the tree.** The live repo blueprint in settings still runs `pip install -e "services/payroll-worker[dev]"`; the directory is `services/fulfilment-worker`. That single stale path is why snapshot builds fail and sessions start with no `node_modules` and no worker package. `docs/blueprint.proposed.yaml` already has the corrected line. Apply it, rebuild, and keep the file and settings in sync.
 3. **Find the other stale lines.** `services/api/AGENTS.md` tells you to `cp .env.example .env` inside `services/api`, but `.env.example` lives at the root. `.devin/skills/harbourline-dev/SKILL.md` and the blueprint's `knowledge` still say the database scripts are no-ops until the API lands — they are not any more. Each is a one-line correction on a throwaway branch.
 4. **Measure the hierarchy.** `node labs/01-onboarding/tools/agents-budget.mjs` lists seven files totalling about 16.5 KiB — no single file is over the limit, because the limit is *per file*. The lesson is to keep each file short and front-loaded, and move procedures into skills, not to merge everything into one file.
-5. **Close the unsafe reset.** The supported reset is `npm run lab:reset -- <nn>`: it reseeds through `db:seed -- --reset` using `DATABASE_URL` from your environment (default `postgres://harbourline:harbourline@localhost:5432/harbourline`, the Compose database) and then runs the lab's scenario script. Note what it does *not* do: nothing refuses a non-local URL. So the safety comes from the documents — every doc points at `lab:reset`, nobody's notes export a shared URL, and `.env.example` holds only local values. A code guard (refuse `--reset` when the host is not local) is a sensible proposal for the API owners, not something to slip in here.
+5. **Close the unsafe reset.** The supported reset is `pnpm lab:reset -- <nn>`: it reseeds through `db:seed -- --reset` using `DATABASE_URL` from your environment (default `postgres://harbourline:harbourline@localhost:5432/harbourline`, the Compose database) and then runs the lab's scenario script. Note what it does *not* do: nothing refuses a non-local URL. So the safety comes from the documents — every doc points at `lab:reset`, nobody's notes export a shared URL, and `.env.example` holds only local values. A code guard (refuse `--reset` when the host is not local) is a sensible proposal for the API owners, not something to slip in here.
 6. **Move repeated guidance into a skill.** Bring-up and gates already live in `harbourline-dev`; anything you find repeated across `AGENTS.md` files (gate order, "never fix a plant") stays once in the root and is referenced elsewhere.
 
 ## The three injectors
@@ -32,7 +32,7 @@ The two numbers to know: Devin automatically includes the **first 16 KiB of each
 
 - Snapshot build fails: read the build log for the first failing command, run it by hand on a session VM, fix the path in the blueprint, rebuild.
 - You edited a shared file on the wrong branch: `git stash`, switch to your throwaway branch, `git stash pop`.
-- You ran an injector and lost track: `bash labs/01-onboarding/injectors/inject.sh --revert` then `npm run lab:reset -- 01`.
+- You ran an injector and lost track: `bash labs/01-onboarding/injectors/inject.sh --revert` then `pnpm lab:reset -- 01`.
 
 ## Model answers to the objections
 

@@ -6,7 +6,7 @@
   "duration_minutes": 120,
   "difficulty": "core",
   "prerequisites": [
-    "Repo cloned, `npm install` done at the root, Node 22",
+    "Repo cloned, `pnpm install` done at the root, Node 22",
     "Lab 00 warm-up done once (framing stems and the update skeleton)",
     "Fixture path: nothing else — `labs/07-automation-preflight/tools/preflight-replay.mjs` replays the Preflight script contract offline",
     "Optional live path: permission to create Automations in your Devin org (an Automation with a Webhook trigger), which you disable or delete at the end of the lab"
@@ -47,7 +47,7 @@
   },
   "scenarios": {
     "reset": [
-      "npm run lab:reset -- 07",
+      "pnpm lab:reset -- 07",
       "rm -rf labs/07-automation-preflight/.state",
       "node labs/07-automation-preflight/tools/preflight-replay.mjs --run-now"
     ],

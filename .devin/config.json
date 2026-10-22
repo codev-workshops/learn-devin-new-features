@@ -4,8 +4,17 @@
   "description": "Harbourline: a deliberately imperfect multi-brand e-commerce fixture used by the Devin practice course in labs/.",
   "permissions": {
     "allow": [
-      "Bash(npm run *)",
-      "Bash(npm test*)",
+      "Bash(pnpm run *)",
+      "Bash(pnpm test*)",
+      "Bash(pnpm lint*)",
+      "Bash(pnpm build*)",
+      "Bash(pnpm gates*)",
+      "Bash(pnpm labs:build*)",
+      "Bash(pnpm coach:dryrun*)",
+      "Bash(pnpm lab:reset*)",
+      "Bash(pnpm db:*)",
+      "Bash(pnpm --filter *)",
+      "Bash(pnpm exec *)",
       "Bash(docker compose *)",
       "Bash(git *)",
       "Bash(date +%s)"

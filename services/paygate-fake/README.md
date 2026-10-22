@@ -15,7 +15,7 @@ The point of this service is to misbehave on demand, the way real PSPs do in pro
 ## Run
 
 ```sh
-npm run build -w services/paygate-fake
+pnpm --filter @harbourline/paygate-fake run build
 node services/paygate-fake/dist/cli.js serve --port 3002 --webhook-url http://localhost:3001/webhooks/payments [--duplicate] [--out-of-order] [--delay 5000]
 
 # fire one event straight at a receiver (used by scripts/demo-duplicate-webhook.sh in the worker)
@@ -45,9 +45,9 @@ Amounts are decimal strings with two fractional digits; the service refuses anyt
 ## Gates
 
 ```sh
-npm run lint -w services/paygate-fake    # eslint (extends the root config) + prettier --check + tsc --noEmit
-npm test -w services/paygate-fake        # vitest: signing, delivery plan/knobs, HTTP surface against a local receiver
-npm run build -w services/paygate-fake
+pnpm --filter @harbourline/paygate-fake run lint    # eslint (extends the root config) + prettier --check + tsc --noEmit
+pnpm --filter @harbourline/paygate-fake test        # vitest: signing, delivery plan/knobs, HTTP surface against a local receiver
+pnpm --filter @harbourline/paygate-fake run build
 ```
 
 Docker: `docker build -f services/paygate-fake/Dockerfile -t harbourline-paygate-fake .` from the repo root (the build

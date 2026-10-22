@@ -18,25 +18,25 @@ afterAll(() => rmSync(logDir, { recursive: true, force: true }));
 
 describe('lab 02 reference hooks', () => {
   it('allows ordinary commands (exit 0, input unchanged)', async () => {
-    const r = await pre('npm test');
+    const r = await pre('pnpm test');
     expect(r.outcome).toBe('allow');
-    expect(r.input.command).toBe('npm test');
+    expect(r.input.command).toBe('pnpm test');
   });
 
   it('allows a reset against the lab database', async () => {
-    const r = await pre('npm run db:seed -- --reset');
+    const r = await pre('pnpm db:seed -- --reset');
     expect(r.outcome).toBe('allow');
   });
 
   it('blocks a reset against anything but the lab database with exit 2', async () => {
-    const r = await pre('DATABASE_URL=postgres://harbourline:harbourline@staging-db.harbourline.internal:5432/harbourline npm run db:seed -- --reset');
+    const r = await pre('DATABASE_URL=postgres://harbourline:harbourline@staging-db.harbourline.internal:5432/harbourline pnpm db:seed -- --reset');
     expect(r.outcome).toBe('block');
     expect(r.hooks_run[0].exit).toBe(2);
     expect(r.reason).toMatch(/not the lab database/);
   });
 
   it('blocks a migration when the hook environment points at a shared database', async () => {
-    const r = await pre('npm run db:migrate', { DATABASE_URL: 'postgres://harbourline:harbourline@10.0.4.12:5432/harbourline' });
+    const r = await pre('pnpm db:migrate', { DATABASE_URL: 'postgres://harbourline:harbourline@10.0.4.12:5432/harbourline' });
     expect(r.outcome).toBe('block');
   });
 
@@ -77,12 +77,12 @@ describe('lab 02 reference hooks', () => {
   });
 
   it('checks every inline DATABASE_URL, not only the first', async () => {
-    const r = await pre('DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline DATABASE_URL=postgres://harbourline:harbourline@staging-db:5432/harbourline npm run db:seed -- --reset');
+    const r = await pre('DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline DATABASE_URL=postgres://harbourline:harbourline@staging-db:5432/harbourline pnpm db:seed -- --reset');
     expect(r.outcome).toBe('block');
   });
 
   it('rejects connection-string parameters that override the host', async () => {
-    const r = await pre('DATABASE_URL="postgres://harbourline:harbourline@localhost:5432/harbourline?host=staging-db" npm run db:migrate');
+    const r = await pre('DATABASE_URL="postgres://harbourline:harbourline@localhost:5432/harbourline?host=staging-db" pnpm db:migrate');
     expect(r.outcome).toBe('block');
   });
 
@@ -97,7 +97,7 @@ describe('lab 02 reference hooks', () => {
       config: { PreToolUse: [{ matcher: '^exec$', hooks: [{ type: 'command', command: `echo 'not json' | node "${path.join(HERE, 'pretool-guard.mjs')}"` }] }] },
       event: 'PreToolUse',
       toolName: 'exec',
-      toolInput: { command: 'npm test' },
+      toolInput: { command: 'pnpm test' },
       env,
     });
     expect(r.outcome).toBe('block');
@@ -111,19 +111,19 @@ describe('lab 02 reference hooks', () => {
 
 describe('lab 02 injectors', () => {
   it('malformed hook JSON loads no hooks, so the reset goes through (fail-open)', async () => {
-    const r = await simulate({ config: path.join(INJECTORS, 'malformed-hooks.v1.json'), event: 'PreToolUse', toolName: 'exec', toolInput: { command: 'DATABASE_URL=postgres://x@prod-db:5432/harbourline npm run db:seed -- --reset' }, env });
+    const r = await simulate({ config: path.join(INJECTORS, 'malformed-hooks.v1.json'), event: 'PreToolUse', toolName: 'exec', toolInput: { command: 'DATABASE_URL=postgres://x@prod-db:5432/harbourline pnpm db:seed -- --reset' }, env });
     expect(r.malformed).toBe(true);
     expect(r.outcome).toBe('allow');
   });
 
   it('a hook that exceeds its timeout is killed and does not block', async () => {
-    const r = await simulate({ config: path.join(INJECTORS, 'slow-hook.v1.json'), event: 'PreToolUse', toolName: 'exec', toolInput: { command: 'npm test' }, env });
+    const r = await simulate({ config: path.join(INJECTORS, 'slow-hook.v1.json'), event: 'PreToolUse', toolName: 'exec', toolInput: { command: 'pnpm test' }, env });
     expect(r.outcome).toBe('timeout');
     expect(r.hooks_run[0].timed_out).toBe(true);
   }, 10_000);
 
   it('a glob-style matcher is not a valid regex and guards nothing', async () => {
-    const r = await simulate({ config: path.join(INJECTORS, 'matcher-glob.v1.json'), event: 'PreToolUse', toolName: 'exec', toolInput: { command: 'npm run db:seed -- --reset' }, env });
+    const r = await simulate({ config: path.join(INJECTORS, 'matcher-glob.v1.json'), event: 'PreToolUse', toolName: 'exec', toolInput: { command: 'pnpm db:seed -- --reset' }, env });
     expect(r.hooks_run).toHaveLength(0);
     expect(r.notes.join(' ')).toMatch(/not a valid regex/);
   });

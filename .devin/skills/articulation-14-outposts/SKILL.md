@@ -1,6 +1,6 @@
 ---
 name: coach-14-outposts
-description: Voice articulation coach for lab 14 (Devin Outposts, keeping PayGate sandbox keys and the repo inside Harbourline's VPC). Use when the learner types `@skills:coach-14-outposts <handle>` or runs `npm run coach:dryrun -- 14`.
+description: Voice articulation coach for lab 14 (Devin Outposts, keeping PayGate sandbox keys and the repo inside Harbourline's VPC). Use when the learner types `@skills:coach-14-outposts <handle>` or runs `pnpm coach:dryrun -- 14`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -57,4 +57,4 @@ Listen for acknowledge → boundary → evidence → offer (see the answer's mod
 
 ## Dry-run
 
-With `--dry-run <transcript>` use the transcript's `[mm:ss]` markers (`timing_method: markers`), grade inline, print the report and skip the progress-log push. `npm run coach:dryrun -- 14` validates the committed strong, mediocre and off-track reports.
+With `--dry-run <transcript>` use the transcript's `[mm:ss]` markers (`timing_method: markers`), grade inline, print the report and skip the progress-log push. `pnpm coach:dryrun -- 14` validates the committed strong, mediocre and off-track reports.

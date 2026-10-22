@@ -1,6 +1,6 @@
 ---
 name: coach-01-onboarding
-description: Voice articulation coach for lab 01 (onboarding — make Harbourline safe and fast to set up before Monday's new starter). Use when the learner types `@skills:coach-01-onboarding <handle>` or runs `npm run coach:dryrun -- 01`.
+description: Voice articulation coach for lab 01 (onboarding — make Harbourline safe and fast to set up before Monday's new starter). Use when the learner types `@skills:coach-01-onboarding <handle>` or runs `pnpm coach:dryrun -- 01`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -54,4 +54,4 @@ Objection 1 is technical (where setup knowledge must live so it is executed, not
 
 ## Dry-run
 
-With `--dry-run <transcript>` use the transcript's `[mm:ss]` markers (`timing_method: markers`), grade inline, print the report and skip the progress-log push. `npm run coach:dryrun -- 01` validates the committed strong, mediocre and off-track reports.
+With `--dry-run <transcript>` use the transcript's `[mm:ss]` markers (`timing_method: markers`), grade inline, print the report and skip the progress-log push. `pnpm coach:dryrun -- 01` validates the committed strong, mediocre and off-track reports.

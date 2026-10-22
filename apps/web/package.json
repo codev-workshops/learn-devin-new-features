@@ -8,15 +8,15 @@
     "node": ">=20.19"
   },
   "scripts": {
-    "dev": "npm run mocks:gen && vite",
-    "build": "npm run mocks:gen && tsc -b && vite build",
+    "dev": "pnpm mocks:gen && vite",
+    "build": "pnpm mocks:gen && tsc -b && vite build",
     "preview": "vite preview --port 4173 --strictPort",
     "mocks:gen": "node scripts/gen-mocks.mjs",
     "mocks:check": "node scripts/gen-mocks.mjs --check",
     "typecheck": "tsc -b",
-    "lint": "npm run mocks:check && eslint . && prettier --check . && tsc -b",
+    "lint": "pnpm mocks:check && eslint . && prettier --check . && tsc -b",
     "format": "prettier --write .",
-    "test": "npm run mocks:gen && vitest run",
+    "test": "pnpm mocks:gen && vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install chromium"

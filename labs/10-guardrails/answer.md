@@ -28,7 +28,7 @@ Why each choice:
 
 Resolver output (`node labs/10-guardrails/solution/profile-resolve.mjs --world labs/10-guardrails/solution/harbourline-guardrails.json --check registry.npmjs.org,api.sandbox.paygate.example,pypi.org,files.pythonhosted.org --grant cdn.playwright.dev`), summarised:
 
-| Target | Profiles in force | Winning level | Git | Devin MCP RO | Token | npm | PayGate sandbox | pypi | Note |
+| Target | Profiles in force | Winning level | Git | Devin MCP RO | Token | registry | PayGate sandbox | pypi | Note |
 |---|---|---|---|---|---|---|---|---|---|
 | `dev-session` | floor + dev | organization default | full | no | removed | yes | yes | no | — |
 | `opt-out-session` | floor | session ("no profile") | full | no | removed | yes | yes | no | opt-out ignored: mandatory floor |
@@ -36,7 +36,7 @@ Resolver output (`node labs/10-guardrails/solution/profile-resolve.mjs --world l
 | `child-of-dev` | floor + dev | organization default | full | no | removed | yes | yes | no | governed by parent chain |
 | `snapshot-build` | floor + dev | organization default | full | no | removed | yes | yes | **no** | — |
 
-`npm test --workspace labs` runs `solution/profile.test.mjs` (12 cases) over the same table.
+`pnpm --filter @harbourline/labs test` runs `solution/profile.test.mjs` (12 cases) over the same table.
 
 ## How resolution works
 
@@ -53,7 +53,7 @@ The resolver encodes exactly these five rules. Rule 4's handling of a child that
 - **recommended-floor** — with `harbourline-floor` recommended, `opt-out-session` resolves to no profiles at all: every host reachable, token kept. `child-of-dev` drops to `harbourline-dev` only, which happens to match the CISO's list today but is one org-admin edit away from not doing so. One sentence: *recommended is a suggestion any lower level can replace; mandatory is the floor.*
 - **mid-session-request** — approving the request adds `cdn.playwright.dev` to that session only. Under a mandatory floor that does not list the host, the grant is clamped: the session still cannot reach it. Fix at source instead: set `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`, or ask the CISO to add the host to the floor.
 - **floor-tightened** — the running session keeps `*.sandbox.paygate.example` (so `webhooks.sandbox.paygate.example` still works) until its next wake; after waking, and for every new session, only `api.sandbox.paygate.example` is in the floor. If the change is urgent, ask owners to put running sessions to sleep (or end them) so they re-resolve.
-- **snapshot-build-python** — the build reaches npm (every one of the 1,302 remote packages in `package-lock.json` resolves to `registry.npmjs.org`, and the three install scripts — `esbuild`, `fsevents`, `msw` — fetch nothing else) but the blueprint's `pip install -e "services/fulfilment-worker[dev]"` needs `pypi.org` and `files.pythonhosted.org`. A snapshot-build binding cannot loosen a mandatory floor, so either the CISO adds those two hosts to the floor, or the build stops installing Python packages. That is the CISO's call; the change request names the two hosts and the one blueprint line.
+- **snapshot-build-python** — the build reaches the package registry (every one of the 1,163 remote packages in `pnpm-lock.yaml` resolves to `registry.npmjs.org`, and the two install scripts — `esbuild`, `msw` — fetch nothing else) but the blueprint's `pip install -e "services/fulfilment-worker[dev]"` needs `pypi.org` and `files.pythonhosted.org`. A snapshot-build binding cannot loosen a mandatory floor, so either the CISO adds those two hosts to the floor, or the build stops installing Python packages. That is the CISO's call; the change request names the two hosts and the one blueprint line.
 - **gh-token-keep** — `harbourline-gh` keeps the token but its network list has no `api.github.com`; `harbourline-gh-readonly` keeps the token with Read-only git. The documentation makes both conditions a requirement for keeping the token, so expect neither to save. `--validate` exits 1 with one problem each.
 - **broad-wildcard** — `registry.npmjs.org*` also matches `registry.npmjs.org.evil.example`; `*paygate.example` also matches `evil-paygate.example` and `evilpaygate.example`; `https://registry.npmjs.org/` is a URL, not a hostname (no scheme, port or path).
 - **guardrail-messages** — message 1 is data exfiltration, message 2 (PR comment) is prompt injection, message 3 is ordinary work.
@@ -112,7 +112,7 @@ and when each change takes effect for running sessions, new sessions and snapsho
 ## Model answers to the objections
 
 1. *"A profile is config — what stops a developer turning it off?"* — "You're right that it's a setting. The enterprise profile is **mandatory**, and only enterprise admins can edit or unbind it. Below that, organization admins, automations and sessions can only add restrictions: a session that picks 'no profile' still resolves to the floor, helper sessions follow the parent's chain, and a mid-session approval for a new host is clamped. Our resolver shows the opt-out session with exactly the floor's two hosts. I'll re-run it and send you the output after every profile change."
-2. *"This will block legitimate npm installs."* — "It would if npm reached more than one place. All 1,302 remote packages in our lockfile resolve to `registry.npmjs.org`, and the three packages with install scripts fetch nothing else, so npm installs pass. The real break is two hosts for the Python worker in snapshot builds — `pypi.org` and `files.pythonhosted.org` — and I'd like your decision on those two. Anything else shows up as a blocked request we can review rather than a silent hole."
+2. *"This will block legitimate pnpm installs."* — "It would if pnpm reached more than one place. All 1,163 remote packages in our lockfile resolve to `registry.npmjs.org`, and the two packages with install scripts fetch nothing else, so pnpm installs pass. The real break is two hosts for the Python worker in snapshot builds — `pypi.org` and `files.pythonhosted.org` — and I'd like your decision on those two. Anything else shows up as a blocked request we can review rather than a silent hole."
 
 ## Debrief
 

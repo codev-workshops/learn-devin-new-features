@@ -20,7 +20,7 @@ Fixture for `@skills:coach-10-guardrails dryrun --dry-run labs/10-guardrails/coa
 [01:45] COACH: Ten minutes in. What are you looking at, and what next? Go.
 [01:48] LEARNER: Uh, the JSON.
 [01:50] (pause 14 s)
-[02:04] LEARNER: I put npm in the network list and the MCP list is separate I guess, it's empty.
+[02:04] LEARNER: I put the registry in the network list and the MCP list is separate I guess, it's empty.
 [02:50] LEARNER: Done.
 --- segment: checkpoint-45 ---
 [03:00] COACH: I just tightened the PayGate entry. What happens to sessions already running? Go.
@@ -39,6 +39,6 @@ Fixture for `@skills:coach-10-guardrails dryrun --dry-run labs/10-guardrails/coa
 [05:53] LEARNER: The guardrails would catch it, basically.
 [06:30] LEARNER: Done.
 --- segment: objection-2 ---
-[06:40] COACH: This will block legitimate npm installs.
+[06:40] COACH: This will block legitimate pnpm installs.
 [06:43] LEARNER: We just approve it in the session.
 [07:05] LEARNER: Done.

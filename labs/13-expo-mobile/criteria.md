@@ -4,7 +4,7 @@ You are done when all of the following are observable by someone who was not on 
 2. **Android order status.** A screenshot of the order-detail screen for a `packed` or `shipped` order (status pill and timeline visible), taken with `adb exec-out screencap -p`.
 3. **Android fallback.** A screenshot of the Cart tab showing `Haptics: JS fallback (no-op)` after adding an item, so the native module's absence is visible and harmless.
 4. **Generated native folders stay generated.** `git status` shows no `apps/mobile/android/` or `apps/mobile/ios/` files, and the report says how you would detect and recover from prebuild drift.
-5. **Gates.** `npm test`, `npm run lint` and `npm run build` in the `apps/mobile` workspace pass; paste the summary lines.
+5. **Gates.** `pnpm test`, `pnpm lint` and `pnpm build` in the `apps/mobile` workspace pass; paste the summary lines.
 6. **iOS build (optional).** The same app built for the iOS Simulator on a macOS machine. The report names the Xcode version and how it was selected (`DEVELOPER_DIR` or `xcode-select`).
 7. **iOS order status (optional).** A Simulator screenshot of the same order in the same status as item 2.
 8. **Native module (optional).** A Simulator screenshot of the Cart tab showing `Haptics: native (harbourline-haptics)`, and the line in `ios/Podfile.lock` that proves `HarbourlineHaptics` was autolinked.

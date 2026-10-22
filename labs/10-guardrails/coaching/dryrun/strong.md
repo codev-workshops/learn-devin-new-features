@@ -12,13 +12,13 @@ Fixture for `@skills:coach-10-guardrails dryrun --dry-run labs/10-guardrails/coa
 
 --- segment: framing ---
 [00:00] COACH: I'm the CISO. In sixty seconds: where can our sessions talk to now, and what keeps it that way? Go.
-[00:04] LEARNER: From today every Devin session can reach two places: the npm registry and the PayGate sandbox. Nothing else, and no MCP servers.
+[00:04] LEARNER: From today every Devin session can reach two places: the package registry and the PayGate sandbox. Nothing else, and no MCP servers.
 [00:22] LEARNER: What makes that stick is one word: mandatory. The enterprise profile is a floor that no organization, automation or session can loosen. A recommended profile would only be a default that anyone below can replace.
 [00:45] LEARNER: What I need from you is one decision about two Python hosts for our build.
 [00:58] LEARNER: Done.
 --- segment: checkpoint-10 ---
 [01:10] COACH: Ten minutes in. What are you looking at, and what next? Go.
-[01:13] LEARNER: I see two lists, not one. Network and MCP are separate allowlists. I think npm and star-dot-sandbox-dot-paygate go in the host list, and the MCP list stays empty until you approve a server.
+[01:13] LEARNER: I see two lists, not one. Network and MCP are separate allowlists. I think registry-dot-npmjs-dot-org and star-dot-sandbox-dot-paygate go in the host list, and the MCP list stays empty until you approve a server.
 [01:38] LEARNER: I'll try the resolver on all five targets next, and I'll check that example.com and production PayGate come back blocked.
 [01:54] LEARNER: Done.
 --- segment: checkpoint-45 ---
@@ -32,7 +32,7 @@ Fixture for `@skills:coach-10-guardrails dryrun --dry-run labs/10-guardrails/coa
 [03:30] LEARNER: Where it is set: harbourline-floor, an enterprise profile, mandatory, bound as the enterprise default.
 [03:50] COACH: Who can loosen it?
 [03:53] LEARNER: Only an enterprise admin, by editing harbourline-floor. A session that picks no profile still gets the floor; I resolved it.
-[04:20] LEARNER: What runs stricter: the webhook-triage automation gets read-only git and read-only Devin MCP, and npm only.
+[04:20] LEARNER: What runs stricter: the webhook-triage automation gets read-only git and read-only Devin MCP, and the package registry only.
 [04:45] LEARNER: Helpers: child sessions are governed by their parent's chain, so delegating work cannot step outside the floor.
 [05:10] LEARNER: When changes land: new sessions at once, running sessions on their next wake.
 [05:30] LEARNER: What it does not cover: messages. AI Guardrails screens those; I suggest log only for a week, then block for exfiltration and injection.
@@ -45,7 +45,7 @@ Fixture for `@skills:coach-10-guardrails dryrun --dry-run labs/10-guardrails/coa
 [07:30] LEARNER: I'll send you the resolver output after every change so you can see it held.
 [07:52] LEARNER: Done.
 --- segment: objection-2 ---
-[08:05] COACH: This will block legitimate npm installs.
+[08:05] COACH: This will block legitimate pnpm installs.
 [08:09] LEARNER: That would hurt, I agree. But all 1,302 remote packages in our lockfile come from one host, registry.npmjs.org, and the three install scripts fetch nothing else.
 [08:45] LEARNER: The real break is the snapshot build: two hosts for the Python worker. One decision from you fixes all builds.
 [09:15] LEARNER: Anything else shows up as a blocked request we review, um, not a silent hole.

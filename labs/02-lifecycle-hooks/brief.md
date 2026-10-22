@@ -1,6 +1,6 @@
 ## Customer brief
 
-Hi — I'm Priya, the database administrator for **Harbourline**. Lumen Home and Trailhead Supply share one PostgreSQL database in every environment, and last quarter a well-meaning session ran `npm run db:seed -- --reset` against the shared staging database the afternoon before Lamp Week. We lost two days of merchandiser price-list edits for both brands and spent a weekend replaying about 400 orders from the payment provider. Nobody was careless; the command was simply allowed.
+Hi — I'm Priya, the database administrator for **Harbourline**. Lumen Home and Trailhead Supply share one PostgreSQL database in every environment, and last quarter a well-meaning session ran `pnpm db:seed -- --reset` against the shared staging database the afternoon before Lamp Week. We lost two days of merchandiser price-list edits for both brands and spent a weekend replaying about 400 orders from the payment provider. Nobody was careless; the command was simply allowed.
 
 We now want Devin working in this repo every day, and I am fine with that on one condition: **Devin must never reset or migrate anything except the lab database, and every `psql` it runs must go through our read-only wrapper.** I do not want a paragraph in a README that the agent may or may not read. I want the tool call itself stopped, or quietly rewritten, before it reaches the database, and I want a log that shows me what was stopped and why.
 

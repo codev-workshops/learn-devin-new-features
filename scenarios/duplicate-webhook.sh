@@ -9,7 +9,7 @@
 #   Without --order a fresh one-line order is created through the contract first.
 #   services/paygate-fake reaches the same outcome with its --duplicate knob; this script
 #   is the credential-free path that needs only the API.
-# Reset: npm run lab:reset -- <nn>
+# Reset: pnpm lab:reset -- <nn>
 set -euo pipefail
 export INJECTOR=duplicate-webhook
 # shellcheck source-path=SCRIPTDIR

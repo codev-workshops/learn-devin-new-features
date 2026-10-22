@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Dry-run harness for the per-lab articulation coaches (plan §5).
 //
-//   npm run coach:dryrun -- <nn>          e.g. npm run coach:dryrun -- 05
+//   pnpm coach:dryrun -- <nn>          e.g. pnpm coach:dryrun -- 05
 //   node labs/coach-dryrun.mjs <nn> [--labs <dir>] [--json]
 //   node labs/coach-dryrun.mjs --render <report.json>   print the Markdown rendering
 //
@@ -445,7 +445,7 @@ function parseArgs(argv) {
   const nn = rest.find((r) => /^\d{1,2}$/.test(r));
   if (opts.render) return opts;
   if (nn == null) {
-    console.error('usage: node labs/coach-dryrun.mjs <nn>   (e.g. npm run coach:dryrun -- 05)');
+    console.error('usage: node labs/coach-dryrun.mjs <nn>   (e.g. pnpm coach:dryrun -- 05)');
     process.exit(2);
   }
   return { ...opts, nn };

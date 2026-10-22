@@ -7,11 +7,11 @@ order status through the event timeline.
 ## Run
 
 ```bash
-nvm use 22 && npm install                      # from the repo root
+nvm use 22 && pnpm install                      # from the repo root
 cd apps/mobile
-npx expo start                                 # Metro; press `a` with an emulator running
-npx expo run:android                           # development build on the connected emulator
-EXPO_PUBLIC_API_MODE=live npx expo start       # talk to services/api instead of the in-app mock
+pnpm exec expo start                                 # Metro; press `a` with an emulator running
+pnpm exec expo run:android                           # development build on the connected emulator
+EXPO_PUBLIC_API_MODE=live pnpm exec expo start       # talk to services/api instead of the in-app mock
 ```
 
 The default `mock` mode needs no backend: `MockStore` serves `packages/contracts/seed-spec.yaml`
@@ -21,7 +21,7 @@ the same typed client the live mode uses.
 ## Verify
 
 ```bash
-npm test && npm run lint && npm run build
+pnpm test && pnpm lint && pnpm build
 ```
 
 ## Android emulator (Linux, KVM)
@@ -29,7 +29,7 @@ npm test && npm run lint && npm run build
 ```bash
 export ANDROID_HOME=$HOME/android-sdk
 $ANDROID_HOME/emulator/emulator -avd <avd> -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -accel on &
-adb wait-for-device && npx expo run:android
+adb wait-for-device && pnpm exec expo run:android
 ```
 
 ## iOS (not exercised here)

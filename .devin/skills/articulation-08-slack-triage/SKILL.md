@@ -1,6 +1,6 @@
 ---
 name: coach-08-slack-triage
-description: Voice articulation coach for lab 08 (Slack triage and write-back). Plays Harbourline's head of customer support. Use when the learner runs `@skills:coach-08-slack-triage <handle>` or `npm run coach:dryrun -- 08`.
+description: Voice articulation coach for lab 08 (Slack triage and write-back). Plays Harbourline's head of customer support. Use when the learner runs `@skills:coach-08-slack-triage <handle>` or `pnpm coach:dryrun -- 08`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -49,4 +49,4 @@ Score objection-2 at most 4/10 on recovery if no count of messages, reports or p
 
 ## Dry-run
 
-With `--dry-run <transcript>`, read the transcript, use its `[mm:ss]` markers, skip the git push, and print the report. `npm run coach:dryrun -- 08` validates the three fixtures in `labs/08-slack-triage/coaching/dryrun/`.
+With `--dry-run <transcript>`, read the transcript, use its `[mm:ss]` markers, skip the git push, and print the report. `pnpm coach:dryrun -- 08` validates the three fixtures in `labs/08-slack-triage/coaching/dryrun/`.

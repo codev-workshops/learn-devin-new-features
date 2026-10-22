@@ -21,9 +21,9 @@ GA Xcode 26.6 is the `xcode-select` default and its iOS 26.5 SDK matches an inst
 | # | Command | Wall clock |
 | --- | --- | --- |
 | 1 | `brew install node@22` then `export PATH="$(brew --prefix node@22)/bin:$PATH"` | 36 s |
-| 2 | `npm install --no-audit --no-fund` | 8 s |
-| 3 | `npm test --workspace apps/mobile` (35/35), `npm run lint --workspace apps/mobile`, `npm run build --workspace apps/mobile` | 5 s / 4 s / 10 s |
-| 4 | `cd apps/mobile && npx expo prebuild --platform ios --no-install` | 1.2 s |
+| 2 | `pnpm install` | 8 s |
+| 3 | `pnpm --filter @harbourline/mobile test` (35/35), `pnpm --filter @harbourline/mobile run lint`, `pnpm --filter @harbourline/mobile run build` | 5 s / 4 s / 10 s |
+| 4 | `cd apps/mobile && pnpm exec expo prebuild --platform ios --no-install` | 1.2 s |
 | 5 | `cd apps/mobile/ios && LANG=en_US.UTF-8 pod install` | 27 s first, 8.5 s after the podspec fix |
 | 6 | `xcodebuild -workspace ios/Harbourline.xcworkspace -scheme Harbourline -sdk iphonesimulator -configuration Release -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' -derivedDataPath ios/build build` | 88 s first (arm64 + x86_64), 48 s incremental |
 | 7 | `xcrun simctl install booted ios/build/Build/Products/Release-iphonesimulator/Harbourline.app && xcrun simctl launch booted test.harbourline.commerce` | < 5 s |
@@ -55,6 +55,6 @@ Lumen Home → Add (Arc Floor Lamp) → Cart tab → Orders tab → LH-001003 `S
 
 - Haptic feel: the Simulator cannot vibrate; only `isAvailable` and the `impact` call path ran.
 - Physical device, code signing, provisioning, TestFlight / App Store.
-- `npx expo run:ios` and the Debug configuration with Metro (xcodebuild Release was used instead).
+- `pnpm exec expo run:ios` and the Debug configuration with Metro (xcodebuild Release was used instead).
 - Xcode 27.0 RC / iOS 27.0 runtime; live API mode against `services/api`.
 - Installing CocoaPods from scratch (it was already present via Homebrew).

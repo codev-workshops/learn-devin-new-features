@@ -5,19 +5,19 @@ Harbourline order API (Express 5 + TypeScript, PostgreSQL 16). Owned by W1-api t
 ## Run
 
 ```bash
-npm run db:up                       # Postgres (repo root)
+pnpm db:up                       # Postgres (repo root)
 cp .env.example .env                # DATABASE_URL, API_PORT, PAYGATE_SECRET
-npm run db:migrate && npm run db:seed -- --reset
-npm run dev -w services/api         # http://localhost:3001
+pnpm db:migrate && pnpm db:seed -- --reset
+pnpm --filter @harbourline/api run dev         # http://localhost:3001
 ```
 
 `HARBOURLINE_NOW=2026-10-22T09:00:00Z` pins the API clock (promo windows, abandoned-cart ages); tests set it automatically.
 
-## Gates (run from this directory or via root `npm run gates`)
+## Gates (run from this directory or via root `pnpm gates`)
 
-- `npm test` — Vitest + Supertest against a live Postgres; the global setup migrates and reseeds (`--reset`) first.
-- `npm run lint` — ESLint, Prettier check, `tsc --noEmit`.
-- `npm run build` — emits `dist/`.
+- `pnpm test` — Vitest + Supertest against a live Postgres; the global setup migrates and reseeds (`--reset`) first.
+- `pnpm lint` — ESLint, Prettier check, `tsc --noEmit`.
+- `pnpm build` — emits `dist/`.
 
 ## Layout
 

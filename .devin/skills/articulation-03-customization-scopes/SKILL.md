@@ -44,4 +44,4 @@ argument-hint: "<learner-handle> [--dry-run <transcript>] [--slack]"
 
 ## Dry-run
 
-`@skills:coach-03-customization-scopes dryrun --dry-run labs/03-customization-scopes/coaching/dryrun/<variant>.md`: read the transcript, take timings from the `[mm:ss]` markers (`run.timing_method: "markers"`, tolerance 5 s), write `<variant>.report.json`, render `.report.md` with `node labs/coach-dryrun.mjs --render`, skip the coaching-branch push. Then `npm run coach:dryrun -- 03`.
+`@skills:coach-03-customization-scopes dryrun --dry-run labs/03-customization-scopes/coaching/dryrun/<variant>.md`: read the transcript, take timings from the `[mm:ss]` markers (`run.timing_method: "markers"`, tolerance 5 s), write `<variant>.report.json`, render `.report.md` with `node labs/coach-dryrun.mjs --render`, skip the coaching-branch push. Then `pnpm coach:dryrun -- 03`.

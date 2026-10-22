@@ -13,6 +13,6 @@ export default function setup(): void {
     DATABASE_URL: process.env.DATABASE_URL ?? config.databaseUrl,
     HARBOURLINE_NOW: process.env.HARBOURLINE_NOW ?? "2026-10-22T09:00:00Z",
   };
-  execSync("npm run db:migrate --silent", { cwd: workspace, stdio: "inherit", env });
-  execSync("npm run db:seed --silent -- --reset", { cwd: workspace, stdio: "inherit", env });
+  execSync("pnpm --silent run db:migrate", { cwd: workspace, stdio: "inherit", env });
+  execSync("pnpm --silent run db:seed -- --reset", { cwd: workspace, stdio: "inherit", env });
 }

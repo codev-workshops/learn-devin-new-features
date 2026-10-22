@@ -14,7 +14,7 @@ info:
     USD with tax added at checkout; Trailhead Supply is EUR with 19% VAT included in list prices.
 servers:
   - url: http://localhost:3001
-    description: services/api (W1-api) via `npm run dev`
+    description: services/api (W1-api) via `pnpm dev`
 tags:
   - { name: system }
   - { name: brands }

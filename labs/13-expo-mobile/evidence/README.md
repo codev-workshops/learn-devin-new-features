@@ -9,7 +9,7 @@ This is the evidence from the run that built the lab. It is the fixture fallback
 | Machine | Linux Devin session VM, `/dev/kvm` present; `emulator -accel-check` → "KVM (version 12) is installed and usable." |
 | Emulator | AVD `oba_test`, Android 15 (API 35), Google APIs x86_64, 1080×2400 |
 | Boot command | `emulator -avd oba_test -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -no-snapshot -accel on` |
-| Build command | `cd apps/mobile && npx expo run:android --variant release --no-bundler` (prebuild → Gradle 8.14.3 → install) |
+| Build command | `cd apps/mobile && pnpm exec expo run:android --variant release --no-bundler` (prebuild → Gradle 8.14.3 → install) |
 | Build time | 5 min 20 s cold (all four ABIs; add `-PreactNativeArchitectures=x86_64` via `expo-build-properties` to cut it) |
 | Output | `android/app/build/outputs/apk/release/app-release.apk` (65 MB), installed as `test.harbourline.commerce` |
 | API mode | `mock` (default) — no backend, no credentials |

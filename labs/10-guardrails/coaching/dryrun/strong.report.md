@@ -21,7 +21,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T10:00:00Z · timing:
 | Think-aloud checkpoint (T+45) | 45 s | 47 s | +2 s | on |
 | Three-minute CISO update | 180 s | 182 s | +2 s | on |
 | Objection 1 (technical) — “A profile is config — what stops a developer turning it off?” | 90 s | 88 s | -2 s | on |
-| Objection 2 (commercial) — “This will block legitimate npm installs.” | 90 s | 92 s | +2 s | on |
+| Objection 2 (commercial) — “This will block legitimate pnpm installs.” | 90 s | 92 s | +2 s | on |
 
 ## Structure (problem → approach → evidence → next step)
 
@@ -40,7 +40,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T10:00:00Z · timing:
 ## Missing key points
 
 - [x] The enterprise profile is mandatory, so it is a floor nobody below can loosen, while a recommended profile is only a default a lower level may replace (8) — “The enterprise profile is a floor that no organization, automation or session can loosen. A recommended profile would only be a default that anyone below can replace”
-- [x] Network and MCP access are separate allowlists: npm and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved (6) — “Network and MCP are separate allowlists. I think npm and star-dot-sandbox-dot-paygate go in the host list, and the MCP list stays empty until you approve a server”
+- [x] Network and MCP access are separate allowlists: the package registry and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved (6) — “Network and MCP are separate allowlists. I think registry-dot-npmjs-dot-org and star-dot-sandbox-dot-paygate go in the host list, and the MCP list stays empty until you approve a server”
 - [x] A session already running keeps the profile it resolved until it wakes or reboots, while new sessions get the change straight away (6) — “A session that is already running keeps the profile it resolved until it wakes or reboots. New sessions get your change straight away”
 - [x] Child sessions are governed by their parent's chain, so delegating work cannot step outside the floor (5) — “child sessions are governed by their parent's chain, so delegating work cannot step outside the floor”
 - [x] Write paths are closed in the profile itself: GitHub CLI token removed, git access level, and Devin MCP read-only for automations (5) — “the GitHub CLI token is removed, git access is set per level, and automations get Devin MCP read-only”

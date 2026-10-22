@@ -25,7 +25,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T10:20:00Z · timing:
 
 ## Structure (problem → approach → evidence → next step)
 
-- **Problem** — weak: “So, first you install Node, then npm install, then the Python worker”
+- **Problem** — weak: “So, first you install Node, then pnpm install, then the Python worker”
 - **Approach** — present: “Devin will set up the blueprint, which is the machine setup”
 - **Evidence** — weak: “the gates are green on a fresh machine”
 - **Next step** — present: “Ask: please tell Jonas to delete his note.”
@@ -52,7 +52,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T10:20:00Z · timing:
 - Repeated words: then (×4 in the opening sentence)
 - Coach asked “did you say…?”: never
 - Article/plural slips: "the AGENTS.md is the instructions" — "AGENTS.md holds the instructions"
-- Re-record: “So, first you install Node, then npm install, then the Python worker…”; “I can fix the README too.”
+- Re-record: “So, first you install Node, then pnpm install, then the Python worker…”; “I can fix the README too.”
 
 ## Three stems for next time
 

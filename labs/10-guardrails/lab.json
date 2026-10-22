@@ -1,13 +1,13 @@
 {
   "number": 10,
   "slug": "guardrails",
-  "title": "npm and the PayGate sandbox, nothing else — a security floor every session inherits",
+  "title": "the package registry and the PayGate sandbox, nothing else — a security floor every session inherits",
   "feature": "Enterprise guardrails: Security Profiles (network allowlist, MCP allowlist, Devin MCP read-only, git access level, GitHub CLI token), mandatory vs recommended bindings, child-session and snapshot-build resolution, running-session timing, and AI Guardrails message screening",
   "duration_minutes": 75,
   "difficulty": "advanced",
   "prerequisites": [
     "Lab 01 done (blueprint, AGENTS.md and skills), so you know what a snapshot build installs",
-    "Repo cloned, `npm install` done at the root (the offline resolver and its tests run under `labs/`)",
+    "Repo cloned, `pnpm install` done at the root (the offline resolver and its tests run under `labs/`)",
     "A Devin account. Enterprise-admin or organization-admin rights are needed only to save and bind profiles; without them you take the observer path",
     "Optional: access to the Devin API, to bind a profile to snapshot builds"
   ],
@@ -57,7 +57,7 @@
       "git switch main && git status --short",
       "git branch --list 'lab10/*' | xargs -r git branch -D",
       "rm -rf ~/lab10",
-      "npm run lab:reset -- 10"
+      "pnpm lab:reset -- 10"
     ],
     "clean_state": "On `main` with `git status --short` empty, no local `lab10/*` branches and no `~/lab10` working folder. If you are an admin, no profile named `harbourline-*` exists at any scope you control and no profile is bound to your test automation or session; otherwise note which profile already governs your sessions (run `probe.sh` once and keep its output)."
   },

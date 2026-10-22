@@ -7,7 +7,7 @@
   "difficulty": "advanced",
   "prerequisites": [
     "Labs 01–03 done (environment, rules and skills) so a child session can bring the API up from the repo alone",
-    "Repo cloned, `npm install` done at the root and `npm run db:up` working locally",
+    "Repo cloned, `pnpm install` done at the root and `pnpm db:up` working locally",
     "Dynamic workflows enabled for your Devin organization and enough ACU allowance for roughly ten child sessions",
     "Push access to a fork or sandbox copy of the repo, so fixer agents can push throwaway `audit/*` branches"
   ],
@@ -30,7 +30,7 @@
         "integration": "PostgreSQL 16 (docker compose)",
         "required": true,
         "fixture": "Same container locally and inside each child session",
-        "note": "The API tests in services/api need it; `npm run lab:reset -- 09` reseeds"
+        "note": "The API tests in services/api need it; `pnpm lab:reset -- 09` reseeds"
       }
     ],
     "fixture_only_story": "Without workflow access you still do the whole audit: enumerate the 22 endpoints from services/api/src/routes, decide per endpoint whether a caller of the other brand can read or change a row, un-skip the planted cross-brand test on a throwaway branch to prove the fix, then read the reference run in the hidden answer and price your own design with its per-agent ACU numbers.",
@@ -42,7 +42,7 @@
     "reset": [
       "git switch main && git status --short",
       "git branch --list 'audit/*' | xargs -r git branch -D",
-      "npm run lab:reset -- 09"
+      "pnpm lab:reset -- 09"
     ],
     "clean_state": "On `main` with `git status --short` empty, no local `audit/*` branches, and the seed-spec dataset loaded for both brands. The planted `cross-brand-leak` (GET /orders/:orderId ignores the caller's brand) is still present and its test in services/api/test/planted.test.ts is still skipped."
   },

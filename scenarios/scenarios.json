@@ -2,9 +2,9 @@
   "$comment": "Harbourline scenario manifest (W1-fixtures). Lab authors copy `injectors[].lab` into labs/<nn>-*/lab.json#injectors and `briefs/<id>.json` into brief.md. Every injector talks only to the OpenAPI contract; exit 0 = symptom observed, 2 = precondition, 3 = plant fixed, 4 = worker-side symptom pending.",
   "version": 1,
   "reset": {
-    "command": "npm run lab:reset -- <nn>",
+    "command": "pnpm lab:reset -- <nn>",
     "steps": [
-      "npm run db:seed -- --reset (services/api)",
+      "pnpm db:seed -- --reset (services/api)",
       "scenarios/lab-reset.sh <nn>: revert bad-migration.patch, clear scenarios/.state, reset paygate-fake knobs via PUT /knobs, print the lab's starting state"
     ],
     "paygate_knobs_note": "services/paygate-fake knobs (--duplicate, --out-of-order, --delay) are reset with PUT /knobs when the service is reachable at PAYGATE_URL; otherwise restart it."
@@ -103,7 +103,7 @@
       "revert": "git apply -R scenarios/bad-migration.patch",
       "lab": {
         "name": "bad-migration",
-        "command": "git apply scenarios/bad-migration.patch && npm run db:migrate",
+        "command": "git apply scenarios/bad-migration.patch && pnpm db:migrate",
         "when": "T+30 min",
         "behaviour": "A plausible-looking migration lands; a PreToolUse hook should block db:migrate, otherwise the worker dies on NULL currency."
       }

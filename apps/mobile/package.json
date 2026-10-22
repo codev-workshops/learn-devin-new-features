@@ -2,7 +2,7 @@
   "name": "@harbourline/mobile",
   "version": "0.1.0",
   "private": true,
-  "description": "Kad\u00e9 Commerce shopping app (Expo SDK 54, Expo Router): brand picker, catalog, cart and order status against the frozen OpenAPI contract.",
+  "description": "Harbourline shopping app (Expo SDK 54, Expo Router): brand picker, catalog, cart and order status against the frozen OpenAPI contract.",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
@@ -10,7 +10,7 @@
     "ios": "expo run:ios",
     "test": "jest --ci",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "lint": "prettier --check . && eslint . && npm run typecheck",
+    "lint": "prettier --check . && eslint . && pnpm typecheck",
     "format": "prettier --write .",
     "build": "node scripts/build-fixtures.mjs --check && expo export --platform android --output-dir dist",
     "fixtures": "node scripts/build-fixtures.mjs"

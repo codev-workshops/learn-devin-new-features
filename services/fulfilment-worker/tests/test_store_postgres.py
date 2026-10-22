@@ -1,7 +1,7 @@
 """Runs the duplicate-webhook plant through PostgresStore against db/expected-schema.sql.
 
 Needs a reachable database: ``HARBOURLINE_TEST_DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline``
-(``npm run db:up`` at the repo root). Skipped otherwise so ``pytest -q`` stays green offline.
+(``pnpm db:up`` at the repo root). Skipped otherwise so ``pytest -q`` stays green offline.
 """
 
 import os

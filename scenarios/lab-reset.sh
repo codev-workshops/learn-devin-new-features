@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # lab-reset.sh <nn> — roll back lab-specific injectors after the database has been reseeded.
 #
-# Called by `npm run lab:reset -- <nn>` (scripts/lab-reset.mjs) right after
-# `npm run db:seed -- --reset`. Everything the injectors create lives in the database and is
+# Called by `pnpm lab:reset -- <nn>` (scripts/lab-reset.mjs) right after
+# `pnpm db:seed -- --reset`. Everything the injectors create lives in the database and is
 # already gone by the time this runs; what remains is file-level state and process knobs:
 #
 #   1. revert scenarios/bad-migration.patch if a lab applied it to the working tree

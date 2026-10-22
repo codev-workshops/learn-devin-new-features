@@ -1,6 +1,6 @@
 ---
 name: coach-12-oncall
-description: Voice articulation coach for lab 12 (Devin Oncall, the 02:10 LH-LAMP-03 oversell page). Use when the learner types `@skills:coach-12-oncall <handle>` or runs `npm run coach:dryrun -- 12`.
+description: Voice articulation coach for lab 12 (Devin Oncall, the 02:10 LH-LAMP-03 oversell page). Use when the learner types `@skills:coach-12-oncall <handle>` or runs `pnpm coach:dryrun -- 12`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -55,4 +55,4 @@ Listen for acknowledge → boundary → evidence → offer (see the answer's mod
 
 ## Dry-run
 
-With `--dry-run <transcript>` use the transcript's `[mm:ss]` markers (`timing_method: markers`), grade inline, print the report and skip the progress-log push. `npm run coach:dryrun -- 12` validates the committed strong, mediocre and off-track reports.
+With `--dry-run <transcript>` use the transcript's `[mm:ss]` markers (`timing_method: markers`), grade inline, print the report and skip the progress-log push. `pnpm coach:dryrun -- 12` validates the committed strong, mediocre and off-track reports.

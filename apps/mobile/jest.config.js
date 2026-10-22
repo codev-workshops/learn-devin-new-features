@@ -1,6 +1,9 @@
 // jest-expo preset, widened for the monorepo: msw ships ESM (.mjs) deps that must be transformed,
-// and `react` must resolve to this workspace's copy (the root hoists a newer React for other packages).
+// and `react` must resolve to the copy this workspace sees (local when pnpm nests it, else the
+// hoisted root copy) so React and the renderer never come from two installs.
+const path = require("node:path");
 const preset = require("jest-expo/jest-preset");
+const reactDir = path.dirname(require.resolve("react/package.json", { paths: [__dirname] }));
 
 const babelTransform = preset.transform["\\.[jt]sx?$"];
 const esmPackages = [
@@ -39,8 +42,8 @@ module.exports = {
     ...(preset.moduleNameMapper ?? {}),
     "^@/(.*)$": "<rootDir>/src/$1",
     "^@harbourline/contracts$": "<rootDir>/../../packages/contracts/src/index.ts",
-    "^react$": "<rootDir>/node_modules/react",
-    "^react/(.*)$": "<rootDir>/node_modules/react/$1",
+    "^react$": reactDir,
+    "^react/(.*)$": `${reactDir}/$1`,
   },
   testEnvironmentOptions: {
     ...(preset.testEnvironmentOptions ?? {}),

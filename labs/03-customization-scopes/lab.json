@@ -6,7 +6,7 @@
   "duration_minutes": 90,
   "difficulty": "core",
   "prerequisites": [
-    "Repo cloned locally, `npm install` done at the root, Node 22",
+    "Repo cloned locally, `pnpm install` done at the root, Node 22",
     "Lab 00 done once, so you know how the voice coach works",
     "Work on a throwaway branch such as `lab/03-<your-handle>`; never commit rules or skills from this lab to `main`",
     "No database is needed: this lab changes instruction files only"

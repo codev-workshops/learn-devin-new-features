@@ -6,7 +6,7 @@
   "duration_minutes": 75,
   "difficulty": "core",
   "prerequisites": [
-    "Repo cloned, `npm install` done at the root, Node 22",
+    "Repo cloned, `pnpm install` done at the root, Node 22",
     "Lab 00 warm-up done once (framing stems and the update skeleton)",
     "Fixture path: nothing else — `labs/11-acu-analytics/tools/acu-sim.mjs` replays the documented limit rules over a fictional Harbourline enterprise",
     "Optional observer path: a Devin account whose role can open Settings → Analytics (organization), and, if your enterprise enabled it, Settings → Personal → My analytics"
@@ -42,7 +42,7 @@
   },
   "scenarios": {
     "reset": [
-      "npm run lab:reset -- 11",
+      "pnpm lab:reset -- 11",
       "rm -rf labs/11-acu-analytics/figures/tenant labs/11-acu-analytics/ACU-DECISION.md",
       "node labs/11-acu-analytics/tools/acu-sim.mjs --views"
     ],

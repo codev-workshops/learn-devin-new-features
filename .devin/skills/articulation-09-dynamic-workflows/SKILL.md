@@ -1,6 +1,6 @@
 ---
 name: coach-09-dynamic-workflows
-description: Voice articulation coach for lab 09 (dynamic workflows pilot). Plays the external security auditor. Use when the learner runs `@skills:coach-09-dynamic-workflows <handle>` or `npm run coach:dryrun -- 09`.
+description: Voice articulation coach for lab 09 (dynamic workflows pilot). Plays the external security auditor. Use when the learner runs `@skills:coach-09-dynamic-workflows <handle>` or `pnpm coach:dryrun -- 09`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -46,4 +46,4 @@ Score objection-2 at most 4/10 on recovery if no per-agent ACU figure is spoken.
 
 ## Dry-run
 
-With `--dry-run <transcript>`, read the transcript, use its `[mm:ss]` markers, skip the git push, and print the report. `npm run coach:dryrun -- 09` validates the three fixtures in `labs/09-dynamic-workflows/coaching/dryrun/`.
+With `--dry-run <transcript>`, read the transcript, use its `[mm:ss]` markers, skip the git push, and print the report. `pnpm coach:dryrun -- 09` validates the three fixtures in `labs/09-dynamic-workflows/coaching/dryrun/`.

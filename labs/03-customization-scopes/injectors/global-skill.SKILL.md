@@ -6,5 +6,5 @@ triggers: ["user"]
 
 # Checkout review (personal, global)
 
-1. Run `npm run lint` and `npm test`.
+1. Run `pnpm lint` and `pnpm test`.
 2. If both pass, approve.

@@ -7,7 +7,7 @@
   "difficulty": "advanced",
   "prerequisites": [
     "Labs 01–14 attempted (at least their fixture paths), so you know what each capability does and costs",
-    "Repo cloned, `npm install` done at the root, Node 22, Docker for `npm run db:up`",
+    "Repo cloned, `pnpm install` done at the root, Node 22, Docker for `pnpm db:up`",
     "A facilitator or the capstone coach to hand you a sealed envelope; you never choose or open it yourself",
     "Half a day blocked in your calendar, with the voice call free to stay connected while you work"
   ],
@@ -17,7 +17,7 @@
       {
         "integration": "Harbourline stack (API, worker, PayGate fake, seed data, scenario injectors)",
         "required": true,
-        "fixture": "`npm run db:up && npm run lab:reset -- 15`, then `npm run dev -w services/api` (port 3001); the webhook and sweeper injectors also need the fulfilment worker: `(cd services/fulfilment-worker && DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline python3 -m fulfilment_worker run)`.",
+        "fixture": "`pnpm db:up && pnpm lab:reset -- 15`, then `pnpm --filter @harbourline/api run dev` (port 3001); the webhook and sweeper injectors also need the fulfilment worker: `(cd services/fulfilment-worker && DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline python3 -m fulfilment_worker run)`.",
         "note": "Zero credentials. This is the only part every envelope needs."
       },
       {
@@ -47,8 +47,8 @@
   },
   "scenarios": {
     "reset": [
-      "npm run db:up",
-      "npm run lab:reset -- 15",
+      "pnpm db:up",
+      "pnpm lab:reset -- 15",
       "git switch main && git status --short (must print nothing) — work on your own leaf branch, never on main"
     ],
     "clean_state": "Seed-spec dataset for both brands, no scenario orders, every planted defect still in place on `main`, `bad-migration.patch` not applied, `scenarios/.state/` empty, and you have not read anything under `labs/15-capstone/scenarios/`."

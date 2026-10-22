@@ -1,6 +1,6 @@
 ---
 name: coach-06-review-remediation
-description: Voice articulation coach for lab 06 (Devin Review on the price-drift fix that touches totals and tax). Plays Tomás, the sceptical checkout tech lead. Use when the learner types `@skills:coach-06-review-remediation <handle>` or runs `npm run coach:dryrun -- 06`. Started manually by the learner only.
+description: Voice articulation coach for lab 06 (Devin Review on the price-drift fix that touches totals and tax). Plays Tomás, the sceptical checkout tech lead. Use when the learner types `@skills:coach-06-review-remediation <handle>` or runs `pnpm coach:dryrun -- 06`. Started manually by the learner only.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -44,4 +44,4 @@ Acknowledgement cues the coach listens for: "fair", "you're right that", "I agre
 
 ## Dry-run
 
-With `--dry-run <transcript>`, read the transcript file, use its `[mm:ss]` markers, skip the git push, and print the report. `npm run coach:dryrun -- 06` validates the committed strong / mediocre / off-track reports against the transcripts.
+With `--dry-run <transcript>`, read the transcript file, use its `[mm:ss]` markers, skip the git push, and print the report. `pnpm coach:dryrun -- 06` validates the committed strong / mediocre / off-track reports against the transcripts.

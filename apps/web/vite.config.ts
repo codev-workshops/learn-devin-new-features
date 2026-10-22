@@ -11,6 +11,9 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: { "@harbourline/contracts": contractsSrc },
+    // apps/mobile pins an older React; the hoisted root copy may be that one, so React and
+    // ReactDOM must both resolve from this workspace.
+    dedupe: ["react", "react-dom"],
   },
   server: { port: 5173, strictPort: true },
   build: { sourcemap: true },

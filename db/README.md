@@ -10,11 +10,11 @@ Owned by W1-api. The database is PostgreSQL 16 started by the root `docker compo
 Commands (from the repo root; both delegate to `services/api`):
 
 ```sh
-npm run db:up                    # start Postgres and wait for the healthcheck
-npm run db:migrate               # apply pending migrations (table `pgmigrations`)
-npm run db:seed                  # seed an empty database; refuses to run twice
-npm run db:seed -- --reset       # truncate every table and rebuild the seed — the universal lab reset
-npm run db:seed -- --verify      # recompute the dataset and compare row counts and checksums with the database
+pnpm db:up                    # start Postgres and wait for the healthcheck
+pnpm db:migrate               # apply pending migrations (table `pgmigrations`)
+pnpm db:seed                  # seed an empty database; refuses to run twice
+pnpm db:seed -- --reset       # truncate every table and rebuild the seed — the universal lab reset
+pnpm db:seed -- --verify      # recompute the dataset and compare row counts and checksums with the database
 ```
 
 `DATABASE_URL` (default `postgres://harbourline:harbourline@localhost:5432/harbourline`) selects the database. The seed is

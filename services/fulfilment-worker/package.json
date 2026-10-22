@@ -2,7 +2,7 @@
   "name": "@harbourline/fulfilment-worker",
   "version": "0.1.0",
   "private": true,
-  "description": "Harbourline fulfilment worker (Python 3.12). The npm scripts only forward to pytest/ruff so the root gates can drive this workspace.",
+  "description": "Harbourline fulfilment worker (Python 3.12). The package.json scripts only forward to pytest/ruff so the root gates can drive this workspace.",
   "scripts": {
     "test": "python3 -m pytest -q",
     "lint": "python3 -m ruff check . && python3 -m ruff format --check .",

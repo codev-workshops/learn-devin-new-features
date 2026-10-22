@@ -6,7 +6,7 @@
   "duration_minutes": 120,
   "difficulty": "intro",
   "prerequisites": [
-    "Repo cloned, Node 22, `npm install` done at the root",
+    "Repo cloned, Node 22, `pnpm install` done at the root",
     "Lab 00 warm-up done once (framing stems and the update skeleton)",
     "Fixture path: nothing beyond the repository connection — the blueprint audit, the AGENTS.md budget tool and all three injectors run locally",
     "Optional live path: permission to edit the repository blueprint in Settings → Environment and to start a snapshot build"
@@ -49,7 +49,7 @@
   "scenarios": {
     "reset": [
       "bash labs/01-onboarding/injectors/inject.sh --revert",
-      "npm run lab:reset -- 01",
+      "pnpm lab:reset -- 01",
       "node labs/01-onboarding/tools/agents-budget.mjs"
     ],
     "clean_state": "The injector revert prints `reverted` and `git status --short` is clean (no `docs/SETUP.md`, no `services/api/src/AGENTS.md`, no `labs/01-onboarding/.env.lab`). `lab:reset` reseeds whatever `DATABASE_URL` names from the seed spec — the local Compose database when it is unset; it has no host guard, so check `echo $DATABASE_URL` is empty or points at `localhost` before running it. The budget tool lists six `AGENTS.md` files, all under the limit, with exit code 0. Without Docker, skip the second command: everything else in this lab needs only the clone."

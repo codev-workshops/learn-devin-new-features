@@ -6,7 +6,7 @@
   "duration_minutes": 150,
   "difficulty": "advanced",
   "prerequisites": [
-    "Repo cloned, `npm install` done at the root, Node 22",
+    "Repo cloned, `pnpm install` done at the root, Node 22",
     "Lab 00 warm-up done once (framing stems and the update skeleton)",
     "Fixture path: the `fixtures/mcp` shim registered in Devin as a custom stdio MCP server from `fixtures/mcp/mcp.example.json` (no credentials)",
     "Optional live path: org admin access to Devin Oncall settings and a PagerDuty and/or Datadog MCP connection"
@@ -54,7 +54,7 @@
   },
   "scenarios": {
     "reset": [
-      "npm run lab:reset -- 12",
+      "pnpm lab:reset -- 12",
       "node fixtures/mcp/shim.mjs --call pagerduty_get_incident '{\"incident_id\":\"2187\"}'"
     ],
     "clean_state": "`lab:reset` ends with the lab 12 starting state: LH-LAMP-03 on hand = 3, no negative inventory, no Lamp Week orders beyond the seed, PayGate knobs off. The shim returns incident 2187 in status `acknowledged`. `git status --short` is clean and there is no `labs/12-oncall/INCIDENT-REPORT.md`. Without Docker, skip the first command: the fixture path needs only the shim."

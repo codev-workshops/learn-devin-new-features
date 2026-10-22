@@ -1,6 +1,6 @@
 # Harbourline seed-data specification (frozen in W0).
 # db/seed (W1-api) must generate exactly this dataset, deterministically, from `seed: 20261022`.
-# `npm run db:seed -- --reset` drops and re-creates it; it is the universal lab reset.
+# `pnpm db:seed -- --reset` drops and re-creates it; it is the universal lab reset.
 version: 1
 seed: 20261022
 as_of: "2026-10-22T00:00:00Z" # every relative age below is measured from this instant
