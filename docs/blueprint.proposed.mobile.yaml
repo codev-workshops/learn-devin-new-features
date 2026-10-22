@@ -33,6 +33,7 @@ repos:
             echo 'export ANDROID_HOME="$HOME/android-sdk"'
             echo 'export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"'
           } >> "$HOME/.bashrc"
+          sudo ln -sf "$ANDROID_HOME/platform-tools/adb" /usr/local/bin/adb  # non-interactive shells skip .bashrc
     install_dependencies:
       - name: npm workspaces
         run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
