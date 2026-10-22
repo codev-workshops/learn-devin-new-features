@@ -1,0 +1,39 @@
+# Pub/Sub topology for PayGate webhook fan-out. The API publishes every accepted webhook
+# (after the 202) to the topic; the worker consumes with at-least-once delivery, which is
+# why event_id must be the idempotency key (seed-spec → duplicate-webhook).
+topics:
+  - name: projects/kade-prod/topics/paygate-webhooks
+    labels: { service: kade-api, env: prod }
+    messageRetentionDuration: 604800s
+    schemaSettings:
+      schema: projects/kade-prod/schemas/PaymentWebhookEvent
+      encoding: JSON
+subscriptions:
+  - name: projects/kade-prod/subscriptions/paygate-webhooks-worker
+    topic: projects/kade-prod/topics/paygate-webhooks
+    ackDeadlineSeconds: 30
+    retryPolicy: { minimumBackoff: 10s, maximumBackoff: 600s }
+    deadLetterPolicy:
+      deadLetterTopic: projects/kade-prod/topics/paygate-webhooks-dlq
+      maxDeliveryAttempts: 5
+    enableExactlyOnceDelivery: false # at-least-once: the worker must dedupe on event_id
+    labels: { service: kade-fulfilment-worker, env: prod }
+  - name: projects/kade-prod/subscriptions/paygate-webhooks-audit
+    topic: projects/kade-prod/topics/paygate-webhooks
+    ackDeadlineSeconds: 60
+    bigqueryConfig:
+      table: kade-prod:analytics.paygate_webhooks_raw
+      useTopicSchema: true
+      writeMetadata: true
+# Snapshot of subscription metrics at 2026-10-22T02:30Z (fixture for the MCP shim):
+metrics_snapshot:
+  as_of: "2026-10-22T02:30:00Z"
+  paygate-webhooks-worker:
+    num_undelivered_messages: 212
+    oldest_unacked_message_age_seconds: 1830
+    ack_message_count_15m: 1440
+    nack_message_count_15m: 97
+    dead_letter_message_count_15m: 6
+  paygate-webhooks-audit:
+    num_undelivered_messages: 0
+    oldest_unacked_message_age_seconds: 2

@@ -1,0 +1,36 @@
+{
+  "id": "oversell",
+  "title": "We sold lamps we do not have",
+  "customer": {
+    "name": "Maya Perera",
+    "role": "Head of Merchandising, Lumen Home",
+    "brand": "lumen-home"
+  },
+  "voice": [
+    "Lamp Week started Monday. The Ember Table Lamp (LH-LAMP-03) had three units left and we sold forty of them overnight. Customer care is sending apology emails and a 15% voucher to every one of those customers, and our warehouse in New Jersey is being asked why their count was wrong when it was not.",
+    "This is the second flash sale where the stock number on the site and the stock on the shelf disagree. Finance has stopped trusting the inventory report; they now ask the warehouse for a manual count before every promotion.",
+    "I need to know how this happens, how many orders are affected right now, and what stops it before Black Friday. I do not need a rewrite of the inventory system."
+  ],
+  "impact": {
+    "orders_affected": 37,
+    "money": {
+      "amount": "2183.00",
+      "currency": "USD",
+      "note": "37 unfulfillable orders × $59.00; vouchers add ≈$330"
+    },
+    "trust": "Finance requests a manual count before every promotion (≈4 h of warehouse time each)"
+  },
+  "stakeholders": [
+    "Maya Perera (merchandising, decision owner)",
+    "US-NJ warehouse lead",
+    "Customer care lead",
+    "Platform engineering on-call"
+  ],
+  "constraints": [
+    "No schema changes this week",
+    "Lamp Week continues; the site stays up",
+    "Fixes ship behind a feature flag"
+  ],
+  "deadline": "Root cause and affected-order list by end of day; prevention proposal before Black Friday (31 Oct)",
+  "labs": [5, 9, 12, 15]
+}

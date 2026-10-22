@@ -1,0 +1,49 @@
+{
+  "alerts": [
+    {
+      "id": "ALRT01",
+      "type": "alert",
+      "status": "resolved",
+      "created_at": "2026-10-22T02:10:14Z",
+      "resolved_at": "2026-10-22T02:31:12Z",
+      "alert_key": "datadog-48213771-sku:LH-LAMP-03",
+      "severity": "critical",
+      "summary": "min:kade.inventory.on_hand{sku:LH-LAMP-03} = -37",
+      "integration": { "summary": "Datadog" }
+    },
+    {
+      "id": "ALRT02",
+      "type": "alert",
+      "status": "resolved",
+      "created_at": "2026-10-22T02:24:30Z",
+      "resolved_at": "2026-10-22T02:31:12Z",
+      "alert_key": "datadog-48213802",
+      "severity": "warning",
+      "summary": "PayGate webhook failure rate 5.6% (> 5%)",
+      "integration": { "summary": "Datadog" }
+    },
+    {
+      "id": "ALRT03",
+      "type": "alert",
+      "status": "resolved",
+      "created_at": "2026-10-22T02:30:00Z",
+      "resolved_at": "2026-10-22T02:31:12Z",
+      "alert_key": "datadog-48213771-sku:LH-LAMP-04",
+      "severity": "critical",
+      "summary": "min:kade.inventory.on_hand{sku:LH-LAMP-04} = -2",
+      "integration": { "summary": "Datadog" }
+    },
+    {
+      "id": "ALRT04",
+      "type": "alert",
+      "status": "triggered",
+      "created_at": "2026-10-22T02:52:40Z",
+      "resolved_at": null,
+      "alert_key": "datadog-48213771-sku:LH-LAMP-03",
+      "severity": "critical",
+      "summary": "min:kade.inventory.on_hand{sku:LH-LAMP-03} = -3 (re-triggered after manual correction)",
+      "integration": { "summary": "Datadog" }
+    }
+  ],
+  "$comment": "Alert storm injector for lab 12: duplicate this file's ALRT03 for LH-LAMP-02 and LH-BNDL-01 to simulate three SKUs paging at once."
+}

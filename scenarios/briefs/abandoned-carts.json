@@ -1,0 +1,31 @@
+{
+  "id": "abandoned-carts",
+  "title": "Ghost orders: paid, confirmed, nothing in them",
+  "customer": { "name": "Platform Ops", "role": "Platform admin (both brands)", "brand": null },
+  "voice": [
+    "Every few mornings the merchandiser console shows one or two orders that are paid and confirmed but have no lines. The customer paid real money and our warehouse has nothing to pick. Care has to call the customer and ask what they bought.",
+    "The pattern we see: the customer started checkout, PayGate's hosted page took its time, and our nightly cart sweeper cleaned up 'abandoned' carts in between. When the payment finally arrived there was no cart to build the order from.",
+    "We want to understand the sequence precisely, stop creating ghost orders, and recover the ones already created without refunding everyone."
+  ],
+  "impact": {
+    "orders_affected": 9,
+    "money": {
+      "amount": "1240.00",
+      "currency": "USD",
+      "note": "9 paid orders in 30 days with unknown contents; two refunded already"
+    },
+    "trust": "Warehouse pick list contains empty orders; care calls customers to ask what they ordered"
+  },
+  "stakeholders": [
+    "Platform Ops (decision owner)",
+    "Customer care",
+    "Fulfilment worker maintainer",
+    "Both brand merchandisers"
+  ],
+  "constraints": [
+    "The 48 h sweeper must keep running (storage and GDPR retention)",
+    "No change to the PayGate contract"
+  ],
+  "deadline": "Sequence diagram and fix proposal this week",
+  "labs": [7, 12, 15]
+}

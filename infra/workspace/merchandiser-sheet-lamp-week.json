@@ -1,0 +1,54 @@
+{
+  "$comment": "Google Sheets values (spreadsheets.values.get shape) for the Lamp Week planning sheet merchandising keeps by hand. Row 4 is the one that matters: LH-LAMP-03 had 3 units and a 60-unit 'expected demand'.",
+  "spreadsheetId": "1KadeLampWeek2026PlanningSheetFixture",
+  "title": "Lamp Week 2026 — plan",
+  "range": "Plan!A1:H9",
+  "majorDimension": "ROWS",
+  "values": [
+    [
+      "SKU",
+      "Name",
+      "List price",
+      "Sale price (-20%)",
+      "On hand (Fri count)",
+      "Expected demand",
+      "Reorder placed?",
+      "Notes"
+    ],
+    ["LH-LAMP-01", "Arc Floor Lamp", "129.00", "103.20", "40", "35", "yes", ""],
+    [
+      "LH-LAMP-02",
+      "Halo Pendant",
+      "89.00",
+      "71.20",
+      "2",
+      "20",
+      "no",
+      "supplier late — consider hiding"
+    ],
+    [
+      "LH-LAMP-03",
+      "Ember Table Lamp",
+      "59.00",
+      "47.20",
+      "3",
+      "60",
+      "no",
+      "hero product in the newsletter!"
+    ],
+    ["LH-LAMP-04", "Lumen Desk Lamp", "49.00", "39.20", "1", "15", "no", ""],
+    ["LH-LAMP-05", "Studio Clamp Lamp", "39.00", "31.20", "60", "25", "n/a", ""],
+    ["LH-LAMP-06", "Paper Moon Lantern", "34.50", "27.60", "75", "30", "n/a", ""],
+    ["LH-BULB-01", "Warm Filament Bulb 2-pack", "12.99", "10.39", "500", "200", "n/a", ""],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Maya: do NOT hide low-stock SKUs, the site shows 'low stock' and that drives urgency"
+    ]
+  ]
+}
