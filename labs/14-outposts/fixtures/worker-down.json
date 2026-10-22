@@ -1,0 +1,12 @@
+{
+  "outpost": "kade-vpc",
+  "description": "02:00 worker-b dies mid-session; its session waits, then resumes when the container restarts.",
+  "events": [
+    { "t": 0, "op": "worker_online", "worker": "worker-a" },
+    { "t": 0, "op": "worker_online", "worker": "worker-b" },
+    { "t": 5, "op": "session", "id": "S1" },
+    { "t": 6, "op": "session", "id": "S2" },
+    { "t": 7200, "op": "worker_offline", "worker": "worker-b", "snapshot": "worker-b down" },
+    { "t": 7230, "op": "worker_online", "worker": "worker-b", "snapshot": "restart policy brought worker-b back" }
+  ]
+}

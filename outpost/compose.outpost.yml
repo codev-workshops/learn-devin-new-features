@@ -1,0 +1,28 @@
+# Two Kadé outpost workers on one host = two concurrent sessions; a third session queues.
+# Usage (from the repo root, token exported in your shell, never written to a file in git):
+#   export DEVIN_OUTPOSTS_TOKEN=...   OUTPOST_NAME=kade-vpc
+#   docker compose -f outpost/compose.outpost.yml up -d --build
+# Each worker has its own data volume, so each keeps its own acceptor id. Never share one.
+x-worker: &worker
+  build:
+    context: ..
+    dockerfile: outpost/Dockerfile
+  image: kade-outpost-worker
+  command: ["worker", "start", "--outpost=${OUTPOST_NAME:-kade-vpc}"]
+  environment:
+    DEVIN_OUTPOSTS_TOKEN: ${DEVIN_OUTPOSTS_TOKEN:?export DEVIN_OUTPOSTS_TOKEN first}
+  restart: unless-stopped
+
+services:
+  worker-a:
+    <<: *worker
+    volumes:
+      - worker-a-data:/home/devin/.devin/worker
+  worker-b:
+    <<: *worker
+    volumes:
+      - worker-b-data:/home/devin/.devin/worker
+
+volumes:
+  worker-a-data:
+  worker-b-data:

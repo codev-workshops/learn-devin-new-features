@@ -1,0 +1,182 @@
+{
+  "number": 14,
+  "slug": "outposts",
+  "title": "Outposts — keep PayGate sandbox keys and the repo inside Kadé's VPC",
+  "feature": "Devin Outposts (Outpost queue, Docker worker image with the repo baked in, devin worker start, Slack !outpost, organization default platform, queueing across two containers) — or the offline queue model and Dockerfile check",
+  "duration_minutes": 120,
+  "difficulty": "advanced",
+  "prerequisites": [
+    "Repo cloned, `npm install` done at the root, Node 22",
+    "Lab 00 warm-up done once (framing stems and the update skeleton)",
+    "Docker on the machine you will build the worker image on (any Linux host or the Devin VM)",
+    "Optional live path: an organization with Outposts enabled, an admin who can create an Outpost, and a v3 API token with the `account.outposts.write` scope"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Offline queue model and Dockerfile check (`labs/14-outposts/tools/outpost-sim.mjs`) — default path",
+        "required": true,
+        "fixture": "Replays `labs/14-outposts/fixtures/*.json` and the injectors through the documented claim/queue rules, and checks `outpost/Dockerfile` against the worker-image policy. Smoke-test with `node labs/14-outposts/tools/outpost-sim.mjs check-dockerfile outpost/Dockerfile`.",
+        "note": "Zero credentials, zero network. Every acceptance criterion has a fixture-path version."
+      },
+      {
+        "integration": "Docker build of `outpost/Dockerfile`",
+        "required": true,
+        "fixture": "If `public.ecr.aws` is unreachable, smoke-build the same layers on Ubuntu: `docker build -f outpost/Dockerfile --build-arg BASE_IMAGE=mirror.gcr.io/library/ubuntu:24.04 -t kade-outpost-worker:smoke .` then run `outpost/smoke.sh` inside it.",
+        "note": "The smoke image has no Devin CLI, so it can prove the dependencies and the baked-in repo but cannot register as a worker."
+      },
+      {
+        "integration": "Devin Outposts (create Outpost, worker token, workers) — optional",
+        "required": false,
+        "fixture": "Observer path: read `outpost/RUNBOOK.md` and run the queue model. With a read-scoped token you can still list Outposts: `GET https://api.devin.ai/opbeta/outposts`.",
+        "note": "Live: Settings → Devin → Outposts → Create Outpost; the worker token is displayed exactly once. Needs Outposts enabled for the org (Pro, Max or Teams) and an admin."
+      },
+      {
+        "integration": "Slack (`!outpost`) — optional",
+        "required": false,
+        "fixture": "The queue model tags each session with how it was started (`via`), so the Slack route shows up in the replay log.",
+        "note": "Live: the Devin Slack app in a channel you may post in."
+      },
+      {
+        "integration": "Organization default platform — optional",
+        "required": false,
+        "fixture": "Describe the setting and its effect in `labs/14-outposts/OUTPOST-REPORT.md`; the `default platform` session in `fixtures/two-workers.json` shows where such sessions land.",
+        "note": "Live: org admin, Settings → Devin → Default platform."
+      }
+    ],
+    "fixture_only_story": "With no Outpost permission you still build the worker image (or its Ubuntu smoke variant), prove it carries the repo and its dependencies and no token, replay two containers serving three sessions, a worker dying at night, a claim race and a duplicated acceptor id, and write the CISO report. You label every live step as not exercised and say exactly what you would run.",
+    "not_exercised": [
+      "Registering a real worker with `devin worker start --outpost … --token …` and running a session on it (needs an Outpost and its one-time token).",
+      "Starting a session from Slack with `!outpost` and setting the organization default platform (need the Slack app and org-admin rights).",
+      "Watching the live wait banner while two real containers are busy (the queue model reproduces the rules, not the UI)."
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "npm run lab:reset -- 14",
+      "docker compose -f outpost/compose.outpost.yml down -v (only if you started live workers)",
+      "git checkout -- outpost/ labs/14-outposts/ && rm -f labs/14-outposts/OUTPOST-REPORT.md"
+    ],
+    "clean_state": "`outpost/Dockerfile` matches `main` and passes `outpost-sim.mjs check-dockerfile` with nine `ok` lines, no `kade-outpost-worker` containers are running, and `labs/14-outposts/OUTPOST-REPORT.md` does not exist."
+  },
+  "injectors": [
+    {
+      "name": "token-shown-once",
+      "when": "T+10 min",
+      "behaviour": "The platform engineer says the worker token from Outpost creation was pasted into a chat and never saved. Decide what happens to that token and where the next one lives; nothing in the image may change."
+    },
+    {
+      "name": "no-chrome",
+      "when": "T+20 min",
+      "behaviour": "`node labs/14-outposts/tools/outpost-sim.mjs check-dockerfile labs/14-outposts/injectors/no-chrome.Dockerfile` — a colleague's \"slimmer\" image. Say what breaks for Kadé's checkout UI work and how you would prove it."
+    },
+    {
+      "name": "third-session",
+      "when": "T+30 min",
+      "behaviour": "`node labs/14-outposts/tools/outpost-sim.mjs scenario labs/14-outposts/fixtures/two-workers.json` — a third engineer starts a session while both containers are busy. Explain what they see and what capacity decision follows."
+    },
+    {
+      "name": "claim-race",
+      "when": "T+40 min",
+      "behaviour": "`… scenario labs/14-outposts/injectors/claim-race.json` — both containers see the same queue event. Show that one session never runs twice."
+    },
+    {
+      "name": "shared-acceptor-id",
+      "when": "T+45 min",
+      "behaviour": "`… scenario labs/14-outposts/injectors/shared-acceptor-id.json` — the second container was started from a copied data directory."
+    },
+    {
+      "name": "baked-token",
+      "when": "T+50 min",
+      "behaviour": "`… check-dockerfile labs/14-outposts/injectors/baked-token.Dockerfile` — a pull request that \"makes the worker start without arguments\". Review it as the CISO would."
+    },
+    {
+      "name": "worker-down",
+      "when": "T+60 min",
+      "behaviour": "`… scenario labs/14-outposts/fixtures/worker-down.json` — worker-b dies at 02:00. Say what the engineer whose session it was sees, and what brings the worker back."
+    }
+  ],
+  "coach": {
+    "skill": "coach-14-outposts",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      {
+        "id": "framing",
+        "kind": "framing",
+        "label": "60-second framing for the CISO",
+        "target_seconds": 60
+      },
+      {
+        "id": "checkpoint-15",
+        "kind": "checkpoint",
+        "label": "Think-aloud checkpoint (T+15)",
+        "at_minute": 15,
+        "target_seconds": 45
+      },
+      {
+        "id": "checkpoint-60",
+        "kind": "checkpoint",
+        "label": "Think-aloud checkpoint (T+60)",
+        "at_minute": 60,
+        "target_seconds": 45
+      },
+      {
+        "id": "update",
+        "kind": "update",
+        "label": "Three-minute update to the CISO",
+        "target_seconds": 180
+      },
+      {
+        "id": "objection-1",
+        "kind": "objection",
+        "label": "Objection 1 (data boundary)",
+        "target_seconds": 90
+      },
+      {
+        "id": "objection-2",
+        "kind": "objection",
+        "label": "Objection 2 (availability)",
+        "target_seconds": 90
+      },
+      {
+        "id": "objection-3",
+        "kind": "objection",
+        "label": "Objection 3 (ownership)",
+        "target_seconds": 90
+      }
+    ]
+  },
+  "references": [
+    {
+      "title": "Devin docs — Outposts overview (queues, workers, machine dependencies, Slack !outpost, default platform)",
+      "url": "https://docs.devin.ai/cloud/outposts/overview",
+      "date": "fetched 2026-10-22"
+    },
+    {
+      "title": "Devin docs — Outposts quickstart (create an Outpost, worker token, Docker worker image, DEVIN_CHROME_PATH)",
+      "url": "https://docs.devin.ai/cloud/outposts/quickstart",
+      "date": "fetched 2026-10-22"
+    },
+    {
+      "title": "Devin docs — Outposts orchestration (list-then-watch, claim, 409 on a race, claim deadline, release)",
+      "url": "https://docs.devin.ai/cloud/outposts/orchestration",
+      "date": "fetched 2026-10-22"
+    },
+    {
+      "title": "Devin docs — Outposts reference (worker CLI, environment variables, API)",
+      "url": "https://docs.devin.ai/cloud/outposts/reference",
+      "date": "fetched 2026-10-22"
+    },
+    {
+      "title": "Devin release notes 2026 — Outposts launch (22 Jul), sessions wait for a machine and default-platform API (30 Sep), Automations on shared Outposts (25 Sep)",
+      "url": "https://docs.devin.ai/release-notes/2026",
+      "date": "fetched 2026-10-22"
+    },
+    {
+      "title": "Docker docs — Dockerfile-specific .dockerignore files",
+      "url": "https://docs.docker.com/build/concepts/context/#dockerignore-files",
+      "date": "fetched 2026-10-22"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "outpost": "kade-vpc",
+  "description": "Injector: both workers see the same queue event and race for S1; the loser gets 409 and keeps watching.",
+  "events": [
+    { "t": 0, "op": "worker_online", "worker": "worker-a", "manual": true },
+    { "t": 0, "op": "worker_online", "worker": "worker-b", "manual": true },
+    { "t": 10, "op": "session", "id": "S1", "manual": true },
+    { "t": 11, "op": "claim", "worker": "worker-a", "id": "S1", "manual": true },
+    { "t": 11, "op": "claim", "worker": "worker-b", "id": "S1", "manual": true },
+    { "t": 12, "op": "provision_failed", "id": "S1", "snapshot": "worker-a released S1 after a failed clone" }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "outpost": "kade-vpc",
+  "description": "Injector: two containers were started from one copied data dir, so both present the same acceptor id.",
+  "events": [
+    { "t": 0, "op": "worker_online", "worker": "worker-a" },
+    { "t": 0, "op": "worker_online", "worker": "worker-a" },
+    { "t": 5, "op": "session", "id": "S1" },
+    { "t": 6, "op": "session", "id": "S2", "snapshot": "only one worker really online" }
+  ]
+}

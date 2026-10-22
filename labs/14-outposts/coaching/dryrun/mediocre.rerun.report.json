@@ -1,0 +1,239 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 14,
+    "slug": "outposts",
+    "coach": "coach-14-outposts"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T11:30:00Z",
+    "run_index": 2,
+    "transcript": "labs/14-outposts/coaching/dryrun/mediocre.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing for the CISO",
+      "target_seconds": 60,
+      "actual_seconds": 74,
+      "delta_seconds": 14,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-15",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+15)",
+      "target_seconds": 45,
+      "actual_seconds": 43,
+      "delta_seconds": -2,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-60",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+60)",
+      "target_seconds": 45,
+      "actual_seconds": 58,
+      "delta_seconds": 13,
+      "verdict": "over"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Three-minute update to the CISO",
+      "target_seconds": 180,
+      "actual_seconds": 150,
+      "delta_seconds": -30,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (data boundary)",
+      "target_seconds": 90,
+      "actual_seconds": 70,
+      "delta_seconds": -20,
+      "verdict": "under",
+      "question": "The control plane still sees our code, so what did we actually gain?"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (availability)",
+      "target_seconds": 90,
+      "actual_seconds": 88,
+      "delta_seconds": -2,
+      "verdict": "on",
+      "question": "What happens when the worker is down at 2 a.m.?"
+    },
+    {
+      "segment": "objection-3",
+      "kind": "objection",
+      "label": "Objection 3 (ownership)",
+      "target_seconds": 90,
+      "actual_seconds": 62,
+      "delta_seconds": -28,
+      "verdict": "under",
+      "question": "Who patches the worker image?"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "So, Outposts is a Devin feature for self-hosting"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "the commands and the repo checkout happen on our worker in the VPC"
+    },
+    "evidence": {
+      "status": "weak",
+      "quote": "basically the image works"
+    },
+    "next_step": {
+      "status": "present",
+      "quote": "Ask: can we get an admin to create the Outpost?"
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 9.1,
+    "filler_count": 6,
+    "filler_rate_per_minute": 0.66,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 2
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "The third one waits, right?"
+    ],
+    "long_pauses": [
+      {
+        "at": "02:41",
+        "seconds": 11,
+        "segment": "checkpoint-60"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Commands, file edits and repo access run on Kadé's worker in the VPC while inference and planning stay in Devin Cloud",
+      "weight": 6,
+      "mentioned": true,
+      "belonged_in": "framing",
+      "evidence_quote": "the commands and the repo checkout happen on our worker in the VPC, and Devin Cloud still does the inference"
+    },
+    {
+      "id": "mm2",
+      "point": "Worker started with devin worker start plus the outpost name and its token, the token shown once and kept in the secret manager",
+      "weight": 5,
+      "mentioned": true,
+      "belonged_in": "checkpoint-15",
+      "evidence_quote": "devin worker start with the outpost name and the token … only shown once, so I actually saved it in the secret manager"
+    },
+    {
+      "id": "mm3",
+      "point": "One session per worker so two containers serve two sessions and the third waits under a banner rather than failing",
+      "weight": 5,
+      "mentioned": true,
+      "belonged_in": "checkpoint-60",
+      "evidence_quote": "each worker takes one session, so with two containers the third session waits with a banner"
+    },
+    {
+      "id": "mm4",
+      "point": "Engineers reach the outpost through the organization default platform and the Slack bang command",
+      "weight": 4,
+      "mentioned": true,
+      "belonged_in": "update",
+      "evidence_quote": "Slack with bang outpost, or the admin sets the organization default platform"
+    },
+    {
+      "id": "mm5",
+      "point": "Image bakes in the repo with git, ffmpeg and Chrome via DEVIN_CHROME_PATH and grants no passwordless sudo",
+      "weight": 4,
+      "mentioned": true,
+      "belonged_in": "update",
+      "evidence_quote": "it has the repo, git, ffmpeg and Chrome with DEVIN_CHROME_PATH, and no passwordless sudo"
+    },
+    {
+      "id": "mm6",
+      "point": "Platform engineering rebuilds the image on a schedule and rolls one worker at a time",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "objection-3"
+    },
+    {
+      "id": "mm7",
+      "point": "Which steps ran live and which only ran on the offline queue model",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [
+      "So, Outposts is a Devin feature for self-hosting, and we set it up this week with Docker."
+    ],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 22,
+      "max": 30,
+      "anchor": "Boundary, worker start and token, queueing, routing and image contents stated; no patching owner and no live-versus-rehearsed statement (anchor: 17–22 = five of seven points)."
+    },
+    "structure": {
+      "score": 16,
+      "max": 25,
+      "anchor": "Update has Outcome, Risk and Ask but no Evidence or Next action; framing leads with the product (anchor: 14–17 = parts findable, order broken)."
+    },
+    "customer_relevance": {
+      "score": 13,
+      "max": 20,
+      "anchor": "The CISO's condition appears only in the second sentence; the Friday deliverable is vague (anchor: 10–13 = outcome present but buried)."
+    },
+    "brevity_and_fluency": {
+      "score": 8,
+      "max": 15,
+      "anchor": "Framing and T+60 over, update and two objections under; six fillers in 9.1 minutes, one tag question, one 11-second pause (anchor: 7–9 = several segments off target)."
+    },
+    "recovery": {
+      "score": 6,
+      "max": 10,
+      "anchor": "Objection 2 held the pattern; objections 1 and 3 conceded without evidence or an offer (anchor: 5–6 = pattern partly held)."
+    },
+    "total": 65
+  },
+  "stems": [
+    "\"Execution moves; inference does not.\" — lead with the boundary, not the product name.",
+    "\"Platform engineering owns the image: rebuild, smoke test, roll one at a time.\" — answer the ownership objection with a name and a cadence.",
+    "\"I saw this run live: … I rehearsed this offline: …\" — say which path you ran."
+  ],
+  "previous_run_comparison": "Second dry-run grading of the same transcript: total 64 → 65 (customer relevance +1); every other dimension identical."
+}
