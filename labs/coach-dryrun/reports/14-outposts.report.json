@@ -1,0 +1,240 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 14,
+    "slug": "outposts",
+    "coach": "coach-14-outposts"
+  },
+  "learner": "calibration",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T11:30:00Z",
+    "run_index": 1,
+    "transcript": "labs/coach-dryrun/fixtures/generic-mediocre.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing for the CISO",
+      "target_seconds": 60,
+      "actual_seconds": 72,
+      "delta_seconds": 12,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-15",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+15)",
+      "target_seconds": 45,
+      "actual_seconds": 57,
+      "delta_seconds": 12,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-60",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+60)",
+      "target_seconds": 45,
+      "actual_seconds": 45,
+      "delta_seconds": 0,
+      "verdict": "on"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Three-minute update to the CISO",
+      "target_seconds": 180,
+      "actual_seconds": 150,
+      "delta_seconds": -30,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (data boundary)",
+      "target_seconds": 90,
+      "actual_seconds": 51,
+      "delta_seconds": -39,
+      "verdict": "under",
+      "question": "The control plane still sees our code, so what did we actually gain?"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (availability)",
+      "target_seconds": 90,
+      "actual_seconds": 47,
+      "delta_seconds": -43,
+      "verdict": "under",
+      "question": "What happens when the worker is down at 2 a.m.?"
+    },
+    {
+      "segment": "objection-3",
+      "kind": "objection",
+      "label": "Objection 3 (ownership)",
+      "target_seconds": 90,
+      "actual_seconds": 37,
+      "delta_seconds": -53,
+      "verdict": "under",
+      "question": "Who patches the worker image?"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "there was a problem in the system and I looked into it with Devin"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "I used Devin to investigate, it found the cause, and then we made a change and tested it"
+    },
+    "evidence": {
+      "status": "weak",
+      "quote": "The error went away after the change, so that told me it was the right thing"
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "Next step is to monitor it"
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 8.9,
+    "filler_count": 6,
+    "filler_rate_per_minute": 0.67,
+    "fillers": [
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "actually",
+        "count": 1
+      },
+      {
+        "word": "um",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "Then I will ask Devin to explain what it found and see if it makes sense, right?"
+    ],
+    "long_pauses": [
+      {
+        "at": "02:10",
+        "seconds": 12,
+        "segment": "checkpoint-15"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Commands, file edits and repo access run on Kadé's worker in the VPC while inference and planning stay in Devin Cloud",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "Worker started with devin worker start plus the outpost name and its token, the token shown once and kept in the secret manager",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "checkpoint-15"
+    },
+    {
+      "id": "mm3",
+      "point": "One session per worker so two containers serve two sessions and the third waits under a banner rather than failing",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "checkpoint-60"
+    },
+    {
+      "id": "mm4",
+      "point": "Engineers reach the outpost through the organization default platform and the Slack bang command",
+      "weight": 4,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "Image bakes in the repo with git, ffmpeg and Chrome via DEVIN_CHROME_PATH and grants no passwordless sudo",
+      "weight": 4,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm6",
+      "point": "Platform engineering rebuilds the image on a schedule and rolls one worker at a time",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "objection-3"
+    },
+    {
+      "id": "mm7",
+      "point": "Which steps ran live and which only ran on the offline queue model",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [
+      "\"I think\" (×2 in the framing)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [
+      "So, basically, there was a problem in the system and I looked into it with Devin."
+    ],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 4,
+      "max": 30,
+      "anchor": "None of the 7 must-mention points is stated; nothing is contradicted, the answer is simply content-free (anchor: 0–8 = one point or fewer)."
+    },
+    "structure": {
+      "score": 12,
+      "max": 25,
+      "anchor": "Problem, approach, evidence and next step are all findable but thin; the update has no risk and no ask (anchor: 14–17 = parts findable, order broken)."
+    },
+    "customer_relevance": {
+      "score": 8,
+      "max": 20,
+      "anchor": "Impact appears once (\"some users were affected\", \"maybe a few customers\") with no number, asked for and not given (anchor: 10–13 = outcome present but buried; 5–8 = misleading)."
+    },
+    "brevity_and_fluency": {
+      "score": 6,
+      "max": 15,
+      "anchor": "6 of 7 segments off target, 6 fillers (0.67/min), one 12 s pause, one tag question (anchor: 7–9 = several off (six of seven here))."
+    },
+    "recovery": {
+      "score": 3,
+      "max": 10,
+      "anchor": "Objection 1 acknowledged (\"fair question\") with no boundary or evidence; objection 2 deflected to \"next month\"; objection 3 conceded (anchor: 5–6 = partly; 0–2 = not used)."
+    },
+    "total": 33
+  },
+  "stems": [
+    "Lead with the missing top point: \"Commands — and the evidence is …\"",
+    "\"The customers affected were …, and the number is …\"",
+    "\"That's a fair concern; the boundary is …, the evidence is …, and what I can offer is …\""
+  ],
+  "previous_run_comparison": "Calibration run of the generic transcript (labs/coach-dryrun/fixtures/generic-mediocre.md); no previous run."
+}
