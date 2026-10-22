@@ -1,0 +1,95 @@
+{
+  "number": 1,
+  "slug": "onboarding",
+  "title": "Onboarding — make Kadé safe and fast to set up before Monday's new starter",
+  "feature": "Devin environment blueprints (initialize, maintenance, knowledge), the AGENTS.md hierarchy and its automatic-inclusion limit, Knowledge migrating to Skills, and choosing Ask Devin or an Agent session",
+  "duration_minutes": 120,
+  "difficulty": "intro",
+  "prerequisites": [
+    "Repo cloned, Node 22, `npm install` done at the root",
+    "Lab 00 warm-up done once (framing stems and the update skeleton)",
+    "Fixture path: nothing beyond the repository connection — the blueprint audit, the AGENTS.md budget tool and all three injectors run locally",
+    "Optional live path: permission to edit the repository blueprint in Settings → Environment and to start a snapshot build"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Repository connection (GitHub) — default path",
+        "required": true,
+        "fixture": "Your clone plus `docs/blueprint.proposed.yaml`, the per-service `AGENTS.md` files, `.devin/` and `labs/01-onboarding/tools/agents-budget.mjs`.",
+        "note": "Zero credentials and zero secret values. Every acceptance criterion can be met by reading and running the repo on a session VM."
+      },
+      {
+        "integration": "Devin environment settings (repo blueprint, snapshot builds) — optional",
+        "required": false,
+        "fixture": "`docs/blueprint.proposed.yaml` is the reference blueprint; compare it with what Settings → Environment shows and run its `initialize` and `maintenance` commands by hand on a session VM.",
+        "note": "Live: edit the repository blueprint and trigger a build. Needs settings access; the fixture path proves the same commands with exit codes."
+      },
+      {
+        "integration": "Organization Knowledge and Skills — optional",
+        "required": false,
+        "fixture": "`.devin/skills/kade-dev/SKILL.md` is the repo skill a Knowledge note becomes; the blueprint `knowledge:` section in `docs/blueprint.proposed.yaml` shows environment-level context.",
+        "note": "Live: open Settings → Knowledge (or Skills) to see where migrated notes landed. Read-only is enough."
+      },
+      {
+        "integration": "Ask Devin — optional",
+        "required": false,
+        "fixture": "Answer your three questions from the repo yourself and record which mode you would have used and why.",
+        "note": "Ask Devin needs the repository to be indexed in your organization; nothing here assumes it."
+      }
+    ],
+    "fixture_only_story": "With the clone alone you audit every place setup knowledge lives today, run the blueprint commands by hand on a session VM to prove they work, measure the AGENTS.md hierarchy with the budget tool, and work through the three injectors on a throwaway branch. You do not save a blueprint in settings or trigger a snapshot build; you show the before and after text and the exit codes instead.",
+    "not_exercised": [
+      "Saving the repository blueprint in Settings → Environment and watching a snapshot build (fixture path runs the same commands by hand)",
+      "Browsing migrated Knowledge in a live organization",
+      "Ask Devin over an indexed repository"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "bash labs/01-onboarding/injectors/inject.sh --revert",
+      "npm run lab:reset -- 01",
+      "node labs/01-onboarding/tools/agents-budget.mjs"
+    ],
+    "clean_state": "The injector revert prints `reverted` and `git status --short` is clean (no `docs/SETUP.md`, no `services/api/src/AGENTS.md`, no `labs/01-onboarding/.env.lab`). `lab:reset` reseeds the local lab database from the seed spec. The budget tool lists six `AGENTS.md` files, all under the limit, with exit code 0. Without Docker, skip the second command: everything else in this lab needs only the clone."
+  },
+  "injectors": [
+    {
+      "name": "contradictory-agents",
+      "when": "T+20 min",
+      "behaviour": "`bash labs/01-onboarding/injectors/inject.sh contradictory-agents` adds a deeper `services/api/src/AGENTS.md` whose test and reset instructions disagree with `services/api/AGENTS.md` and the root file. Decide which one Devin should follow, and make the contradiction disappear on a throwaway branch."
+    },
+    {
+      "name": "stale-setup-doc",
+      "when": "T+35 min",
+      "behaviour": "`bash labs/01-onboarding/injectors/inject.sh stale-setup-doc` restores the old new-starter page, `docs/SETUP.md`, the one Jonas still trusts. It names a service that no longer exists, an old runtime and a database reset line. Decide what happens to it."
+    },
+    {
+      "name": "missing-paygate-secret",
+      "when": "T+50 min",
+      "behaviour": "`bash labs/01-onboarding/injectors/inject.sh missing-paygate-secret` writes `labs/01-onboarding/.env.lab` in which the webhook signing key differs between the fake payment provider and the services. Explain what a new engineer would see, and where the key's name (never its value) should be documented."
+    }
+  ],
+  "coach": {
+    "skill": "coach-01-onboarding",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "60-second framing for a non-engineer", "target_seconds": 60 },
+      { "id": "checkpoint-10", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+10)", "at_minute": 10, "target_seconds": 45 },
+      { "id": "checkpoint-40", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+40)", "at_minute": 40, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "3-minute update to the hiring manager", "target_seconds": 180 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 (technical)", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 (commercial)", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — AGENTS.md (hierarchy, automatic inclusion of the first 16 KiB of each file)", "url": "https://docs.devin.ai/onboard-devin/agents-md", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Environment blueprints (initialize, maintenance, knowledge; snapshot builds)", "url": "https://docs.devin.ai/onboard-devin/environment/blueprints", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Skills (repo skill locations, organization skills in plugins)", "url": "https://docs.devin.ai/product-guides/skills", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Knowledge (deprecation and migration to Skills)", "url": "https://docs.devin.ai/product-guides/knowledge", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Ask Devin", "url": "https://docs.devin.ai/work-with-devin/ask-devin", "date": "fetched 2026-10-22" },
+    { "title": "Devin release notes 2026 — AGENTS.md read during repository setup; Knowledge moving to Skills", "url": "https://docs.devin.ai/release-notes/2026", "date": "2026 entries, fetched 2026-10-22" },
+    { "title": "Devin docs — Voice mode", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" }
+  ]
+}

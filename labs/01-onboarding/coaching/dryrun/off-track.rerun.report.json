@@ -1,0 +1,238 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 1,
+    "slug": "onboarding",
+    "coach": "coach-01-onboarding"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T11:40:00Z",
+    "run_index": 2,
+    "transcript": "labs/01-onboarding/coaching/dryrun/off-track.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing for a non-engineer",
+      "target_seconds": 60,
+      "actual_seconds": 100,
+      "delta_seconds": 40,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 63,
+      "delta_seconds": 18,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-40",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+40)",
+      "target_seconds": 45,
+      "actual_seconds": 24,
+      "delta_seconds": -21,
+      "verdict": "under"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "3-minute update to the hiring manager",
+      "target_seconds": 180,
+      "actual_seconds": 102,
+      "delta_seconds": -78,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "target_seconds": 90,
+      "actual_seconds": 108,
+      "delta_seconds": 18,
+      "verdict": "over"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "target_seconds": 90,
+      "actual_seconds": 48,
+      "delta_seconds": -42,
+      "verdict": "under"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "missing",
+      "quote": ""
+    },
+    "approach": {
+      "status": "weak",
+      "quote": "I asked Devin to fix all the files"
+    },
+    "evidence": {
+      "status": "missing",
+      "quote": ""
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "It should be ready by Monday, yes?"
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 7.4,
+    "filler_count": 12,
+    "filler_rate_per_minute": 1.62,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 1
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 2
+      },
+      {
+        "word": "like",
+        "count": 2
+      },
+      {
+        "word": "um",
+        "count": 4
+      }
+    ],
+    "tag_questions": 3,
+    "tag_question_examples": [
+      "Uh, I think I will rewrite it with Devin, right?",
+      "It should be ready by Monday, yes? Done.",
+      "Maybe not, but it is faster, no?"
+    ],
+    "long_pauses": [
+      {
+        "at": "02:10",
+        "seconds": 14,
+        "segment": "checkpoint-10"
+      },
+      {
+        "at": "06:20",
+        "seconds": 15,
+        "segment": "objection-1"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Only the first 16 KiB of each AGENTS.md is injected automatically; the cap is per file, so keep files short and front-loaded",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "checkpoint-40"
+    },
+    {
+      "id": "mm2",
+      "point": "The blueprint prepares the machine (initialize, maintenance, knowledge); AGENTS.md tells Devin how to work in the repo",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm3",
+      "point": "Knowledge notes are migrating to Skills; repeated setup guidance becomes a skill rather than more AGENTS.md text",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm4",
+      "point": "Ask Devin for read-only questions about the code, an Agent session for work that has to run, with a reason",
+      "weight": 4,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "`lab:reset` is the one supported reset and only reseeds the local lab database, so nobody wipes the shared one",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "use lab:reset instead of the reset command, so the shared database is safe",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm6",
+      "point": "The stale blueprint path (payroll-worker instead of fulfilment-worker) broke the snapshot build, and the fix was proven",
+      "weight": 4,
+      "mentioned": false,
+      "belonged_in": "checkpoint-10"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [
+      "kind of (×2)",
+      "config (×2 in one sentence)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"the AGENTS.md is also config\" — \"AGENTS.md is\""
+    ],
+    "sentences_to_rerecord": [
+      "Um, so, Devin is like, an AI engineer…",
+      "The blueprint is sort of the config, and the AGENTS.md is also config, they are kind of the same.",
+      "Maybe not, but it is faster, no?"
+    ],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 5,
+      "max": 30,
+      "anchor": "Only the lab reset is stated; blueprint and AGENTS.md described as the same thing (anchor: 0–8 = one point or a wrong claim)."
+    },
+    "structure": {
+      "score": 8,
+      "max": 25,
+      "anchor": "No problem statement and no evidence; the update is a status of what Devin is doing (anchor: 5–9 = parts missing)."
+    },
+    "customer_relevance": {
+      "score": 6,
+      "max": 20,
+      "anchor": "No cost, no outcome for Monday's starter, and the gates were not run (anchor: 5–9 = no customer outcome)."
+    },
+    "brevity_and_fluency": {
+      "score": 3,
+      "max": 15,
+      "anchor": "Four of six segments off target; twelve fillers in 7.4 minutes, three tag questions, two long pauses (anchor: 0–4 = most segments off target, fillers over 1.5/min)."
+    },
+    "recovery": {
+      "score": 2,
+      "max": 10,
+      "anchor": "Both objections conceded with no evidence or next step (anchor: 0–2 = pattern not held)."
+    },
+    "total": 24
+  },
+  "stems": [
+    "\"Today a new engineer loses their first week to … On Monday …\" — open with the cost.",
+    "\"That lives in the machine setup, not in the instructions, because…\" — they are different places.",
+    "\"I ran the gates on a clean machine and they exited zero.\" — evidence before you say it is ready."
+  ],
+  "previous_run_comparison": "Second grading of the same transcript (run 1 total 23); differences are grading noise within the ±5 drift budget."
+}

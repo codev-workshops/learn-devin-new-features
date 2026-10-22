@@ -1,0 +1,224 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 1,
+    "slug": "onboarding",
+    "coach": "coach-01-onboarding"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T11:20:00Z",
+    "run_index": 2,
+    "transcript": "labs/01-onboarding/coaching/dryrun/mediocre.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing for a non-engineer",
+      "target_seconds": 60,
+      "actual_seconds": 74,
+      "delta_seconds": 14,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 42,
+      "delta_seconds": -3,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-40",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+40)",
+      "target_seconds": 45,
+      "actual_seconds": 50,
+      "delta_seconds": 5,
+      "verdict": "on"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "3-minute update to the hiring manager",
+      "target_seconds": 180,
+      "actual_seconds": 155,
+      "delta_seconds": -25,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "target_seconds": 90,
+      "actual_seconds": 68,
+      "delta_seconds": -22,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "target_seconds": 90,
+      "actual_seconds": 93,
+      "delta_seconds": 3,
+      "verdict": "on"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "So, first you install Node, then npm install, then the Python worker"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "Devin will set up the blueprint, which is the machine setup"
+    },
+    "evidence": {
+      "status": "weak",
+      "quote": "the gates are green on a fresh machine"
+    },
+    "next_step": {
+      "status": "present",
+      "quote": "Ask: please tell Jonas to delete his note."
+    },
+    "order_held": true
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 8.0,
+    "filler_count": 6,
+    "filler_rate_per_minute": 0.75,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 2
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "Then I check the old setup page, it is the same problem, no? Done."
+    ],
+    "long_pauses": [
+      {
+        "at": "02:33",
+        "seconds": 12,
+        "segment": "checkpoint-40"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Only the first 16 KiB of each AGENTS.md is injected automatically; the cap is per file, so keep files short and front-loaded",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "checkpoint-40"
+    },
+    {
+      "id": "mm2",
+      "point": "The blueprint prepares the machine (initialize, maintenance, knowledge); AGENTS.md tells Devin how to work in the repo",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "the blueprint, which is the machine setup, and AGENTS.md is the instructions it reads",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm3",
+      "point": "Knowledge notes are migrating to Skills; repeated setup guidance becomes a skill rather than more AGENTS.md text",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "Our Knowledge notes are moving to Skills, so the setup steps are in the kade-dev skill",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm4",
+      "point": "Ask Devin for read-only questions about the code, an Agent session for work that has to run, with a reason",
+      "weight": 4,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "`lab:reset` is the one supported reset and only reseeds the local lab database, so nobody wipes the shared one",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "The reset is lab:reset now, it only touches the local database",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm6",
+      "point": "The stale blueprint path (payroll-worker instead of fulfilment-worker) broke the snapshot build, and the fix was proven",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "the blueprint says payroll-worker but the folder is fulfilment-worker, so the build broke",
+      "belonged_in": "checkpoint-10"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [
+      "then (×4 in the opening sentence)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"the AGENTS.md is the instructions\" — \"AGENTS.md holds the instructions\""
+    ],
+    "sentences_to_rerecord": [
+      "So, first you install Node, then npm install, then the Python worker…",
+      "I can fix the README too."
+    ],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 21,
+      "max": 30,
+      "anchor": "Blueprint vs instructions, the Skills migration, the reset and the stale path stated; no inclusion limit and no Ask-vs-Agent choice (anchor: 17–21 = four of six points)."
+    },
+    "structure": {
+      "score": 15,
+      "max": 25,
+      "anchor": "All parts findable but the framing walks through setup steps before the outcome (anchor: 14–17 = all parts findable, order broken once)."
+    },
+    "customer_relevance": {
+      "score": 12,
+      "max": 20,
+      "anchor": "The week of lost time is there but late; the update never says what Monday's starter will do differently (anchor: 10–13 = one outcome, buried)."
+    },
+    "brevity_and_fluency": {
+      "score": 7,
+      "max": 15,
+      "anchor": "Framing over target, update and objection 1 under; six fillers in 8.0 minutes, one tag question, one 12-second pause (anchor: 7–9 = several segments off target, fillers under 1/min)."
+    },
+    "recovery": {
+      "score": 6,
+      "max": 10,
+      "anchor": "Objection 2 held the pattern; objection 1 conceded and skipped the evidence (anchor: 5–6 = pattern partly held)."
+    },
+    "total": 61
+  },
+  "stems": [
+    "\"Today a new engineer loses their first week to … On Monday …\" — outcome before the steps.",
+    "\"Only the start of each instruction file is read automatically, so…\" — name the limit with its number.",
+    "\"I asked Devin … for that, and started an Agent session for … because…\""
+  ],
+  "previous_run_comparison": "Second grading of the same transcript (run 1 total 61); differences are grading noise within the ±5 drift budget."
+}
