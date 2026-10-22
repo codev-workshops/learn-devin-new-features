@@ -1,0 +1,67 @@
+diff --git a/services/api/REVIEW.md b/services/api/REVIEW.md
+new file mode 100644
+index 0000000..d07c649
+--- /dev/null
++++ b/services/api/REVIEW.md
+@@ -0,0 +1,4 @@
++# Review rules — services/api
++
++- Money arithmetic lives in `src/money.ts`. Any change to `src/money.ts` must come with a test in `test/` that pins the rounded amounts for both brands.
++- Do not merge changes to checkout totals without a second reviewer from payments.
+diff --git a/services/api/src/routes/checkout.ts b/services/api/src/routes/checkout.ts
+index f52e323..560babc 100644
+--- a/services/api/src/routes/checkout.ts
++++ b/services/api/src/routes/checkout.ts
+@@ -4,10 +4,11 @@ import type { Address, CheckoutResult } from "@kade/contracts";
+ import type { Db } from "../db.js";
+ import { config, now } from "../config.js";
+ import { conflict, outOfStock, validationFailed } from "../errors.js";
+-import { requireCaller } from "../middleware/auth.js";
++import { isStaff, requireCaller } from "../middleware/auth.js";
+ import { Validator } from "../middleware/validate.js";
+ import { brandPricing, getBrandRow, type BrandRow } from "../services/brands.js";
+ import { getCartLines, getCartRow, type CartLineRow } from "../services/carts.js";
++import { currentPrice, resolveSellable } from "../services/catalog.js";
+ import { computeTotals, totalsToApi } from "../money.js";
+ import { ORDER_COLUMNS, ordersToApi, type OrderRow } from "../services/orders.js";
+ 
+@@ -201,9 +202,24 @@ export function checkoutRouter(db: Db): Router {
+         reservationsByLine.set(line.id, taken);
+       }
+ 
+-      // Totals from the cart's stored unit prices, not the current price list (PLANTED.md `stale-cart-prices`).
++      // Re-price every line from the current price list so flash-sale prices apply at checkout.
++      // Staff may pin a goodwill price per SKU (customer-service requests) with `priceOverrides`.
++      const overrides = (req.body?.priceOverrides ?? {}) as Record<string, string>;
++      for (const line of lines) {
++        const sellable = await resolveSellable(tx, brandRow.id, line.sku);
++        const current = await currentPrice(
++          tx,
++          brandRow.id,
++          sellable?.sku ?? line.sku,
++          pricing.currency,
++        );
++        const pinned = isStaff(req.caller) ? overrides[line.sku] : undefined;
++        line.unit_price = pinned ?? current.price.amount;
++      }
++      // Round per line, like the fulfilment worker, so the API and the worker agree on totals.
++      const toCents = (value: number) => Math.floor(value * 100) / 100;
+       const totals = computeTotals(
+-        lines.map((l) => ({ unitPrice: Number(l.unit_price), quantity: l.quantity })),
++        lines.map((l) => ({ unitPrice: toCents(Number(l.unit_price) * l.quantity), quantity: 1 })),
+         pricing,
+       );
+       const numberRow = await tx.query<{ n: number }>("SELECT nextval('order_number_seq') AS n");
+diff --git a/services/api/test/planted.test.ts b/services/api/test/planted.test.ts
+index dec4509..30e8859 100644
+--- a/services/api/test/planted.test.ts
++++ b/services/api/test/planted.test.ts
+@@ -91,7 +91,7 @@ describe("planted defects (skipped: each one fails on main by design)", () => {
+     expect(h.db.queryCount - before).toBeLessThanOrEqual(6);
+   });
+ 
+-  it.skip("price-drift: checkout re-prices cart lines from the current price list", async () => {
++  it("price-drift: checkout re-prices cart lines from the current price list", async () => {
+     const cartId = await cartWith(h, LUMEN, LUMEN_CUSTOMER, [{ sku: "LH-LAMP-05", quantity: 1 }]);
+     await h.db.query("UPDATE cart_lines SET unit_price = 1.00 WHERE cart_id = $1", [cartId]);
+     const res = await h.api
