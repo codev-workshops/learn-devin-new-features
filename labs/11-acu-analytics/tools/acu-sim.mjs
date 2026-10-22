@@ -55,6 +55,9 @@ export function cycleFor(fx, date) {
 export function applyOptions(fixture, opts = {}) {
   const fx = structuredClone(fixture);
   fx.date = opts.date ?? fx.today;
+  if (day(fx.date) < day(fx.today)) {
+    throw new Error(`--date ${fx.date} is before the fixture day ${fx.today}; usage before it is aggregated per period, so only ${fx.today} or later can be evaluated`);
+  }
   fx.applied = [];
   const member = (h) => {
     const m = fx.members.find((x) => x.handle === h);
@@ -175,21 +178,40 @@ export function check(fx, handle, orgId) {
   };
 }
 
+/** Usage periods as date spans; the fixture is aggregated per period, not per day. */
+export function periodSpans(fx) {
+  return {
+    cycle: [fx.cycle.start, fx.today],
+    'pre-cycle-tail': [fx.pre_cycle_tail.start, fx.pre_cycle_tail.end],
+    ...(day(fx.date) >= day(fx.sale.start) ? { sale: [fx.sale.start, fx.sale.start] } : {}),
+  };
+}
+
 /** What each analytics view would total for a date range (simulated, see answer.md). */
 export function views(fx, range = 'cycle') {
   let from;
   let to;
-  if (range === 'cycle') [from, to] = [fx.cycle.start, fx.today];
-  else if (range === 'last-30') [from, to] = [addDays(fx.today, -29), fx.today];
-  else {
+  if (day(fx.date) > day(fx.cycle.end)) throw new Error(`--views covers the billing window ${fx.cycle.start}..${fx.cycle.end}; --date ${fx.date} is outside it`);
+  if (range === 'cycle') [from, to] = [fx.cycle.start, fx.date];
+  else if (range === 'last-30') {
+    if (fx.date !== fx.today) throw new Error(`--range last-30 is only available as of the fixture day ${fx.today}`);
+    [from, to] = [addDays(fx.today, -29), fx.today];
+  } else {
     const m = /^(\d{4}-\d{2}-\d{2})\.\.(\d{4}-\d{2}-\d{2})$/.exec(range);
     if (!m) throw new Error(`bad --range: ${range}`);
     [from, to] = [m[1], m[2]];
+    if (day(from) > day(to)) throw new Error(`bad --range: ${range} ends before it starts`);
   }
   if (day(to) < day(fx.contract_start)) return { range: { from, to }, empty: EMPTY_CYCLE };
   const periods = new Set();
-  if (day(from) <= day(fx.today) && day(to) >= day(fx.cycle.start)) periods.add('cycle');
-  if (day(from) <= day(fx.pre_cycle_tail.end) && day(to) >= day(fx.pre_cycle_tail.start)) periods.add('pre-cycle-tail');
+  for (const [name, [s, e]] of Object.entries(periodSpans(fx))) {
+    const overlaps = day(from) <= day(e) && day(to) >= day(s);
+    if (!overlaps) continue;
+    if (day(from) > day(s) || day(to) < day(e)) {
+      throw new Error(`--range ${from}..${to} cuts through the ${name} period (${s}..${e}); the fixture is aggregated per period, so pick a range that covers it whole or not at all`);
+    }
+    periods.add(name);
+  }
   const rows = fx.usage.filter((r) => periods.has(r.period));
   const sum = (pred) => rows.filter(pred).reduce((a, r) => a + r.acu, 0);
   const orgs = fx.orgs.map((o) => {
@@ -211,7 +233,7 @@ export function views(fx, range = 'cycle') {
         local: sum((r) => r.member === m.handle && r.surface === 'local'),
         review: sum((r) => r.member === m.handle && r.surface === 'review'),
       },
-      limit_meter_this_cycle: memberUsage({ ...fx, date: fx.today }, m.handle).counted,
+      limit_meter_this_cycle: memberUsage(fx, m.handle).counted,
     }));
   return { range: { from, to }, enterprise_consumption_total: sum(() => true), orgs, people };
 }

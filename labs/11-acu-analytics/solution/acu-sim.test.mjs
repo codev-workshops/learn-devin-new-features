@@ -78,4 +78,25 @@ describe('why the dashboards disagree', () => {
   it('a range before the contract started has no billing cycle', () => {
     expect(views(applyOptions(fx, {}), '2026-03-01..2026-04-15').empty).toBe(EMPTY_CYCLE);
   });
+
+  it('includes the injected sale forecast once the sale has started', () => {
+    const v = views(applyOptions(fx, parseArgs(['--inject', 'sale-spike', '--date', '2026-11-20'])), 'cycle');
+    expect(v.orgs.find((o) => o.org === 'kade-trailhead').overview_all_surfaces).toBe(3900);
+  });
+
+  it('leaves the sale forecast out of views dated before the sale starts', () => {
+    const v = views(applyOptions(fx, parseArgs(['--inject', 'sale-spike'])), '2026-10-23..2026-11-20');
+    expect(v.orgs.find((o) => o.org === 'kade-trailhead').overview_all_surfaces).toBe(3000);
+  });
+
+  it('refuses a custom range that cuts through an aggregated period', () => {
+    expect(() => views(applyOptions(fx, {}), '2026-11-01..2026-11-01')).toThrow(/cuts through the cycle period/);
+    expect(views(applyOptions(fx, {}), '2026-10-16..2026-11-14').enterprise_consumption_total).toBe(9520);
+  });
+});
+
+describe('date guard', () => {
+  it('refuses dates before the fixture day, whose usage the fixture cannot split', () => {
+    expect(() => run('A', ['--date', '2026-10-23'])).toThrow(/before the fixture day/);
+  });
 });
