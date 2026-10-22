@@ -1,0 +1,229 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 4,
+    "slug": "plugin-engineering",
+    "coach": "coach-04-plugin-engineering"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:00:00Z",
+    "run_index": 1,
+    "transcript": "labs/04-plugin-engineering/coaching/dryrun/off-track.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 114,
+      "delta_seconds": 54,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-20",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+20)",
+      "target_seconds": 45,
+      "actual_seconds": 23,
+      "delta_seconds": -22,
+      "verdict": "under"
+    },
+    {
+      "segment": "checkpoint-70",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+70)",
+      "target_seconds": 45,
+      "actual_seconds": 75,
+      "delta_seconds": 30,
+      "verdict": "over"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Three-minute security-reviewer update",
+      "target_seconds": 180,
+      "actual_seconds": 98,
+      "delta_seconds": -82,
+      "verdict": "under",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "A plugin is one more supply chain to secure. Why should I let it run in every session?",
+      "target_seconds": 90,
+      "actual_seconds": 40,
+      "delta_seconds": -50,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "question": "Why not just hand each brand team a playbook and skip the packaging?",
+      "target_seconds": 90,
+      "actual_seconds": 120,
+      "delta_seconds": 30,
+      "verdict": "over"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "missing",
+      "quote": ""
+    },
+    "approach": {
+      "status": "weak",
+      "quote": "I made a skill for the release checklist"
+    },
+    "evidence": {
+      "status": "missing",
+      "quote": ""
+    },
+    "next_step": {
+      "status": "missing",
+      "quote": ""
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 7.8,
+    "filler_count": 11,
+    "filler_rate_per_minute": 1.41,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 1
+      },
+      {
+        "word": "basically",
+        "count": 3
+      },
+      {
+        "word": "you know",
+        "count": 2
+      },
+      {
+        "word": "like",
+        "count": 2
+      },
+      {
+        "word": "um",
+        "count": 3
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "They're better, right? Everyone uses them."
+    ],
+    "long_pauses": [
+      {
+        "at": "02:45",
+        "seconds": 15,
+        "segment": "checkpoint-70"
+      },
+      {
+        "at": "06:40",
+        "seconds": 14,
+        "segment": "objection-2"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "One plugin ships both procedures as skills together with the freeze rule, the push guard hook, the reviewer subagent and the incident MCP",
+      "weight": 8,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "Repository installs follow the branch unless pinned to a SHA, uploads stay pinned to what was uploaded, and a skills-only repo needs no manifest",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "A repo install keeps up with the branch unless you pin a SHA. Uploads stay as uploaded and skills-only repos need no manifest",
+      "belonged_in": "checkpoint-20"
+    },
+    {
+      "id": "mm3",
+      "point": "A new uploaded revision replaces the whole bundle, so a partial zip removes every file it left out",
+      "weight": 6,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "checkpoint-70"
+    },
+    {
+      "id": "mm4",
+      "point": "The MCP credential is connected after install through a secret reference and never written into the plugin files",
+      "weight": 5,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "Engineers without edit rights can only propose; an admin approves the diff before the shared plugin changes",
+      "weight": 5,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "objection-1"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "basically (×3)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [
+      "And I put the PagerDuty key in the config for now so the demo works.",
+      "The hook guarantees nobody pushes to main, even in cloud sessions.",
+      "They're better, right? Everyone uses them."
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 6,
+      "max": 30,
+      "anchor": "One of five points; the token was placed in the plugin and the revision described as a patch. (anchors: 27–30 every point with a file or scope named; 15–20 three of five; under 10 one point)"
+    },
+    "structure": {
+      "score": 5,
+      "max": 25,
+      "anchor": "No outcome, no evidence, no ask; feature talk throughout. (anchors: 22–25 all parts in order; 13–17 parts present but weak; under 8 problem only)"
+    },
+    "customer_relevance": {
+      "score": 5,
+      "max": 20,
+      "anchor": "Did not answer what runs, where it came from or who can change it. (anchors: 16–20 reviewer's questions answered with files, scopes and counts; 10–13 some; under 6 feature talk)"
+    },
+    "brevity_and_fluency": {
+      "score": 3,
+      "max": 15,
+      "anchor": "Five of six segments off target; eleven fillers and two long pauses. (anchors: 11–15 segments on target, under 1 filler/min; 6–8 two or more segments off; under 4 most segments off)"
+    },
+    "recovery": {
+      "score": 1,
+      "max": 10,
+      "anchor": "Neither objection acknowledged; objection 1 relied on trust in the team, objection 2 on popularity. (anchors: 7–10 acknowledge → boundary → evidence → offer held with numbers; 4–6 partial; under 3 no pattern)"
+    },
+    "total": 20
+  },
+  "stems": [
+    "\"Every session will get…\" — lead with the outcome, then the contents.",
+    "\"The token is not in the plugin; it is…\" — rehearse the credential answer until it is one sentence.",
+    "\"You are right that it is new code…\" — acknowledge before you defend."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 04; no previous run to compare with."
+}
