@@ -28,7 +28,7 @@ What it is not: a guaranteed guardrail. Plugin hooks run only in local sessions 
 
 The hook command is self-contained (`node -e …`) so it does not depend on where the plugin is unpacked.
 
-Checker on the reference (`node labs/04-plugin-engineering/solution/plugin-check.mjs labs/04-plugin-engineering/solution/kade-flash-sale`), abridged:
+Checker on the reference (`node labs/04-plugin-engineering/solution/plugin-check.mjs --kit labs/04-plugin-engineering/solution/kade-flash-sale`), abridged:
 
 ```json
 {

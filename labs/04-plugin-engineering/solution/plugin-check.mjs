@@ -52,7 +52,7 @@ function inspectMcp(servers, source, problems) {
 }
 
 /** Inspect one plugin folder. `repoName` names a skills-only repo (it has no manifest to name it). */
-export function inspect(dir, { repoName = path.basename(dir) } = {}) {
+export function inspect(dir, { repoName = path.basename(dir), kit = false } = {}) {
   const problems = [];
   const files = listFiles(dir);
   const manifestPath = path.join(dir, '.devin-plugin', 'plugin.json');
@@ -93,6 +93,13 @@ export function inspect(dir, { repoName = path.basename(dir) } = {}) {
   if (files.includes('.mcp.json')) {
     const cfg = readJson(path.join(dir, '.mcp.json'), problems);
     for (const s of inspectMcp(cfg?.mcpServers, '.mcp.json', problems)) if (!mcpServers.some((m) => m.name === s.name)) mcpServers.push(s);
+  }
+  if (kit) {
+    if (skills.length < 2) problems.push('kit: needs both procedures as skills (release and incident)');
+    if (!rules.length) problems.push('kit: no rule (AGENTS.md or rules/*.md)');
+    if (!agents.length) problems.push('kit: no subagent under agents/');
+    if (!hooks.includes('PreToolUse')) problems.push('kit: no PreToolUse hook in hooks.json');
+    if (!mcpServers.length) problems.push('kit: no MCP server declared');
   }
   return { kind, name, commands: skills.map((s) => `/${name}:${s}`), skills, rules, agents, hooks, mcpServers, files, problems };
 }
@@ -143,9 +150,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (a === '--revise') out = reviseUpload(b, c);
   else if (a === '--propose') out = proposeEdit(JSON.parse(readFileSync(b, 'utf8')));
   else if (a === '--hook') out = runPreToolHook(b, c, { KADE_SALE_FREEZE: process.env.KADE_SALE_FREEZE ?? '' });
+  else if (a === '--kit') out = inspect(b, { kit: true });
   else if (a && a !== '--help') out = inspect(a, b === '--repo-name' ? { repoName: c } : {});
   else {
-    console.error('usage: node plugin-check.mjs <plugin-dir> [--repo-name <name>] | --revise <old> <new> | --propose <fixture.json> | --hook <plugin-dir> "<command>"');
+    console.error('usage: node plugin-check.mjs <plugin-dir> [--repo-name <name>] | --kit <plugin-dir> | --revise <old> <new> | --propose <fixture.json> | --hook <plugin-dir> "<command>"');
     process.exit(64);
   }
   console.log(JSON.stringify(out, null, 2));
