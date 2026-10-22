@@ -10,7 +10,10 @@
 # `python3 -m fulfilment_worker sweep` (needs the worker installed and DATABASE_URL); --sweeper
 # contract reproduces only the visible part through the API (DELETE /carts/{cartId}) for stacks
 # where the worker is not reachable, e.g. the test stub. `auto` (default) picks worker when it
-# is importable and DATABASE_URL is set, otherwise contract.
+# is importable and DATABASE_URL is set, otherwise contract. Note that the worker sweep is the
+# real production behaviour: it sweeps EVERY open cart older than --older-than (both brands),
+# exactly as the nightly job would — that is the incident being reproduced, not a side effect.
+# Use --sweeper contract to touch only the selected cart(s).
 # The seed ships 4 pending carts older than 48 h; when they have all been consumed the script
 # builds a fresh cart + checkout and ages nothing (same mechanics).
 #
@@ -37,7 +40,7 @@ while [ $# -gt 0 ]; do
   --fresh) FRESH=1; shift ;;
   --wait) WAIT="$2"; shift 2 ;;
   --sweeper) SWEEPER="$2"; shift 2 ;;
-  -h | --help) sed -n '2,19p' "$0"; exit 0 ;;
+  -h | --help) sed -n '2,24p' "$0"; exit 0 ;;
   *) die "unknown option $1" ;;
   esac
 done
@@ -66,6 +69,10 @@ if [ "$(printf '%s' "$targets" | jq length)" -eq 0 ]; then
   [ "$BRAND" = "trailhead-supply" ] && res="$(create_order "$BRAND" "$(customer_user "$BRAND" 77)" "TS-MAP-01" 1)"
   [ "$(last_status)" = "201" ] || die "checkout failed ($API_STATUS): $res"
   targets="$(printf '%s' "$res" | jq -c '[{cartId: .order.cartId, ageHours: 0, order: .order}]')"
+  if [ "$SWEEPER" = "worker" ]; then
+    log "a fresh cart is not older than ${OLDER}h, so the worker sweeper would not touch it — using the contract sweep for this run"
+    SWEEPER=contract
+  fi
 fi
 
 ghosts=0
