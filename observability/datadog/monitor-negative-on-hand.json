@@ -1,0 +1,25 @@
+{
+  "id": 48213771,
+  "name": "[Kadé] Negative on-hand inventory — {{sku.name}}",
+  "type": "query alert",
+  "query": "min(last_5m):min:kade.inventory.on_hand{env:prod,brand:lumen-home} by {sku} < 0",
+  "message": "On-hand stock for {{sku.name}} is {{value}} (negative). Customers have paid for units we do not have.\n\nRunbook: observability/runbooks/RB-102-negative-on-hand-oversell.md (RB-101 is the superseded one — do not bump stock by hand).\nDashboard: Kadé Commerce — Inventory & Payments\n\n@pagerduty-kade-commerce-platform @slack-kade-incidents",
+  "tags": ["service:kade-api", "team:platform", "brand:lumen-home", "runbook:RB-102", "lab:12"],
+  "priority": 2,
+  "options": {
+    "thresholds": { "critical": 0, "warning": 2 },
+    "notify_no_data": false,
+    "require_full_window": false,
+    "evaluation_delay": 60,
+    "renotify_interval": 20,
+    "escalation_message": "Still negative after 20 min. Check the deploy at 22:40 UTC (Lamp Week) and the checkout reservation path before touching stock counts.",
+    "include_tags": true,
+    "notify_audit": true,
+    "new_group_delay": 60
+  },
+  "created": "2026-09-14T10:02:11Z",
+  "modified": "2026-10-21T22:41:07Z",
+  "creator": { "name": "Platform Ops", "email": "ops@kade.test" },
+  "overall_state": "Alert",
+  "overall_state_modified": "2026-10-22T02:10:14Z"
+}

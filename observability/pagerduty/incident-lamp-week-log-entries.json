@@ -1,0 +1,80 @@
+{
+  "log_entries": [
+    {
+      "id": "RLOG01",
+      "type": "trigger_log_entry",
+      "created_at": "2026-10-22T02:10:14Z",
+      "summary": "Triggered through the API (Datadog monitor 48213771).",
+      "channel": {
+        "type": "api",
+        "summary": "Datadog",
+        "details": "min:kade.inventory.on_hand{sku:LH-LAMP-03} = -37"
+      }
+    },
+    {
+      "id": "RLOG02",
+      "type": "notify_log_entry",
+      "created_at": "2026-10-22T02:10:20Z",
+      "summary": "Sent push notification to Sam Ortiz (platform on-call)."
+    },
+    {
+      "id": "RLOG03",
+      "type": "acknowledge_log_entry",
+      "created_at": "2026-10-22T02:13:50Z",
+      "summary": "Acknowledged by Sam Ortiz.",
+      "agent": {
+        "id": "PUSRONC1",
+        "summary": "Sam Ortiz (platform on-call)",
+        "type": "user_reference"
+      }
+    },
+    {
+      "id": "RLOG04",
+      "type": "annotate_log_entry",
+      "created_at": "2026-10-22T02:20:05Z",
+      "summary": "Note added.",
+      "channel": {
+        "type": "note",
+        "summary": "Following RB-101 (cache). Restarting the fulfilment worker and correcting the count for LH-LAMP-03 to 50 via /admin/inventory."
+      },
+      "agent": {
+        "id": "PUSRONC1",
+        "summary": "Sam Ortiz (platform on-call)",
+        "type": "user_reference"
+      }
+    },
+    {
+      "id": "RLOG05",
+      "type": "resolve_log_entry",
+      "created_at": "2026-10-22T02:31:12Z",
+      "summary": "Alert resolved by Datadog (value 50).",
+      "channel": { "type": "api", "summary": "Datadog" }
+    },
+    {
+      "id": "RLOG06",
+      "type": "trigger_log_entry",
+      "created_at": "2026-10-22T02:52:40Z",
+      "summary": "Re-triggered through the API (Datadog monitor 48213771).",
+      "channel": {
+        "type": "api",
+        "summary": "Datadog",
+        "details": "min:kade.inventory.on_hand{sku:LH-LAMP-03} = -3; webhook failure rate monitor 48213802 in WARN (5.8%)"
+      }
+    },
+    {
+      "id": "RLOG07",
+      "type": "annotate_log_entry",
+      "created_at": "2026-10-22T02:55:01Z",
+      "summary": "Note added.",
+      "channel": {
+        "type": "note",
+        "summary": "Second page. Stock bump did not hold. 40 orders for LH-LAMP-03 since 00:50 against 3 units. Escalating to incident commander; no more manual stock edits."
+      },
+      "agent": {
+        "id": "PUSRONC1",
+        "summary": "Sam Ortiz (platform on-call)",
+        "type": "user_reference"
+      }
+    }
+  ]
+}

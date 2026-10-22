@@ -1,0 +1,54 @@
+{
+  "$comment": "Nightly orders export bucket consumed by the BigQuery load (infra/bigquery). list-objects-v2 shape for prefix orders_daily/.",
+  "bucket": {
+    "Name": "kade-prod-exports",
+    "Region": "us-east-1",
+    "CreationDate": "2026-03-02T08:00:00Z",
+    "Versioning": "Enabled",
+    "Encryption": "aws:kms",
+    "LifecycleRules": [
+      {
+        "ID": "expire-exports-180d",
+        "Prefix": "orders_daily/",
+        "Status": "Enabled",
+        "Expiration": { "Days": 180 }
+      }
+    ],
+    "Tags": { "service": "kade-exports", "env": "prod" }
+  },
+  "objects": {
+    "Prefix": "orders_daily/",
+    "KeyCount": 4,
+    "Contents": [
+      {
+        "Key": "orders_daily/dt=2026-10-19/orders_daily.csv",
+        "LastModified": "2026-10-20T01:05:11Z",
+        "Size": 2140,
+        "ETag": "\"7d1c1\"",
+        "StorageClass": "STANDARD"
+      },
+      {
+        "Key": "orders_daily/dt=2026-10-20/orders_daily.csv",
+        "LastModified": "2026-10-21T01:05:09Z",
+        "Size": 2168,
+        "ETag": "\"7d1c2\"",
+        "StorageClass": "STANDARD"
+      },
+      {
+        "Key": "orders_daily/dt=2026-10-21/orders_daily.csv",
+        "LastModified": "2026-10-22T01:05:14Z",
+        "Size": 2231,
+        "ETag": "\"7d1c3\"",
+        "StorageClass": "STANDARD"
+      },
+      {
+        "Key": "orders_daily/dt=2026-10-22/orders_daily.csv",
+        "LastModified": "2026-10-22T03:00:02Z",
+        "Size": 1402,
+        "ETag": "\"7d1c4\"",
+        "StorageClass": "STANDARD",
+        "$note": "partial — written by the 03:00 intraday export during the incident"
+      }
+    ]
+  }
+}

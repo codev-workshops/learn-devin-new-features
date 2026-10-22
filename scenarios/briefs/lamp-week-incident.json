@@ -1,0 +1,38 @@
+{
+  "id": "lamp-week-incident",
+  "title": "SEV-2: negative on-hand for LH-LAMP-03 after the Lamp Week deploy",
+  "customer": { "name": "Platform Ops", "role": "Incident commander", "brand": "lumen-home" },
+  "voice": [
+    "PagerDuty paged at 02:10 UTC: 'negative on-hand for SKU LH-LAMP-03'. By the time the on-call opened the dashboard, 40 customers had ordered stock we do not have and the webhook-failure rate monitor was also warning.",
+    "The Lamp Week deploy went out at 22:40 the evening before. The on-call followed runbook RB-101, bumped the stock count by hand and went back to bed; the alert fired again twenty minutes later.",
+    "I need an impact statement, the evidence chain across the monitor, the incident, the traces and the code, the likely cause, a mitigation that holds until morning, and a written incident report by 09:00."
+  ],
+  "impact": {
+    "orders_affected": 40,
+    "money": {
+      "amount": "2360.00",
+      "currency": "USD",
+      "note": "40 × $59.00 unfulfillable; vouchers and care time on top"
+    },
+    "trust": "Second overnight page in two weeks; leadership asks whether flash sales should pause"
+  },
+  "stakeholders": [
+    "Incident commander (Platform Ops)",
+    "Lumen Home merchandising (Maya Perera)",
+    "US-NJ warehouse",
+    "PayGate integration owner"
+  ],
+  "constraints": [
+    "No deploy before 08:00 without IC approval",
+    "Site stays up; Lamp Week continues",
+    "No manual stock edits (that is what RB-101 got wrong)"
+  ],
+  "deadline": "Incident report by 09:00 UTC; post-incident review within 3 days",
+  "fixtures": {
+    "pagerduty": "fixtures/mcp/pagerduty/incidents.json",
+    "datadog": "fixtures/mcp/datadog/monitors.json",
+    "traces": "observability/otel/traces-oversell-checkout.json",
+    "runbooks": "observability/runbooks/"
+  },
+  "labs": [12]
+}

@@ -1,0 +1,120 @@
+{
+  "$comment": "Kadé Commerce scenario manifest (W1-fixtures). Lab authors copy `injectors[].lab` into labs/<nn>-*/lab.json#injectors and `briefs/<id>.json` into brief.md. Every injector talks only to the OpenAPI contract; exit 0 = symptom observed, 2 = precondition, 3 = plant fixed, 4 = worker-side symptom pending.",
+  "version": 1,
+  "reset": {
+    "command": "npm run lab:reset -- <nn>",
+    "steps": [
+      "npm run db:seed -- --reset (services/api)",
+      "scenarios/lab-reset.sh <nn>: revert bad-migration.patch, clear scenarios/.state, print the lab's starting state"
+    ],
+    "paygate_knobs_note": "PayGate knobs are process flags of services/paygate-fake; restart it to clear them."
+  },
+  "environment": {
+    "KADE_API_URL": "http://localhost:3001",
+    "PAYGATE_SECRET": "kade-local-paygate-secret",
+    "KADE_SCENARIO_STATE_DIR": "scenarios/.state"
+  },
+  "injectors": [
+    {
+      "id": "oversell",
+      "script": "scenarios/oversell.sh",
+      "plant": "oversell",
+      "labs": [5, 9, 12, 15],
+      "brief": "briefs/oversell.json",
+      "symptom": "More checkouts succeed than units on hand; GET /admin/inventory shows LH-LAMP-03 with a negative onHand.",
+      "result_fields": ["onHandBefore", "onHandAfter", "succeeded", "rejected", "orders"],
+      "lab": {
+        "name": "oversell",
+        "command": "scenarios/oversell.sh --sku LH-LAMP-03 --concurrency 20",
+        "when": "any time after reset",
+        "behaviour": "20 concurrent one-unit checkouts hit a 3-unit SKU; several succeed and on-hand stock goes negative."
+      }
+    },
+    {
+      "id": "duplicate-webhook",
+      "script": "scenarios/duplicate-webhook.sh",
+      "plant": "duplicate-webhook",
+      "labs": [7, 12, 15],
+      "brief": "briefs/duplicate-webhook.json",
+      "symptom": "The same payment.succeeded event_id is processed twice: two payment_received events, two emails queued, stock decremented twice.",
+      "result_fields": [
+        "order",
+        "eventId",
+        "paymentReceivedEvents",
+        "emailQueuedEvents",
+        "onHandBefore",
+        "onHandAfter"
+      ],
+      "lab": {
+        "name": "duplicate-webhook",
+        "command": "scenarios/duplicate-webhook.sh",
+        "when": "T+20 min",
+        "behaviour": "PayGate redelivers an identical payment.succeeded; the order is confirmed twice and the customer gets two emails."
+      }
+    },
+    {
+      "id": "abandoned-carts",
+      "script": "scenarios/abandoned-carts.sh",
+      "plant": "abandoned-cart-sweeper",
+      "labs": [7, 12, 15],
+      "brief": "briefs/abandoned-carts.json",
+      "symptom": "A late payment.succeeded lands on a cart the 48 h sweeper deleted; the order becomes paid/confirmed with zero lines (ghost order).",
+      "result_fields": ["ghostOrders", "orders"],
+      "lab": {
+        "name": "ghost-order",
+        "command": "scenarios/abandoned-carts.sh --older-than 48",
+        "when": "T+40 min",
+        "behaviour": "The sweeper has removed a pending cart; the customer's late payment creates an order with no lines."
+      }
+    },
+    {
+      "id": "rounding-drift",
+      "script": "scenarios/rounding-drift.sh",
+      "plant": "currency-rounding",
+      "labs": [5, 6, 9],
+      "brief": "briefs/rounding-drift.json",
+      "symptom": "On a few percent of VAT-inclusive EUR orders the API total differs from the exact Decimal recomputation by one cent; reconciliation never balances.",
+      "result_fields": ["ordersPlaced", "mismatches", "driftPercent", "drifted"],
+      "lab": {
+        "name": "rounding-drift",
+        "command": "scenarios/rounding-drift.sh --orders 40",
+        "when": "any time after reset",
+        "behaviour": "40 deterministic Trailhead baskets are checked out; the script lists every order whose total drifts by a cent."
+      }
+    },
+    {
+      "id": "bad-migration",
+      "script": "scenarios/bad-migration.patch",
+      "plant": "bad-migration",
+      "labs": [2, 12],
+      "brief": "briefs/bad-migration.json",
+      "symptom": "After `git apply scenarios/bad-migration.patch` a new migration drops the NOT NULL default on orders.currency; the worker crashes on the first new order after deploy.",
+      "result_fields": [],
+      "apply": "git apply scenarios/bad-migration.patch",
+      "revert": "git apply -R scenarios/bad-migration.patch",
+      "lab": {
+        "name": "bad-migration",
+        "command": "git apply scenarios/bad-migration.patch && npm run db:migrate",
+        "when": "T+30 min",
+        "behaviour": "A plausible-looking migration lands; a PreToolUse hook should block db:migrate, otherwise the worker dies on NULL currency."
+      }
+    },
+    {
+      "id": "wrong-runbook",
+      "script": null,
+      "plant": null,
+      "labs": [12],
+      "brief": "briefs/lamp-week-incident.json",
+      "symptom": "observability/runbooks/ contains two runbooks for negative on-hand; RB-101 blames the cache and tells the responder to bump stock by hand, which hides the oversell. RB-102 is the correct one.",
+      "result_fields": [],
+      "wrong_runbook": "observability/runbooks/RB-101-negative-on-hand-cache.md",
+      "correct_runbook": "observability/runbooks/RB-102-negative-on-hand-oversell.md",
+      "lab": {
+        "name": "wrong-runbook",
+        "command": null,
+        "when": "T+15 min",
+        "behaviour": "The on-call hands the responder a runbook that fixes the symptom and not the cause; a good investigation notices the second runbook."
+      }
+    }
+  ]
+}
