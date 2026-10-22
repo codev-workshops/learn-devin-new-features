@@ -8,6 +8,7 @@
 # (pytest/ruff for the worker gates); `npm test` also needs `npm run build` (contracts dist) and `npm run db:up` first.
 # W1-fixtures (22 Oct 2026) added shellcheck/jq (scenarios/ injectors) and the fixtures-gates knowledge entry.
 # W1-mobile (22 Oct 2026) added the Android SDK/emulator step for apps/mobile; details in blueprint.proposed.mobile.yaml.
+# W1-web (22 Oct 2026) added the Playwright Chromium install for the apps/web smoke tests (`npm run test:e2e -w apps/web`).
 initialize: |
   export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
   nvm install 22 >/dev/null && nvm alias default 22 >/dev/null
@@ -30,6 +31,7 @@ maintenance: |
   export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"; nvm use 22 >/dev/null
   npm install --no-audit --no-fund
   pip install -q -e "services/fulfilment-worker[dev]"
+  npm run test:e2e:install -w apps/web
 knowledge:
   - name: test
     contents: |
