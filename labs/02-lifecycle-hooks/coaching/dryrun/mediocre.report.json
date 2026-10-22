@@ -1,0 +1,219 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 2,
+    "slug": "lifecycle-hooks",
+    "coach": "coach-02-lifecycle-hooks"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:00:00Z",
+    "run_index": 1,
+    "transcript": "labs/02-lifecycle-hooks/coaching/dryrun/mediocre.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 74,
+      "delta_seconds": 14,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-15",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+15)",
+      "target_seconds": 45,
+      "actual_seconds": 52,
+      "delta_seconds": 7,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-60",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+60)",
+      "target_seconds": 45,
+      "actual_seconds": 39,
+      "delta_seconds": -6,
+      "verdict": "under"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "3-minute update to the DBA",
+      "target_seconds": 180,
+      "actual_seconds": 201,
+      "delta_seconds": 21,
+      "verdict": "over",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "Isn't this just a lint rule?",
+      "target_seconds": 90,
+      "actual_seconds": 58,
+      "delta_seconds": -32,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial, one follow-up allowed)",
+      "question": "If the hook has a bug, are we locked out of our own database?",
+      "target_seconds": 90,
+      "actual_seconds": 102,
+      "delta_seconds": 12,
+      "verdict": "over",
+      "interruptions": 1
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "So, because the reset happened on staging, and because both brands share the database"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "It is a PreToolUse hook, and when the command is a reset on another database it exits 2 so it is blocked"
+    },
+    "evidence": {
+      "status": "weak",
+      "quote": "I'll know it works when the tests pass with the hook on."
+    },
+    "next_step": {
+      "status": "present",
+      "quote": "Next action is to open the PR on the branch."
+    },
+    "order_held": true
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 7.3,
+    "filler_count": 6,
+    "filler_rate_per_minute": 0.82,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 2
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "That's the idea, right?"
+    ],
+    "long_pauses": [
+      {
+        "at": "15:20",
+        "seconds": 12,
+        "segment": "checkpoint-15"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "hk1",
+      "point": "Exit code 2 from PreToolUse denies the call while exit 0 lets it run and other codes are only logged",
+      "weight": 7,
+      "mentioned": true,
+      "evidence_quote": "when the command is a reset on another database it exits 2 so it is blocked, and exit 0 means it continues",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "hk2",
+      "point": "The psql call is rewritten into the read-only wrapper through updatedInput instead of being refused",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "the psql command is changed to the wrapper with updatedInput so it is read-only",
+      "belonged_in": "update"
+    },
+    {
+      "id": "hk3",
+      "point": "The matcher is a regex on the tool name and a list of patterns matches any entry",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "checkpoint-60"
+    },
+    {
+      "id": "hk4",
+      "point": "A broken hooks file or crashed hook fails open so the script itself must fail closed",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "hk5",
+      "point": "The bad migration patch was refused with an exit 2 reason and an audit log line as proof",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "The bad migration patch was also blocked with exit 2 and it is in the log.",
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "because (×3 in the opening sentence)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"the matcher one\" — \"the matcher injector\""
+    ],
+    "sentences_to_rerecord": [
+      "So, because the reset happened on staging, and because both brands share the database…"
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 18,
+      "max": 30,
+      "anchor": "Exit codes, rewrite and bad migration right; matcher semantics and open-vs-closed never stated (anchor: 17–21 = right conclusion, shaky mechanism)."
+    },
+    "structure": {
+      "score": 15,
+      "max": 25,
+      "anchor": "All parts findable but the framing front-loaded three \"because\" clauses and the evidence was a command, not an observation (anchor: 14–17 = order broken once)."
+    },
+    "customer_relevance": {
+      "score": 11,
+      "max": 20,
+      "anchor": "The customer's loss never quantified; the row-count interruption produced a hedge (anchor: 10–13 = impact mentioned once, hedged)."
+    },
+    "brevity_and_fluency": {
+      "score": 8,
+      "max": 15,
+      "anchor": "Framing, update and objection 2 over target, objection 1 and checkpoint 60 under; six fillers, one tag question, one 12-second pause (anchor: 7–9 = several segments off target)."
+    },
+    "recovery": {
+      "score": 5,
+      "max": 10,
+      "anchor": "Objections answered but without evidence; the follow-up \"open or closed\" was deferred (anchor: 5–6 = answers but defensively)."
+    },
+    "total": 57
+  },
+  "stems": [
+    "\"If the hook itself breaks, the policy fails… because…\" — answer open-or-closed in one sentence.",
+    "\"The matcher is a regex, so… guards exactly…\" — explain what the injector taught you.",
+    "\"You lost two days and 400 orders; this stops…\" — put the customer's number first."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 02; no previous run to compare with."
+}
