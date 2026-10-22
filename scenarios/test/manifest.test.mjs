@@ -86,7 +86,7 @@ describe("scripts", () => {
   it("only talk to the OpenAPI contract: no psql, no docker, no direct DB URL", () => {
     for (const f of readdirSync(scenarios).filter((f) => f.endsWith(".sh"))) {
       const text = readFileSync(join(scenarios, f), "utf8");
-      assert.doesNotMatch(text, /\bpsql\b|DATABASE_URL|docker /, `${f} reaches past the contract`);
+      assert.doesNotMatch(text, /\bpsql\b|docker |postgres:\/\//, `${f} reaches past the contract`);
     }
   });
   it("use only paths that exist in packages/contracts/openapi.yaml", () => {

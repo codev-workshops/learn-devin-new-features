@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
-# rounding-drift.sh — place VAT-inclusive Trailhead orders and show the 1-cent drift.
+# rounding-drift.sh — place orders and show the 1-cent drift between API and worker totals.
 #
-# Plant: services/api totals use JS floats and half-up rounding per line; the fulfilment
-# worker recomputes with Decimal and banker's rounding (seed-spec → currency-rounding).
-# Symptom: on a few percent of orders the API total/tax differs by one cent from the exact
-# recomputation, so the daily reconciliation never balances.
+# Plant: services/api totals use JS floats and half-up rounding; the fulfilment worker
+# recomputes with Decimal and banker's rounding (seed-spec → currency-rounding).
+# Symptom: on a share of orders the API tax/total differs by one cent from the exact
+# recomputation, so the daily reconciliation never balances. Against services/api the ties of
+# the 8.25% tax-exclusive Lumen Home rule (e.g. subtotal 10.00 → 0.825) are where it shows,
+# so lumen-home is the default; --brand trailhead-supply exercises the VAT-inclusive path.
 #
-# usage: scenarios/rounding-drift.sh [--orders 40] [--brand trailhead-supply] [--seed 7]
+# usage: scenarios/rounding-drift.sh [--orders 40] [--brand lumen-home] [--seed 7]
 #   Baskets are deterministic for a given --seed so a run is reproducible.
 # Reset: npm run lab:reset -- <nn>
 set -euo pipefail
@@ -16,7 +18,7 @@ export INJECTOR=rounding-drift
 . "$(dirname "${BASH_SOURCE[0]}")/lib/common.sh"
 
 ORDERS=40
-BRAND="trailhead-supply"
+BRAND="lumen-home"
 SEED=7
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -32,8 +34,8 @@ require_api
 require_cmd node
 # High-stock, variant-free SKUs so the run never trips the oversell plant.
 case "$BRAND" in
-trailhead-supply) BASKET=(TS-STAKE-01 TS-MAP-01 TS-FIRST-01 TS-SOCK-01-M TS-FLTR-01 TS-LAMP-01 TS-KNIFE-01 TS-STOVE-01 TS-HAMK-01 TS-BTL-01-BLK) ;;
-lumen-home) BASKET=(LH-BULB-01 LH-CANDLE-01 LH-TOWEL-01 LH-MUG-01 LH-THROW-01 LH-FRAME-01 LH-CANIST-01 LH-VASE-01) ;;
+trailhead-supply) BASKET=(TS-STAKE-01 TS-MAP-01 TS-FIRST-01 TS-SOCK-01-M TS-FLTR-01 TS-LAMP-01 TS-KNIFE-01 TS-STOVE-01 TS-BTL-01-BLU TS-BTL-01-BLK) ;;
+lumen-home) BASKET=(LH-BULB-01 LH-CANDLE-01 LH-TOWEL-01 LH-MUG-01 LH-THROW-01 LH-FRAME-01) ;;
 *) die "unknown brand $BRAND" ;;
 esac
 

@@ -1,6 +1,7 @@
 import type { BrandId, Cart, CartLine } from "@kade/contracts";
 import type { Queryable } from "../db.js";
 import { notFound } from "../errors.js";
+import { isStaff, type Caller } from "../middleware/auth.js";
 import { computeTotals, money, totalsToApi } from "../money.js";
 import { brandPricing, type BrandRow } from "./brands.js";
 
@@ -24,13 +25,22 @@ export interface CartLineRow {
   currency: "USD" | "EUR";
 }
 
-export async function getCartRow(db: Queryable, brand: BrandId, cartId: string): Promise<CartRow> {
+/** Carts are private: customers see only their own, staff (merchandiser/admin) see every cart of the brand. */
+export async function getCartRow(
+  db: Queryable,
+  brand: BrandId,
+  cartId: string,
+  caller?: Caller,
+): Promise<CartRow> {
   const { rows } = await db.query<CartRow>("SELECT * FROM carts WHERE id = $1 AND brand = $2", [
     cartId,
     brand,
   ]);
-  if (!rows[0]) throw notFound(`cart ${cartId} not found in ${brand}`);
-  return rows[0];
+  const cart = rows[0];
+  if (!cart || (caller && !isStaff(caller) && cart.user_email !== caller.user)) {
+    throw notFound(`cart ${cartId} not found in ${brand}`);
+  }
+  return cart;
 }
 
 export async function getCartLines(db: Queryable, cartId: string): Promise<CartLineRow[]> {
@@ -67,7 +77,12 @@ export function cartToApi(cart: CartRow, lines: CartLineRow[], brand: BrandRow):
   };
 }
 
-export async function loadCart(db: Queryable, brand: BrandRow, cartId: string): Promise<Cart> {
-  const cart = await getCartRow(db, brand.id, cartId);
+export async function loadCart(
+  db: Queryable,
+  brand: BrandRow,
+  cartId: string,
+  caller?: Caller,
+): Promise<Cart> {
+  const cart = await getCartRow(db, brand.id, cartId, caller);
   return cartToApi(cart, await getCartLines(db, cartId), brand);
 }

@@ -5,11 +5,16 @@
 # (seed-spec → abandoned-cart-sweeper). Symptom: payment.succeeded arrives for a deleted cart
 # and the order becomes a "ghost" — paid/confirmed with no lines.
 #
-# The sweeper's effect is reproduced through the contract (DELETE /carts/{cartId}) so this
-# works without the worker's schedule. The seed ships 4 pending carts older than 48 h; when they
-# have all been consumed the script builds a fresh cart + checkout and ages nothing (same mechanics).
+# The sweep itself is the worker's job (services/fulfilment-worker sweeper: delete the cart,
+# cancel the pending order and drop its lines). --sweeper worker runs it once via
+# `python3 -m fulfilment_worker sweep` (needs the worker installed and DATABASE_URL); --sweeper
+# contract reproduces only the visible part through the API (DELETE /carts/{cartId}) for stacks
+# where the worker is not reachable, e.g. the test stub. `auto` (default) picks worker when it
+# is importable and DATABASE_URL is set, otherwise contract.
+# The seed ships 4 pending carts older than 48 h; when they have all been consumed the script
+# builds a fresh cart + checkout and ages nothing (same mechanics).
 #
-# usage: scenarios/abandoned-carts.sh [--brand lumen-home] [--older-than 48] [--count 1] [--fresh] [--wait 20]
+# usage: scenarios/abandoned-carts.sh [--brand lumen-home] [--older-than 48] [--count 1] [--fresh] [--wait 20] [--sweeper auto|worker|contract]
 # Reset: npm run lab:reset -- <nn>
 set -euo pipefail
 export INJECTOR=abandoned-carts
@@ -23,6 +28,7 @@ OLDER=48
 COUNT=1
 FRESH=0
 WAIT=20
+SWEEPER=auto
 while [ $# -gt 0 ]; do
   case "$1" in
   --brand) BRAND="$2"; shift 2 ;;
@@ -30,13 +36,19 @@ while [ $# -gt 0 ]; do
   --count) COUNT="$2"; shift 2 ;;
   --fresh) FRESH=1; shift ;;
   --wait) WAIT="$2"; shift 2 ;;
-  -h | --help) sed -n '2,14p' "$0"; exit 0 ;;
+  --sweeper) SWEEPER="$2"; shift 2 ;;
+  -h | --help) sed -n '2,19p' "$0"; exit 0 ;;
   *) die "unknown option $1" ;;
   esac
 done
 
 require_api
 merch="$(merchandiser_for "$BRAND")"
+if [ "$SWEEPER" = "auto" ]; then
+  if [ -n "${DATABASE_URL:-}" ] && python3 -c 'import fulfilment_worker' >/dev/null 2>&1; then SWEEPER=worker; else SWEEPER=contract; fi
+fi
+case "$SWEEPER" in worker | contract) ;; *) die "--sweeper must be auto, worker or contract" ;; esac
+log "sweeper mode: $SWEEPER"
 targets="[]"
 if [ "$FRESH" -eq 0 ]; then
   abandoned="$(KADE_BRAND="$BRAND" KADE_USER="$merch" KADE_ROLE=merchandiser api GET "/admin/carts/abandoned?olderThanHours=$OLDER")"
@@ -66,8 +78,13 @@ while IFS= read -r row; do
   currency="$(printf '%s' "$row" | jq -r .order.totals.currency)"
 
   # 1. What the sweeper does at 48 h: the cart goes away while the payment is still pending.
-  KADE_BRAND="$BRAND" KADE_USER="$merch" KADE_ROLE=merchandiser api DELETE "/carts/$cart_id" >/dev/null
-  log "cart $cart_id deleted (sweeper) → $(last_status); order $order_id still pending_payment"
+  if [ "$SWEEPER" = "worker" ]; then
+    SWEEPER_MAX_AGE_HOURS="$OLDER" python3 -m fulfilment_worker sweep >&2 || die "fulfilment_worker sweep failed"
+    log "fulfilment worker sweeper ran (max age ${OLDER}h); cart $cart_id should be gone, order $order_id emptied"
+  else
+    KADE_BRAND="$BRAND" KADE_USER="$merch" KADE_ROLE=merchandiser api DELETE "/carts/$cart_id" >/dev/null
+    log "cart $cart_id deleted through the contract (what the sweeper does) → $(last_status); order $order_id still pending"
+  fi
 
   # 2. The late PayGate delivery (attempt 3, occurred when the customer actually paid).
   event="$(jq -nc --arg id "evt_late_$(rand_hex)" --arg at "$(iso_hours_ago "$((OLDER + 1))")" \
@@ -83,12 +100,14 @@ while IFS= read -r row; do
     o="$(KADE_BRAND="$BRAND" KADE_USER="$merch" KADE_ROLE=merchandiser api GET "/orders/$order_id")"
     status="$(printf '%s' "$o" | jq -r .status)"
     lines="$(printf '%s' "$o" | jq '.lines | length')"
-    [ "$status" != "pending_payment" ] && break
+    case "$status" in paid | confirmed | packed | shipped | delivered) break ;; esac
     [ "$(date +%s)" -ge "$deadline" ] && break
     sleep 1
   done
   ghost=false
-  if [ "$status" != "pending_payment" ] && [ "$lines" -eq 0 ]; then ghost=true; ghosts=$((ghosts + 1)); fi
+  case "$status" in
+  paid | confirmed | packed | shipped | delivered) [ "$lines" -eq 0 ] && { ghost=true; ghosts=$((ghosts + 1)); } ;;
+  esac
   details="$(printf '%s' "$details" | jq -c --arg o "$order_id" --arg c "$cart_id" --arg s "$status" --argjson l "$lines" --argjson g "$ghost" \
     '. + [{order:$o,cart:$c,status:$s,lines:$l,ghost:$g}]')"
 done < <(printf '%s' "$targets" | jq -c '.[]')
@@ -98,8 +117,8 @@ if [ "$ghosts" -gt 0 ]; then
   symptom "$ghosts ghost order(s): paid for a cart the sweeper deleted, zero lines — $(printf '%s' "$details" | jq -r '[.[] | select(.ghost) | .order] | join(", ")')" "$result"
   exit "$EXIT_SYMPTOM"
 fi
-if printf '%s' "$details" | jq -e 'all(.status == "pending_payment")' >/dev/null; then
-  no_symptom "late webhook accepted but no order left pending_payment within ${WAIT}s — is the fulfilment worker running?" "$result"
+if printf '%s' "$details" | jq -e 'all(.status == "pending_payment" or .status == "cancelled")' >/dev/null; then
+  no_symptom "late webhook accepted but no order was confirmed within ${WAIT}s — is the fulfilment worker running (kade-worker run)?" "$result"
   exit "$EXIT_PENDING"
 fi
 no_symptom "orders were paid with their lines intact — the worker handled the missing cart; plant fixed?" "$result"
