@@ -1,0 +1,14 @@
+You are done when all of the following are observable by someone who was not on the call. Every item can be met on the fixture path with zero credentials.
+
+1. **A responder exists.** A Devin Oncall responder of the Alerts type is configured for Kadé (screenshot of the settings page), with its trigger (PagerDuty on the live path; manual on the fixture path), the repo, and a runbook attached. The page or a manual trigger started at least one investigation session (session link or screenshot).
+2. **Impact statement.** `labs/12-oncall/INCIDENT-REPORT.md` opens with one paragraph naming the SKU, the number of affected orders and customers, the money at risk with its currency, and the window (first order beyond stock → page → re-page). Each number cites its source (a shim tool call, a metric point, a log entry).
+3. **Evidence chain.** The report links, in order, the Datadog monitor (id and threshold), the PagerDuty incident (number, trigger, acknowledgement, the note at 02:20 and the re-trigger), at least one trace (trace id and the span attribute that matters), and the code path in `services/api` (file and function). A reader can follow the chain without asking you.
+4. **Likely cause, with its amplifier.** The report states the primary cause and the second defect that made the numbers worse, each with one piece of evidence that would look different if you were wrong. "A race condition" on its own does not count.
+5. **Local reproduction.** On a local stack, one injector run reproduces the primary cause and its `RESULT:` line is pasted into the report (on hand before and after, succeeded vs rejected). If you cannot run Docker, say so and cite the trace fixture instead.
+6. **Mitigation that respects the constraints.** The report lists the mitigation until 08:00 — no deploy, no manual stock edit, site stays up — and how you would know it is holding (which series or monitor, what value). Code fixes appear only as follow-ups with an owner.
+7. **Runbook judgement.** The report says which runbook you followed after the T+15 injector, which one you rejected, and the observation that decided it.
+8. **Alert storm absorbed.** After the T+25 injector the report says whether the new alerts are one incident or several, and why.
+9. **Mode choice justified.** One paragraph says which parts of the investigation ran (or would run) in Lite and which in a full mode, with one reason each and a rough cost comparison.
+10. **Updates sent.** The T+15 update and the closing update exist (incidents channel thread or `labs/12-oncall/INCIDENT-UPDATES.md`), each following Outcome → Evidence → Risk → Next action → Ask.
+11. **Credential honesty.** The report has a short "not exercised" list: which integrations were live, which were fixtures.
+12. **Articulation drill completed** with the voice coach (section 8) or against a timer, and the gap report (or your self-score) saved as `labs/12-oncall/INCIDENT-REPORT.coach.md`. Do not commit it.
