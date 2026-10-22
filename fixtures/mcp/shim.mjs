@@ -45,6 +45,22 @@ function parseCsv(rel) {
   return lines.map((l) => Object.fromEntries(l.split(",").map((v, i) => [cols[i], v])));
 }
 
+// Clip a metrics query result to [from, to] (ISO or unix ms) when either bound is given.
+function windowed(result, a) {
+  const from = a.from
+    ? Number(new Date(isNaN(Number(a.from)) ? a.from : Number(a.from)))
+    : -Infinity;
+  const to = a.to ? Number(new Date(isNaN(Number(a.to)) ? a.to : Number(a.to))) : Infinity;
+  if (from === -Infinity && to === Infinity) return result;
+  return {
+    ...result,
+    series: result.series.map((s) => ({
+      ...s,
+      pointlist: s.pointlist.filter(([t]) => t >= from && t <= to),
+    })),
+  };
+}
+
 const incidents = () => json("fixtures/mcp/pagerduty/incidents.json").incidents;
 const findIncident = (id) =>
   incidents().find((i) => i.id === String(id) || String(i.incident_number) === String(id));
@@ -153,6 +169,30 @@ export function callTool(name, args = {}) {
   for (const req of tool.inputSchema.required ?? []) {
     if (args[req] === undefined)
       return { error: { code: -32602, message: `Missing required argument: ${req}` } };
+  }
+  // `match` in tools.json lists the ids a fixture answers for; any other id is a not-found tool error.
+  for (const [arg, allowed] of Object.entries(tool.match ?? {})) {
+    const given = args[arg];
+    if (given === undefined) continue;
+    const values = Array.isArray(given) ? given : [given];
+    const ok = values.every((v) =>
+      allowed.some(
+        (x) => String(v) === x || String(v).endsWith(`/${x}`) || String(v).endsWith(`:${x}`),
+      ),
+    );
+    if (!ok) {
+      return {
+        result: {
+          content: [
+            {
+              type: "text",
+              text: `${arg} ${JSON.stringify(given)} not found; fixture has ${allowed.join(", ")}`,
+            },
+          ],
+          isError: true,
+        },
+      };
+    }
   }
   try {
     const out = handlers[tool.handler](tool, args);

@@ -22,8 +22,16 @@
       "plant": "oversell",
       "labs": [5, 9, 12, 15],
       "brief": "briefs/oversell.json",
-      "symptom": "More checkouts succeed than units on hand; GET /admin/inventory shows LH-LAMP-03 with a negative onHand.",
-      "result_fields": ["onHandBefore", "onHandAfter", "succeeded", "rejected", "orders"],
+      "symptom": "More checkouts succeed than units were available; GET /admin/inventory shows LH-LAMP-03 with negative available (onHand once the worker decrements).",
+      "result_fields": [
+        "onHandBefore",
+        "availableBefore",
+        "onHandAfter",
+        "availableAfter",
+        "succeeded",
+        "rejected",
+        "orders"
+      ],
       "lab": {
         "name": "oversell",
         "command": "scenarios/oversell.sh --sku LH-LAMP-03 --concurrency 20",
@@ -74,13 +82,13 @@
       "plant": "currency-rounding",
       "labs": [5, 6, 9],
       "brief": "briefs/rounding-drift.json",
-      "symptom": "On a few percent of VAT-inclusive EUR orders the API total differs from the exact Decimal recomputation by one cent; reconciliation never balances.",
+      "symptom": "On a share of orders the API tax/total differs from the exact Decimal recomputation by one cent; reconciliation never balances. Against services/api the 8.25% tax-exclusive ties (Lumen Home) drift; --brand trailhead-supply exercises the VAT-inclusive path.",
       "result_fields": ["ordersPlaced", "mismatches", "driftPercent", "drifted"],
       "lab": {
         "name": "rounding-drift",
-        "command": "scenarios/rounding-drift.sh --orders 40",
+        "command": "scenarios/rounding-drift.sh --orders 40 --brand lumen-home",
         "when": "any time after reset",
-        "behaviour": "40 deterministic Trailhead baskets are checked out; the script lists every order whose total drifts by a cent."
+        "behaviour": "40 deterministic baskets are checked out; the script lists every order whose tax/total drifts by a cent from the worker's Decimal arithmetic."
       }
     },
     {
