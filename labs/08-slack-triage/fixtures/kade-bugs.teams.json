@@ -1,0 +1,6 @@
+[
+  { "id": "1792663200100", "channelIdentity": { "teamId": "kade-support-team", "channelId": "19:kadebugs@thread.tacv2", "membershipType": "standard" }, "from": { "user": { "id": "amara", "displayName": "amara (support)" } }, "body": { "content": "Customer on Lumen order LH-100231 says she was charged twice for the Arc floor lamp." } },
+  { "id": "1792664100300", "channelIdentity": { "teamId": "kade-support-team", "channelId": "19:kadebugs@thread.tacv2", "membershipType": "standard" }, "from": { "user": { "id": "joel", "displayName": "joel (support)" } }, "body": { "content": "Double charge on LH-100245, two payments of $129.90." } },
+  { "id": "1792665900600", "replyToId": "1792663200100", "channelIdentity": { "teamId": "kade-support-team", "channelId": "19:kadebugs@thread.tacv2", "membershipType": "standard" }, "from": { "user": { "id": "priya", "displayName": "priya (engineering)" } }, "body": { "content": "Wrong owner: route these to @kade-fulfilment." } },
+  { "id": "1792666000000", "channelIdentity": { "teamId": "kade-support-team", "channelId": "19:kadepayments@thread.skype", "membershipType": "private" }, "from": { "user": { "id": "li", "displayName": "li (support)" } }, "body": { "content": "Chargeback rate doubled since Tuesday." } }
+]
