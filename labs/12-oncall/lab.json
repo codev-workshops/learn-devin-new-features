@@ -1,0 +1,165 @@
+{
+  "number": 12,
+  "slug": "oncall",
+  "title": "Oncall investigation — the 02:10 oversell page after the Lamp Week deploy",
+  "feature": "Devin Oncall (Alerts responder, PagerDuty trigger, runbook, incident report, Lite vs Ultra) with PagerDuty and Datadog MCPs — or the local fixture MCP shim",
+  "duration_minutes": 150,
+  "difficulty": "advanced",
+  "prerequisites": [
+    "Repo cloned, `npm install` done at the root, Node 22",
+    "Lab 00 warm-up done once (framing stems and the update skeleton)",
+    "Fixture path: the `fixtures/mcp` shim registered in Devin as a custom stdio MCP server from `fixtures/mcp/mcp.example.json` (no credentials)",
+    "Optional live path: org admin access to Devin Oncall settings and a PagerDuty and/or Datadog MCP connection"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Fixture MCP shim (`fixtures/mcp/shim.mjs`) — default path",
+        "required": true,
+        "fixture": "It is the fixture: read-only tools for PagerDuty, Datadog, AWS, GCP, BigQuery and Google Workspace serving incident 2187. Smoke-test with `node fixtures/mcp/shim.mjs --list`.",
+        "note": "Zero credentials and zero environment variables. Every acceptance criterion can be met on this path."
+      },
+      {
+        "integration": "PagerDuty (Devin Oncall trigger + PagerDuty MCP) — optional",
+        "required": false,
+        "fixture": "`pagerduty_*` shim tools return incident 2187, its log entries, grouped alerts and the on-call schedule; `observability/pagerduty/webhook-incident-triggered.json` is the v3 webhook a live trigger would deliver.",
+        "note": "Live: connect PagerDuty in Settings → Integrations and add it as a responder trigger. Needs a PagerDuty account; nothing in this repo assumes one."
+      },
+      {
+        "integration": "Datadog MCP — optional",
+        "required": false,
+        "fixture": "`datadog_*` shim tools: monitors 48213771 and 48213802, the Inventory & Payments dashboard, the on-hand and webhook failure-rate series, worker logs and deploy events.",
+        "note": "Live: org MCP connection with a read-only Datadog key; the monitor and dashboard JSON in `observability/datadog/` can be imported into a sandbox org."
+      },
+      {
+        "integration": "AWS, GCP, BigQuery, Google Workspace MCPs — optional",
+        "required": false,
+        "fixture": "`aws_*`, `gcp_*`, `bigquery_*` and `workspace_*` shim tools (ECS deployment of the Lamp Week build, Pub/Sub backlog, `orders_daily`, the merchandiser sheet and the incident Doc).",
+        "note": "Useful for the deploy timeline and the order count; never required."
+      },
+      {
+        "integration": "Slack or Teams incidents channel — optional",
+        "required": false,
+        "fixture": "Write the T+15 and closing updates into `labs/12-oncall/INCIDENT-UPDATES.md` instead of a channel.",
+        "note": "A live incidents channel needs the Slack (or Teams) integration and a test channel; do not post into a real one."
+      }
+    ],
+    "fixture_only_story": "With the shim alone you get the whole incident as the responder would have seen it at 02:55: the page, the timeline (including the on-call's notes), the monitors and series, worker logs, OTLP traces, the deploy event, the runbooks and the draft incident Doc. You configure the Devin Oncall responder in settings but trigger it by hand (or start an ordinary session with the same instructions) instead of from a real page. The local API and `scenarios/` reproduce the cause on your machine.",
+    "not_exercised": [
+      "A real PagerDuty page triggering a Devin Oncall responder (fixture path triggers by hand)",
+      "Live Datadog, AWS, GCP, BigQuery and Google Workspace MCP calls",
+      "Posting into a real incidents channel in Slack or Teams"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "npm run lab:reset -- 12",
+      "node fixtures/mcp/shim.mjs --call pagerduty_get_incident '{\"incident_id\":\"2187\"}'"
+    ],
+    "clean_state": "`lab:reset` ends with the lab 12 starting state: LH-LAMP-03 on hand = 3, no negative inventory, no Lamp Week orders beyond the seed, PayGate knobs off. The shim returns incident 2187 in status `acknowledged`. `git status --short` is clean and there is no `labs/12-oncall/INCIDENT-REPORT.md`. Without Docker, skip the first command: the fixture path needs only the shim."
+  },
+  "injectors": [
+    {
+      "name": "wrong-runbook",
+      "when": "T+15 min",
+      "behaviour": "The on-call hands your responder the runbook they used at 02:20 and asks you to follow it. It is not the only runbook for this monitor. Your T+15 update must say which runbook you are following and why."
+    },
+    {
+      "name": "alert-storm",
+      "when": "T+25 min",
+      "behaviour": "The incident's alert list grows: more Lamp Week SKUs and the webhook failure-rate monitor page within minutes (`pagerduty_list_incident_alerts`; facilitator may copy ALRT03 for LH-LAMP-02 and LH-BNDL-01 as described in `observability/pagerduty/alerts-lamp-week.json`). Decide whether this is one incident or several, and say so."
+    },
+    {
+      "name": "oversell",
+      "when": "any time after reset",
+      "behaviour": "`scenarios/oversell.sh --sku LH-LAMP-03 --concurrency 20` reproduces the symptom on your local API: several checkouts succeed against 3 units and on hand goes negative."
+    },
+    {
+      "name": "duplicate-webhook",
+      "when": "T+40 min",
+      "behaviour": "`scenarios/duplicate-webhook.sh` redelivers an identical `payment.succeeded`; on a local stack with the worker the order is confirmed twice and stock drops twice. Without the worker it exits 4 and the logs and traces fixtures carry the evidence."
+    }
+  ],
+  "coach": {
+    "skill": "coach-12-oncall",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      {
+        "id": "framing",
+        "kind": "framing",
+        "label": "45-second incident framing",
+        "target_seconds": 45
+      },
+      {
+        "id": "update-15",
+        "kind": "update",
+        "label": "T+15 incident update",
+        "at_minute": 15,
+        "target_seconds": 120
+      },
+      {
+        "id": "checkpoint-60",
+        "kind": "checkpoint",
+        "label": "Think-aloud checkpoint (T+60)",
+        "at_minute": 60,
+        "target_seconds": 45
+      },
+      {
+        "id": "update",
+        "kind": "update",
+        "label": "Closing update",
+        "target_seconds": 180
+      },
+      {
+        "id": "objection-1",
+        "kind": "objection",
+        "label": "Objection 1 (commercial)",
+        "target_seconds": 90
+      },
+      {
+        "id": "objection-2",
+        "kind": "objection",
+        "label": "Objection 2 (technical)",
+        "target_seconds": 90
+      }
+    ]
+  },
+  "references": [
+    {
+      "title": "Devin docs — Devin Oncall (responders, triggers, responder settings, incidents and their modes, reports)",
+      "url": "https://docs.devin.ai/product-guides/devin-oncall",
+      "date": "fetched 2026-10-22"
+    },
+    {
+      "title": "Devin docs — PagerDuty integration",
+      "url": "https://docs.devin.ai/integrations/pagerduty",
+      "date": "fetched 2026-10-22"
+    },
+    {
+      "title": "Devin release notes 2026 — Devin Oncall generally available (Oct 19) and Lite mode for Oncall responders and incident investigations (Oct 21)",
+      "url": "https://docs.devin.ai/release-notes/2026",
+      "date": "Oct 19 and Oct 21, 2026"
+    },
+    {
+      "title": "Devin docs — MCP (custom stdio servers, org connections)",
+      "url": "https://docs.devin.ai/work-with-devin/mcp",
+      "date": "fetched 2026-10-22"
+    },
+    {
+      "title": "Devin docs — MCP use cases (Datadog, PagerDuty, AWS, BigQuery)",
+      "url": "https://docs.devin.ai/use-cases/tutorials/mcp-use-cases",
+      "date": "fetched 2026-10-22"
+    },
+    {
+      "title": "Devin docs — Voice mode",
+      "url": "https://docs.devin.ai/work-with-devin/voice-mode",
+      "date": "fetched 2026-10-22"
+    },
+    {
+      "title": "Devin docs — Skills (@skills: invocation)",
+      "url": "https://docs.devin.ai/product-guides/skills",
+      "date": "fetched 2026-10-22"
+    }
+  ]
+}
