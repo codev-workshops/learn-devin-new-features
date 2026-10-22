@@ -22,6 +22,7 @@ describe("oversell.sh", () => {
     assert.match(r.stdout, /^SYMPTOM: /m);
     assert.equal(r.result.sku, "LH-LAMP-03");
     assert.equal(r.result.onHandBefore, 3);
+    assert.equal(r.result.availableBefore, 3);
     assert.ok(r.result.succeeded > 3, `expected >3 successes, got ${r.result.succeeded}`);
     assert.ok(r.result.onHandAfter < 0, `expected negative onHand, got ${r.result.onHandAfter}`);
     assert.equal(r.result.succeeded + r.result.rejected, 20);
@@ -34,7 +35,7 @@ describe("oversell.sh", () => {
     const r = runInjector("oversell.sh", ["--concurrency", "5"], env());
     assert.equal(r.status, 2, r.stderr);
     assert.match(r.stdout, /^NO SYMPTOM: .*nothing new happened/m);
-    assert.ok(r.result.onHandBefore < 0);
+    assert.ok(r.result.availableBefore < 0);
     assert.equal(r.result.succeeded, 0);
   });
 });
@@ -74,7 +75,14 @@ describe("abandoned-carts.sh", () => {
 });
 
 describe("rounding-drift.sh", () => {
-  it("finds at least one Trailhead order whose API total drifts from the exact recomputation", () => {
+  it("finds at least one order whose API total drifts from the exact recomputation (both brands)", () => {
+    const ts = runInjector(
+      "rounding-drift.sh",
+      ["--orders", "40", "--brand", "trailhead-supply"],
+      env(),
+    );
+    assert.equal(ts.status, 0, ts.stderr);
+    assert.ok(ts.result.mismatches >= 1);
     const r = runInjector("rounding-drift.sh", ["--orders", "40"], env());
     assert.equal(r.status, 0, r.stderr);
     assert.match(r.stdout, /^SYMPTOM: /m);
@@ -88,8 +96,17 @@ describe("rounding-drift.sh", () => {
     }
   });
   it("is deterministic for a seed: the same baskets produce the same drift count", () => {
-    const a = runInjector("rounding-drift.sh", ["--orders", "15", "--seed", "3"], env());
-    const b = runInjector("rounding-drift.sh", ["--orders", "15", "--seed", "3"], env());
+    const a = runInjector(
+      "rounding-drift.sh",
+      ["--orders", "8", "--seed", "3", "--brand", "trailhead-supply"],
+      env(),
+    );
+    const b = runInjector(
+      "rounding-drift.sh",
+      ["--orders", "8", "--seed", "3", "--brand", "trailhead-supply"],
+      env(),
+    );
+    assert.equal(a.result.ordersPlaced, b.result.ordersPlaced);
     assert.equal(a.result.mismatches, b.result.mismatches);
     assert.deepEqual(
       a.result.drifted.map((d) => d.apiTotal),

@@ -175,6 +175,13 @@ inventory_on_hand() {
     jq --arg sku "$sku" '[.[] | select(.sku == $sku) | .onHand] | add // 0'
 }
 
+# inventory_available <brand> <sku>  → total available (onHand - reserved) via GET /admin/inventory
+inventory_available() {
+  local brand="$1" sku="$2"
+  KADE_BRAND="$brand" KADE_USER="$(merchandiser_for "$brand")" KADE_ROLE=merchandiser api GET /admin/inventory |
+    jq --arg sku "$sku" '[.[] | select(.sku == $sku) | .available] | add // 0'
+}
+
 # order_events <brand> <order-id>  → JSON array
 order_events() {
   KADE_BRAND="$1" KADE_USER="$(merchandiser_for "$1")" KADE_ROLE=merchandiser api GET "/orders/$2/events"

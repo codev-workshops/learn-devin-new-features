@@ -19,7 +19,7 @@ export KADE_API_URL=http://localhost:3001        # default
 scenarios/oversell.sh --concurrency 20           # exit 0 = symptom observed
 scenarios/duplicate-webhook.sh --wait 20
 scenarios/abandoned-carts.sh --older-than 48     # --sweeper worker|contract|auto; --fresh when the seeded carts are used up
-scenarios/rounding-drift.sh --orders 40 --seed 7
+scenarios/rounding-drift.sh --orders 40 --seed 7   # default --brand lumen-home (8.25% ties drift against services/api)
 git apply scenarios/bad-migration.patch && npm run db:migrate   # lab 2: a hook should block this
 npm run lab:reset -- 12
 ```
