@@ -1,0 +1,244 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 12,
+    "slug": "oncall",
+    "coach": "coach-12-oncall"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T11:40:00Z",
+    "run_index": 2,
+    "transcript": "labs/12-oncall/coaching/dryrun/off-track.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "45-second incident framing",
+      "target_seconds": 45,
+      "actual_seconds": 80,
+      "delta_seconds": 35,
+      "verdict": "over"
+    },
+    {
+      "segment": "update-15",
+      "kind": "update",
+      "label": "T+15 incident update",
+      "target_seconds": 120,
+      "actual_seconds": 75,
+      "delta_seconds": -45,
+      "verdict": "under"
+    },
+    {
+      "segment": "checkpoint-60",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+60)",
+      "target_seconds": 45,
+      "actual_seconds": 30,
+      "delta_seconds": -15,
+      "verdict": "under"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Closing update",
+      "target_seconds": 180,
+      "actual_seconds": 110,
+      "delta_seconds": -70,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (commercial)",
+      "target_seconds": 90,
+      "actual_seconds": 40,
+      "delta_seconds": -50,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (technical)",
+      "target_seconds": 90,
+      "actual_seconds": 120,
+      "delta_seconds": 30,
+      "verdict": "over"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "the deploy went out, then the newsletter, then the alert"
+    },
+    "approach": {
+      "status": "missing",
+      "quote": "Devin will look at all of it."
+    },
+    "evidence": {
+      "status": "missing",
+      "quote": "Next I will look at more logs."
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "Next I will look at more logs."
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 7.6,
+    "filler_count": 12,
+    "filler_rate_per_minute": 1.58,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 4
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "so yeah",
+        "count": 3
+      },
+      {
+        "word": "you know",
+        "count": 1
+      },
+      {
+        "word": "like",
+        "count": 1
+      },
+      {
+        "word": "um",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "Actually, I see a lot of logs, it's complicated, right?"
+    ],
+    "long_pauses": [
+      {
+        "at": "02:00",
+        "seconds": 14,
+        "segment": "update-15"
+      },
+      {
+        "at": "04:50",
+        "seconds": 12,
+        "segment": "update"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Impact in numbers: 40 paid orders for LH-LAMP-03 against 3 units, about $2,360",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "It is LH-LAMP-03, 40 orders against 3 units, so, yeah, around 2,360 dollars",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "Evidence chain from monitor 48213771 to incident 2187 to a checkout.reserve trace to the reservation code",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "update-15"
+    },
+    {
+      "id": "mm3",
+      "point": "Primary cause is the unlocked read-then-write reservation, amplified by duplicate payment webhooks",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "checkpoint-60"
+    },
+    {
+      "id": "mm4",
+      "point": "Mitigation until 08:00 that stops new sales of the SKU without a deploy or a manual stock edit",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "stop selling the lamp on the price list until 08:00, no deploy and no more stock edits",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "Lite for the bounded triage, a full mode for the cross-service root cause, with the reason",
+      "weight": 4,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm6",
+      "point": "The cache runbook was wrong and the oversell runbook was followed instead, with the deciding observation",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update-15"
+    },
+    {
+      "id": "mm7",
+      "point": "Which integrations were live and which ran on the fixture shim",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [
+      "then (×3 in the opening sentence)"
+    ],
+    "clarification_requests": [
+      "Which logs? (coach, T+60)"
+    ],
+    "article_plural_slips": [
+      "\"the cache thing\" — \"the cache theory\""
+    ],
+    "sentences_to_rerecord": [
+      "So, basically, the deploy went out, then the newsletter, then the alert…",
+      "Actually, I see a lot of logs, it's complicated, right?"
+    ],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 9,
+      "max": 30,
+      "anchor": "Only impact and mitigation stated; no evidence chain, no cause, no mode choice, the wrong runbook followed (anchor: 6–10 = two of seven points)."
+    },
+    "structure": {
+      "score": 9,
+      "max": 25,
+      "anchor": "No approach or evidence section; the framing is a timeline and the updates have no skeleton (anchor: 6–9 = problem only, order lost)."
+    },
+    "customer_relevance": {
+      "score": 7,
+      "max": 20,
+      "anchor": "One number, hedged with \"I think\"; the customer impact is never turned into a decision (anchor: 6–9 = one number, hedged)."
+    },
+    "brevity_and_fluency": {
+      "score": 5,
+      "max": 15,
+      "anchor": "Five segments off target; twelve fillers in 7.6 minutes, one tag question, pauses of 14 s and 12 s (anchor: 4–6 = most segments off target, fillers over 1.5/min)."
+    },
+    "recovery": {
+      "score": 3,
+      "max": 10,
+      "anchor": "Objection 1 dismissed; objection 2 defended the wrong runbook without evidence (anchor: 2–4 = no acknowledge, no offer)."
+    },
+    "total": 33
+  },
+  "stems": [
+    "\"What I know for sure is… What I do not know yet is…\" — separate facts from guesses before you talk about causes.",
+    "\"The runbook said X; the telemetry said Y; I followed Y because…\" — check the runbook against the re-page.",
+    "\"Monitor → incident → trace → code\" — give one id per link before you name a cause."
+  ],
+  "previous_run_comparison": "Rerun of the same transcript (run 2): total 33 vs 34 in run 1; every dimension within 5 points."
+}

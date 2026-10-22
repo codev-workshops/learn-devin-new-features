@@ -1,0 +1,231 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 12,
+    "slug": "oncall",
+    "coach": "coach-12-oncall"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:40:00Z",
+    "run_index": 1,
+    "transcript": "labs/12-oncall/coaching/dryrun/mediocre.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "45-second incident framing",
+      "target_seconds": 45,
+      "actual_seconds": 58,
+      "delta_seconds": 13,
+      "verdict": "over"
+    },
+    {
+      "segment": "update-15",
+      "kind": "update",
+      "label": "T+15 incident update",
+      "target_seconds": 120,
+      "actual_seconds": 135,
+      "delta_seconds": 15,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-60",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+60)",
+      "target_seconds": 45,
+      "actual_seconds": 44,
+      "delta_seconds": -1,
+      "verdict": "on"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Closing update",
+      "target_seconds": 180,
+      "actual_seconds": 160,
+      "delta_seconds": -20,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (commercial)",
+      "target_seconds": 90,
+      "actual_seconds": 70,
+      "delta_seconds": -20,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (technical)",
+      "target_seconds": 90,
+      "actual_seconds": 88,
+      "delta_seconds": -2,
+      "verdict": "on"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "So, the Lamp Week deploy went out at 22:40, and then the newsletter went out"
+    },
+    "approach": {
+      "status": "weak",
+      "quote": "Devin Oncall is looking at it"
+    },
+    "evidence": {
+      "status": "present",
+      "quote": "in the traces there are three checkout.reserve spans reading 3 at the same time"
+    },
+    "next_step": {
+      "status": "present",
+      "quote": "Ask: can we turn off the SKU?"
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 9.2,
+    "filler_count": 6,
+    "filler_rate_per_minute": 0.65,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 2
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "I think it is the reservation race and the webhooks double it, that's the cause, no?"
+    ],
+    "long_pauses": [
+      {
+        "at": "03:53",
+        "seconds": 11,
+        "segment": "checkpoint-60"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Impact in numbers: 40 paid orders for LH-LAMP-03 against 3 units, about $2,360",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "40 customers paid for LH-LAMP-03 and we had 3 units, so around 2,360 dollars",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "Evidence chain from monitor 48213771 to incident 2187 to a checkout.reserve trace to the reservation code",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "the monitor 48213771 opened incident 2187, and in the traces there are three checkout.reserve spans reading 3 at the same time, so it goes to the reservation code",
+      "belonged_in": "update-15"
+    },
+    {
+      "id": "mm3",
+      "point": "Primary cause is the unlocked read-then-write reservation, amplified by duplicate payment webhooks",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "it is the reservation race and the webhooks double it",
+      "belonged_in": "checkpoint-60"
+    },
+    {
+      "id": "mm4",
+      "point": "Mitigation until 08:00 that stops new sales of the SKU without a deploy or a manual stock edit",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "the SKU is unavailable on the price list, we did not deploy and nobody edits the stock by hand",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "Lite for the bounded triage, a full mode for the cross-service root cause, with the reason",
+      "weight": 4,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm6",
+      "point": "The cache runbook was wrong and the oversell runbook was followed instead, with the deciding observation",
+      "weight": 3,
+      "mentioned": true,
+      "evidence_quote": "The on-call used RB-101, the cache one, but it is wrong because the stock went negative again after his correction, so I use RB-102 instead",
+      "belonged_in": "update-15"
+    },
+    {
+      "id": "mm7",
+      "point": "Which integrations were live and which ran on the fixture shim",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [
+      "and then (×2 in the opening sentence)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"the monitor 48213771\" — \"monitor 48213771\""
+    ],
+    "sentences_to_rerecord": [
+      "So, the Lamp Week deploy went out at 22:40, and then the newsletter went out…"
+    ],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 20,
+      "max": 30,
+      "anchor": "Impact, evidence chain, cause, mitigation and the runbook switch stated; no mode choice and no fixture/live statement (anchor: 17–21 = five of seven points)."
+    },
+    "structure": {
+      "score": 16,
+      "max": 25,
+      "anchor": "Updates follow the skeleton but the framing leads with the timeline; the T+15 outcome has no number of its own (anchor: 14–17 = all parts findable, order broken once)."
+    },
+    "customer_relevance": {
+      "score": 12,
+      "max": 20,
+      "anchor": "Numbers present but late in the framing; the closing update hands customers to merchandising without a count or decision (anchor: 10–13 = one number, buried)."
+    },
+    "brevity_and_fluency": {
+      "score": 8,
+      "max": 15,
+      "anchor": "Framing and T+15 over target, closing update and objection 1 under; six fillers in 9.2 minutes, one tag question, one 11-second pause (anchor: 7–9 = several segments off target, fillers under 1/min)."
+    },
+    "recovery": {
+      "score": 6,
+      "max": 10,
+      "anchor": "Objection 2 held the pattern; objection 1 skipped the evidence step and conceded the point (anchor: 5–6 = pattern partly held)."
+    },
+    "total": 62
+  },
+  "stems": [
+    "\"Right now, 40 customers have paid for a lamp we do not have.\" — impact before the timeline.",
+    "\"Lite for …, full mode for …, because…\" — name the mode choice and its cost in the closing update.",
+    "\"Tonight PagerDuty and Datadog were fixtures; nothing was live.\" — say which path you ran."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 12; no previous run to compare with."
+}
