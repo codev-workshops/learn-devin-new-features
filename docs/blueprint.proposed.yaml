@@ -46,7 +46,7 @@ knowledge:
       npm run gates   (test, lint, build, labs:build) && npm run coach:dryrun -- 00
   - name: startup
     contents: |
-      npm run db:up (Compose Postgres 16 from mirror.gcr.io) && npm run db:migrate && npm run db:seed -- --reset (node-pg-migrate reads DATABASE_URL from the root .env created by initialize). API: npm run dev -w services/api (3001); KADE_NOW=2026-10-22T09:00:00Z pins the clock. Lab pages: npm run labs:build, then open labs/index.html from file://.
+      npm run db:up (Compose Postgres 16 from mirror.gcr.io) && npm run db:migrate && npm run db:seed (no-op once seeded; `npm run db:seed -- --reset` is the lab reset and rebuilds the dataset). DATABASE_URL comes from the process env, else the root .env created by initialize, else the local default. API: npm run dev -w services/api (3001); KADE_NOW=2026-10-22T09:00:00Z pins the clock. Lab pages: npm run labs:build, then open labs/index.html from file://.
   - name: fixtures-gates
     contents: |
       node --test 'scenarios/test/*.test.mjs' 'fixtures/mcp/test/*.test.mjs' && shellcheck -x scenarios/*.sh scenarios/lib/common.sh   (W1-fixtures; not part of npm test)
