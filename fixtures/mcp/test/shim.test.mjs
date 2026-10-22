@@ -167,6 +167,22 @@ describe("tools", () => {
       (await callTool("bigquery_list_tables", { dataset: "kade-prod.analytics" })).result.isError,
       false,
     );
+    assert.equal(
+      (
+        await callTool("gcp_cloudrun_get_service", {
+          name: "projects/kade-prod/locations/europe-west1/services/kade-fulfilment-worker",
+        })
+      ).result.isError,
+      false,
+    );
+    assert.equal(
+      (
+        await callTool("gcp_cloudrun_get_service", {
+          name: "projects/other-tenant/locations/europe-west1/services/kade-fulfilment-worker",
+        })
+      ).result.isError,
+      true,
+    );
   });
 });
 
