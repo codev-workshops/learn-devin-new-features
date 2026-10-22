@@ -1,0 +1,105 @@
+{
+  "number": 11,
+  "slug": "acu-analytics",
+  "title": "ACU governance and analytics — control cost without blocking brand teams",
+  "feature": "Organization ACU limits, usage policies (per-user tiers, IdP group mapping, per-member overrides, additional usage requests), Consumption / Consumption Analytics / My analytics, the analytics Version setting (Newest vs Legacy)",
+  "duration_minutes": 75,
+  "difficulty": "core",
+  "prerequisites": [
+    "Repo cloned, `npm install` done at the root, Node 22",
+    "Lab 00 warm-up done once (framing stems and the update skeleton)",
+    "Fixture path: nothing else — `labs/11-acu-analytics/tools/acu-sim.mjs` replays the documented limit rules over a fictional Kadé enterprise",
+    "Optional observer path: a Devin account whose role can open Settings → Analytics (organization), and, if your enterprise enabled it, Settings → Personal → My analytics"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Offline limit and analytics simulator (`tools/acu-sim.mjs`) — default path",
+        "required": true,
+        "fixture": "`fixtures/kade-consumption.json`: 3 organizations with limits, 3 usage tiers, 3 IdP mappings, 4 named members plus aggregate rows, cloud / local / Devin Review usage for the current billing window and the last week of the previous one.",
+        "note": "Zero credentials. Both limit decisions and the dashboard-totals question can be answered on this path."
+      },
+      {
+        "integration": "Your own tenant's analytics pages — optional, read-only",
+        "required": false,
+        "fixture": "Placeholder figures in `figures/` show where each screenshot goes; the navigation map in the brief names the page for each one.",
+        "note": "Read only. Do not change any limit, tier or override in a real enterprise during this lab; capture screenshots into `labs/11-acu-analytics/figures/tenant/` (git-ignored)."
+      },
+      {
+        "integration": "Enterprise admin settings (Organizations, Usage policies) — not used live",
+        "required": false,
+        "fixture": "The simulator's `--raise-org`, `--override`, `--assign`, `--unassign` and `--billing-org` flags stand in for the admin actions.",
+        "note": "Changing limits needs an enterprise admin (Manage ACU limits or billing admin permission). The lab never asks you to do it for real."
+      }
+    ],
+    "fixture_only_story": "With fixtures only you still make both limit decisions, see which view counts which surface, and write the finance update. What you cannot do is confirm the exact layout of the Newest and Legacy analytics in your own tenant: the figures stay placeholders until you replace them.",
+    "not_exercised": [
+      "Changing a real organization limit, usage tier, IdP mapping or per-member override (simulated by `acu-sim.mjs`)",
+      "The live Newest / Legacy analytics pages and My analytics in your tenant (placeholder figures until you capture your own)",
+      "Additional usage requests and their approval notifications (described, not simulated)"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "npm run lab:reset -- 11",
+      "rm -rf labs/11-acu-analytics/figures/tenant labs/11-acu-analytics/ACU-DECISION.md",
+      "node labs/11-acu-analytics/tools/acu-sim.mjs --views"
+    ],
+    "clean_state": "The simulator is stateless: every run starts from `fixtures/kade-consumption.json` and only the flags you pass change it, so `lab:reset` (which reseeds the shop database) is optional here. Clean means no `ACU-DECISION.md` of your own and no `figures/tenant/` folder. `--views` prints an enterprise total of 8870 ACU for the current billing window (23 Oct → 14 Nov 2026) and three organization rows."
+  },
+  "injectors": [
+    {
+      "name": "sale-spike",
+      "command": "node labs/11-acu-analytics/tools/acu-sim.mjs --scenario A --inject sale-spike --date 2026-11-20",
+      "when": "T+30 min",
+      "behaviour": "Trailhead's merchandising lead forwards the Winter Drop forecast: about 900 extra cloud ACU between 18 and 20 November. Check whether your proposed fix still holds on the last sale day."
+    },
+    {
+      "name": "review-storm",
+      "command": "node labs/11-acu-analytics/tools/acu-sim.mjs --scenario B --inject review-storm",
+      "when": "T+40 min",
+      "behaviour": "Lumen pushes a burst of PRs and Devin Review spends 300 more ACU on them. Watch which of the two meters moves."
+    },
+    {
+      "name": "reset-day",
+      "command": "node labs/11-acu-analytics/tools/acu-sim.mjs --scenario B --override arjun=520 --date 2026-11-23",
+      "when": "after decision B",
+      "behaviour": "Jump to the first day of the next billing window. Say what happened to the override you set and to both meters."
+    },
+    {
+      "name": "empty-cycle",
+      "command": "node labs/11-acu-analytics/tools/acu-sim.mjs --views --range 2026-03-01..2026-04-15",
+      "when": "any time",
+      "behaviour": "Finance asks for spring numbers. The selected period is before the contract started; read the message and explain it in one sentence."
+    },
+    {
+      "name": "billing-org-drift",
+      "command": "node labs/11-acu-analytics/tools/acu-sim.mjs --views --billing-org noor=kade-trailhead",
+      "when": "built into the fixture",
+      "behaviour": "One Trailhead engineer never had a billing organization assigned. Compare the Platform and Trailhead rows with and without the flag."
+    }
+  ],
+  "coach": {
+    "skill": "coach-11-acu-analytics",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
+      { "id": "checkpoint-10", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+10)", "at_minute": 10, "target_seconds": 45 },
+      { "id": "checkpoint-40", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+40)", "at_minute": 40, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "Update to the finance controller", "target_seconds": 180 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 (commercial)", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 (technical)", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — Enterprise billing (tracking consumption, organization ACU limits)", "url": "https://docs.devin.ai/admin/billing/enterprise", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Organization-level ACU limits (billing windows, billing organization attribution)", "url": "https://docs.devin.ai/admin/billing/org-acu-limits", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Usage policies: per-user ACU limits (tiers, IdP mappings, overrides, requests)", "url": "https://docs.devin.ai/enterprise/features/usage-policies", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Usage (how meters work)", "url": "https://docs.devin.ai/admin/billing/usage", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Personal Analytics (My analytics, View Personal Analytics permission)", "url": "https://docs.devin.ai/enterprise/security-access/personal-analytics", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Devin Review (consumption dashboard, review usage counts toward the organization limit)", "url": "https://docs.devin.ai/work-with-devin/devin-review", "date": "fetched 2026-10-22" },
+    { "title": "Devin release notes 2026 — Analytics drilldown paging (Sep 30), date ranges include today (Oct 5), analytics metric corrections and Local tab (Oct 7), resolved counts (Oct 21)", "url": "https://docs.devin.ai/release-notes/2026", "date": "Sep 30 – Oct 21, 2026" },
+    { "title": "Devin docs — Voice mode", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" }
+  ]
+}
