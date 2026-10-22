@@ -99,6 +99,25 @@ describe('rendered lab page', () => {
     expect(html).toMatch(/<button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer<\/button>/);
     expect(html).toContain('<div class="answer-panel" id="answer-panel" tabindex="-1"');
     expect(html).not.toMatch(/localStorage|sessionStorage|document\.cookie|location\.hash/);
+    expect(html).toContain("e.key==='Escape'&&shown");
+  });
+
+  it('neutralises raw HTML, images and unsafe link schemes in lab content', async () => {
+    const s = await scratchLabs('xss', async ({ lab }) => {
+      await fs.appendFile(
+        path.join(lab, 'brief.md'),
+        '\n<script>alert(1)</script>\n\nInline <img src=x onerror=alert(2)> here. [bad](javascript:alert(3)) [ok](https://docs.devin.ai/) ![pic](https://example.com/p.png)\n',
+      );
+    });
+    await buildLabs({ labsDir: s.labs, repoDir: s.repo, outDir: s.out });
+    const page = await fs.readFile(path.join(s.out, '00-sample', 'index.html'), 'utf8');
+    expect(page).not.toMatch(/<script>alert/);
+    expect(page).not.toMatch(/<img/);
+    expect(page).not.toMatch(/javascript:/);
+    expect(page).toContain('&lt;script&gt;alert(1)&lt;/script&gt;');
+    expect(page).toContain('<a href="https://docs.devin.ai/" rel="noopener">ok</a>');
+    expect(page).not.toMatch(/<a[^>]*>bad<\/a>/);
+    expect(page).toContain(' bad ');
   });
 
   it('prints the exact @skills: start line, the mute hint and the transcript caveat in section 8', () => {
@@ -181,7 +200,14 @@ describe('build rules', () => {
     );
   });
 
-  it('ignores folders that do not match NN-slug or have no lab.json', async () => {
+  it('fails (rather than dropping the lab) when lab.json is missing but other sources exist', async () => {
+    const s = await scratchLabs('no-labjson', async ({ lab }) => {
+      await fs.rm(path.join(lab, 'lab.json'));
+    });
+    await expectBuildFailure({ labsDir: s.labs, repoDir: s.repo }, /00-sample\/lab\.json is missing/);
+  });
+
+  it('ignores folders that do not match NN-slug or have no source files', async () => {
     const s = await scratchLabs('ignore', async ({ labs }) => {
       await fs.mkdir(path.join(labs, 'coach-dryrun', 'fixtures'), { recursive: true });
       await fs.mkdir(path.join(labs, '99-empty'), { recursive: true });

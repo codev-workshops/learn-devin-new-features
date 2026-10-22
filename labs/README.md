@@ -58,6 +58,11 @@ refresh always starts hidden.
    the two H2 headings.
 4. Answer content detected outside the `<template>` in the rendered page.
 
+Lab Markdown is treated as data: raw HTML is rendered literally, images are dropped and
+only `http(s):`/`mailto:`/relative links are kept, so a lab edit cannot inject script.
+A `NN-slug/` folder with any source file but a missing `lab.json` fails the build instead
+of silently disappearing from the index.
+
 ## Dry-run contract (`coach-dryrun.mjs`)
 
 For lab `nn` it expects, under `coaching/dryrun/`, for each of `strong`, `mediocre`,
@@ -68,11 +73,11 @@ For lab `nn` it expects, under `coaching/dryrun/`, for each of `strong`, `medioc
   `--- segment: <id> ---` and lines `[mm:ss] COACH:|LEARNER:` (the learner ends a timed
   segment with `Done.`; pauses are `[mm:ss] (pause N s)`).
 * `<variant>.report.json` — validates against `coach-report.schema.json`.
-* `<variant>.report.md` — the same report rendered (`--render`), must contain the caveat
-  `transcript-based, approximate`.
+* `<variant>.report.md` — byte-identical to `--render <variant>.report.json` (a stale
+  Markdown fails) and therefore carrying the caveat `transcript-based, approximate`.
 * `<variant>.rerun.report.json` — a second grading of the same transcript.
 
-Checks: every `lab.coach.segments[].id` appears once in `timing`; actual seconds within
+Checks (applied to the first grading **and** the rerun): every `lab.coach.segments[].id` appears once in `timing`; actual seconds within
 ±5 s of the transcript markers; delta/verdict consistent; exactly three stems; totals
 equal the sum of the five dimensions (30/25/20/15/10); must-mention weights sum to 30;
 unmentioned ids equal `planted_omissions`; filler count within ±1 of the plant and the

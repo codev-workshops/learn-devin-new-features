@@ -28,6 +28,7 @@ import { Marked } from 'marked';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const LEARNER_FACING_FILES = ['lab.json', 'brief.md', 'criteria.md', 'drill.md'];
+export const SOURCE_FILES = [...LEARNER_FACING_FILES, 'answer.md'];
 export const LAB_DIR_PATTERN = /^(\d{2})-([a-z0-9][a-z0-9-]*)$/;
 export const CAVEAT = 'transcript-based, approximate';
 export const SECTION_TITLES = [
@@ -54,10 +55,28 @@ export class BuildError extends Error {
 // ---------------------------------------------------------------------------
 // Markdown
 
+// Relative links and fragments are fine; absolute URLs must be http(s) or mailto.
+const hasScheme = (href) => /^\s*[a-z][a-z0-9+.-]*:/i.test(href);
+const isSafeHref = (href) => !hasScheme(href) || /^\s*(https?|mailto):/i.test(href);
+
 function makeMarked() {
   const marked = new Marked({ gfm: true, breaks: false });
   marked.use({
     renderer: {
+      // Lab content is data, not code: raw HTML is shown literally, images are dropped
+      // (pages must be self-contained) and only safe link schemes survive.
+      html({ text }) {
+        return escapeHtml(text);
+      },
+      image({ text }) {
+        return escapeHtml(text);
+      },
+      link({ href, title, tokens }) {
+        const body = this.parser.parseInline(tokens);
+        if (!isSafeHref(href ?? '')) return body;
+        const t = title ? ` title="${escapeHtml(title)}"` : '';
+        return `<a href="${escapeHtml(href)}"${t} rel="noopener">${body}</a>`;
+      },
       heading({ tokens, depth }) {
         const text = this.parser.parseInline(tokens);
         const level = Math.min(depth + 2, 6);
@@ -277,7 +296,10 @@ export async function discoverLabDirs(labsDir) {
   const dirs = [];
   for (const e of entries) {
     if (!e.isDirectory() || !LAB_DIR_PATTERN.test(e.name)) continue;
-    if (await exists(path.join(labsDir, e.name, 'lab.json'))) dirs.push(e.name);
+    const dir = path.join(labsDir, e.name);
+    let hasSource = false;
+    for (const name of SOURCE_FILES) if (await exists(path.join(dir, name))) hasSource = true;
+    if (hasSource) dirs.push(e.name);
   }
   return dirs.sort();
 }
@@ -286,7 +308,7 @@ export async function loadLab(labsDir, dirName, repoDir) {
   const dir = path.join(labsDir, dirName);
   const problems = [];
   const files = {};
-  for (const name of ['lab.json', 'brief.md', 'criteria.md', 'drill.md', 'answer.md']) {
+  for (const name of SOURCE_FILES) {
     const text = await readIfExists(path.join(dir, name));
     if (text === null) problems.push(`${dirName}/${name} is missing`);
     files[name] = text ?? '';
@@ -432,6 +454,7 @@ const JS = `
     if(shown){answer.focus();}
   }
   btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
   window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
 })();
 `;

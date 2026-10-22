@@ -243,76 +243,84 @@ export async function runDryrunChecks({ labsDir = __dirname, nn } = {}) {
     }
     if (failures.some((f) => f.startsWith(`${variant}.`))) continue;
 
-    const v = `${variant}`;
-    if (report.lab.number !== labJson.number) fail(`${v}: report.lab.number ${report.lab.number} != ${labJson.number}`);
-    if (report.lab.coach !== labJson.coach?.skill) fail(`${v}: report.lab.coach ${report.lab.coach} != ${labJson.coach?.skill}`);
-    if (report.mode !== 'dry-run') fail(`${v}: mode must be dry-run`);
+    // Every check below runs on the first grading and on the rerun, so a rerun
+    // cannot drift from the transcript while staying within the score tolerance.
+    for (const [suffix, rep] of [['', report], ['.rerun', rerun]]) {
+      const v = `${variant}${suffix}`;
+      if (rep.lab.number !== labJson.number) fail(`${v}: rep.lab.number ${rep.lab.number} != ${labJson.number}`);
+      if (rep.lab.coach !== labJson.coach?.skill) fail(`${v}: rep.lab.coach ${rep.lab.coach} != ${labJson.coach?.skill}`);
+      if (rep.mode !== 'dry-run') fail(`${v}: mode must be dry-run`);
 
-    // Timing table
-    const seen = report.timing.map((t) => t.segment);
-    for (const id of segmentIds) if (!seen.includes(id)) fail(`${v}: timing is missing segment "${id}"`);
-    for (const id of seen) if (!segmentIds.includes(id)) fail(`${v}: timing has unknown segment "${id}"`);
-    if (new Set(seen).size !== seen.length) fail(`${v}: duplicate timing segments`);
-    const durations = segmentDurations(transcript);
-    for (const t of report.timing) {
-      if (segmentTargets[t.segment] != null && t.target_seconds !== segmentTargets[t.segment]) {
-        fail(`${v}: ${t.segment} target_seconds ${t.target_seconds} != lab.json ${segmentTargets[t.segment]}`);
+      // Timing table
+      const seen = rep.timing.map((t) => t.segment);
+      for (const id of segmentIds) if (!seen.includes(id)) fail(`${v}: timing is missing segment "${id}"`);
+      for (const id of seen) if (!segmentIds.includes(id)) fail(`${v}: timing has unknown segment "${id}"`);
+      if (new Set(seen).size !== seen.length) fail(`${v}: duplicate timing segments`);
+      const durations = segmentDurations(transcript);
+      for (const t of rep.timing) {
+        if (segmentTargets[t.segment] != null && t.target_seconds !== segmentTargets[t.segment]) {
+          fail(`${v}: ${t.segment} target_seconds ${t.target_seconds} != lab.json ${segmentTargets[t.segment]}`);
+        }
+        if (t.delta_seconds !== t.actual_seconds - t.target_seconds) fail(`${v}: ${t.segment} delta_seconds must be actual - target`);
+        const want = expectedVerdict(t.delta_seconds, rep.run.timing_tolerance_seconds);
+        if (t.verdict !== want) fail(`${v}: ${t.segment} verdict "${t.verdict}" should be "${want}" (delta ${t.delta_seconds}, tolerance ${rep.run.timing_tolerance_seconds})`);
+        if (durations[t.segment] != null && Math.abs(durations[t.segment] - t.actual_seconds) > TIMING_SLACK_SECONDS) {
+          fail(`${v}: ${t.segment} actual_seconds ${t.actual_seconds} disagrees with transcript markers (${durations[t.segment]} s)`);
+        } else if (durations[t.segment] == null) {
+          fail(`${v}: transcript has no "--- segment: ${t.segment} ---" block with marked lines`);
+        }
       }
-      if (t.delta_seconds !== t.actual_seconds - t.target_seconds) fail(`${v}: ${t.segment} delta_seconds must be actual - target`);
-      const want = expectedVerdict(t.delta_seconds, report.run.timing_tolerance_seconds);
-      if (t.verdict !== want) fail(`${v}: ${t.segment} verdict "${t.verdict}" should be "${want}" (delta ${t.delta_seconds}, tolerance ${report.run.timing_tolerance_seconds})`);
-      if (durations[t.segment] != null && Math.abs(durations[t.segment] - t.actual_seconds) > TIMING_SLACK_SECONDS) {
-        fail(`${v}: ${t.segment} actual_seconds ${t.actual_seconds} disagrees with transcript markers (${durations[t.segment]} s)`);
-      } else if (durations[t.segment] == null) {
-        fail(`${v}: transcript has no "--- segment: ${t.segment} ---" block with marked lines`);
+
+      // Stems and caveat
+      if (rep.stems.length !== 3) fail(`${v}: exactly three stems required`);
+      if (rep.clarity.caveat !== CAVEAT) fail(`${v}: clarity.caveat must be "${CAVEAT}"`);
+      if (!reportMd.includes(CAVEAT)) fail(`${v}: rep.md must contain "${CAVEAT}"`);
+
+      // Scores
+      const s = rep.scores;
+      const sum = s.accuracy.score + s.structure.score + s.customer_relevance.score + s.brevity_and_fluency.score + s.recovery.score;
+      if (sum !== s.total) fail(`${v}: scores.total ${s.total} != sum of parts ${sum}`);
+      const weightSum = rep.must_mention.reduce((a, m) => a + m.weight, 0);
+      if (weightSum !== ACCURACY_SHARE) fail(`${v}: must-mention weights sum to ${weightSum}, expected ${ACCURACY_SHARE}`);
+      for (const m of rep.must_mention) {
+        if (!segmentIds.includes(m.belonged_in)) fail(`${v}: must_mention ${m.id} belonged_in "${m.belonged_in}" is not a segment`);
+      }
+
+      // Planted omissions, fillers, pauses
+      const planted = transcript.data;
+      if (Array.isArray(planted.planted_omissions)) {
+        const missed = rep.must_mention.filter((m) => !m.mentioned).map((m) => m.id).sort();
+        const want = [...planted.planted_omissions].map(String).sort();
+        if (JSON.stringify(missed) !== JSON.stringify(want)) fail(`${v}: missed must-mention ids [${missed}] != planted omissions [${want}]`);
+      } else {
+        fail(`${v}: transcript front matter needs planted_omissions (use [] for none)`);
+      }
+      if (Number.isInteger(planted.planted_fillers)) {
+        const counted = countFillers(transcript.learnerText).total;
+        if (counted !== planted.planted_fillers) fail(`${v}: transcript contains ${counted} filler(s) but front matter plants ${planted.planted_fillers}`);
+        if (Math.abs(rep.fillers_and_pauses.filler_count - planted.planted_fillers) > 1) {
+          fail(`${v}: filler_count ${rep.fillers_and_pauses.filler_count} not within ±1 of planted ${planted.planted_fillers}`);
+        }
+      } else {
+        fail(`${v}: transcript front matter needs planted_fillers`);
+      }
+      const plantedPauses = Array.isArray(planted.planted_long_pauses) ? planted.planted_long_pauses.map(String) : [];
+      for (const at of plantedPauses) {
+        const want = toSeconds(at);
+        if (want == null) {
+          fail(`${v}: planted_long_pauses entry "${at}" is not mm:ss`);
+          continue;
+        }
+        if (!transcript.pauses.some((p) => toSeconds(p.at) === want)) fail(`${v}: transcript has no "[${at}] (pause N s)" line for the planted pause`);
+        if (!rep.fillers_and_pauses.long_pauses.some((p) => Math.abs(toSeconds(p.at) - want) <= TIMING_SLACK_SECONDS)) {
+          fail(`${v}: planted long pause at ${at} not reported`);
+        }
       }
     }
 
-    // Stems and caveat
-    if (report.stems.length !== 3) fail(`${v}: exactly three stems required`);
-    if (report.clarity.caveat !== CAVEAT) fail(`${v}: clarity.caveat must be "${CAVEAT}"`);
-    if (!reportMd.includes(CAVEAT)) fail(`${v}: report.md must contain "${CAVEAT}"`);
-
-    // Scores
-    const s = report.scores;
-    const sum = s.accuracy.score + s.structure.score + s.customer_relevance.score + s.brevity_and_fluency.score + s.recovery.score;
-    if (sum !== s.total) fail(`${v}: scores.total ${s.total} != sum of parts ${sum}`);
-    const weightSum = report.must_mention.reduce((a, m) => a + m.weight, 0);
-    if (weightSum !== ACCURACY_SHARE) fail(`${v}: must-mention weights sum to ${weightSum}, expected ${ACCURACY_SHARE}`);
-    for (const m of report.must_mention) {
-      if (!segmentIds.includes(m.belonged_in)) fail(`${v}: must_mention ${m.id} belonged_in "${m.belonged_in}" is not a segment`);
-    }
-
-    // Planted omissions, fillers, pauses
-    const planted = transcript.data;
-    if (Array.isArray(planted.planted_omissions)) {
-      const missed = report.must_mention.filter((m) => !m.mentioned).map((m) => m.id).sort();
-      const want = [...planted.planted_omissions].map(String).sort();
-      if (JSON.stringify(missed) !== JSON.stringify(want)) fail(`${v}: missed must-mention ids [${missed}] != planted omissions [${want}]`);
-    } else {
-      fail(`${v}: transcript front matter needs planted_omissions (use [] for none)`);
-    }
-    if (Number.isInteger(planted.planted_fillers)) {
-      const counted = countFillers(transcript.learnerText).total;
-      if (counted !== planted.planted_fillers) fail(`${v}: transcript contains ${counted} filler(s) but front matter plants ${planted.planted_fillers}`);
-      if (Math.abs(report.fillers_and_pauses.filler_count - planted.planted_fillers) > 1) {
-        fail(`${v}: filler_count ${report.fillers_and_pauses.filler_count} not within ±1 of planted ${planted.planted_fillers}`);
-      }
-    } else {
-      fail(`${v}: transcript front matter needs planted_fillers`);
-    }
-    const plantedPauses = Array.isArray(planted.planted_long_pauses) ? planted.planted_long_pauses.map(String) : [];
-    for (const at of plantedPauses) {
-      const want = toSeconds(at);
-      if (want == null) {
-        fail(`${v}: planted_long_pauses entry "${at}" is not mm:ss`);
-        continue;
-      }
-      if (!transcript.pauses.some((p) => toSeconds(p.at) === want)) fail(`${v}: transcript has no "[${at}] (pause N s)" line for the planted pause`);
-      if (!report.fillers_and_pauses.long_pauses.some((p) => Math.abs(toSeconds(p.at) - want) <= TIMING_SLACK_SECONDS)) {
-        fail(`${v}: planted long pause at ${at} not reported`);
-      }
-    }
+    // Markdown report is derived from the JSON: it must carry the caveat and be in sync
+    if (!reportMd.includes(CAVEAT)) fail(`${variant}: report.md must contain "${CAVEAT}"`);
+    if (reportMd !== renderReportMarkdown(report)) fail(`${variant}: report.md is stale — regenerate with --render ${path.relative(process.cwd(), files.report)}`);
 
     // Stability
     const drift = {};
@@ -320,7 +328,7 @@ export async function runDryrunChecks({ labsDir = __dirname, nn } = {}) {
       const a = key === 'total' ? report.scores.total : report.scores[key].score;
       const b = key === 'total' ? rerun.scores.total : rerun.scores[key].score;
       drift[key] = Math.abs(a - b);
-      if (drift[key] > MAX_DRIFT) fail(`${v}: ${key} moved by ${drift[key]} between runs (max ${MAX_DRIFT})`);
+      if (drift[key] > MAX_DRIFT) fail(`${variant}: ${key} moved by ${drift[key]} between runs (max ${MAX_DRIFT})`);
     }
 
     reports[variant] = report;

@@ -27,7 +27,7 @@
   "scenarios": {
     "reset": [
       "git status --short",
-      "rm -f labs/00-sample/PLAN.md"
+      "rm -f labs/00-sample/PLAN.md labs/00-sample/PLAN.report.md"
     ],
     "clean_state": "`git status --short` prints nothing and there is no `labs/00-sample/PLAN.md`. This lab touches no database, no service and no Devin settings."
   },

@@ -126,6 +126,29 @@ describe('coach:dryrun rules', () => {
     expect(r.failures).toEqual(expect.arrayContaining([expect.stringMatching(/mediocre\.report: schema \/clarity\/caveat must be equal to constant/)]));
   });
 
+  it('applies the transcript checks to the rerun too', async () => {
+    const r = await scratch('rerun-transcript', ({ editJson }) =>
+      editJson('mediocre.rerun.report.json', (j) => {
+        j.must_mention.find((m) => m.id === 'mm5').mentioned = true;
+        const f = j.timing.find((t) => t.segment === 'framing');
+        f.actual_seconds = 60;
+        f.delta_seconds = 0;
+        f.verdict = 'on';
+      }),
+    );
+    expect(r.failures).toEqual(
+      expect.arrayContaining(['mediocre.rerun: missed must-mention ids [mm2] != planted omissions [mm2,mm5]', expect.stringMatching(/mediocre\.rerun: framing actual_seconds 60 disagrees with transcript markers \(74 s\)/)]),
+    );
+  });
+
+  it('rejects a report.md that is out of sync with its JSON even when it carries the caveat', async () => {
+    const r = await scratch('stale-md', async ({ dryrun }) => {
+      const p = path.join(dryrun, 'strong.report.md');
+      await fs.writeFile(p, (await fs.readFile(p, 'utf8')).replace('86/100', '99/100'));
+    });
+    expect(r.failures).toEqual(expect.arrayContaining([expect.stringMatching(/strong: report\.md is stale — regenerate with --render/)]));
+  });
+
   it('rejects missing fixture files', async () => {
     const r = await scratch('missing', ({ dryrun }) => fs.rm(path.join(dryrun, 'off-track.rerun.report.json')));
     expect(r.failures).toContain('off-track: rerun file missing (00-sample/coaching/dryrun/off-track.rerun.report.json)');
