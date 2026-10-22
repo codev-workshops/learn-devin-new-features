@@ -1,0 +1,19 @@
+[project]
+name = "payroll-worker"
+version = "0.1.0"
+description = "Polls queued payroll exports, computes totals from approved timesheets and writes CSV files"
+requires-python = ">=3.11"
+dependencies = ["psycopg[binary]>=3.2,<4"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

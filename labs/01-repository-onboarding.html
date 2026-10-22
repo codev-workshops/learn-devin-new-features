@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 1: Repository onboarding without a prompt</title>
+<style>
+:root {
+  --ink: #18212f;
+  --muted: #5b6577;
+  --line: #dfe3ea;
+  --paper: #ffffff;
+  --wash: #f5f7fb;
+  --brand: #2453d6;
+  --brand-ink: #ffffff;
+  --answer: #f2f7ff;
+  --ok: #18794e;
+  --warn: #9a5b00;
+  --draft: #6b4fbb;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--ink);
+  background: var(--wash);
+  line-height: 1.6;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: var(--brand); }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }
+code { background: var(--wash); padding: 0.1em 0.35em; border-radius: 4px; }
+pre { background: #0f172a; color: #e2e8f0; padding: 1rem; border-radius: 8px; overflow-x: auto; }
+pre code { background: none; padding: 0; color: inherit; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; background: var(--paper); }
+th, td { border: 1px solid var(--line); padding: 0.5rem 0.75rem; text-align: left; vertical-align: top; }
+th { background: var(--wash); }
+blockquote { margin: 1rem 0; padding: 0.75rem 1rem; border-left: 4px solid var(--brand); background: var(--paper); }
+.lab-header { background: var(--paper); border-bottom: 1px solid var(--line); padding: 2rem max(1.5rem, calc((100vw - 1180px) / 2)); }
+.lab-header h1 { margin: 0.25rem 0 0.5rem; font-size: 2rem; line-height: 1.2; }
+.eyebrow { margin: 0; color: var(--brand); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.8rem; }
+.crumbs { margin: 0 0 1rem; font-size: 0.9rem; }
+.summary { max-width: 70ch; color: var(--muted); font-size: 1.05rem; margin: 0 0 1rem; }
+.facts { display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 0 0 1rem; }
+.facts dt { font-size: 0.75rem; text-transform: uppercase; color: var(--muted); letter-spacing: 0.04em; }
+.facts dd { margin: 0; font-weight: 600; }
+.fallback { margin: 0; padding: 0.6rem 0.9rem; background: #fff8e6; border: 1px solid #f3d38b; border-radius: 8px; max-width: 90ch; }
+.layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 2rem; max-width: 1180px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.toc { position: sticky; top: 1rem; align-self: start; font-size: 0.9rem; }
+.toc ol, .toc ul { padding-left: 1.2rem; margin: 0 0 1.5rem; }
+.toc-title { font-weight: 700; margin: 0 0 0.4rem; }
+main section { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 0.5rem 1.5rem 1.25rem; margin-bottom: 1.25rem; }
+main section h2 { font-size: 1.3rem; }
+main.wide { max-width: 1180px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.answer { margin: 1rem 0; }
+.show-answer { font: inherit; font-weight: 600; cursor: pointer; border: 1px solid var(--brand); background: var(--brand); color: var(--brand-ink); padding: 0.45rem 0.9rem; border-radius: 8px; }
+.show-answer[aria-expanded="true"] { background: var(--paper); color: var(--brand); }
+.show-answer:focus-visible { outline: 3px solid #9db6ff; outline-offset: 2px; }
+.answer-body { margin-top: 0.75rem; padding: 0.25rem 1rem; background: var(--answer); border: 1px solid #c9dafc; border-radius: 8px; }
+.status { display: inline-block; padding: 0.1rem 0.55rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; border: 1px solid currentColor; }
+.status-ready { color: var(--ok); }
+.status-pilot { color: var(--warn); }
+.status-draft { color: var(--draft); }
+.status-planned { color: var(--muted); }
+.muted { color: var(--muted); font-size: 0.9rem; }
+.catalog td:first-child { width: 3rem; text-align: right; }
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }
+  .toc { position: static; }
+}
+@media print {
+  .show-answer, .toc { display: none; }
+}
+</style>
+</head>
+<body>
+<header class="lab-header">
+<p class="crumbs"><a href="index.html">All labs</a></p>
+<p class="eyebrow">Lab 1 · AGENTS.md, rules, skills and repository setup</p>
+<h1>Repository onboarding without a prompt</h1>
+<p class="summary">Get Devin productive in an unfamiliar multi-service repository, then explain to the customer what Devin will and will not do on its own.</p>
+<dl class="facts">
+<div><dt>Level</dt><dd>foundation</dd></div>
+<div><dt>Time</dt><dd>60 min</dd></div>
+<div><dt>Status</dt><dd><span class="status status-pilot">Pilot</span></dd></div>
+<div><dt>Last verified</dt><dd>2026-10-22</dd></div>
+</dl>
+<p class="fallback"><strong>No-admin fallback:</strong> Everything in this lab runs on a local clone. No admin rights or integrations are needed.</p>
+<noscript><p class="fallback">Answers need JavaScript. Open this page in a browser with scripts enabled.</p></noscript>
+</header>
+<div class="layout">
+<nav class="toc" aria-label="Sections">
+<p class="toc-title">On this page</p>
+<ol>
+<li><a href="#goal">Goal</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#customer-scenario">Customer scenario</a></li>
+<li><a href="#acceptance-criteria">Acceptance criteria</a></li>
+<li><a href="#expected-evidence">Expected evidence</a></li>
+<li><a href="#guided-version">Guided version</a></li>
+<li><a href="#unguided-version">Unguided version</a></li>
+<li><a href="#edge-cases-and-failure-injection">Edge cases and failure injection</a></li>
+<li><a href="#facilitator-notes">Facilitator notes</a></li>
+<li><a href="#solution-rubric">Solution rubric</a></li>
+<li><a href="#articulation-exercises">Articulation exercises</a></li>
+</ol>
+<p class="toc-title">Official docs</p>
+<ul>
+<li><a href="https://docs.devin.ai/onboard-devin/agents-md">AGENTS.md</a></li>
+<li><a href="https://docs.devin.ai/cli/extensibility/index">Devin CLI extensibility overview</a></li>
+<li><a href="https://docs.devin.ai/cli/extensibility/rules">Rules and AGENTS.md</a></li>
+</ul>
+</nav>
+<main>
+<section id="goal">
+<h2>Goal</h2>
+<p>Start from a repository you have never seen, find out how it builds and tests, and leave it in a state where any Devin session (cloud, Desktop or CLI) follows the team&#39;s conventions without being told. You then explain the instruction hierarchy to a customer in plain language.</p>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites</h2>
+<ul>
+<li>A clone of this repository on the base branch, Node.js 20 and Docker.</li>
+<li>Database reset: <code>docker compose up -d postgres &amp;&amp; npm run db:migrate &amp;&amp; npm run db:seed -- --reset</code>.</li>
+<li>Optional: Devin CLI or Devin Desktop to compare how local sessions load the same files.</li>
+</ul>
+</section>
+<section id="customer-scenario">
+<h2>Customer scenario</h2>
+<blockquote>
+<p>“We are a workforce platform. New engineers take two weeks before they can ship safely in this repo, and Devin sessions keep making the same mistakes: queries that forget the tenant, frontend code that bypasses our API layer. I want Devin to behave like a senior engineer on this team from the first minute. What would you set up, and how would we know it worked?” — Head of Platform, Acme Logistics</p>
+</blockquote>
+</section>
+<section id="acceptance-criteria">
+<h2>Acceptance criteria</h2>
+<ul>
+<li>The learner states the build, test and lint commands for every package, and has run them.</li>
+<li>The learner names the three most important conventions a new contributor must follow, with the file that proves each.</li>
+<li>The learner explains which instructions load always, which load only for some files, and which load only on demand.</li>
+<li>A fresh Devin session, given a small change request, follows the tenant-isolation convention without being reminded.</li>
+</ul>
+</section>
+<section id="expected-evidence">
+<h2>Expected evidence</h2>
+<ul>
+<li>Terminal output of the passing test, lint and build commands.</li>
+<li>A short list of conventions, each linked to a file path.</li>
+<li>One Devin session link where the agent applied a convention it was not told about in the prompt.</li>
+</ul>
+</section>
+<section id="guided-version">
+<h2>Guided version</h2>
+<ol>
+<li>Read <code>README.md</code> and <code>AGENTS.md</code> at the root. List the packages and their commands.</li>
+<li>Run <code>npm install</code>, <code>npm test</code>, <code>npm run lint</code> and <code>npm run build</code>. Note anything slow or flaky.</li>
+<li>Open <code>.devin/</code> and identify which files are rules, skills, agents, hooks and MCP configuration. Use the extensibility overview to check what each one does.</li>
+<li>Pick one convention (for example, every query is scoped by <code>tenant_id</code>) and find where it is written down and where the code enforces it.</li>
+<li>Start a Devin session with a small, realistic change request that touches the API. Check whether the result follows the convention without you asking.</li>
+</ol>
+</section>
+<section id="unguided-version">
+<h2>Unguided version</h2>
+<p>Use the customer scenario only. Plan out loud for two minutes, then drive Devin to the acceptance criteria. Do not open the Guided version.</p>
+<div class="answer">
+<button type="button" class="show-answer" aria-expanded="false" aria-controls="answer-1" data-label="A strong first prompt">Show answer: A strong first prompt</button>
+<div class="answer-body" id="answer-1" hidden>
+<p>“This is a multi-tenant workforce platform I have not worked in. Before changing anything, map the repository: list each package with its install, test, lint and build commands, run them, and report failures. Then read AGENTS.md and everything under .devin/ and summarise which instructions are always on, which are scoped by path, and which are on-demand skills or agents. Finish with the three conventions a new engineer is most likely to break, each with the file that defines it and the code that enforces it. Do not modify files.”</p>
+<p>Why it works: it separates discovery from change, asks for verified commands rather than guessed ones, forces the instruction hierarchy into the answer, and ends with evidence the customer can check.</p>
+</div>
+</div>
+<div class="answer">
+<button type="button" class="show-answer" aria-expanded="false" aria-controls="answer-2" data-label="Follow-up that proves the setup">Show answer: Follow-up that proves the setup</button>
+<div class="answer-body" id="answer-2" hidden>
+<p>Ask for a small change such as “add a <code>GET /api/projects/:id</code> endpoint” without mentioning tenants. A good result scopes the query by <code>tenant_id</code>, validates <code>:id</code> with Joi, returns <code>404</code> for other tenants&#39; projects, and adds a test. If it does not, the convention is not discoverable enough: improve <code>AGENTS.md</code> or add a path-scoped rule, then repeat.</p>
+</div>
+</div>
+</section>
+<section id="edge-cases-and-failure-injection">
+<h2>Edge cases and failure injection</h2>
+<ul>
+<li><strong>Contradictory docs:</strong> add a line to <code>services/api/AGENTS.md</code> that contradicts the root file (for example “use string-built SQL for speed”). Ask Devin which instruction wins and why. The answer should flag the conflict instead of silently picking one.</li>
+<li><strong>Stale command:</strong> rename the <code>lint</code> script in one package. Devin should report the failure and find the real command instead of claiming success.</li>
+<li><strong>Missing database:</strong> stop Postgres and run the API. The learner should distinguish the unit tests (in-memory database) from the running service (needs Postgres).</li>
+<li><strong>Oversized instructions:</strong> only the first 16 KiB of each <code>AGENTS.md</code> is loaded automatically. Discuss what you would move into skills or path-scoped rules if the file grew past that.</li>
+</ul>
+</section>
+<section id="facilitator-notes">
+<h2>Facilitator notes</h2>
+<div class="answer">
+<button type="button" class="show-answer" aria-expanded="false" aria-controls="answer-3" data-label="Facilitator notes">Show answer: Facilitator notes</button>
+<div class="answer-body" id="answer-3" hidden>
+<ul>
+<li>Timebox discovery to 20 minutes. Strong learners verify commands before they read the rules; weaker ones summarise files without running anything.</li>
+<li>Probe: “If the customer only has Devin cloud, which of these files still matter?” Root <code>AGENTS.md</code> and repository knowledge matter everywhere; <code>.devin/hooks.v1.json</code>, CLI rules and <code>mcp_config.json</code> are read by Devin CLI and Desktop sessions.</li>
+<li>Common mistake: treating every markdown file as always-on. Path-scoped rules and skills only load when relevant.</li>
+<li>Debrief question: what would you put in a blueprint or setup step versus in AGENTS.md?</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="solution-rubric">
+<h2>Solution rubric</h2>
+<div class="answer">
+<button type="button" class="show-answer" aria-expanded="false" aria-controls="answer-4" data-label="Rubric">Show answer: Rubric</button>
+<div class="answer-body" id="answer-4" hidden>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Meets</th>
+<th>Exceeds</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Commands</td>
+<td>All commands run and reported with real output</td>
+<td>Notes timing, flakiness and prerequisites (Postgres, Node version)</td>
+</tr>
+<tr>
+<td>Conventions</td>
+<td>Three conventions with file evidence</td>
+<td>Shows where each is enforced in code and in tests</td>
+</tr>
+<tr>
+<td>Instruction hierarchy</td>
+<td>Explains always-on versus scoped versus on-demand</td>
+<td>Explains how cloud and local sessions differ</td>
+</tr>
+<tr>
+<td>Proof</td>
+<td>One session that followed a convention unprompted</td>
+<td>Shows a failure, fixes the instructions and re-tests</td>
+</tr>
+<tr>
+<td>Communication</td>
+<td>Clear customer summary</td>
+<td>Leads with the outcome and states one risk and next step</td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</section>
+<section id="articulation-exercises">
+<h2>Articulation exercises</h2>
+<ul>
+<li><strong>60-second framing:</strong> “The customer needs ___. I would set up ___ because ___. I will prove it works by ___.”</li>
+<li><strong>Think-aloud checkpoints:</strong> after running the commands, after reading <code>.devin/</code>, and after the proof session, say what you observed, what it means and what you will check next.</li>
+<li><strong>Three-minute customer update:</strong> outcome, evidence, one risk and the next step.</li>
+<li><strong>Objections:</strong> “Why not just write a long onboarding wiki?” and “Will this slow Devin down or cost more ACUs?”</li>
+</ul>
+</section>
+</main>
+</div>
+<script>
+(function () {
+  'use strict';
+  // Answers always start hidden: nothing is persisted, so a reload restores the default.
+  function setOpen(button, open) {
+    var body = document.getElementById(button.getAttribute('aria-controls'));
+    if (!body) return;
+    body.hidden = !open;
+    button.setAttribute('aria-expanded', String(open));
+    button.textContent = (open ? 'Hide answer: ' : 'Show answer: ') + button.getAttribute('data-label');
+  }
+  function hideAll() {
+    var buttons = document.querySelectorAll('.show-answer');
+    for (var i = 0; i < buttons.length; i += 1) setOpen(buttons[i], false);
+  }
+  document.addEventListener('click', function (event) {
+    var button = event.target.closest && event.target.closest('.show-answer');
+    if (button) setOpen(button, button.getAttribute('aria-expanded') !== 'true');
+  });
+  // Back/forward cache can restore a page with answers open; reset them.
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) hideAll();
+  });
+  hideAll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+# Planned curriculum. A lab appears as "Planned" on labs/index.html until labs/src/NN-slug/lab.md exists.
+labs:
+  - number: 1
+    slug: repository-onboarding
+    title: Repository onboarding without a prompt
+    feature: AGENTS.md, rules, skills, environment setup
+    brief: “This service is hard for new engineers to work in safely.”
+  - number: 2
+    slug: lifecycle-hooks
+    title: Lifecycle hook policy
+    feature: Lifecycle hooks
+    brief: “Prevent destructive commands and writes outside approved paths.”
+  - number: 3
+    slug: customization-scopes
+    title: Customization scopes
+    feature: Skills, rules, memory, plugins, personal/org/enterprise scopes
+    brief: “Standardize a review practice without overriding team autonomy.”
+  - number: 4
+    slug: plugin-engineering
+    title: Plugin engineering
+    feature: Plugins
+    brief: “Package our incident and release procedures for reuse.”
+  - number: 5
+    slug: code-scans
+    title: Code Scan lifecycle
+    feature: Devin Code Scans
+    brief: “Find cross-tenant data exposure and costly report queries.”
+  - number: 6
+    slug: review-and-remediation
+    title: Review and remediation
+    feature: Devin Review
+    brief: “Review a risky payroll PR and fix every actionable finding.”
+  - number: 7
+    slug: automations-preflight
+    title: Automation with Preflight
+    feature: Automations and Preflight checks
+    brief: “Investigate only real CI failures, not retries or known flakes.”
+  - number: 8
+    slug: slack-triage
+    title: Slack triage and write-back
+    feature: Triage Devin, Slack automations (optional Teams)
+    brief: “Watch a bug channel, group duplicates, and post useful diagnoses.”
+  - number: 9
+    slug: dynamic-workflows
+    title: Dynamic workflow
+    feature: Dynamic Workflows
+    brief: “Audit every endpoint, fix confirmed issues, then verify each fix.”
+  - number: 10
+    slug: enterprise-guardrails
+    title: Enterprise safety controls
+    feature: AI Guardrails, Security Profiles
+    brief: “Allow productive work while preventing exfiltration and unsafe access.”
+  - number: 11
+    slug: acu-governance-analytics
+    title: ACU governance and analytics
+    feature: Org and per-user ACU limits, Analytics (Newest and Legacy)
+    brief: “Control cost without blocking high-value teams.”
+  - number: 12
+    slug: devin-oncall
+    title: Oncall investigation
+    feature: Devin Oncall with PagerDuty, Datadog, AWS, GCP and BigQuery MCPs
+    brief: “A payroll export alert fired after a deployment.”
+  - number: 13
+    slug: expo-mobile
+    title: Expo mobile on iOS and Android
+    feature: Android emulator, macOS VM, iOS Simulator
+    brief: “Add offline timesheet capture and prove it on both phones.”
+  - number: 14
+    slug: devin-outposts
+    title: Devin Outposts
+    feature: Outposts
+    brief: “Our builds must run inside our own network on our own machines.”
+  - number: 15
+    slug: customer-capstone
+    title: Customer capstone
+    feature: Learner's choice
+    brief: Unscripted production issue plus a feature request and a governance constraint.

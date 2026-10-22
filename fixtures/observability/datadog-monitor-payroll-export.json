@@ -1,0 +1,8 @@
+{
+  "name": "[payroll-worker] Export failure rate above 20%",
+  "type": "log alert",
+  "query": "logs(\"service:payroll-worker @event:export.failed\").index(\"*\").rollup(\"count\").last(\"15m\") > 3",
+  "message": "Payroll exports are failing. Runbook: fixtures/observability/runbook-payroll-export.md @pagerduty-payroll",
+  "tags": ["service:payroll-worker", "team:payroll", "env:staging"],
+  "options": { "thresholds": { "critical": 3, "warning": 1 }, "notify_no_data": false, "renotify_interval": 30 }
+}

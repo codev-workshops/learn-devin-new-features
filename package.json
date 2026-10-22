@@ -1,0 +1,28 @@
+{
+  "name": "learn-devin-new-features",
+  "private": true,
+  "description": "Practice platform and promptless labs for recent Devin features",
+  "workspaces": [
+    "services/api",
+    "apps/web"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "npm run test --workspaces && npm run labs:test",
+    "lint": "npm run lint --workspaces",
+    "build": "npm run build --workspace apps/web && npm run labs:check",
+    "labs:build": "node scripts/labs/build.mjs",
+    "labs:check": "node scripts/labs/build.mjs --check",
+    "labs:test": "node --test scripts/",
+    "db:migrate": "npm run db:migrate --workspace services/api",
+    "db:seed": "npm run db:seed --workspace services/api --",
+    "dev:api": "npm run dev --workspace services/api",
+    "dev:web": "npm run dev --workspace apps/web"
+  },
+  "devDependencies": {
+    "marked": "^18.1.1",
+    "yaml": "^2.9.1"
+  }
+}

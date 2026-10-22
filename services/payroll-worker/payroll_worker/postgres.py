@@ -1,0 +1,70 @@
+"""PostgreSQL repository. Every query is parameterized and scoped by tenant_id."""
+
+from decimal import Decimal
+
+import psycopg
+
+from .export import ApprovedHours
+from .worker import ExportJob
+
+CLAIM_SQL = """
+UPDATE payroll_exports
+   SET status = 'running', attempts = attempts + 1, started_at = now(), last_error = NULL
+ WHERE id = (
+   SELECT id FROM payroll_exports
+    WHERE status = 'queued'
+    ORDER BY created_at, id
+    LIMIT 1
+    FOR UPDATE SKIP LOCKED
+ )
+RETURNING id, tenant_id, period_start::text, period_end::text, attempts
+"""
+
+APPROVED_HOURS_SQL = """
+SELECT u.id, u.email, u.name, u.hourly_rate_cents,
+       to_char(e.work_date, 'IYYY-"W"IW') AS iso_week,
+       SUM(e.hours) AS hours
+  FROM timesheet_entries e
+  JOIN users u ON u.id = e.user_id AND u.tenant_id = e.tenant_id
+ WHERE e.tenant_id = %s
+   AND e.status = 'approved'
+   AND e.work_date BETWEEN %s AND %s
+ GROUP BY u.id, u.email, u.name, u.hourly_rate_cents, iso_week
+ ORDER BY u.id, iso_week
+"""
+
+
+class PostgresRepository:
+    def __init__(self, conn: psycopg.Connection):
+        self.conn = conn
+
+    def claim_next(self) -> ExportJob | None:
+        with self.conn.transaction():
+            row = self.conn.execute(CLAIM_SQL).fetchone()
+        return ExportJob(*row) if row else None
+
+    def approved_hours(self, job: ExportJob) -> list[ApprovedHours]:
+        rows = self.conn.execute(
+            APPROVED_HOURS_SQL, (job.tenant_id, job.period_start, job.period_end)
+        ).fetchall()
+        return [ApprovedHours(*row[:5], Decimal(row[5])) for row in rows]
+
+    def mark_succeeded(self, job: ExportJob, file_path: str, hours: Decimal, cents: int) -> None:
+        with self.conn.transaction():
+            self.conn.execute(
+                """UPDATE payroll_exports
+                      SET status = 'succeeded', file_path = %s, total_hours = %s,
+                          total_amount_cents = %s, finished_at = now()
+                    WHERE id = %s AND tenant_id = %s""",
+                (file_path, hours, cents, job.id, job.tenant_id),
+            )
+
+    def mark_failed(self, job: ExportJob, error: str, retry: bool) -> None:
+        with self.conn.transaction():
+            self.conn.execute(
+                """UPDATE payroll_exports
+                      SET status = %s, last_error = %s,
+                          finished_at = CASE WHEN %s THEN NULL ELSE now() END
+                    WHERE id = %s AND tenant_id = %s""",
+                ("queued" if retry else "failed", error[:500], retry, job.id, job.tenant_id),
+            )

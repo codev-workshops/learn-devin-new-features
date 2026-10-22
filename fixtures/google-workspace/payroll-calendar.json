@@ -1,0 +1,8 @@
+{
+  "calendar": "Payroll operations (fixture)",
+  "events": [
+    { "summary": "September timesheet approval deadline", "start": "2026-10-02T17:00:00+05:30", "attendees": ["mia.manager@acme.test"] },
+    { "summary": "September payroll export", "start": "2026-10-03T07:30:00+05:30", "attendees": ["ava.admin@acme.test"] },
+    { "summary": "Payroll export retro", "start": "2026-10-06T10:00:00+05:30", "attendees": ["ava.admin@acme.test", "mia.manager@acme.test"] }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "event": {
+    "event_type": "incident.triggered",
+    "occurred_at": "2026-10-01T02:06:00Z",
+    "data": {
+      "id": "Q0FAKEINC01",
+      "type": "incident",
+      "number": 1042,
+      "title": "[payroll-worker] Export failure rate above 20%",
+      "status": "triggered",
+      "urgency": "high",
+      "service": { "id": "PFAKESVC1", "summary": "payroll-worker" },
+      "escalation_policy": { "id": "PFAKEEP1", "summary": "Payroll on-call" },
+      "body": { "details": "3 failed attempts for export 42 (tenant acme, 2026-09-01 to 2026-09-30)" }
+    }
+  }
+}

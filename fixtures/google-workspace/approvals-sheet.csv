@@ -1,0 +1,4 @@
+week_start,manager_email,employee_email,submitted_hours,approved_hours,notes
+2026-09-07,mia.manager@acme.test,eli@acme.test,38,38,
+2026-09-14,mia.manager@acme.test,eli@acme.test,42,42,Overtime approved for dock audit
+2026-09-28,mia.manager@acme.test,noah@acme.test,38,0,Pending approval

@@ -1,0 +1,11 @@
+[
+  { "name": "tenant_slug", "type": "STRING", "mode": "REQUIRED" },
+  { "name": "export_id", "type": "INT64", "mode": "REQUIRED" },
+  { "name": "period_start", "type": "DATE", "mode": "REQUIRED" },
+  { "name": "period_end", "type": "DATE", "mode": "REQUIRED" },
+  { "name": "user_email", "type": "STRING", "mode": "REQUIRED" },
+  { "name": "regular_hours", "type": "NUMERIC", "mode": "REQUIRED" },
+  { "name": "overtime_hours", "type": "NUMERIC", "mode": "REQUIRED" },
+  { "name": "amount_cents", "type": "INT64", "mode": "REQUIRED" },
+  { "name": "loaded_at", "type": "TIMESTAMP", "mode": "REQUIRED" }
+]

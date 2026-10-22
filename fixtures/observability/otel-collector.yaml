@@ -1,0 +1,27 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+processors:
+  batch: {}
+  attributes/tenant:
+    actions:
+      - key: tenant.id
+        action: upsert
+        from_attribute: tenantId
+exporters:
+  datadog:
+    api:
+      key: ${env:DD_API_KEY}
+      site: ${env:DD_SITE}
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [attributes/tenant, batch]
+      exporters: [datadog]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [datadog]

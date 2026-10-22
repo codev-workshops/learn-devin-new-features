@@ -1,0 +1,21 @@
+{
+  "family": "ldnf-api",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "containerDefinitions": [
+    {
+      "name": "api",
+      "image": "ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ldnf-api:latest",
+      "portMappings": [{ "containerPort": 3001 }],
+      "environment": [{ "name": "NODE_ENV", "value": "production" }, { "name": "API_PORT", "value": "3001" }],
+      "secrets": [
+        { "name": "DATABASE_URL", "valueFrom": "arn:aws:secretsmanager:ap-south-1:ACCOUNT_ID:secret:ldnf/database-url" },
+        { "name": "JWT_SECRET", "valueFrom": "arn:aws:secretsmanager:ap-south-1:ACCOUNT_ID:secret:ldnf/jwt-secret" }
+      ],
+      "healthCheck": { "command": ["CMD-SHELL", "wget -qO- http://localhost:3001/health/ready || exit 1"], "interval": 30, "retries": 3 },
+      "logConfiguration": { "logDriver": "awslogs", "options": { "awslogs-group": "/ldnf/api", "awslogs-region": "ap-south-1", "awslogs-stream-prefix": "api" } }
+    }
+  ]
+}
