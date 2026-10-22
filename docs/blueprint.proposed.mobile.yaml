@@ -1,6 +1,6 @@
 # Proposed multi-platform blueprint fragment for apps/mobile (W1-mobile).
-# Not applied by this child: the parent merges it into the repo blueprint through Devin
-# environment settings. Two YAML documents, one per `runs-on`, as required for multi-platform
+# Applied to the repo blueprint by W1-mobile on 22 Oct 2026 (user pre-approved blueprint updates);
+# docs/blueprint.proposed.yaml mirrors the Linux Android step. Two YAML documents, one per `runs-on`, as required for multi-platform
 # blueprints. The Linux document is what W1-mobile exercised; the macOS document is the
 # recipe for the W4-13 iOS child and is marked "not exercised" until that child runs it.
 runs-on: linux
@@ -12,7 +12,7 @@ repos:
         run: |
           export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
           nvm install 22 >/dev/null && nvm alias default 22 >/dev/null
-      - name: Android SDK (command-line tools, platform 36, emulator, system image)
+      - name: Android SDK (command-line tools, platforms 35/36, emulator, API 35 system image)
         run: |
           export ANDROID_HOME="$HOME/android-sdk"
           mkdir -p "$ANDROID_HOME/cmdline-tools"
@@ -24,10 +24,11 @@ repos:
           fi
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
-            "platform-tools" "platforms;android-36" "build-tools;36.0.0" \
-            "emulator" "system-images;android-36;google_apis;x86_64"
+            "platform-tools" "platforms;android-35" "platforms;android-36" \
+            "build-tools;35.0.0" "build-tools;36.0.0" \
+            "emulator" "system-images;android-35;google_apis;x86_64"
           echo no | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd \
-            -n kade_android -k "system-images;android-36;google_apis;x86_64" --force
+            -n kade_android -k "system-images;android-35;google_apis;x86_64" -d pixel_6 --force
           {
             echo 'export ANDROID_HOME="$HOME/android-sdk"'
             echo 'export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"'
