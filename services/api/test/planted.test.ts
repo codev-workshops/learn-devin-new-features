@@ -91,7 +91,7 @@ describe("planted defects (skipped: each one fails on main by design)", () => {
     expect(h.db.queryCount - before).toBeLessThanOrEqual(6);
   });
 
-  it.skip("price-drift: checkout re-prices cart lines from the current price list", async () => {
+  it("price-drift: checkout re-prices cart lines from the current price list", async () => {
     const cartId = await cartWith(h, LUMEN, LUMEN_CUSTOMER, [{ sku: "LH-LAMP-05", quantity: 1 }]);
     await h.db.query("UPDATE cart_lines SET unit_price = 1.00 WHERE cart_id = $1", [cartId]);
     const res = await h.api
