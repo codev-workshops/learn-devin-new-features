@@ -1,0 +1,63 @@
+{
+  "_note": "Fictional Kadé Commerce enterprise for lab 11. Every number is invented; no tenant data. Usage is current-cycle-to-date (2026-10-23 to 2026-11-14) unless period is pre-cycle-tail (2026-10-16 to 2026-10-22, the last week of the previous cycle).",
+  "enterprise": "Kadé Commerce (fixture)",
+  "contract_start": "2026-04-23",
+  "billing_cycle_day": 23,
+  "today": "2026-11-14",
+  "cycle": { "start": "2026-10-23", "end": "2026-11-22" },
+  "pre_cycle_tail": { "start": "2026-10-16", "end": "2026-10-22" },
+  "sale": { "name": "Trailhead Winter Drop", "org": "kade-trailhead", "start": "2026-11-18", "end": "2026-11-20", "forecast_cloud_acu": 900 },
+  "orgs": [
+    { "id": "kade-platform", "name": "Kadé Platform", "limit": 2500 },
+    { "id": "kade-lumen", "name": "Lumen Home", "limit": 6000 },
+    { "id": "kade-trailhead", "name": "Trailhead Supply", "limit": 3000 }
+  ],
+  "tiers": [
+    { "id": "oncall", "name": "On-call", "allocation": 800, "priority": 1, "approval": "always-approve", "max_auto_approve": 1000 },
+    { "id": "brand-eng", "name": "Brand engineers", "allocation": 400, "priority": 2, "approval": "manual" },
+    { "id": "default", "name": "Default", "allocation": 250, "priority": 3, "default": true, "approval": "efficiency", "max_auto_approve": 350 }
+  ],
+  "idp_mappings": [
+    { "group": "lumen-eng", "tier": "brand-eng" },
+    { "group": "trailhead-eng", "tier": "brand-eng" },
+    { "group": "kade-oncall", "tier": "oncall" }
+  ],
+  "members": [
+    { "handle": "mira", "role": "Trailhead Supply engineering lead", "groups": ["trailhead-eng"], "explicit_tier": null, "override": null, "billing_org": "kade-trailhead", "orgs": ["kade-trailhead"] },
+    { "handle": "noor", "role": "Trailhead Supply engineer (joined in September)", "groups": ["trailhead-eng"], "explicit_tier": null, "override": null, "billing_org": null, "orgs": ["kade-platform", "kade-trailhead"] },
+    { "handle": "arjun", "role": "Lumen Home engineer, on the on-call rota this month", "groups": ["lumen-eng", "kade-oncall"], "explicit_tier": "brand-eng", "override": null, "billing_org": "kade-lumen", "orgs": ["kade-lumen"] },
+    { "handle": "tomas", "role": "Platform engineer", "groups": [], "explicit_tier": null, "override": null, "billing_org": "kade-platform", "orgs": ["kade-platform"] },
+    { "handle": "rest-trailhead", "role": "8 other Trailhead members (aggregate row)", "aggregate": true, "groups": ["trailhead-eng"], "billing_org": "kade-trailhead", "orgs": ["kade-trailhead"] },
+    { "handle": "rest-lumen", "role": "14 other Lumen members (aggregate row)", "aggregate": true, "groups": ["lumen-eng"], "billing_org": "kade-lumen", "orgs": ["kade-lumen"] },
+    { "handle": "rest-platform", "role": "6 other Platform members (aggregate row)", "aggregate": true, "groups": [], "billing_org": "kade-platform", "orgs": ["kade-platform"] }
+  ],
+  "usage": [
+    { "member": "mira", "surface": "cloud", "org": "kade-trailhead", "period": "cycle", "acu": 140 },
+    { "member": "mira", "surface": "local", "period": "cycle", "acu": 40 },
+    { "member": "mira", "surface": "review", "org": "kade-trailhead", "period": "cycle", "acu": 60 },
+    { "member": "noor", "surface": "cloud", "org": "kade-trailhead", "period": "cycle", "acu": 200 },
+    { "member": "noor", "surface": "local", "period": "cycle", "acu": 120 },
+    { "member": "arjun", "surface": "cloud", "org": "kade-lumen", "period": "cycle", "acu": 250 },
+    { "member": "arjun", "surface": "local", "period": "cycle", "acu": 160 },
+    { "member": "arjun", "surface": "review", "org": "kade-lumen", "period": "cycle", "acu": 90 },
+    { "member": "tomas", "surface": "cloud", "org": "kade-platform", "period": "cycle", "acu": 90 },
+    { "member": "tomas", "surface": "local", "period": "cycle", "acu": 30 },
+    { "member": "rest-trailhead", "surface": "cloud", "org": "kade-trailhead", "period": "cycle", "acu": 1840 },
+    { "member": "rest-trailhead", "surface": "local", "period": "cycle", "acu": 360 },
+    { "member": "rest-trailhead", "surface": "review", "org": "kade-trailhead", "period": "cycle", "acu": 360 },
+    { "member": "rest-lumen", "surface": "cloud", "org": "kade-lumen", "period": "cycle", "acu": 2650 },
+    { "member": "rest-lumen", "surface": "local", "period": "cycle", "acu": 640 },
+    { "member": "rest-lumen", "surface": "review", "org": "kade-lumen", "period": "cycle", "acu": 310 },
+    { "member": "rest-platform", "surface": "cloud", "org": "kade-platform", "period": "cycle", "acu": 1110 },
+    { "member": "rest-platform", "surface": "local", "period": "cycle", "acu": 270 },
+    { "member": "rest-platform", "surface": "review", "org": "kade-platform", "period": "cycle", "acu": 150 },
+    { "member": "rest-trailhead", "surface": "cloud", "org": "kade-trailhead", "period": "pre-cycle-tail", "acu": 150 },
+    { "member": "rest-trailhead", "surface": "local", "period": "pre-cycle-tail", "acu": 30 },
+    { "member": "rest-trailhead", "surface": "review", "org": "kade-trailhead", "period": "pre-cycle-tail", "acu": 30 },
+    { "member": "rest-lumen", "surface": "cloud", "org": "kade-lumen", "period": "pre-cycle-tail", "acu": 240 },
+    { "member": "rest-lumen", "surface": "local", "period": "pre-cycle-tail", "acu": 60 },
+    { "member": "rest-lumen", "surface": "review", "org": "kade-lumen", "period": "pre-cycle-tail", "acu": 40 },
+    { "member": "rest-platform", "surface": "cloud", "org": "kade-platform", "period": "pre-cycle-tail", "acu": 80 },
+    { "member": "rest-platform", "surface": "local", "period": "pre-cycle-tail", "acu": 20 }
+  ]
+}
