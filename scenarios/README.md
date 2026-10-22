@@ -26,7 +26,7 @@ npm run lab:reset -- 12
 
 Exit codes (shared, `lib/common.sh`): `0` symptom observed · `2` precondition/usage (API down, missing `curl`/`jq`/`openssl`) · `3` no symptom — the plant looks fixed · `4` accepted by the API but the worker-side symptom did not appear within `--wait`. Every run ends with a `SYMPTOM:`/`NO SYMPTOM:` line and a machine-readable `RESULT: {…}` line; what each injector created is appended to `scenarios/.state/<injector>.jsonl` (gitignored) for the debrief.
 
-Webhooks are signed with `PAYGATE_SECRET` (default `kade-local-paygate-secret`, see `.env.example`). `services/paygate-fake` reaches the same duplicate/late outcomes with its `--duplicate` and `--delay` knobs; these scripts are the path that needs only the API.
+Webhooks are signed with `PAYGATE_SECRET` (default `kade-local-paygate-secret`, see `.env.example`). `services/paygate-fake` reaches the same duplicate/late outcomes with its `--duplicate` and `--delay` knobs (`PUT /knobs` at runtime, or `paygate-fake fire --duplicate …`); these scripts are the path that needs only the API. `lab-reset.sh` turns the knobs off again when PayGate is reachable at `PAYGATE_URL`.
 
 ## Tests
 

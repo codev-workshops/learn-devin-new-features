@@ -9,8 +9,8 @@
 #   2. clear scenarios/.state (what each injector recorded for the debrief)
 #   3. print the lab's starting state so the learner can check "clean"
 #
-# PayGate knobs (--duplicate, --out-of-order, --delay) are process flags of services/paygate-fake;
-# restart that service to clear them — this script only reminds you.
+#   4. reset the services/paygate-fake delivery knobs (PUT /knobs) when the service is reachable
+#      at PAYGATE_URL (default http://localhost:3002); otherwise it just says so
 set -euo pipefail
 LAB="${1:-}"
 [[ "$LAB" =~ ^[0-9]{2}$ ]] || {
@@ -20,6 +20,7 @@ LAB="${1:-}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$HERE/.." && pwd)"
 STATE_DIR="${KADE_SCENARIO_STATE_DIR:-$HERE/.state}"
+PAYGATE_URL="${PAYGATE_URL:-http://localhost:3002}"
 log() { printf '[lab-reset %s] %s\n' "$LAB" "$*"; }
 
 cd "$ROOT"
@@ -40,12 +41,20 @@ else
   log "no injector state recorded"
 fi
 
+if curl -fsS -m 2 "$PAYGATE_URL/health" >/dev/null 2>&1; then
+  knobs="$(curl -fsS -m 5 -X PUT "$PAYGATE_URL/knobs" -H 'Content-Type: application/json' \
+    --data '{"duplicate":false,"outOfOrder":false,"delayMs":0,"gapMs":0}' 2>/dev/null || echo '{}')"
+  log "paygate-fake knobs reset at $PAYGATE_URL: $knobs"
+else
+  log "paygate-fake not reachable at $PAYGATE_URL — knobs untouched (they live in that process; restart it if it was started with --duplicate/--out-of-order/--delay)"
+fi
+
 case "$LAB" in
 02) log "starting state: .devin/hooks.v1.json is {} on main; bad-migration.patch is NOT applied; no db/migrations file mentions currency-nullable" ;;
 05) log "starting state: seed-spec dataset; LH-LAMP-03 on_hand = 3; no scenario orders. Plants stay in place — never fix them on main" ;;
-07) log "starting state: 12 pending webhooks in the inbox (6 fresh, 3 duplicates, 2 late, 1 failed); restart services/paygate-fake to clear --duplicate/--delay knobs" ;;
+07) log "starting state: 12 pending webhooks in the inbox (6 fresh, 3 duplicates, 2 late, 1 failed); paygate-fake knobs all off" ;;
 09) log "starting state: seed-spec dataset, both brands; no audit branches checked out (git branch --list 'audit/*')" ;;
-12) log "starting state: LH-LAMP-03 on_hand = 3, no negative inventory, no Lamp Week orders beyond the seed; fixtures/mcp shim serves the 02:10 incident; restart services/paygate-fake to clear knobs" ;;
+12) log "starting state: LH-LAMP-03 on_hand = 3, no negative inventory, no Lamp Week orders beyond the seed; fixtures/mcp shim serves the 02:10 incident; paygate-fake knobs all off" ;;
 15) log "starting state: seed-spec dataset; every injector available; no scenario orders; bad-migration.patch not applied" ;;
 *) log "no lab-specific steps for lab $LAB — database reset only" ;;
 esac
