@@ -155,6 +155,10 @@ export async function runCalibration({ labsDir = DEFAULT_LABS_DIR, strict = fals
       const off = path.join(labsDir, dir, 'coaching', 'dryrun', 'off-track.report.json');
       if (await exists(off)) own.offTrack = (await readJson(off)).scores.total;
     }
+    const graded = new Set(Object.values(map));
+    const lastGraded = Math.max(...transcript.segments.filter((g) => graded.has(g.id)).flatMap((g) => g.lines.map((l) => l.t)));
+    const wantMinutes = Math.round(lastGraded / 6) / 10;
+    if (Math.abs(r.fillers_and_pauses.spoken_minutes - wantMinutes) > 0.2) f(`spoken_minutes ${r.fillers_and_pauses.spoken_minutes} should be ≈ ${wantMinutes} (graded segments end at ${lastGraded} s)`);
     if (Math.abs(r.fillers_and_pauses.filler_count - plantedFillers) > 1) f(`filler_count ${r.fillers_and_pauses.filler_count} not within ±1 of planted ${plantedFillers}`);
     for (const at of plantedPauses) {
       if (!r.fillers_and_pauses.long_pauses.some((p) => Math.abs(toSeconds(p.at) - toSeconds(at)) <= TIMING_SLACK_SECONDS)) f(`planted long pause at ${at} not reported`);
