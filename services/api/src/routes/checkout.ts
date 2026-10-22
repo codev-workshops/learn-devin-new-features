@@ -133,7 +133,7 @@ export function checkoutRouter(db: Db): Router {
     if (idempotencyKey) {
       const existing = await db.query<OrderRow>(
         `SELECT ${ORDER_COLUMNS} FROM orders WHERE brand = $1 AND idempotency_key = $2 AND cart_id = $3 AND user_email = $4`,
-        [brandRow.id, idempotencyKey, cartId, email],
+        [brandRow.id, idempotencyKey, cartId, req.caller.user],
       );
       if (existing.rows[0]) {
         const [order] = await ordersToApi(db, existing.rows);

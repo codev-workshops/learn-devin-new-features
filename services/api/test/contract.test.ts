@@ -510,11 +510,7 @@ describe("review follow-ups", () => {
       idempotencyKey: `shared-${cartId}`,
     };
     await h.api.post("/checkout").set(as(LUMEN, LUMEN_CUSTOMER)).send(body).expect(201);
-    await h.api
-      .post("/checkout")
-      .set(as(LUMEN, OTHER))
-      .send({ ...body, email: OTHER })
-      .expect(404);
+    await h.api.post("/checkout").set(as(LUMEN, OTHER)).send(body).expect(404);
     const again = await h.api
       .post("/checkout")
       .set(as(LUMEN, LUMEN_CUSTOMER))
