@@ -127,4 +127,11 @@ describe('lab 08 scratchpad check', () => {
       `report ${want.ts} has issue ghost-order, expected ${want.issue}`,
     ]);
   });
+
+  it('flags a report triaged twice so an earlier wrong entry cannot hide', () => {
+    const bad = structuredClone(REFERENCE);
+    const first = bad.triaged[0];
+    bad.triaged.unshift({ ...first, reporter: 'U0NOBODY' });
+    expect(checkScratchpad(bad, reference)).toEqual([`report ${first.ts} is triaged 2 times`]);
+  });
 });

@@ -188,6 +188,9 @@ export function checkScratchpad(learner, reference) {
     for (const f of ['channel', 'ts', 'reporter']) if (!t[f]) problems.push(`triaged item ${t.ts ?? '?'} has no ${f}`);
   }
   const seen = new Map(learner.triaged.map((t) => [t.ts, t]));
+  const counts = new Map();
+  for (const t of learner.triaged) counts.set(t.ts, (counts.get(t.ts) ?? 0) + 1);
+  for (const [ts, n] of counts) if (n > 1) problems.push(`report ${ts} is triaged ${n} times`);
   for (const t of reference.scratchpad.triaged) {
     const got = seen.get(t.ts);
     if (!got) {
