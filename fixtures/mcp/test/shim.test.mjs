@@ -142,6 +142,31 @@ describe("tools", () => {
       (await callTool("aws_s3_list_objects", { bucket: "someone-elses-bucket" })).result.isError,
       true,
     );
+    assert.equal(
+      (
+        await callTool("gcp_pubsub_describe", {
+          subscription: "projects/other-tenant/subscriptions/paygate-webhooks-worker",
+        })
+      ).result.isError,
+      true,
+    );
+    assert.equal(
+      (
+        await callTool("aws_ecs_describe_task_definition", {
+          task_definition: "arn:aws:ecs:us-east-1:999999999999:task-definition/kade-api:47",
+        })
+      ).result.isError,
+      true,
+    );
+    assert.equal(
+      (await callTool("aws_ecs_describe_services", { cluster: "kade-prod", services: [] })).result
+        .isError,
+      true,
+    );
+    assert.equal(
+      (await callTool("bigquery_list_tables", { dataset: "kade-prod.analytics" })).result.isError,
+      false,
+    );
   });
 });
 
