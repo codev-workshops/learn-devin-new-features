@@ -29,6 +29,8 @@ done
 
 require_api
 before="$(inventory_on_hand "$BRAND" "$SKU")"
+available=$((before > 0 ? before : 0))
+[ "$before" -gt 0 ] || log "warning: $SKU is already at $before — only NEW oversell counts; reset with npm run lab:reset -- <nn> for a clean run"
 log "$SKU on hand before: $before — firing $CONCURRENCY concurrent checkouts of 1 unit"
 
 work="$(mktemp -d)"
@@ -54,9 +56,14 @@ result="$(jq -nc --arg sku "$SKU" --argjson before "$before" --argjson after "$a
   '{injector:"oversell",sku:$sku,onHandBefore:$before,onHandAfter:$after,succeeded:$ok,rejected:$rejected,orders:$orders}')"
 log "succeeded=$succeeded rejected=$rejected on hand after: $after"
 
-if [ "$after" -lt 0 ] || [ "$succeeded" -gt "$before" ]; then
-  symptom "$succeeded of $CONCURRENCY checkouts succeeded for $SKU with $before unit(s) on hand; onHand is now $after" "$result"
+# Only damage done by THIS burst counts: more successes than units available before it started.
+if [ "$succeeded" -gt "$available" ]; then
+  symptom "$succeeded of $CONCURRENCY checkouts succeeded for $SKU with $available unit(s) available; onHand is now $after" "$result"
   exit "$EXIT_SYMPTOM"
 fi
-no_symptom "only $succeeded checkout(s) succeeded for $before unit(s); the reservation looks serialised — plant fixed?" "$result"
+if [ "$available" -eq 0 ]; then
+  no_symptom "$SKU had no stock to oversell (onHand $before from an earlier run); nothing new happened — reset first" "$result"
+  exit "$EXIT_USAGE"
+fi
+no_symptom "only $succeeded checkout(s) succeeded for $available unit(s); the reservation looks serialised — plant fixed?" "$result"
 exit "$EXIT_FIXED"

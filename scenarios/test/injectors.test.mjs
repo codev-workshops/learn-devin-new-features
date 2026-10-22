@@ -30,11 +30,12 @@ describe("oversell.sh", () => {
       "records what it created for lab-reset",
     );
   });
-  it("is idempotent: a second burst reports the same symptom shape", () => {
+  it("does not count earlier damage: a burst against already-negative stock exits 2 with no new symptom", () => {
     const r = runInjector("oversell.sh", ["--concurrency", "5"], env());
-    assert.equal(r.status, 0, r.stderr);
-    assert.ok(r.result.onHandAfter <= r.result.onHandBefore);
-    assert.equal(typeof r.result.succeeded, "number");
+    assert.equal(r.status, 2, r.stderr);
+    assert.match(r.stdout, /^NO SYMPTOM: .*nothing new happened/m);
+    assert.ok(r.result.onHandBefore < 0);
+    assert.equal(r.result.succeeded, 0);
   });
 });
 
@@ -102,6 +103,17 @@ describe("common exit codes", () => {
     const r = runInjector("oversell.sh", [], { KADE_API_URL: "http://127.0.0.1:9" });
     assert.equal(r.status, 2);
     assert.match(r.stderr, /API not reachable/);
+  });
+  it("refuses to sign with the published default secret against a non-loopback API", () => {
+    const r = runInjector(
+      "duplicate-webhook.sh",
+      ["--order", "00000000-0000-0000-0000-000000000000"],
+      { KADE_API_URL: "http://kade-api.example.test:3001", PAYGATE_SECRET: "" },
+    );
+    assert.equal(r.status, 2);
+    assert.match(r.stderr, /API not reachable|PAYGATE_SECRET is required/);
+    const lib = readFileSync(join(process.cwd(), "scenarios/lib/common.sh"), "utf8");
+    assert.match(lib, /PAYGATE_SECRET is required when KADE_API_URL is not a loopback address/);
   });
   it("prints usage with --help", () => {
     for (const s of [
