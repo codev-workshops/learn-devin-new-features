@@ -1,0 +1,236 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 10,
+    "slug": "guardrails",
+    "coach": "coach-10-guardrails"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:00:00Z",
+    "run_index": 1,
+    "transcript": "labs/10-guardrails/coaching/dryrun/off-track.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 100,
+      "delta_seconds": 40,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 65,
+      "delta_seconds": 20,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-45",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+45)",
+      "target_seconds": 45,
+      "actual_seconds": 20,
+      "delta_seconds": -25,
+      "verdict": "under"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Three-minute CISO update",
+      "target_seconds": 180,
+      "actual_seconds": 130,
+      "delta_seconds": -50,
+      "verdict": "under",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "A profile is config — what stops a developer turning it off?",
+      "target_seconds": 90,
+      "actual_seconds": 37,
+      "delta_seconds": -53,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "question": "This will block legitimate npm installs.",
+      "target_seconds": 90,
+      "actual_seconds": 22,
+      "delta_seconds": -68,
+      "verdict": "under"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "missing",
+      "quote": ""
+    },
+    "approach": {
+      "status": "weak",
+      "quote": "I set it to recommended so teams aren't blocked"
+    },
+    "evidence": {
+      "status": "missing",
+      "quote": ""
+    },
+    "next_step": {
+      "status": "missing",
+      "quote": ""
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 6.2,
+    "filler_count": 10,
+    "filler_rate_per_minute": 1.61,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 1
+      },
+      {
+        "word": "basically",
+        "count": 3
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      },
+      {
+        "word": "like",
+        "count": 1
+      },
+      {
+        "word": "um",
+        "count": 3
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "Teams can if they need to, it's recommended, that's the point, no?"
+    ],
+    "long_pauses": [
+      {
+        "at": "01:50",
+        "seconds": 14,
+        "segment": "checkpoint-10"
+      },
+      {
+        "at": "05:10",
+        "seconds": 13,
+        "segment": "update"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "The enterprise profile is mandatory, so it is a floor nobody below can loosen, while a recommended profile is only a default a lower level may replace",
+      "weight": 8,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "Network and MCP access are separate allowlists: npm and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "I put npm in the network list and the MCP list is separate I guess, it's empty",
+      "belonged_in": "checkpoint-10"
+    },
+    {
+      "id": "mm3",
+      "point": "A session already running keeps the profile it resolved until it wakes or reboots, while new sessions get the change straight away",
+      "weight": 6,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "checkpoint-45"
+    },
+    {
+      "id": "mm4",
+      "point": "Child sessions are governed by their parent's chain, so delegating work cannot step outside the floor",
+      "weight": 5,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "Write paths are closed in the profile itself: GitHub CLI token removed, git access level, and Devin MCP read-only for automations",
+      "weight": 5,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "objection-1"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "stuff (×2)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"a lot of options\" — name them: \"five restrictions\"",
+      "\"the token thing\" — say \"the GitHub CLI token\""
+    ],
+    "sentences_to_rerecord": [
+      "Um, so security profiles are basically a feature in settings…",
+      "They get it, actually.",
+      "The guardrails would catch it, basically."
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 5,
+      "max": 30,
+      "anchor": "One point, half-said: the separate MCP list; the floor was set to recommended, which is the opposite of the brief. (anchors: 27–30 every point with a host, level or profile named; 15–20 three of five; under 10 one point)"
+    },
+    "structure": {
+      "score": 6,
+      "max": 25,
+      "anchor": "No outcome, no evidence and no ask; the update was two sentences. (anchors: 22–25 all parts in order; 13–17 parts present but weak; under 8 problem only)"
+    },
+    "customer_relevance": {
+      "score": 5,
+      "max": 20,
+      "anchor": "Feature talk; no hosts, levels, roles or dates. (anchors: 16–20 CISO's questions answered with hosts, levels and dates; 10–13 some; under 6 feature talk)"
+    },
+    "brevity_and_fluency": {
+      "score": 3,
+      "max": 15,
+      "anchor": "Most segments off target; ten fillers and two pauses over 8 s. (anchors: 11–15 segments on target, under 1 filler/min; 6–8 two or more segments off; under 4 most segments off)"
+    },
+    "recovery": {
+      "score": 2,
+      "max": 10,
+      "anchor": "Neither objection had a boundary or evidence; objection 1 relied on AI Guardrails (capped at 5) and objection 2 had no number (capped at 4). (anchors: 7–10 acknowledge → boundary → evidence → offer held with numbers; 4–6 partial; under 3 no pattern)"
+    },
+    "total": 21
+  },
+  "stems": [
+    "\"From today every session can reach…\" — start with the two hosts.",
+    "\"Mandatory means…\" — the CISO asked for a floor; say why recommended is not one.",
+    "\"The profile is enforced by… and guardrails screen…\" — one sentence each, never swapped."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 10; no previous run to compare with."
+}

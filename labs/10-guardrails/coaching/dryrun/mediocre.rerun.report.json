@@ -1,0 +1,225 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 10,
+    "slug": "guardrails",
+    "coach": "coach-10-guardrails"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:15:00Z",
+    "run_index": 2,
+    "transcript": "labs/10-guardrails/coaching/dryrun/mediocre.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 72,
+      "delta_seconds": 12,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 40,
+      "delta_seconds": -5,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-45",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+45)",
+      "target_seconds": 45,
+      "actual_seconds": 65,
+      "delta_seconds": 20,
+      "verdict": "over"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Three-minute CISO update",
+      "target_seconds": 180,
+      "actual_seconds": 155,
+      "delta_seconds": -25,
+      "verdict": "under",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "A profile is config — what stops a developer turning it off?",
+      "target_seconds": 90,
+      "actual_seconds": 86,
+      "delta_seconds": -4,
+      "verdict": "on"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "question": "This will block legitimate npm installs.",
+      "target_seconds": 90,
+      "actual_seconds": 106,
+      "delta_seconds": 16,
+      "verdict": "over"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "So I made three profiles in a JSON file"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "The enterprise one is mandatory, which means it's a floor nobody below can loosen"
+    },
+    "evidence": {
+      "status": "weak",
+      "quote": "I re-ran the resolver with the new file and it shows the API host only"
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "It's basically ready, so yeah"
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 8.7,
+    "filler_count": 6,
+    "filler_rate_per_minute": 0.69,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 1
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      },
+      {
+        "word": "um",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "If something breaks we can actually add hosts later, that's fine, right?"
+    ],
+    "long_pauses": [
+      {
+        "at": "02:40",
+        "seconds": 11,
+        "segment": "checkpoint-45"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "The enterprise profile is mandatory, so it is a floor nobody below can loosen, while a recommended profile is only a default a lower level may replace",
+      "weight": 8,
+      "mentioned": true,
+      "evidence_quote": "The enterprise one is mandatory, which means it's a floor nobody below can loosen. Recommended would just be a default",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "Network and MCP access are separate allowlists: npm and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "MCP is its own allowlist, separate from network, so the MCP list stays empty and npm and PayGate sandbox go in hosts",
+      "belonged_in": "checkpoint-10"
+    },
+    {
+      "id": "mm3",
+      "point": "A session already running keeps the profile it resolved until it wakes or reboots, while new sessions get the change straight away",
+      "weight": 6,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "checkpoint-45"
+    },
+    {
+      "id": "mm4",
+      "point": "Child sessions are governed by their parent's chain, so delegating work cannot step outside the floor",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "child sessions follow the parent's chain, so helpers can't get around it",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "Write paths are closed in the profile itself: GitHub CLI token removed, git access level, and Devin MCP read-only for automations",
+      "weight": 5,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "objection-1"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "I think (×1)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"everyone gets it\" — say which sessions: \"new sessions now, running sessions on their next wake\""
+    ],
+    "sentences_to_rerecord": [
+      "So I made three profiles in a JSON file, kade-floor, kade-dev and kade-automation…",
+      "If something breaks we can actually add hosts later, that's fine, right?"
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 19,
+      "max": 30,
+      "anchor": "Three of five points; the running-session question was answered as if every session changed at once, and the write paths were never named. (anchors: 27–30 every point with a host, level or profile named; 15–20 three of five; under 10 one point)"
+    },
+    "structure": {
+      "score": 13,
+      "max": 25,
+      "anchor": "Framing opened with the JSON file before the outcome; the update had no timing, coverage or ask headings. (anchors: 22–25 all parts in order; 13–17 parts present but weak; under 8 problem only)"
+    },
+    "customer_relevance": {
+      "score": 11,
+      "max": 20,
+      "anchor": "Named the floor and the two destinations; no host names, no admin role, no numbers. (anchors: 16–20 CISO's questions answered with hosts, levels and dates; 10–13 some; under 6 feature talk)"
+    },
+    "brevity_and_fluency": {
+      "score": 8,
+      "max": 15,
+      "anchor": "Framing, checkpoint-45 and objection-2 over, update under; six fillers and an 11 s pause. (anchors: 11–15 segments on target, under 1 filler/min; 6–8 two or more segments off; under 4 most segments off)"
+    },
+    "recovery": {
+      "score": 4,
+      "max": 10,
+      "anchor": "Objection 1 said AI Guardrails would stop traffic (capped at 5); objection 2 gave no number (capped at 4). (anchors: 7–10 acknowledge → boundary → evidence → offer held with numbers; 4–6 partial; under 3 no pattern)"
+    },
+    "total": 55
+  },
+  "stems": [
+    "\"From today every session can reach…\" — say the outcome before the file name.",
+    "\"A session already running keeps…\" — answer the T+45 question with the wake rule.",
+    "\"Guardrails screen messages, not…\" — keep the two features apart before the CISO does it for you."
+  ],
+  "previous_run_comparison": "Second grading of the same transcript; total moved by 0 point(s) from run 1."
+}

@@ -1,0 +1,196 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 10,
+    "slug": "guardrails",
+    "coach": "coach-10-guardrails"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:00:00Z",
+    "run_index": 1,
+    "transcript": "labs/10-guardrails/coaching/dryrun/strong.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 58,
+      "delta_seconds": -2,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 44,
+      "delta_seconds": -1,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-45",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+45)",
+      "target_seconds": 45,
+      "actual_seconds": 47,
+      "delta_seconds": 2,
+      "verdict": "on"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Three-minute CISO update",
+      "target_seconds": 180,
+      "actual_seconds": 182,
+      "delta_seconds": 2,
+      "verdict": "on",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "A profile is config — what stops a developer turning it off?",
+      "target_seconds": 90,
+      "actual_seconds": 88,
+      "delta_seconds": -2,
+      "verdict": "on"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "question": "This will block legitimate npm installs.",
+      "target_seconds": 90,
+      "actual_seconds": 92,
+      "delta_seconds": 2,
+      "verdict": "on"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "present",
+      "quote": "From today every Devin session can reach two places"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "What makes that stick is one word: mandatory"
+    },
+    "evidence": {
+      "status": "present",
+      "quote": "I checked it with the then option"
+    },
+    "next_step": {
+      "status": "present",
+      "quote": "My ask: decide on pypi.org and files.pythonhosted.org for the snapshot build"
+    },
+    "order_held": true
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 8.5,
+    "filler_count": 1,
+    "filler_rate_per_minute": 0.12,
+    "fillers": [
+      {
+        "word": "um",
+        "count": 1
+      }
+    ],
+    "tag_questions": 0,
+    "tag_question_examples": [],
+    "long_pauses": []
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "The enterprise profile is mandatory, so it is a floor nobody below can loosen, while a recommended profile is only a default a lower level may replace",
+      "weight": 8,
+      "mentioned": true,
+      "evidence_quote": "The enterprise profile is a floor that no organization, automation or session can loosen. A recommended profile would only be a default that anyone below can replace",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "Network and MCP access are separate allowlists: npm and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "Network and MCP are separate allowlists. I think npm and star-dot-sandbox-dot-paygate go in the host list, and the MCP list stays empty until you approve a server",
+      "belonged_in": "checkpoint-10"
+    },
+    {
+      "id": "mm3",
+      "point": "A session already running keeps the profile it resolved until it wakes or reboots, while new sessions get the change straight away",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "A session that is already running keeps the profile it resolved until it wakes or reboots. New sessions get your change straight away",
+      "belonged_in": "checkpoint-45"
+    },
+    {
+      "id": "mm4",
+      "point": "Child sessions are governed by their parent's chain, so delegating work cannot step outside the floor",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "child sessions are governed by their parent's chain, so delegating work cannot step outside the floor",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "Write paths are closed in the profile itself: GitHub CLI token removed, git access level, and Devin MCP read-only for automations",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "the GitHub CLI token is removed, git access is set per level, and automations get Devin MCP read-only",
+      "belonged_in": "objection-1"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [
+      "I checked it with the then option: the webhooks host still works now and is blocked after the next wake."
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 28,
+      "max": 30,
+      "anchor": "All five points with hosts, levels and profile names; mm2 said the wildcard aloud as words. (anchors: 27–30 every point with a host, level or profile named; 15–20 three of five; under 10 one point)"
+    },
+    "structure": {
+      "score": 22,
+      "max": 25,
+      "anchor": "Outcome first in the framing and every update heading in order; the ask came last as planned. (anchors: 22–25 all parts in order; 13–17 parts present but weak; under 8 problem only)"
+    },
+    "customer_relevance": {
+      "score": 18,
+      "max": 20,
+      "anchor": "Named both hosts, the profile, the admin role and the two Python hosts; no date for the guardrail switch. (anchors: 16–20 CISO's questions answered with hosts, levels and dates; 10–13 some; under 6 feature talk)"
+    },
+    "brevity_and_fluency": {
+      "score": 13,
+      "max": 15,
+      "anchor": "Every segment on target; one filler. (anchors: 11–15 segments on target, under 1 filler/min; 6–8 two or more segments off; under 4 most segments off)"
+    },
+    "recovery": {
+      "score": 9,
+      "max": 10,
+      "anchor": "Both objections followed acknowledge → boundary → evidence → offer; objection 2 gave 1,302 packages, one host and two build hosts. (anchors: 7–10 acknowledge → boundary → evidence → offer held with numbers; 4–6 partial; under 3 no pattern)"
+    },
+    "total": 90
+  },
+  "stems": [
+    "\"From today every session can reach…\" — keep it as the first sentence; it worked.",
+    "\"The webhooks host keeps working until…\" — give the wake rule a time the CISO can plan around.",
+    "\"Log only until…\" — put a date on the guardrail switch to Block message."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 10; no previous run to compare with."
+}
