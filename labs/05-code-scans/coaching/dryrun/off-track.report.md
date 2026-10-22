@@ -43,7 +43,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T11:10:00Z · timing:
 - [x] Security Swarm for the brand leak and the webhook, a performance scan for the catalog, an accessibility scan for the admin console (5) — “Um, many. I didn't count. Security Swarm for the brand leak and the webhook, a performance scan for the catalog, an accessibility scan for the admin console — those are the ones I picked.”
 - [ ] The order detail lookup ignores the caller's brand header, so Lumen staff can read Trailhead orders (5) — missed; belonged in framing
 - [ ] The PayGate webhook signature is computed but never compared (4) — missed; belonged in framing
-- [x] The Lamp Week collection runs two queries per product plus one per variant (4) — “So, the scans ran. Performance said the Lamp Week collection runs two queries per product plus one per variant, which is, like, a lot.”
+- [x] The Lamp Week collection runs three queries per product, 27 for the eight lamps (4) — “So, the scans ran. Performance said the Lamp Week collection runs three queries per product, 27 for the eight lamps, which is, like, a lot.”
 - [ ] One finding assigned to Devin produced a pull request that was closed unmerged (3) — missed; belonged in update
 - [ ] One false positive dismissed with a written reason (3) — missed; belonged in update
 - [ ] Scan new commits on the unchanged branch found nothing new, as expected (3) — missed; belonged in update

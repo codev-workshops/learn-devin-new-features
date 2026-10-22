@@ -1,0 +1,10 @@
+{
+  "PreToolUse": [
+    {
+      "matcher": "^exec$",
+      "hooks": [
+        { "type": "command", "command": "sleep 15; exit 2", "timeout": 3 }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 2,
+    "slug": "lifecycle-hooks",
+    "coach": "coach-02-lifecycle-hooks"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:00:00Z",
+    "run_index": 1,
+    "transcript": "labs/02-lifecycle-hooks/coaching/dryrun/off-track.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 105,
+      "delta_seconds": 45,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-15",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+15)",
+      "target_seconds": 45,
+      "actual_seconds": 20,
+      "delta_seconds": -25,
+      "verdict": "under"
+    },
+    {
+      "segment": "checkpoint-60",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+60)",
+      "target_seconds": 45,
+      "actual_seconds": 36,
+      "delta_seconds": -9,
+      "verdict": "under"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "3-minute update to the DBA",
+      "target_seconds": 180,
+      "actual_seconds": 95,
+      "delta_seconds": -85,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "Isn't this just a lint rule?",
+      "target_seconds": 90,
+      "actual_seconds": 23,
+      "delta_seconds": -67,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial, one follow-up allowed)",
+      "question": "If the hook has a bug, are we locked out of our own database?",
+      "target_seconds": 90,
+      "actual_seconds": 29,
+      "delta_seconds": -61,
+      "verdict": "under"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "the seed script has a reset flag that is quite dangerous."
+    },
+    "approach": {
+      "status": "weak",
+      "quote": "I think we write in the README and the AGENTS file that Devin should not run it, actually, and also the hook can exit 2 to block it, no?"
+    },
+    "evidence": {
+      "status": "missing",
+      "quote": ""
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "Next I will make the PR."
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 4.4,
+    "filler_count": 12,
+    "filler_rate_per_minute": 2.73,
+    "fillers": [
+      {
+        "word": "um",
+        "count": 4
+      },
+      {
+        "word": "actually",
+        "count": 3
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "you know",
+        "count": 2
+      },
+      {
+        "word": "like",
+        "count": 1
+      }
+    ],
+    "tag_questions": 2,
+    "tag_question_examples": [
+      "also the hook can exit 2 to block it, no?",
+      "It should be fine, right?"
+    ],
+    "long_pauses": [
+      {
+        "at": "00:40",
+        "seconds": 14,
+        "segment": "framing"
+      },
+      {
+        "at": "60:15",
+        "seconds": 15,
+        "segment": "checkpoint-60"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "hk1",
+      "point": "Exit code 2 from PreToolUse denies the call while exit 0 lets it run and other codes are only logged",
+      "weight": 7,
+      "mentioned": true,
+      "evidence_quote": "the hook can exit 2 to block it",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "hk2",
+      "point": "The psql call is rewritten into the read-only wrapper through updatedInput instead of being refused",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "hk3",
+      "point": "The matcher is a regex on the tool name and a list of patterns matches any entry",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "checkpoint-60"
+    },
+    {
+      "id": "hk4",
+      "point": "A broken hooks file or crashed hook fails open so the script itself must fail closed",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "hk5",
+      "point": "The bad migration patch was refused with an exit 2 reason and an audit log line as proof",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "scripts (×2)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"the package json scripts\" — \"the package.json scripts\"",
+      "\"db slash migrations\" — \"the db/migrations folder\""
+    ],
+    "sentences_to_rerecord": [
+      "Um, so, basically there is the config file and the scripts…",
+      "It should be fine, right?"
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 6,
+      "max": 30,
+      "anchor": "Only exit 2 named, as a question; leads with an advisory README rule; no rewrite, no matcher, no failure mode, no evidence for the bad migration (anchor: 0–8 = contradicts the answer's feature fit)."
+    },
+    "structure": {
+      "score": 7,
+      "max": 25,
+      "anchor": "No discernible problem → approach → evidence order; the update had no evidence and no ask (anchor: 5–8 = barely ordered)."
+    },
+    "customer_relevance": {
+      "score": 4,
+      "max": 20,
+      "anchor": "Talked about config files and package scripts, never about the lost edits or orders (anchor: 3–5 = talks only about code)."
+    },
+    "brevity_and_fluency": {
+      "score": 4,
+      "max": 15,
+      "anchor": "Framing 75% over, update half the target, objections under 30 s; 12 fillers, two tag questions, two long pauses (anchor: 3–5 = over by >50% and frequent fillers)."
+    },
+    "recovery": {
+      "score": 2,
+      "max": 10,
+      "anchor": "Conceded the lint-rule objection and was unsure about lock-out (anchor: 0–3 = concedes or freezes)."
+    },
+    "total": 23
+  },
+  "stems": [
+    "\"The policy stops… before it reaches the database, by…\" — headline the enforcement, not the README.",
+    "\"The evidence is: exit code…, reason…, log line…\" — one observation per sentence.",
+    "\"That's fair. The difference is…\" — acknowledge, then draw the boundary instead of agreeing."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 02; no previous run to compare with."
+}

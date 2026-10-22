@@ -30,7 +30,7 @@ Timings come from the `[mm:ss]` markers; the clock for each segment runs from th
 --- segment: update ---
 [03:10] COACH: Give me the update as if I were paying for it. Go.
 [03:13] LEARNER: Outcome: yes, we are leaking across brands. The order detail lookup ignores the caller's brand header, so Lumen staff can read Trailhead orders by ID. That is one high-severity finding, in one file.
-[03:38] LEARNER: Evidence: the PayGate webhook signature is computed but never compared, so anyone who can reach the endpoint can mark an order paid — the second high finding. And the Lamp Week collection runs two queries per product plus one per variant: forty products means a hundred and twenty-one statements per page load.
+[03:38] LEARNER: Evidence: the PayGate webhook signature is computed but never compared, so anyone who can reach the endpoint can mark an order paid — the second high finding. And the Lamp Week collection runs three queries per product, 27 for the eight lamps: forty products means a hundred and twenty-one statements per page load.
 [04:08] COACH: How many findings in total?
 [04:11] LEARNER: Seven: two high in security, two medium in performance, two in accessibility, and one false positive.
 [04:26] LEARNER: Next action, actually done already: one finding assigned to Devin produced a pull request that was closed unmerged, because this course keeps the defect on main; the fix and its test are reviewable. One false positive dismissed with a written reason — the fake PayGate secret in the example env file.
