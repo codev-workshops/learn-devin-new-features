@@ -1,0 +1,12 @@
+{
+  "name": "@kade/fulfilment-worker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Kadé Commerce fulfilment worker (Python 3.12). The npm scripts only forward to pytest/ruff so the root gates can drive this workspace.",
+  "scripts": {
+    "test": "python3 -m pytest -q",
+    "lint": "python3 -m ruff check . && python3 -m ruff format --check .",
+    "build": "python3 -m compileall -q src",
+    "dev": "python3 -m fulfilment_worker run"
+  }
+}
