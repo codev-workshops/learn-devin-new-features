@@ -1,0 +1,867 @@
+{
+  "version": 1,
+  "seed": 20261022,
+  "asOf": "2026-10-22T00:00:00Z",
+  "brands": {
+    "lumen-home": {
+      "id": "lumen-home",
+      "name": "Lumen Home",
+      "currency": "USD",
+      "pricing": "tax_exclusive",
+      "taxRate": 0.0825,
+      "locale": "en-US",
+      "warehouses": [
+        "US-NJ"
+      ],
+      "freeShippingOver": null,
+      "shippingFlat": "7.95",
+      "orderNumberPrefix": "LH",
+      "collections": [
+        {
+          "slug": "lamp-week",
+          "name": "Lamp Week",
+          "description": "Flash sale, 20% off lamps; three SKUs deliberately low on stock",
+          "promotion": "lamp-week-2026"
+        },
+        {
+          "slug": "living",
+          "name": "Living"
+        },
+        {
+          "slug": "kitchen",
+          "name": "Kitchen"
+        },
+        {
+          "slug": "bundles",
+          "name": "Bundles"
+        }
+      ]
+    },
+    "trailhead-supply": {
+      "id": "trailhead-supply",
+      "name": "Trailhead Supply",
+      "currency": "EUR",
+      "pricing": "tax_inclusive",
+      "taxRate": 0.19,
+      "locale": "en-IE",
+      "warehouses": [
+        "DE-HAM",
+        "NL-RTM"
+      ],
+      "freeShippingOver": "80.00",
+      "shippingFlat": "5.90",
+      "orderNumberPrefix": "TS",
+      "collections": [
+        {
+          "slug": "shelter",
+          "name": "Shelter"
+        },
+        {
+          "slug": "apparel",
+          "name": "Apparel"
+        },
+        {
+          "slug": "trail",
+          "name": "Trail"
+        },
+        {
+          "slug": "pre-order",
+          "name": "Pre-order",
+          "description": "Zero on-hand, ships next season"
+        }
+      ]
+    }
+  },
+  "promotions": {
+    "lamp-week-2026": {
+      "id": "lamp-week-2026",
+      "brand": "lumen-home",
+      "name": "Lamp Week 2026",
+      "activeFrom": "2026-10-20T00:00:00Z",
+      "activeTo": "2026-10-27T00:00:00Z"
+    }
+  },
+  "skus": {
+    "lumen-home": [
+      {
+        "sku": "LH-LAMP-01",
+        "name": "Arc Floor Lamp",
+        "collection": "lamp-week",
+        "price": "129.00",
+        "onHand": 40,
+        "safetyStock": 5,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-LAMP-02",
+        "name": "Halo Pendant",
+        "collection": "lamp-week",
+        "price": "89.00",
+        "onHand": 2,
+        "safetyStock": 5,
+        "lowStock": true,
+        "preorder": false
+      },
+      {
+        "sku": "LH-LAMP-03",
+        "name": "Ember Table Lamp",
+        "collection": "lamp-week",
+        "price": "59.00",
+        "onHand": 3,
+        "safetyStock": 5,
+        "lowStock": true,
+        "preorder": false
+      },
+      {
+        "sku": "LH-LAMP-04",
+        "name": "Lumen Desk Lamp",
+        "collection": "lamp-week",
+        "price": "49.00",
+        "onHand": 1,
+        "safetyStock": 5,
+        "lowStock": true,
+        "preorder": false
+      },
+      {
+        "sku": "LH-LAMP-05",
+        "name": "Studio Clamp Lamp",
+        "collection": "lamp-week",
+        "price": "39.00",
+        "onHand": 60,
+        "safetyStock": 5,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-LAMP-06",
+        "name": "Paper Moon Lantern",
+        "collection": "lamp-week",
+        "price": "34.50",
+        "onHand": 75,
+        "safetyStock": 10,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-BULB-01",
+        "name": "Warm Filament Bulb 2-pack",
+        "collection": "lamp-week",
+        "price": "12.99",
+        "onHand": 500,
+        "safetyStock": 50,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-BULB-02",
+        "name": "Smart Bulb E26",
+        "collection": "lamp-week",
+        "price": "19.99",
+        "onHand": 320,
+        "safetyStock": 50,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-SOFA-01",
+        "name": "Linen Loveseat",
+        "collection": "living",
+        "price": "899.00",
+        "onHand": 6,
+        "safetyStock": 2,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-CHAIR-01",
+        "name": "Oak Accent Chair",
+        "collection": "living",
+        "price": "349.00",
+        "onHand": 14,
+        "safetyStock": 3,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-RUG-01",
+        "name": "Wool Rug 5x8",
+        "collection": "living",
+        "price": "279.00",
+        "onHand": 22,
+        "safetyStock": 4,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-RUG-02",
+        "name": "Jute Runner",
+        "collection": "living",
+        "price": "89.00",
+        "onHand": 30,
+        "safetyStock": 4,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-SHELF-01",
+        "name": "Floating Shelf Set",
+        "collection": "living",
+        "price": "64.00",
+        "onHand": 48,
+        "safetyStock": 6,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-PILLOW-01",
+        "name": "Velvet Throw Pillow",
+        "collection": "living",
+        "price": "29.00",
+        "onHand": 120,
+        "safetyStock": 20,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-THROW-01",
+        "name": "Cotton Throw Blanket",
+        "collection": "living",
+        "price": "45.00",
+        "onHand": 80,
+        "safetyStock": 10,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-CANDLE-01",
+        "name": "Soy Candle Trio",
+        "collection": "living",
+        "price": "24.00",
+        "onHand": 200,
+        "safetyStock": 25,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-VASE-01",
+        "name": "Stoneware Vase",
+        "collection": "living",
+        "price": "38.00",
+        "onHand": 55,
+        "safetyStock": 8,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-FRAME-01",
+        "name": "Gallery Frame 3-pack",
+        "collection": "living",
+        "price": "42.00",
+        "onHand": 70,
+        "safetyStock": 10,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-POT-01",
+        "name": "Enamel Dutch Oven",
+        "collection": "kitchen",
+        "price": "149.00",
+        "onHand": 25,
+        "safetyStock": 4,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-PAN-01",
+        "name": "Carbon Steel Skillet",
+        "collection": "kitchen",
+        "price": "69.00",
+        "onHand": 40,
+        "safetyStock": 6,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-KNIFE-01",
+        "name": "Chef Knife 8in",
+        "collection": "kitchen",
+        "price": "95.00",
+        "onHand": 35,
+        "safetyStock": 5,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-BOARD-01",
+        "name": "Walnut Cutting Board",
+        "collection": "kitchen",
+        "price": "54.00",
+        "onHand": 44,
+        "safetyStock": 6,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-MUG-01",
+        "name": "Stoneware Mug 4-pack",
+        "collection": "kitchen",
+        "price": "36.00",
+        "onHand": 150,
+        "safetyStock": 20,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-PLATE-01",
+        "name": "Dinner Plate Set",
+        "collection": "kitchen",
+        "price": "72.00",
+        "onHand": 60,
+        "safetyStock": 8,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-KETTLE-01",
+        "name": "Gooseneck Kettle",
+        "collection": "kitchen",
+        "price": "79.00",
+        "onHand": 28,
+        "safetyStock": 5,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-TOWEL-01",
+        "name": "Linen Tea Towels",
+        "collection": "kitchen",
+        "price": "22.00",
+        "onHand": 180,
+        "safetyStock": 20,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-CANIST-01",
+        "name": "Glass Canister Set",
+        "collection": "kitchen",
+        "price": "48.00",
+        "onHand": 52,
+        "safetyStock": 6,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "LH-BNDL-01",
+        "name": "Reading Nook Bundle",
+        "collection": "bundles",
+        "price": "169.00",
+        "onHand": 0,
+        "safetyStock": 0,
+        "lowStock": false,
+        "preorder": false,
+        "bundle": [
+          "LH-LAMP-03",
+          "LH-PILLOW-01",
+          "LH-THROW-01"
+        ]
+      },
+      {
+        "sku": "LH-BNDL-02",
+        "name": "Weeknight Kitchen Bundle",
+        "collection": "bundles",
+        "price": "289.00",
+        "onHand": 0,
+        "safetyStock": 0,
+        "lowStock": false,
+        "preorder": false,
+        "bundle": [
+          "LH-POT-01",
+          "LH-PAN-01",
+          "LH-BOARD-01"
+        ]
+      },
+      {
+        "sku": "LH-BNDL-03",
+        "name": "Housewarming Bundle",
+        "collection": "bundles",
+        "price": "99.00",
+        "onHand": 0,
+        "safetyStock": 0,
+        "lowStock": false,
+        "preorder": false,
+        "bundle": [
+          "LH-CANDLE-01",
+          "LH-VASE-01",
+          "LH-MUG-01"
+        ]
+      }
+    ],
+    "trailhead-supply": [
+      {
+        "sku": "TS-TENT-01",
+        "name": "Ridge 2P Tent",
+        "collection": "shelter",
+        "price": "349.00",
+        "onHand": 18,
+        "safetyStock": 3,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "colour": [
+            "GRN",
+            "ORG"
+          ]
+        }
+      },
+      {
+        "sku": "TS-TENT-02",
+        "name": "Summit 3P Tent",
+        "collection": "shelter",
+        "price": "479.00",
+        "onHand": 9,
+        "safetyStock": 2,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "colour": [
+            "GRN",
+            "GRY"
+          ]
+        }
+      },
+      {
+        "sku": "TS-TARP-01",
+        "name": "Ultralight Tarp",
+        "collection": "shelter",
+        "price": "119.00",
+        "onHand": 30,
+        "safetyStock": 5,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "TS-BAG-01",
+        "name": "Down Sleeping Bag -5C",
+        "collection": "shelter",
+        "price": "289.00",
+        "onHand": 24,
+        "safetyStock": 4,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "REG",
+            "LNG"
+          ]
+        }
+      },
+      {
+        "sku": "TS-PAD-01",
+        "name": "Insulated Sleeping Pad",
+        "collection": "shelter",
+        "price": "139.00",
+        "onHand": 36,
+        "safetyStock": 5,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "REG",
+            "LNG"
+          ]
+        }
+      },
+      {
+        "sku": "TS-HAMK-01",
+        "name": "Trail Hammock",
+        "collection": "shelter",
+        "price": "69.00",
+        "onHand": 50,
+        "safetyStock": 8,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "TS-STAKE-01",
+        "name": "Titanium Stakes 6-pack",
+        "collection": "shelter",
+        "price": "24.90",
+        "onHand": 200,
+        "safetyStock": 20,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "TS-JKT-01",
+        "name": "Alpine Shell Jacket",
+        "collection": "apparel",
+        "price": "299.00",
+        "onHand": 48,
+        "safetyStock": 6,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "colour": [
+            "BLK",
+            "RED"
+          ]
+        }
+      },
+      {
+        "sku": "TS-JKT-02",
+        "name": "Down Hoodie",
+        "collection": "apparel",
+        "price": "219.00",
+        "onHand": 40,
+        "safetyStock": 6,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "colour": [
+            "NVY",
+            "GRN"
+          ]
+        }
+      },
+      {
+        "sku": "TS-FLC-01",
+        "name": "Grid Fleece",
+        "collection": "apparel",
+        "price": "89.00",
+        "onHand": 72,
+        "safetyStock": 8,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ]
+        }
+      },
+      {
+        "sku": "TS-PANT-01",
+        "name": "Trek Pants",
+        "collection": "apparel",
+        "price": "109.00",
+        "onHand": 60,
+        "safetyStock": 8,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "colour": [
+            "KHK",
+            "BLK"
+          ]
+        }
+      },
+      {
+        "sku": "TS-SHRT-01",
+        "name": "Merino Tee",
+        "collection": "apparel",
+        "price": "59.00",
+        "onHand": 96,
+        "safetyStock": 12,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "colour": [
+            "BLU",
+            "GRY"
+          ]
+        }
+      },
+      {
+        "sku": "TS-SOCK-01",
+        "name": "Merino Hiking Socks",
+        "collection": "apparel",
+        "price": "19.90",
+        "onHand": 300,
+        "safetyStock": 30,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "S",
+            "M",
+            "L"
+          ]
+        }
+      },
+      {
+        "sku": "TS-HAT-01",
+        "name": "Sun Hat",
+        "collection": "apparel",
+        "price": "34.90",
+        "onHand": 80,
+        "safetyStock": 10,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "M",
+            "L"
+          ]
+        }
+      },
+      {
+        "sku": "TS-GLV-01",
+        "name": "Liner Gloves",
+        "collection": "apparel",
+        "price": "29.90",
+        "onHand": 90,
+        "safetyStock": 10,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "S",
+            "M",
+            "L"
+          ]
+        }
+      },
+      {
+        "sku": "TS-BOOT-01",
+        "name": "Ridgeline Boot",
+        "collection": "trail",
+        "price": "189.00",
+        "onHand": 54,
+        "safetyStock": 6,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "40",
+            "41",
+            "42",
+            "43",
+            "44",
+            "45"
+          ]
+        }
+      },
+      {
+        "sku": "TS-SHOE-01",
+        "name": "Trail Runner",
+        "collection": "trail",
+        "price": "139.00",
+        "onHand": 66,
+        "safetyStock": 6,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "40",
+            "41",
+            "42",
+            "43",
+            "44",
+            "45"
+          ]
+        }
+      },
+      {
+        "sku": "TS-PACK-01",
+        "name": "45L Backpack",
+        "collection": "trail",
+        "price": "199.00",
+        "onHand": 28,
+        "safetyStock": 4,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "size": [
+            "S",
+            "M",
+            "L"
+          ]
+        }
+      },
+      {
+        "sku": "TS-PACK-02",
+        "name": "20L Daypack",
+        "collection": "trail",
+        "price": "79.00",
+        "onHand": 70,
+        "safetyStock": 8,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "colour": [
+            "BLK",
+            "GRN",
+            "ORG"
+          ]
+        }
+      },
+      {
+        "sku": "TS-POLE-01",
+        "name": "Carbon Trekking Poles",
+        "collection": "trail",
+        "price": "129.00",
+        "onHand": 45,
+        "safetyStock": 5,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "TS-BTL-01",
+        "name": "Insulated Bottle 750ml",
+        "collection": "trail",
+        "price": "32.00",
+        "onHand": 160,
+        "safetyStock": 20,
+        "lowStock": false,
+        "preorder": false,
+        "variants": {
+          "colour": [
+            "BLK",
+            "BLU",
+            "GRN"
+          ]
+        }
+      },
+      {
+        "sku": "TS-FLTR-01",
+        "name": "Squeeze Water Filter",
+        "collection": "trail",
+        "price": "44.90",
+        "onHand": 110,
+        "safetyStock": 12,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "TS-STOVE-01",
+        "name": "Canister Stove",
+        "collection": "trail",
+        "price": "64.90",
+        "onHand": 58,
+        "safetyStock": 6,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "TS-LAMP-01",
+        "name": "Headlamp 400lm",
+        "collection": "trail",
+        "price": "49.90",
+        "onHand": 130,
+        "safetyStock": 15,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "TS-KNIFE-01",
+        "name": "Folding Knife",
+        "collection": "trail",
+        "price": "39.90",
+        "onHand": 75,
+        "safetyStock": 8,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "TS-MAP-01",
+        "name": "Waterproof Map Case",
+        "collection": "trail",
+        "price": "14.90",
+        "onHand": 240,
+        "safetyStock": 20,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "TS-FIRST-01",
+        "name": "Trail First-Aid Kit",
+        "collection": "trail",
+        "price": "27.90",
+        "onHand": 140,
+        "safetyStock": 15,
+        "lowStock": false,
+        "preorder": false
+      },
+      {
+        "sku": "TS-TENT-03",
+        "name": "Ridge 2P Tent 2027",
+        "collection": "pre-order",
+        "price": "369.00",
+        "onHand": 0,
+        "safetyStock": 0,
+        "lowStock": false,
+        "preorder": true,
+        "ships": "2027-03-01"
+      },
+      {
+        "sku": "TS-JKT-03",
+        "name": "Alpine Shell 2027",
+        "collection": "pre-order",
+        "price": "319.00",
+        "onHand": 0,
+        "safetyStock": 0,
+        "lowStock": false,
+        "preorder": true,
+        "variants": {
+          "size": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ]
+        },
+        "ships": "2027-02-15"
+      },
+      {
+        "sku": "TS-PACK-03",
+        "name": "60L Expedition Pack",
+        "collection": "pre-order",
+        "price": "259.00",
+        "onHand": 0,
+        "safetyStock": 0,
+        "lowStock": false,
+        "preorder": true,
+        "ships": "2027-04-01"
+      }
+    ]
+  },
+  "orderStatusMix": {
+    "delivered": 0.78,
+    "shipped": 0.06,
+    "packed": 0.03,
+    "confirmed": 0.03,
+    "paid": 0.01,
+    "pending_payment": 0.02,
+    "refunded": 0.05,
+    "chargeback": 0.02
+  }
+}

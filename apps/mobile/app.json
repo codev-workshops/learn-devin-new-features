@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "Kadé Commerce",
+    "slug": "kade-commerce",
+    "version": "0.1.0",
+    "scheme": "kade",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "platforms": ["ios", "android"],
+    "ios": {
+      "bundleIdentifier": "test.kade.commerce",
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "test.kade.commerce",
+      "edgeToEdgeEnabled": true
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": false
+    },
+    "extra": {
+      "apiMode": "mock"
+    }
+  }
+}
