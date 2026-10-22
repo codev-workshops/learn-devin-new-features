@@ -1,0 +1,332 @@
+[
+  {
+    "operationId": "getHealth",
+    "method": "GET",
+    "path": "/health",
+    "mswPath": "/health",
+    "tag": "system",
+    "summary": "Liveness and database connectivity.",
+    "successStatus": 200,
+    "auth": {
+      "brand": false,
+      "user": false,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "listBrands",
+    "method": "GET",
+    "path": "/brands",
+    "mswPath": "/brands",
+    "tag": "brands",
+    "summary": "List the seeded brands (used by the brand picker).",
+    "successStatus": 200,
+    "auth": {
+      "brand": false,
+      "user": false,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "listCollections",
+    "method": "GET",
+    "path": "/catalog/collections",
+    "mswPath": "/catalog/collections",
+    "tag": "catalog",
+    "summary": "Collections of the calling brand.",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "getCollection",
+    "method": "GET",
+    "path": "/catalog/collections/{slug}",
+    "mswPath": "/catalog/collections/:slug",
+    "tag": "catalog",
+    "summary": "One collection with its products and variants (the Lamp Week page).",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "getProduct",
+    "method": "GET",
+    "path": "/catalog/products/{sku}",
+    "mswPath": "/catalog/products/:sku",
+    "tag": "catalog",
+    "summary": "One product by SKU (brand-scoped).",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "createCart",
+    "method": "POST",
+    "path": "/carts",
+    "mswPath": "/carts",
+    "tag": "cart",
+    "summary": "Open a cart for the calling user and brand.",
+    "successStatus": 201,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "getCart",
+    "method": "GET",
+    "path": "/carts/{cartId}",
+    "mswPath": "/carts/:cartId",
+    "tag": "cart",
+    "summary": "",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "abandonCart",
+    "method": "DELETE",
+    "path": "/carts/{cartId}",
+    "mswPath": "/carts/:cartId",
+    "tag": "cart",
+    "summary": "",
+    "successStatus": 204,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "addCartLine",
+    "method": "POST",
+    "path": "/carts/{cartId}/lines",
+    "mswPath": "/carts/:cartId/lines",
+    "tag": "cart",
+    "summary": "Add a SKU; the list price at this moment is captured on the line.",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "updateCartLine",
+    "method": "PATCH",
+    "path": "/carts/{cartId}/lines/{lineId}",
+    "mswPath": "/carts/:cartId/lines/:lineId",
+    "tag": "cart",
+    "summary": "",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "checkout",
+    "method": "POST",
+    "path": "/checkout",
+    "mswPath": "/checkout",
+    "tag": "checkout",
+    "summary": "Reserve stock, create a `pending_payment` order and open a PayGate hosted-checkout session.",
+    "successStatus": 201,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "listOrders",
+    "method": "GET",
+    "path": "/orders",
+    "mswPath": "/orders",
+    "tag": "orders",
+    "summary": "Orders of the calling customer (merchandisers see their brand).",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "getOrder",
+    "method": "GET",
+    "path": "/orders/{orderId}",
+    "mswPath": "/orders/:orderId",
+    "tag": "orders",
+    "summary": "One order. Must be scoped to the caller's brand.",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "listOrderEvents",
+    "method": "GET",
+    "path": "/orders/{orderId}/events",
+    "mswPath": "/orders/:orderId/events",
+    "tag": "orders",
+    "summary": "Status history and outbox messages for one order (the \"packed / shipped\" timeline).",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "cancelOrder",
+    "method": "POST",
+    "path": "/orders/{orderId}/cancel",
+    "mswPath": "/orders/:orderId/cancel",
+    "tag": "orders",
+    "summary": "Cancel a `pending_payment` or `paid` order and release its reservations.",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": false,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "listInventory",
+    "method": "GET",
+    "path": "/admin/inventory",
+    "mswPath": "/admin/inventory",
+    "tag": "admin",
+    "summary": "On-hand and reserved stock per SKU and warehouse for the brand.",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": true,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "adjustInventory",
+    "method": "PATCH",
+    "path": "/admin/inventory/{sku}",
+    "mswPath": "/admin/inventory/:sku",
+    "tag": "admin",
+    "summary": "Adjust on-hand stock (receipt, count correction, write-off).",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": true,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "listPriceLists",
+    "method": "GET",
+    "path": "/admin/price-lists",
+    "mswPath": "/admin/price-lists",
+    "tag": "admin",
+    "summary": "",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": true,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "replacePriceList",
+    "method": "PUT",
+    "path": "/admin/price-lists/{priceListId}",
+    "mswPath": "/admin/price-lists/:priceListId",
+    "tag": "admin",
+    "summary": "Replace a price list (how a flash-sale price change happens).",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": true,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "listAdminOrders",
+    "method": "GET",
+    "path": "/admin/orders",
+    "mswPath": "/admin/orders",
+    "tag": "admin",
+    "summary": "All orders of the brand with payment state, for the merchandiser console.",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": true,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "listAbandonedCarts",
+    "method": "GET",
+    "path": "/admin/carts/abandoned",
+    "mswPath": "/admin/carts/abandoned",
+    "tag": "admin",
+    "summary": "Open carts older than the given age, with any pending payment attached.",
+    "successStatus": 200,
+    "auth": {
+      "brand": true,
+      "user": true,
+      "role": true,
+      "paygateSignature": false
+    }
+  },
+  {
+    "operationId": "receivePaymentWebhook",
+    "method": "POST",
+    "path": "/webhooks/payments",
+    "mswPath": "/webhooks/payments",
+    "tag": "webhooks",
+    "summary": "PayGate webhook receiver (HMAC-SHA256 signed, at-least-once delivery).",
+    "successStatus": 202,
+    "auth": {
+      "brand": false,
+      "user": false,
+      "role": false,
+      "paygateSignature": true
+    }
+  }
+]
