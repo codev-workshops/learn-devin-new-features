@@ -135,9 +135,9 @@ async function main() {
     scripts === null
       ? `workspace ${ws} is not present`
       : `workspace ${ws} has no "${opts.script}" script`;
-  if (opts.required) {
+  if (opts.required && scripts !== null) {
     console.error(
-      `[ws] ${why}. It is delivered by a later wave — see AGENTS.md (script contracts).`,
+      `[ws] ${why}. The workspace exists, so this script is part of its contract — see AGENTS.md.`,
     );
     return 1;
   }

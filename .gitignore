@@ -8,8 +8,6 @@ build/
 out/
 coverage/
 *.tsbuildinfo
-labs/index.html
-labs/**/*.html
 
 # Python (services/fulfilment-worker)
 __pycache__/

@@ -29,6 +29,19 @@ describe("seed-spec.yaml", () => {
     expect(spec.brands["trailhead-supply"].warehouses).toEqual(["DE-HAM", "NL-RTM"]);
   });
 
+  it("parses every collection as a clean record (no stray flow-mapping keys)", () => {
+    for (const brand of BRAND_IDS) {
+      for (const c of spec.brands[brand].collections) {
+        expect(Object.keys(c).sort(), `${brand}/${c.slug}`).toEqual(
+          Object.keys(c)
+            .filter((k) => ["slug", "name", "promotion", "description"].includes(k))
+            .sort(),
+        );
+        for (const v of Object.values(c)) expect(typeof v, `${brand}/${c.slug}`).toBe("string");
+      }
+    }
+  });
+
   it("lists exactly 30 well-formed, unique SKUs per brand in known collections", () => {
     const all = new Set<string>();
     for (const brand of BRAND_IDS) {

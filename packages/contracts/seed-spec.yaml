@@ -22,8 +22,7 @@ brands:
           slug: lamp-week,
           name: Lamp Week,
           promotion: lamp-week-2026,
-          description: Flash sale,
-          20% off lamps; three SKUs deliberately low on stock,
+          description: "Flash sale, 20% off lamps; three SKUs deliberately low on stock",
         }
       - { slug: living, name: Living }
       - { slug: kitchen, name: Kitchen }
@@ -43,7 +42,7 @@ brands:
       - { slug: shelter, name: Shelter }
       - { slug: apparel, name: Apparel }
       - { slug: trail, name: Trail }
-      - { slug: pre-order, name: Pre-order, description: Zero on-hand, ships next season }
+      - { slug: pre-order, name: Pre-order, description: "Zero on-hand, ships next season" }
 
 # Base price lists: id = <brand>-base. Promotions reference the same SKUs with a lower price.
 price_lists:
