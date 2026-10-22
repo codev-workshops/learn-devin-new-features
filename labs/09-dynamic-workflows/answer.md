@@ -15,15 +15,23 @@ What it is not: a reason to use `vm_mode="shared"`. Everything the agents need i
 
 Small flat schemas: strings and arrays of strings, three to four fields each. The inventory comes from a regex over `services/api/src/routes/*.ts` inside the script, so a resume sees exactly the same list. The slice is data (`SLICE`); to widen, set `SLICE = sorted(MOUNTS)`.
 
+`BASE_SHA` comes from your checkout's `HEAD`, so agents audit the same code the inventory was parsed from. That commit must be pushed, because agents clone from the remote. The reference run pinned `c94b9da`; routes changed on `main` after that, so never hard-code a SHA. If you can only push to a fork, set `LAB09_REPO`; otherwise fixer pushes fail and the verifier has no branch to check.
+
 ```python
 import asyncio
 import json
+import os
 import re
+import subprocess
 from pathlib import Path
 
-REPO = "codev-workshops/learn-devin-new-features"
-BASE_SHA = "c94b9daee71eaf438c0dd38e2f7bf46ba01831c8"
-ROUTES_DIR = Path("/home/ubuntu/repos/learn-devin-new-features/services/api/src/routes")
+CHECKOUT = Path("/home/ubuntu/repos/learn-devin-new-features")
+ROUTES_DIR = CHECKOUT / "services/api/src/routes"
+# Push target for fixer branches: set LAB09_REPO=<you>/<fork> when you cannot push to the course repo.
+REPO = os.environ.get("LAB09_REPO", "codev-workshops/learn-devin-new-features")
+# Agents audit exactly the commit whose routes the inventory below was parsed from.
+BASE_SHA = subprocess.run(["git", "-C", str(CHECKOUT), "rev-parse", "HEAD"],
+                          check=True, capture_output=True, text=True).stdout.strip()
 MOUNTS = {"system.ts": "", "catalog.ts": "/catalog", "carts.ts": "/carts", "checkout.ts": "/checkout",
           "orders.ts": "/orders", "admin.ts": "/admin", "webhooks.ts": "/webhooks"}
 SLICE = ["carts.ts", "orders.ts"]  # run on a slice first; widen to sorted(MOUNTS) once the slice is clean
