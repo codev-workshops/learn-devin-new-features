@@ -44,21 +44,12 @@
       "verdict": "under"
     },
     {
-      "segment": "checkpoint-150",
-      "kind": "checkpoint",
-      "label": "Think-aloud checkpoint (T+150)",
-      "target_seconds": 45,
-      "actual_seconds": 75,
-      "delta_seconds": 30,
-      "verdict": "over"
-    },
-    {
       "segment": "update",
       "kind": "update",
       "label": "Four-minute unscripted customer update",
       "target_seconds": 240,
-      "actual_seconds": 120,
-      "delta_seconds": -120,
+      "actual_seconds": 55,
+      "delta_seconds": -185,
       "verdict": "under"
     },
     {
@@ -112,9 +103,9 @@
     "order_held": false
   },
   "fillers_and_pauses": {
-    "spoken_minutes": 10.4,
+    "spoken_minutes": 8.1,
     "filler_count": 12,
-    "filler_rate_per_minute": 1.15,
+    "filler_rate_per_minute": 1.48,
     "fillers": [
       {
         "word": "actually",
@@ -149,9 +140,9 @@
         "segment": "checkpoint-30"
       },
       {
-        "at": "05:30",
+        "at": "05:20",
         "seconds": 14,
-        "segment": "checkpoint-150"
+        "segment": "update"
       }
     ]
   },
@@ -183,7 +174,7 @@
       "point": "Brand isolation checked on every endpoint, and the order-by-id endpoint leaks across brands",
       "weight": 5,
       "mentioned": false,
-      "belonged_in": "checkpoint-150"
+      "belonged_in": "update"
     },
     {
       "id": "mm5",
@@ -238,7 +229,7 @@
     "brevity_and_fluency": {
       "score": 4,
       "max": 15,
-      "anchor": "Seven of eight segments off target; twelve fillers in 10.4 minutes, two tag questions, two long pauses (anchor: 0–4 = most segments off, frequent fillers)."
+      "anchor": "All seven segments off target; twelve fillers in 8.1 minutes, two tag questions, two long pauses (anchor: 0–4 = most segments off, frequent fillers)."
     },
     "recovery": {
       "score": 2,

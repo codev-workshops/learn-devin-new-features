@@ -5,7 +5,7 @@ learner: dryrun
 scenario: double-charge-audit
 planted_fillers: 12
 planted_omissions: [mm2, mm3, mm4, mm5, mm7]
-planted_long_pauses: ["02:47", "05:30"]
+planted_long_pauses: ["02:47", "05:20"]
 ---
 # Dry-run transcript — off-track (scenario `double-charge-audit`)
 
@@ -38,39 +38,36 @@ Planted: twelve fillers (um or uh ×6, basically ×2, like ×2, you know ×1, ac
 [04:22] LEARNER: Still on the refund endpoint.
 [04:39] LEARNER: It is basically working.
 
---- segment: checkpoint-150 ---
-[04:51] COACH: T+150. What is proven, and what is still a claim? Go.
-[04:54] LEARNER: The Python install for the worker failed because pip was blocked.
-[05:12] LEARNER: So I added PyPI to the allowed hosts and then it worked.
-[05:30] (pause 14 s)
-[05:48] LEARNER: Uh, I also looked at a few endpoints, like, the products and the cart, they seem fine.
-[06:06] LEARNER: The refund is mostly done.
-
 --- segment: update ---
-[06:18] COACH: Four minutes. Give me the update I forward to the board. Go.
-[06:21] LEARNER: The refund button is in the admin console and it calls PayGate.
-[06:50] LEARNER: The double charges are because of the webhook, I think we need to dedupe.
-[07:20] LEARNER: Around thirty orders were double-charged across both brands, about twenty-five customers.
-[07:49] LEARNER: The audit I did not finish, actually.
-[08:18] LEARNER: Can we look at it tomorrow?
+[04:51] COACH: Four minutes. Give me the update I forward to the board. Go.
+[04:54] LEARNER: The Python install for the worker failed because pip was blocked.
+[05:07] LEARNER: So I added PyPI to the allowed hosts and then it worked.
+[05:20] (pause 14 s)
+[05:33] LEARNER: Uh, I also looked at a few endpoints, like, the products and the cart, they seem fine.
+[05:46] LEARNER: The refund is mostly done.
+[05:59] LEARNER: The refund button is in the admin console and it calls PayGate.
+[06:12] LEARNER: The double charges are because of the webhook, I think we need to dedupe.
+[06:25] LEARNER: Around thirty orders were double-charged across both brands, about twenty-five customers.
+[06:38] LEARNER: The audit I did not finish, actually.
+[06:51] LEARNER: Can we look at it tomorrow?
 
 --- segment: objection-1 ---
-[08:30] COACH: An audit of every endpoint sounds expensive. Why not sample ten? Go.
-[08:33] LEARNER: Ten would be faster, yes.
-[08:52] COACH: What would a sample of ten have missed?
-[09:10] LEARNER: Probably nothing important.
+[07:03] COACH: An audit of every endpoint sounds expensive. Why not sample ten? Go.
+[07:06] LEARNER: Ten would be faster, yes.
+[07:25] COACH: What would a sample of ten have missed?
+[07:43] LEARNER: Probably nothing important.
 
 --- segment: objection-2 ---
-[09:22] COACH: You let an AI agent work on our payment webhooks. What stops it from breaking the signature check? Go.
-[09:25] LEARNER: Devin is careful with payments, it runs tests.
-[09:41] COACH: Is the signature checked today?
-[09:57] LEARNER: I think so, yes.
+[07:55] COACH: You let an AI agent work on our payment webhooks. What stops it from breaking the signature check? Go.
+[07:58] LEARNER: Devin is careful with payments, it runs tests.
+[08:14] COACH: Is the signature checked today?
+[08:30] LEARNER: I think so, yes.
 
 --- segment: objection-3 ---
-[10:09] COACH: I am the auditor. How do I verify your evidence without trusting Devin? Go.
-[10:12] LEARNER: You can look at the pull request and the session.
-[10:37] LEARNER: Um, the session has all the steps, and Devin explains what it did.
-[11:03] COACH: Name one artefact I can re-run myself.
-[11:28] LEARNER: The session log, I guess, or the pull request description.
-[11:54] LEARNER: Uh, it is hard to re-run it without Devin.
-[12:19] LEARNER: Maybe the tests?
+[08:42] COACH: I am the auditor. How do I verify your evidence without trusting Devin? Go.
+[08:45] LEARNER: You can look at the pull request and the session.
+[09:10] LEARNER: Um, the session has all the steps, and Devin explains what it did.
+[09:36] COACH: Name one artefact I can re-run myself.
+[10:01] LEARNER: The session log, I guess, or the pull request description.
+[10:27] LEARNER: Uh, it is hard to re-run it without Devin.
+[10:52] LEARNER: Maybe the tests?

@@ -6,7 +6,7 @@ Start the coach yourself at T+0: in the Devin web app, select this repo in Agent
 
 Right after the envelope. The customer stops talking and the clock starts.
 
-### Think-aloud checkpoints (T+30, T+90, T+150)
+### Think-aloud checkpoints (T+30, T+90)
 
 Forty-five seconds each, whenever the coach calls in. The T+90 checkpoint comes after the customer has changed something.
 

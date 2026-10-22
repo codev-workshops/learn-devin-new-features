@@ -27,7 +27,8 @@ describe('coach calibration', () => {
     const r = await runCalibration({ strict: true });
     expect(r.failures).toEqual([]);
     expect(r.pending).toEqual([]);
-    expect(r.rows).toHaveLength(15);
+    const coached = (await fs.readdir(DEFAULT_LABS_DIR)).filter((d) => /^\d{2}-/.test(d)).length;
+    expect(r.rows).toHaveLength(coached);
     expect(r.band.spread).toBeLessThanOrEqual(MAX_SPREAD);
   });
 

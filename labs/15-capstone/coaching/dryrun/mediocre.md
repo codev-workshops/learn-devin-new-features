@@ -39,39 +39,36 @@ Planted: six fillers (actually ×2, basically ×2, so yeah ×1, you know ×1), o
 [04:06] LEARNER: I actually stopped the second session to save ACU.
 [04:20] LEARNER: So yeah, the fix is the priority now.
 
---- segment: checkpoint-150 ---
-[04:32] COACH: T+150. What is proven, and what is still a claim? Go.
-[04:35] LEARNER: The review came back with a finding about lock order.
-[04:54] LEARNER: I looked at it and changed the order so the inventory update takes the same lock first.
-[05:12] LEARNER: Then the review ran again. Done.
-
 --- segment: update ---
-[05:24] COACH: Four minutes. Give me the update I forward to the board. Go.
-[05:27] LEARNER: The Lamp Week oversell is fixed on a branch.
-[06:07] LEARNER: Re-running the injector after the fix shows no more than three checkouts succeed and stock never goes negative.
-[06:48] LEARNER: The review finding on lock order was answered and Devin Review is clean on the final commit.
-[07:28] LEARNER: The sign-up is a small pull request with the table and the endpoint, behind a flag.
-[08:09] LEARNER: The budget is basically half of what we had, you know, so I cut the email part.
-[08:49] LEARNER: Ask: can someone merge the fix before Thursday?
+[04:32] COACH: Four minutes. Give me the update I forward to the board. Go.
+[04:35] LEARNER: The review came back with a finding about lock order.
+[05:00] LEARNER: I looked at it and changed the order so the inventory update takes the same lock first.
+[05:26] LEARNER: Then the review ran again.
+[05:51] LEARNER: The Lamp Week oversell is fixed on a branch.
+[06:16] LEARNER: Re-running the injector after the fix shows no more than three checkouts succeed and stock never goes negative.
+[06:41] LEARNER: The review finding on lock order was answered and Devin Review is clean on the final commit.
+[07:07] LEARNER: The sign-up is a small pull request with the table and the endpoint, behind a flag.
+[07:32] LEARNER: The budget is basically half of what we had, you know, so I cut the email part.
+[07:57] LEARNER: Ask: can someone merge the fix before Thursday?
 
 --- segment: objection-1 ---
-[09:01] COACH: Finance halved your budget mid-morning. What did you stop doing, and what does that cost Lumen? Go.
-[09:04] LEARNER: I stopped the second session and cut the email part of the sign-up.
-[09:26] COACH: Give me the number, not the feeling.
-[09:49] LEARNER: I do not have the exact number with me, I think it was around half.
-[10:11] LEARNER: I can find it later.
+[08:09] COACH: Finance halved your budget mid-morning. What did you stop doing, and what does that cost Lumen? Go.
+[08:12] LEARNER: I stopped the second session and cut the email part of the sign-up.
+[08:34] COACH: Give me the number, not the feeling.
+[08:57] LEARNER: I do not have the exact number with me, I think it was around half.
+[09:19] LEARNER: I can find it later.
 
 --- segment: objection-2 ---
-[10:23] COACH: How do I know this does not happen again on Friday at nine o'clock? Go.
-[10:26] LEARNER: That is the right worry.
-[10:47] LEARNER: The fix takes a lock on the stock row, and the injector proves it under twenty concurrent checkouts.
-[11:09] COACH: And who gets woken up if it does?
-[11:30] LEARNER: Right now nobody, because there is no alert yet; the on-call engineer would hear from support.
-[11:51] LEARNER: I can set up the on-call path this afternoon, actually, if you want. Done.
+[09:31] COACH: How do I know this does not happen again on Friday at nine o'clock? Go.
+[09:34] LEARNER: That is the right worry.
+[09:55] LEARNER: The fix takes a lock on the stock row, and the injector proves it under twenty concurrent checkouts.
+[10:17] COACH: And who gets woken up if it does?
+[10:38] LEARNER: Right now nobody, because there is no alert yet; the on-call engineer would hear from support.
+[10:59] LEARNER: I can set up the on-call path this afternoon, actually, if you want. Done.
 
 --- segment: objection-3 ---
-[12:03] COACH: Why should I trust a review done by the same tool that wrote the fix? Go.
-[12:06] LEARNER: Devin Review is a separate check from the session that wrote the code.
-[12:25] COACH: What did the reviewer actually catch that you missed?
-[12:45] LEARNER: It found the lock-order issue, the deadlock with the admin update, that is a real one, right?
-[13:04] LEARNER: So it is useful.
+[11:11] COACH: Why should I trust a review done by the same tool that wrote the fix? Go.
+[11:14] LEARNER: Devin Review is a separate check from the session that wrote the code.
+[11:33] COACH: What did the reviewer actually catch that you missed?
+[11:53] LEARNER: It found the lock-order issue, the deadlock with the admin update, that is a real one, right?
+[12:12] LEARNER: So it is useful.

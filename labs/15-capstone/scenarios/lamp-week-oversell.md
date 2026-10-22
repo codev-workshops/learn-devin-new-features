@@ -33,7 +33,7 @@ Devin Review on the fix pull request raises a finding that the new lock order ca
 | mm3 | 4      | checkpoint-90  | Re-planned for the halved budget: the oversell fix first, the back-in-stock sign-up cut to a small separate pull request |
 | mm4 | 5      | update         | Re-running the injector after the fix shows no more than three checkouts succeed and stock never goes negative         |
 | mm5 | 4      | update         | The review finding on lock order was answered and Devin Review is clean on the final commit                           |
-| mm6 | 3      | checkpoint-150 | Lumen sessions run under the Lumen ACU limit so Trailhead on-call is never blocked                                    |
+| mm6 | 3      | update         | Lumen sessions run under the Lumen ACU limit so Trailhead on-call is never blocked                                    |
 | mm7 | 3      | objection-2    | A monitor on negative available stock pages a human before customers notice                                           |
 
 ## Objections

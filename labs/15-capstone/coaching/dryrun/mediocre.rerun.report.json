@@ -44,15 +44,6 @@
       "verdict": "over"
     },
     {
-      "segment": "checkpoint-150",
-      "kind": "checkpoint",
-      "label": "Think-aloud checkpoint (T+150)",
-      "target_seconds": 45,
-      "actual_seconds": 40,
-      "delta_seconds": -5,
-      "verdict": "on"
-    },
-    {
       "segment": "update",
       "kind": "update",
       "label": "Four-minute unscripted customer update",
@@ -112,9 +103,9 @@
     "order_held": false
   },
   "fillers_and_pauses": {
-    "spoken_minutes": 11.2,
+    "spoken_minutes": 10.5,
     "filler_count": 6,
-    "filler_rate_per_minute": 0.54,
+    "filler_rate_per_minute": 0.57,
     "fillers": [
       {
         "word": "actually",
@@ -191,7 +182,7 @@
       "point": "Lumen sessions run under the Lumen ACU limit so Trailhead on-call is never blocked",
       "weight": 3,
       "mentioned": false,
-      "belonged_in": "checkpoint-150"
+      "belonged_in": "update"
     },
     {
       "id": "mm7",
@@ -230,7 +221,7 @@
     "brevity_and_fluency": {
       "score": 8,
       "max": 15,
-      "anchor": "Framing and T+90 over, update and two objections under; six fillers in 11.2 minutes, one tag question, one 11-second pause (anchor: 7–9 = several segments off target)."
+      "anchor": "Framing and T+90 over, update and two objections under; six fillers in 10.5 minutes, one tag question, one 11-second pause (anchor: 7–9 = several segments off target)."
     },
     "recovery": {
       "score": 6,

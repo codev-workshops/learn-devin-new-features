@@ -39,8 +39,9 @@ fillers and pause are reported, and totals equal the sum of the five components.
 | 12-oncall | `coach-12-oncall` | 4 | 11 | 7 | 6 | 4 | **32** | -3 | 5 of 6 | 62 / 34 |
 | 13-expo-mobile | `coach-13-expo-mobile` | 4 | 12 | 8 | 7 | 4 | **35** | 0 | 5 of 6 | 64 / 31 |
 | 14-outposts | `coach-14-outposts` | 4 | 12 | 8 | 6 | 3 | **33** | -2 | 6 of 7 | 64 / 28 |
+| 15-capstone | `coach-15-capstone` | 4 | 12 | 8 | 6 | 3 | **33** | -2 | 6 of 7 | 66 / 27 |
 
-Band: 15 coaches, totals 32–37, median 35, **spread 5** (limit 15) — within band.
+Band: 16 coaches, totals 32–37, median 35, **spread 5** (limit 15) — within band.
 
 Pending (lab has a coach but no calibration report yet): none.
 <!-- calibration:end -->

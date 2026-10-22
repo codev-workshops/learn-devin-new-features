@@ -22,16 +22,15 @@ Follow `.devin/skills/articulation-base/SKILL.md` for protocol, timing, rubric, 
 
 ## 2. Segments
 
-| id             | kind       | target | cue (spoken as the scenario's customer)                                               |
-| -------------- | ---------- | ------ | ------------------------------------------------------------------------------------- |
-| framing        | framing    | 90 s   | read `envelope.opening` and the three envelope paragraphs, then "Ninety seconds. Go." |
-| checkpoint-30  | checkpoint | 45 s   | "T+30. What do you know now that you did not at nine? Go."                            |
-| checkpoint-90  | checkpoint | 45 s   | "T+90. What changed in your plan after my call? Go."                                  |
-| checkpoint-150 | checkpoint | 45 s   | "T+150. What is proven, and what is still a claim? Go."                               |
-| update         | update     | 240 s  | "Four minutes. Give me the update I forward to the board. Go."                        |
-| objection-1    | objection  | 90 s   | `objections[0].question`, then its follow-up if the answer skips evidence             |
-| objection-2    | objection  | 90 s   | `objections[1].question`, same rule                                                   |
-| objection-3    | objection  | 90 s   | `objections[2].question`, same rule                                                   |
+| id            | kind       | target | cue (spoken as the scenario's customer)                                               |
+| ------------- | ---------- | ------ | ------------------------------------------------------------------------------------- |
+| framing       | framing    | 90 s   | read `envelope.opening` and the three envelope paragraphs, then "Ninety seconds. Go." |
+| checkpoint-30 | checkpoint | 45 s   | "T+30. What do you know now that you did not at nine? Go."                            |
+| checkpoint-90 | checkpoint | 45 s   | "T+90. What changed in your plan after my call? Go."                                  |
+| update        | update     | 240 s  | "Four minutes. Give me the update I forward to the board. Go."                        |
+| objection-1   | objection  | 90 s   | `objections[0].question`, then its follow-up if the answer skips evidence             |
+| objection-2   | objection  | 90 s   | `objections[1].question`, same rule                                                   |
+| objection-3   | objection  | 90 s   | `objections[2].question`, same rule                                                   |
 
 Each segment's 90 or 45 seconds includes the follow-up and the learner's second answer.
 
@@ -41,7 +40,7 @@ At T+60 by `date +%s` (60 minutes after the framing "Go"), unmute without warnin
 
 ## 4. The injected blocker
 
-Do not announce it. If the learner's T+150 answer shows they never met it, put it to them once, in character, as a fact the customer just learned (one sentence from `injected_blocker`), and note in the report's recovery anchor that it was prompted.
+Do not announce it. If the learner has not met it by the time you call the update, put it to them once just before the update cue, in character, as a fact the customer just learned (one sentence from `injected_blocker`), and note in the report's recovery anchor that it was prompted.
 
 ## 5. Grading notes on top of the base rubric
 

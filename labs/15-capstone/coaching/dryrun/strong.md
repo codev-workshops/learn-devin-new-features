@@ -36,44 +36,41 @@ Planted: one filler (actually ×1), no tag questions, no long pauses, no omitted
 [03:31] LEARNER: I re-planned after the change: team updates carry counts only, no customer e-mails or order ids, and gift cards stay Trailhead-only.
 [03:52] LEARNER: I rewrote the Slack summary to say fourteen orders, no identifiers, and I dropped the shared voucher module. Done.
 
---- segment: checkpoint-150 ---
-[04:04] COACH: T+150. What is proven, and what is still a claim? Go.
-[04:07] LEARNER: Proven: every session ran on the kade-eu outpost and the second session waited in the queue instead of moving to the cloud.
-[04:27] LEARNER: That actually cost me twenty minutes of waiting, which I spent writing the report.
-[04:47] LEARNER: Still a claim: the gift-card tax rule until finance reads it. Done.
-
 --- segment: update ---
-[04:59] COACH: Four minutes. Give me the update I forward to the board. Go.
-[05:02] LEARNER: Outcome: the ghost orders have a known cause and a fix waiting for review, and nothing left the EU outpost.
-[05:31] LEARNER: Evidence: the abandoned-carts injector shows the symptom on main and is silent on the fix branch; the sweeper now skips carts with a pending payment.
-[06:01] LEARNER: Fourteen affected customers listed for refunds, with the fix as an open pull request and the re-run that proves it.
-[06:30] LEARNER: The refund list is counts-only in the team channel, as legal asked; the names are in the finance ticket.
-[07:00] LEARNER: Gift cards are a separate pull request and VAT is charged when the card is redeemed, not when it is sold.
-[07:29] LEARNER: It is Trailhead-only, euros as decimal strings, with tests that failed before and pass now.
-[07:58] LEARNER: Risk: the queue. One worker means a second urgent session waits; today that was twenty minutes.
-[08:28] LEARNER: Next action: platform engineering adds a second EU worker; I have written the request.
-[08:57] LEARNER: Ask: approve the refunds for the fourteen customers today so support can close the tickets. Done.
+[04:04] COACH: Four minutes. Give me the update I forward to the board. Go.
+[04:07] LEARNER: Proven: every session ran on the kade-eu outpost and the second session waited in the queue instead of moving to the cloud.
+[04:28] LEARNER: That actually cost me twenty minutes of waiting, which I spent writing the report.
+[04:50] LEARNER: Still a claim: the gift-card tax rule until finance reads it.
+[05:11] LEARNER: Outcome: the ghost orders have a known cause and a fix waiting for review, and nothing left the EU outpost.
+[05:32] LEARNER: Evidence: the abandoned-carts injector shows the symptom on main and is silent on the fix branch; the sweeper now skips carts with a pending payment.
+[05:54] LEARNER: Fourteen affected customers listed for refunds, with the fix as an open pull request and the re-run that proves it.
+[06:15] LEARNER: The refund list is counts-only in the team channel, as legal asked; the names are in the finance ticket.
+[06:37] LEARNER: Gift cards are a separate pull request and VAT is charged when the card is redeemed, not when it is sold.
+[06:58] LEARNER: It is Trailhead-only, euros as decimal strings, with tests that failed before and pass now.
+[07:19] LEARNER: Risk: the queue. One worker means a second urgent session waits; today that was twenty minutes.
+[07:41] LEARNER: Next action: platform engineering adds a second EU worker; I have written the request.
+[08:02] LEARNER: Ask: approve the refunds for the fourteen customers today so support can close the tickets. Done.
 
 --- segment: objection-1 ---
-[09:09] COACH: Half a day of Devin for fourteen orders. What did that cost us, and would a person have been cheaper? Go.
-[09:12] LEARNER: Fair question.
-[09:34] LEARNER: The half day was three sessions and nineteen ACU, about six per problem.
-[09:55] COACH: Which step would you not hand to Devin next time?
-[10:17] LEARNER: Drafting the refund list. A person in support would have done that in ten minutes from the admin console, more cheaply than the session did.
-[10:38] LEARNER: The incident fix itself would have taken a person most of a day; the open pull request is the evidence. Done.
+[08:14] COACH: Half a day of Devin for fourteen orders. What did that cost us, and would a person have been cheaper? Go.
+[08:17] LEARNER: Fair question.
+[08:39] LEARNER: The half day was three sessions and nineteen ACU, about six per problem.
+[09:00] COACH: Which step would you not hand to Devin next time?
+[09:22] LEARNER: Drafting the refund list. A person in support would have done that in ten minutes from the admin console, more cheaply than the session did.
+[09:43] LEARNER: The incident fix itself would have taken a person most of a day; the open pull request is the evidence. Done.
 
 --- segment: objection-2 ---
-[10:50] COACH: If execution stayed in the EU, what exactly left the EU? Go.
-[10:53] LEARNER: You are right to ask.
-[11:14] LEARNER: Execution, the repo checkout and every command stayed on the EU worker; planning and inference ran in Devin Cloud.
-[11:35] COACH: So the model saw our code. Did it see customer data?
-[11:56] LEARNER: The model saw code and the synthetic seed orders in the session; no production customer data is in this repo.
-[12:17] LEARNER: I can send the session list filtered by platform so you can check each one. Done.
+[09:55] COACH: If execution stayed in the EU, what exactly left the EU? Go.
+[09:58] LEARNER: You are right to ask.
+[10:19] LEARNER: Execution, the repo checkout and every command stayed on the EU worker; planning and inference ran in Devin Cloud.
+[10:40] COACH: So the model saw our code. Did it see customer data?
+[11:01] LEARNER: The model saw code and the synthetic seed orders in the session; no production customer data is in this repo.
+[11:22] LEARNER: I can send the session list filtered by platform so you can check each one. Done.
 
 --- segment: objection-3 ---
-[12:29] COACH: Who stops an engineer from starting a Trailhead session on the default cloud tomorrow morning? Go.
-[12:32] LEARNER: Today nothing would, if it were left to good intentions.
-[12:54] LEARNER: The control is the organization default platform set to kade-eu, with the cloud override limited to admins.
-[13:16] COACH: And how would we find out if they did?
-[13:37] LEARNER: The session list shows the platform for every session; a weekly filter on it is our audit trail.
-[13:59] LEARNER: I will put both in the runbook and send you the filter today. Done.
+[11:34] COACH: Who stops an engineer from starting a Trailhead session on the default cloud tomorrow morning? Go.
+[11:37] LEARNER: Today nothing would, if it were left to good intentions.
+[11:59] LEARNER: The control is the organization default platform set to kade-eu, with the cloud override limited to admins.
+[12:21] COACH: And how would we find out if they did?
+[12:42] LEARNER: The session list shows the platform for every session; a weekly filter on it is our audit trail.
+[13:04] LEARNER: I will put both in the runbook and send you the filter today. Done.

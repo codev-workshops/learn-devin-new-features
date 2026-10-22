@@ -44,15 +44,6 @@
       "verdict": "on"
     },
     {
-      "segment": "checkpoint-150",
-      "kind": "checkpoint",
-      "label": "Think-aloud checkpoint (T+150)",
-      "target_seconds": 45,
-      "actual_seconds": 43,
-      "delta_seconds": -2,
-      "verdict": "on"
-    },
-    {
       "segment": "update",
       "kind": "update",
       "label": "Four-minute unscripted customer update",
@@ -112,9 +103,9 @@
     "order_held": true
   },
   "fillers_and_pauses": {
-    "spoken_minutes": 12.1,
+    "spoken_minutes": 11.4,
     "filler_count": 1,
-    "filler_rate_per_minute": 0.08,
+    "filler_rate_per_minute": 0.09,
     "fillers": [
       {
         "word": "actually",
@@ -155,7 +146,7 @@
       "point": "Every session ran on the kade-eu outpost and the second session waited in the queue instead of moving to the cloud",
       "weight": 4,
       "mentioned": true,
-      "belonged_in": "checkpoint-150",
+      "belonged_in": "update",
       "evidence_quote": "every session ran on the kade-eu outpost and the second session waited in the queue instead of moving to the cloud"
     },
     {
@@ -210,7 +201,7 @@
     "brevity_and_fluency": {
       "score": 13,
       "max": 15,
-      "anchor": "Every segment within ±5 s; one filler in 12.1 minutes, no tag questions, no long pauses (anchor: 13–15 = on time, fluent)."
+      "anchor": "Every segment within ±5 s; one filler in 11.4 minutes, no tag questions, no long pauses (anchor: 13–15 = on time, fluent)."
     },
     "recovery": {
       "score": 9,

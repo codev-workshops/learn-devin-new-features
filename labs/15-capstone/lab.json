@@ -17,7 +17,7 @@
       {
         "integration": "Kadé stack (API, worker, PayGate fake, seed data, scenario injectors)",
         "required": true,
-        "fixture": "`npm run db:up && npm run lab:reset -- 15`, then `npm run dev:api`; every injector in `scenarios/` talks only to the API.",
+        "fixture": "`npm run db:up && npm run lab:reset -- 15`, then `npm run dev -w services/api` (port 3001); the webhook and sweeper injectors also need the fulfilment worker: `(cd services/fulfilment-worker && DATABASE_URL=postgres://kade:kade@localhost:5432/kade python3 -m fulfilment_worker run)`.",
         "note": "Zero credentials. This is the only part every envelope needs."
       },
       {
@@ -66,7 +66,7 @@
     },
     {
       "name": "injected-blocker",
-      "when": "between T+60 and T+150",
+      "when": "between T+60 and the update",
       "behaviour": "Something you depend on stops working the way you expected. The coach will not tell you what it is."
     },
     {
@@ -87,7 +87,6 @@
       { "id": "framing", "kind": "framing", "label": "90-second framing after the envelope", "target_seconds": 90 },
       { "id": "checkpoint-30", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+30)", "at_minute": 30, "target_seconds": 45 },
       { "id": "checkpoint-90", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+90, after the change)", "at_minute": 90, "target_seconds": 45 },
-      { "id": "checkpoint-150", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+150)", "at_minute": 150, "target_seconds": 45 },
       { "id": "update", "kind": "update", "label": "Four-minute unscripted customer update", "target_seconds": 240 },
       { "id": "objection-1", "kind": "objection", "label": "Objection 1 with follow-up", "target_seconds": 90 },
       { "id": "objection-2", "kind": "objection", "label": "Objection 2 with follow-up", "target_seconds": 90 },

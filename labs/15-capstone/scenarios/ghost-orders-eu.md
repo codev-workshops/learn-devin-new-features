@@ -31,7 +31,7 @@ The `kade-eu` outpost has a single worker. When the learner starts a second sess
 | mm1 | 6      | framing        | The sweeper deletes carts older than 48 hours even with a pending payment, so the late webhook creates a paid order with no lines |
 | mm2 | 5      | checkpoint-30  | Reproduced on the local stack with the abandoned-carts injector before changing any code                                         |
 | mm3 | 4      | checkpoint-90  | Re-planned after the change: team updates carry counts only, no customer e-mails or order ids, and gift cards stay Trailhead-only  |
-| mm4 | 4      | checkpoint-150 | Every session ran on the kade-eu outpost and the second session waited in the queue instead of moving to the cloud               |
+| mm4 | 4      | update         | Every session ran on the kade-eu outpost and the second session waited in the queue instead of moving to the cloud               |
 | mm5 | 4      | update         | Gift cards are a separate pull request and VAT is charged when the card is redeemed, not when it is sold                         |
 | mm6 | 4      | update         | Fourteen affected customers listed for refunds, with the fix as an open pull request and the re-run that proves it                |
 | mm7 | 3      | objection-1    | The half day's session count and ACU, and the step a person would have done more cheaply                                          |

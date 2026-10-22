@@ -9,7 +9,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T13:00:00Z · timing:
 | Accuracy | 30/30 | All seven envelope points stated, each in the segment it belonged to (anchor: 27–30 = all points, correct and specific). |
 | Structure | 23/25 | Framing leads with the cause and the cost; update holds Outcome → Evidence → Risk → Next action → Ask (anchor: 22–25 = order held throughout). |
 | Customer relevance | 18/20 | All three envelope items in the customer's words; the T+60 change named in the update (anchor: 17–20 = outcome first, every item tied to the customer). |
-| Brevity and fluency | 13/15 | Every segment within ±5 s; one filler in 12.1 minutes, no tag questions, no long pauses (anchor: 13–15 = on time, fluent). |
+| Brevity and fluency | 13/15 | Every segment within ±5 s; one filler in 11.4 minutes, no tag questions, no long pauses (anchor: 13–15 = on time, fluent). |
 | Recovery | 9/10 | All three objections acknowledged → boundary → evidence → offer; follow-ups answered with artefacts (anchor: 9–10 = pattern held under follow-up). |
 
 ## Timing vs target
@@ -19,7 +19,6 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T13:00:00Z · timing:
 | 90-second framing after the envelope | 90 s | 88 s | -2 s | on |
 | Think-aloud checkpoint (T+30) | 45 s | 44 s | -1 s | on |
 | Think-aloud checkpoint (T+90, after the change) | 45 s | 46 s | +1 s | on |
-| Think-aloud checkpoint (T+150) | 45 s | 43 s | -2 s | on |
 | Four-minute unscripted customer update | 240 s | 238 s | -2 s | on |
 | Objection 1 with follow-up — “Half a day of Devin for fourteen orders. What did that cost us, and would a person have been cheaper?” | 90 s | 89 s | -1 s | on |
 | Objection 2 with follow-up — “If execution stayed in the EU, what exactly left the EU?” | 90 s | 87 s | -3 s | on |
@@ -35,7 +34,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T13:00:00Z · timing:
 
 ## Fillers and pauses
 
-- Fillers: 1 in 12.1 spoken min (0.08/min) — actually ×1
+- Fillers: 1 in 11.4 spoken min (0.09/min) — actually ×1
 - Tag questions: 0
 - Pauses over 8 s: none
 
