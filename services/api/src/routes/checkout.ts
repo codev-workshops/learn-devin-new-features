@@ -208,6 +208,7 @@ export function checkoutRouter(db: Db): Router {
       );
       const numberRow = await tx.query<{ n: number }>("SELECT nextval('order_number_seq') AS n");
       const number = `${brandRow.order_number_prefix}-${numberRow.rows[0]!.n}`;
+      // The order belongs to the authenticated caller; `email` is the contact address for notifications.
       await tx.query(
         `INSERT INTO orders (id, number, brand, user_email, cart_id, status, subtotal, discount, tax, shipping, total, currency, tax_included,
                              totals, payment_id, idempotency_key, shipping_address, placed_at, updated_at)
@@ -216,7 +217,7 @@ export function checkoutRouter(db: Db): Router {
           id,
           number,
           brandRow.id,
-          email,
+          req.caller.user,
           cart.id,
           totals.subtotal.toFixed(2),
           totals.discount.toFixed(2),
