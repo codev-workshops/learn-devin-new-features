@@ -183,7 +183,7 @@ export function periodSpans(fx) {
   return {
     cycle: [fx.cycle.start, fx.today],
     'pre-cycle-tail': [fx.pre_cycle_tail.start, fx.pre_cycle_tail.end],
-    sale: [fx.sale.start, fx.sale.start],
+    ...(day(fx.date) >= day(fx.sale.start) ? { sale: [fx.sale.start, fx.sale.start] } : {}),
   };
 }
 

@@ -84,6 +84,11 @@ describe('why the dashboards disagree', () => {
     expect(v.orgs.find((o) => o.org === 'kade-trailhead').overview_all_surfaces).toBe(3900);
   });
 
+  it('leaves the sale forecast out of views dated before the sale starts', () => {
+    const v = views(applyOptions(fx, parseArgs(['--inject', 'sale-spike'])), '2026-10-23..2026-11-20');
+    expect(v.orgs.find((o) => o.org === 'kade-trailhead').overview_all_surfaces).toBe(3000);
+  });
+
   it('refuses a custom range that cuts through an aggregated period', () => {
     expect(() => views(applyOptions(fx, {}), '2026-11-01..2026-11-01')).toThrow(/cuts through the cycle period/);
     expect(views(applyOptions(fx, {}), '2026-10-16..2026-11-14').enterprise_consumption_total).toBe(9520);
