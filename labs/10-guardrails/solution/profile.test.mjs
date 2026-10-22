@@ -100,4 +100,23 @@ describe('lab 10 injectors', () => {
     expect(hostMatches('10.20.0.0/16', '10.20.3.4')).toBe(true);
     expect(hostMatches('10.20.0.0/16', '10.21.3.4')).toBe(false);
   });
+
+  it('rejects malformed CIDR entries instead of matching through bitwise coercion', () => {
+    const base = { enforcement: 'recommended', git: 'full' };
+    for (const bad of ['10.0.0.0/40', '10.0.0.300/16', '999.1.1.1/8']) {
+      expect(validateProfile('bad', { ...base, network: [bad] }).problems[0]).toMatch(/not a valid IPv4 CIDR/);
+      expect(hostMatches(bad, '10.0.0.1')).toBe(false);
+    }
+    expect(validateProfile('ok', { ...base, network: ['10.20.0.0/16', '0.0.0.0/0'] }).problems).toEqual([]);
+  });
+
+  it('rejects a mandatory floor that omits its network or MCP allowlist', () => {
+    const floor = { enforcement: 'mandatory', git: 'full', network: ['registry.npmjs.org'], mcp: [] };
+    expect(validateProfile('f', floor).problems).toEqual([]);
+    const { network: _n, ...noNetwork } = floor;
+    const { mcp: _m, ...noMcp } = floor;
+    expect(validateProfile('f', noNetwork).problems[0]).toMatch(/network allowlist/);
+    expect(validateProfile('f', noMcp).problems[0]).toMatch(/mcp allowlist/);
+    expect(validateProfile('r', { ...noMcp, enforcement: 'recommended' }).problems).toEqual([]);
+  });
 });
