@@ -5,6 +5,7 @@
 # command on a session VM, dropping the stale payroll-worker steps and unverified docker pulls.
 # W2-12 (22 Oct 2026) applied it to the settings blueprint and added the fulfilment-worker pip install
 # (pytest/ruff for the worker gates); `npm test` also needs `npm run build` (contracts dist) and `npm run db:up` first.
+# W1-web (22 Oct 2026) added the Playwright Chromium install for the apps/web smoke tests (`npm run test:e2e -w apps/web`).
 initialize: |
   export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
   nvm install 22 >/dev/null && nvm alias default 22 >/dev/null
@@ -12,6 +13,7 @@ maintenance: |
   export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"; nvm use 22 >/dev/null
   npm install --no-audit --no-fund
   pip install -q -e "services/fulfilment-worker[dev]"
+  npm run test:e2e:install -w apps/web
 knowledge:
   - name: test
     contents: |
