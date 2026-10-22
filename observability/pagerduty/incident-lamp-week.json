@@ -1,0 +1,54 @@
+{
+  "incident": {
+    "id": "Q3KADE0210LAMP",
+    "type": "incident",
+    "incident_number": 2187,
+    "title": "[Kadé] Negative on-hand inventory — LH-LAMP-03",
+    "description": "Datadog monitor 48213771 triggered: min:kade.inventory.on_hand{sku:LH-LAMP-03} = -37 (threshold 0).",
+    "created_at": "2026-10-22T02:10:14Z",
+    "updated_at": "2026-10-22T02:52:40Z",
+    "status": "acknowledged",
+    "urgency": "high",
+    "priority": { "id": "P2KADE", "summary": "P2", "type": "priority_reference" },
+    "service": {
+      "id": "PKADEAPI",
+      "summary": "Kadé Commerce — Platform",
+      "type": "service_reference",
+      "html_url": "https://kade.pagerduty.test/service-directory/PKADEAPI"
+    },
+    "escalation_policy": {
+      "id": "PKADEEP1",
+      "summary": "Platform on-call",
+      "type": "escalation_policy_reference"
+    },
+    "assignments": [
+      {
+        "at": "2026-10-22T02:10:14Z",
+        "assignee": {
+          "id": "PUSRONC1",
+          "summary": "Sam Ortiz (platform on-call)",
+          "type": "user_reference"
+        }
+      }
+    ],
+    "acknowledgements": [
+      {
+        "at": "2026-10-22T02:13:50Z",
+        "acknowledger": {
+          "id": "PUSRONC1",
+          "summary": "Sam Ortiz (platform on-call)",
+          "type": "user_reference"
+        }
+      }
+    ],
+    "alert_counts": { "all": 4, "triggered": 1, "resolved": 3 },
+    "incident_key": "datadog-48213771-sku:LH-LAMP-03",
+    "html_url": "https://kade.pagerduty.test/incidents/Q3KADE0210LAMP",
+    "body": {
+      "type": "incident_body",
+      "details": "Monitor: [Kadé] Negative on-hand inventory — LH-LAMP-03\nValue: -37 units\nBrand: lumen-home\nWarehouse: US-NJ\nLast deploy: kade-api 2026.10.21-lampweek at 22:40 UTC\nRunbook: observability/runbooks/RB-102-negative-on-hand-oversell.md"
+    },
+    "last_status_change_at": "2026-10-22T02:13:50Z",
+    "conference_bridge": null
+  }
+}

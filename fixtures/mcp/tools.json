@@ -1,0 +1,227 @@
+{
+  "$comment": "Tool catalogue of the fixture MCP shim. `example` arguments are used by the smoke test; `handler` names a function in shim.mjs.",
+  "tools": [
+    {
+      "name": "pagerduty_list_incidents",
+      "description": "List PagerDuty incidents for the Kadé services (fixture). Optional status filter: triggered | acknowledged | resolved.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["triggered", "acknowledged", "resolved"] },
+          "service_id": { "type": "string" }
+        }
+      },
+      "handler": "pagerdutyListIncidents",
+      "example": { "status": "acknowledged" }
+    },
+    {
+      "name": "pagerduty_get_incident",
+      "description": "Get one PagerDuty incident by id (e.g. Q3KADE0210LAMP) or incident number (e.g. 2187).",
+      "inputSchema": {
+        "type": "object",
+        "required": ["incident_id"],
+        "properties": { "incident_id": { "type": "string" } }
+      },
+      "handler": "pagerdutyGetIncident",
+      "example": { "incident_id": "Q3KADE0210LAMP" }
+    },
+    {
+      "name": "pagerduty_list_incident_log_entries",
+      "description": "Timeline (trigger, acknowledge, notes, resolve) of one incident.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["incident_id"],
+        "properties": { "incident_id": { "type": "string" } }
+      },
+      "handler": "pagerdutyLogEntries",
+      "example": { "incident_id": "Q3KADE0210LAMP" }
+    },
+    {
+      "name": "pagerduty_list_incident_alerts",
+      "description": "Alerts grouped under one incident (the alert storm for lab 12).",
+      "inputSchema": {
+        "type": "object",
+        "required": ["incident_id"],
+        "properties": { "incident_id": { "type": "string" } }
+      },
+      "handler": "pagerdutyAlerts",
+      "example": { "incident_id": "Q3KADE0210LAMP" }
+    },
+    {
+      "name": "pagerduty_list_services",
+      "description": "PagerDuty services and their integrations.",
+      "inputSchema": { "type": "object", "properties": {} },
+      "handler": "fileJson",
+      "source": "fixtures/mcp/pagerduty/services.json",
+      "example": {}
+    },
+    {
+      "name": "pagerduty_list_oncalls",
+      "description": "Who is on call per escalation level.",
+      "inputSchema": { "type": "object", "properties": {} },
+      "handler": "fileJson",
+      "source": "fixtures/mcp/pagerduty/oncalls.json",
+      "example": {}
+    },
+    {
+      "name": "datadog_list_monitors",
+      "description": "Datadog monitors for Kadé (negative on-hand, webhook failure rate) with current state.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tag": { "type": "string", "description": "Only monitors carrying this tag, e.g. lab:12" }
+        }
+      },
+      "handler": "datadogListMonitors",
+      "example": { "tag": "lab:12" }
+    },
+    {
+      "name": "datadog_get_monitor",
+      "description": "One Datadog monitor by id (48213771 negative on-hand, 48213802 webhook failure rate).",
+      "inputSchema": {
+        "type": "object",
+        "required": ["monitor_id"],
+        "properties": { "monitor_id": { "type": ["integer", "string"] } }
+      },
+      "handler": "datadogGetMonitor",
+      "example": { "monitor_id": 48213771 }
+    },
+    {
+      "name": "datadog_get_dashboard",
+      "description": "The Inventory & Payments dashboard definition.",
+      "inputSchema": { "type": "object", "properties": { "dashboard_id": { "type": "string" } } },
+      "handler": "fileJson",
+      "source": "observability/datadog/dashboard-inventory-and-payments.json",
+      "example": { "dashboard_id": "k4d-3-inv" }
+    },
+    {
+      "name": "datadog_query_metrics",
+      "description": "Query a metric time series (fixture window 2026-10-21T22:00Z → 2026-10-22T03:00Z). Supported: kade.inventory.on_hand{sku:LH-LAMP-03} and the webhook failure-rate expression.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["query"],
+        "properties": {
+          "query": { "type": "string" },
+          "from": { "type": "string" },
+          "to": { "type": "string" }
+        }
+      },
+      "handler": "datadogQueryMetrics",
+      "example": { "query": "min:kade.inventory.on_hand{sku:LH-LAMP-03}" }
+    },
+    {
+      "name": "datadog_search_logs",
+      "description": "Search worker/api logs around the 02:10 page. Free-text terms filter on the message.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string" },
+          "from": { "type": "string" },
+          "to": { "type": "string" }
+        }
+      },
+      "handler": "datadogSearchLogs",
+      "example": { "query": "service:kade-fulfilment-worker evt_9f2a7c01" }
+    },
+    {
+      "name": "datadog_list_events",
+      "description": "Deploy events (to line up the 22:40 Lamp Week deploy with the alert).",
+      "inputSchema": { "type": "object", "properties": { "tags": { "type": "string" } } },
+      "handler": "fileJson",
+      "source": "fixtures/mcp/datadog/events-deploys.json",
+      "example": { "tags": "deploy" }
+    },
+    {
+      "name": "aws_ecs_describe_services",
+      "description": "ECS describe-services for kade-api (deployments and events).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "cluster": { "type": "string" },
+          "services": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "handler": "fileJson",
+      "source": "infra/aws/ecs-service-kade-api.json",
+      "example": { "cluster": "kade-prod", "services": ["kade-api"] }
+    },
+    {
+      "name": "aws_ecs_describe_task_definition",
+      "description": "ECS task definition for kade-api (image, env, secrets by ARN only).",
+      "inputSchema": {
+        "type": "object",
+        "properties": { "task_definition": { "type": "string" } }
+      },
+      "handler": "fileJson",
+      "source": "infra/aws/ecs-task-definition-kade-api.json",
+      "example": { "task_definition": "kade-api:47" }
+    },
+    {
+      "name": "aws_s3_list_objects",
+      "description": "Objects in the nightly export bucket kade-prod-exports.",
+      "inputSchema": {
+        "type": "object",
+        "properties": { "bucket": { "type": "string" }, "prefix": { "type": "string" } }
+      },
+      "handler": "awsS3ListObjects",
+      "example": { "bucket": "kade-prod-exports", "prefix": "orders_daily/" }
+    },
+    {
+      "name": "gcp_cloudrun_get_service",
+      "description": "Cloud Run (Knative) service descriptor for the fulfilment worker, as YAML text.",
+      "inputSchema": { "type": "object", "properties": { "name": { "type": "string" } } },
+      "handler": "fileText",
+      "source": "infra/gcp/cloud-run-fulfilment-worker.yaml",
+      "example": { "name": "kade-fulfilment-worker" }
+    },
+    {
+      "name": "gcp_pubsub_describe",
+      "description": "Pub/Sub topics, subscriptions and the 02:30 backlog snapshot for PayGate webhooks, as YAML text.",
+      "inputSchema": { "type": "object", "properties": { "subscription": { "type": "string" } } },
+      "handler": "fileText",
+      "source": "infra/gcp/pubsub-paygate-webhooks.yaml",
+      "example": { "subscription": "paygate-webhooks-worker" }
+    },
+    {
+      "name": "bigquery_list_tables",
+      "description": "Tables in kade-prod.analytics with schemas.",
+      "inputSchema": { "type": "object", "properties": { "dataset": { "type": "string" } } },
+      "handler": "fileJson",
+      "source": "fixtures/mcp/bigquery/tables.json",
+      "example": { "dataset": "analytics" }
+    },
+    {
+      "name": "bigquery_query_orders_daily",
+      "description": "Rows from analytics.orders_daily filtered by brand, sku, from/to (YYYY-MM-DD) and limit. Replaces SQL in the fixture path.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "brand": { "type": "string" },
+          "sku": { "type": "string" },
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "limit": { "type": "integer" }
+        }
+      },
+      "handler": "bigqueryQueryOrdersDaily",
+      "example": { "sku": "LH-LAMP-03", "from": "2026-10-20" }
+    },
+    {
+      "name": "workspace_get_sheet",
+      "description": "Values of the merchandiser Lamp Week planning Sheet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": { "spreadsheet_id": { "type": "string" }, "range": { "type": "string" } }
+      },
+      "handler": "workspaceGetSheet",
+      "example": { "spreadsheet_id": "1KadeLampWeek2026PlanningSheetFixture" }
+    },
+    {
+      "name": "workspace_get_doc",
+      "description": "The shared incident Doc for incident 2187 (Markdown with front matter).",
+      "inputSchema": { "type": "object", "properties": { "doc_id": { "type": "string" } } },
+      "handler": "workspaceGetDoc",
+      "example": { "doc_id": "1KadeIncident2187DocFixture" }
+    }
+  ]
+}

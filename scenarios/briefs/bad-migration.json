@@ -1,0 +1,34 @@
+{
+  "id": "bad-migration",
+  "title": "Devin must never touch the database outside the lab",
+  "customer": {
+    "name": "Dev Okafor",
+    "role": "Merchandiser and part-time DBA, Lumen Home",
+    "brand": "lumen-home"
+  },
+  "voice": [
+    "Last quarter a well-meaning migration relaxed a NOT NULL on orders and the fulfilment worker crashed on the first new order after deploy. Nobody reviewed it carefully because it looked harmless.",
+    "Now we are letting an AI agent work in this repository. I want hard guarantees, not a policy document: it must never run db:seed --reset or a migration against anything but the lab database, and every psql must go through our read-only wrapper.",
+    "Show me the guard blocking a bad migration before it reaches the database — and show me what happens when the guard itself is misconfigured."
+  ],
+  "impact": {
+    "orders_affected": 0,
+    "money": {
+      "amount": "0.00",
+      "currency": "USD",
+      "note": "Preventive; the last incident cost ≈6 h of fulfilment downtime"
+    },
+    "trust": "Platform team approval to let Devin work in services/ depends on this"
+  },
+  "stakeholders": [
+    "Dev Okafor (DBA, decision owner)",
+    "Platform engineering lead",
+    "Security reviewer"
+  ],
+  "constraints": [
+    "Guards live in the repository, not in anyone's personal settings",
+    "Fail-closed on malformed configuration"
+  ],
+  "deadline": "Demonstration this sprint",
+  "labs": [2, 12]
+}

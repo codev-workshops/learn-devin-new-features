@@ -1,0 +1,30 @@
+{
+  "services": [
+    {
+      "id": "PKADEAPI",
+      "type": "service",
+      "name": "Kadé Commerce — Platform",
+      "status": "critical",
+      "escalation_policy": { "id": "PKADEEP1", "summary": "Platform on-call" },
+      "integrations": [
+        { "id": "PDATADOG", "summary": "Datadog", "type": "events_api_v2_inbound_integration" }
+      ],
+      "html_url": "https://kade.pagerduty.test/service-directory/PKADEAPI"
+    },
+    {
+      "id": "PKADEWRK",
+      "type": "service",
+      "name": "Kadé Commerce — Fulfilment worker",
+      "status": "warning",
+      "escalation_policy": { "id": "PKADEEP1", "summary": "Platform on-call" },
+      "integrations": [
+        { "id": "PDATADOG2", "summary": "Datadog", "type": "events_api_v2_inbound_integration" }
+      ],
+      "html_url": "https://kade.pagerduty.test/service-directory/PKADEWRK"
+    }
+  ],
+  "limit": 25,
+  "offset": 0,
+  "more": false,
+  "total": 2
+}

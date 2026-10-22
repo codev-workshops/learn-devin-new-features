@@ -1,0 +1,34 @@
+From: Kadé Commerce scenarios <scenarios@kade.test>
+Subject: [PATCH] db: relax orders.currency ahead of multi-currency carts
+
+Drops the NOT NULL default on orders.currency so the upcoming multi-currency
+cart can decide the currency later. Looks harmless in review; in production
+the fulfilment worker reads order.currency on every new order and crashes on
+NULL (seed-spec planted_edge_cases → bad-migration). Labs 2 and 12 apply it
+with `git apply scenarios/bad-migration.patch`; `scenarios/lab-reset.sh`
+reverts it with `git apply -R`.
+---
+ db/migrations/1761094800000_orders-currency-nullable.sql | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 db/migrations/1761094800000_orders-currency-nullable.sql
+
+diff --git a/db/migrations/1761094800000_orders-currency-nullable.sql b/db/migrations/1761094800000_orders-currency-nullable.sql
+new file mode 100644
+index 0000000..b2f8e3c
+--- /dev/null
++++ b/db/migrations/1761094800000_orders-currency-nullable.sql
+@@ -0,0 +1,12 @@
++-- Up Migration
++-- "Prepare orders for multi-currency carts": the currency will be decided at payment time.
++-- Reviewer note: this is the planted bad migration (scenarios/bad-migration.patch).
++-- The worker dereferences order.currency on every new order and dies on NULL.
++ALTER TABLE orders ALTER COLUMN currency DROP DEFAULT;
++ALTER TABLE orders ALTER COLUMN currency DROP NOT NULL;
++
++-- Down Migration
++UPDATE orders SET currency = 'USD' WHERE currency IS NULL;
++ALTER TABLE orders ALTER COLUMN currency SET NOT NULL;
++ALTER TABLE orders ALTER COLUMN currency SET DEFAULT 'USD';
++
+--
+2.43.0

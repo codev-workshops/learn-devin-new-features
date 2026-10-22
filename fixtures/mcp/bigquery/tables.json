@@ -1,0 +1,21 @@
+{
+  "project": "kade-prod",
+  "dataset": "analytics",
+  "tables": [
+    {
+      "tableId": "orders_daily",
+      "type": "TABLE",
+      "schema": { "$file": "infra/bigquery/orders_daily.schema.json" },
+      "numRows": 41,
+      "csv": "infra/bigquery/orders_daily.csv",
+      "lastModified": "2026-10-22T03:00:02Z"
+    },
+    {
+      "tableId": "paygate_webhooks_raw",
+      "type": "TABLE",
+      "numRows": 180422,
+      "lastModified": "2026-10-22T02:59:58Z",
+      "note": "fed by the Pub/Sub BigQuery subscription (infra/gcp/pubsub-paygate-webhooks.yaml); no fixture rows"
+    }
+  ]
+}

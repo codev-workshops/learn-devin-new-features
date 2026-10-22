@@ -1,0 +1,35 @@
+{
+  "id": "rounding-drift",
+  "title": "The reconciliation is off by cents, every day",
+  "customer": {
+    "name": "Finance, Trailhead Supply",
+    "role": "Finance controller",
+    "brand": "trailhead-supply"
+  },
+  "voice": [
+    "Our daily reconciliation between the shop's order totals and the fulfilment system's recomputed totals has never balanced since we moved Trailhead to VAT-inclusive prices. The difference is tiny — a cent here, a cent there, on about three per cent of orders — but the auditor does not accept 'tiny'.",
+    "Engineering says the shop and the worker 'round differently'. I do not care who is right; I need one number per order and a statement of which system is authoritative for tax.",
+    "Before Black Friday we need the drift explained, the affected orders listed, and a plan that does not reprice anything a customer has already seen."
+  ],
+  "impact": {
+    "orders_affected": 180,
+    "money": {
+      "amount": "1.80",
+      "currency": "EUR",
+      "note": "≈€0.01 × 180 orders in the window; the cost is audit hours, not cents"
+    },
+    "trust": "Auditor flags the VAT return as unreconciled"
+  },
+  "stakeholders": [
+    "Finance controller (decision owner)",
+    "External auditor",
+    "API team",
+    "Fulfilment worker maintainer"
+  ],
+  "constraints": [
+    "Prices shown to customers do not change",
+    "Tax must be computed from the VAT-inclusive gross, per EU rules"
+  ],
+  "deadline": "Explanation for the auditor in five working days",
+  "labs": [5, 6, 9]
+}
