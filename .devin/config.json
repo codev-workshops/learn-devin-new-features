@@ -1,0 +1,15 @@
+{
+  "$schema": "https://docs.devin.ai/schemas/project-config.json",
+  "name": "kade-commerce",
+  "description": "Kadé Commerce: a deliberately imperfect multi-brand e-commerce fixture used by the Devin practice course in labs/.",
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npm test*)",
+      "Bash(docker compose *)",
+      "Bash(git *)",
+      "Bash(date +%s)"
+    ],
+    "deny": ["Bash(git push --force*)", "Bash(docker compose down -v*)"]
+  }
+}

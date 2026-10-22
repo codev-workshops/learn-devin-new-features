@@ -1,0 +1,15 @@
+# Root `prettier --check .` formats only root-owned files; every workspace formats itself.
+node_modules/
+dist/
+coverage/
+package-lock.json
+apps/
+services/
+labs/
+db/
+scenarios/
+observability/
+infra/
+fixtures/
+outpost/
+coaching/

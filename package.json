@@ -1,0 +1,43 @@
+{
+  "name": "kade-commerce",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Kadé Commerce — a deliberately imperfect multi-brand e-commerce platform used as the fixture for the Applied Devin Lab course.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22 <23",
+    "npm": ">=10"
+  },
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*",
+    "labs"
+  ],
+  "scripts": {
+    "dev": "node scripts/ws.mjs run dev --all --parallel",
+    "test": "node scripts/ws.mjs run test --all",
+    "lint": "prettier --check . && eslint . && node scripts/ws.mjs run lint --all",
+    "format": "prettier --write .",
+    "build": "node scripts/ws.mjs run build --all",
+    "labs:build": "node scripts/ws.mjs run build -w labs --fallback labs/build.mjs",
+    "coach:dryrun": "node scripts/ws.mjs run coach:dryrun -w labs --fallback labs/coach-dryrun.mjs --",
+    "lab:reset": "node scripts/lab-reset.mjs",
+    "db:migrate": "node scripts/ws.mjs run db:migrate -w services/api --required --",
+    "db:seed": "node scripts/ws.mjs run db:seed -w services/api --required --",
+    "db:up": "docker compose up -d --wait postgres",
+    "db:down": "docker compose down",
+    "gates": "npm test && npm run lint && npm run build && npm run labs:build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
+    "globals": "^16.5.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.0",
+    "vitest": "^3.2.4",
+    "yaml": "^2.8.1"
+  }
+}

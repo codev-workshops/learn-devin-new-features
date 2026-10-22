@@ -1,0 +1,42 @@
+# Proposed repo blueprint for codev-workshops/learn-devin-new-features (Kadé Commerce).
+# Written by W0-A; the parent applies it via the Devin environment settings. Replaces the
+# stale payroll-worker blueprint. Every step is idempotent so re-running a snapshot build is safe.
+repos:
+  - repo: codev-workshops/learn-devin-new-features
+    exec_dir: /home/ubuntu/repos/learn-devin-new-features
+    initialize:
+      - name: Node 22 via nvm
+        run: |
+          export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
+          nvm install 22 >/dev/null && nvm alias default 22 >/dev/null
+      - name: Python 3.12 toolchain
+        run: python3.12 -m pip install --user --upgrade pip
+      - name: Pull PostgreSQL image from the GCR mirror
+        run: docker pull mirror.gcr.io/library/postgres:16-alpine
+    install_dependencies:
+      - name: npm workspaces
+        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+      - name: Fulfilment worker dev deps (no-op until W1-worker lands)
+        run: |
+          if [ -f services/fulfilment-worker/pyproject.toml ]; then
+            python3.12 -m pip install --user -e "services/fulfilment-worker[dev]"
+          fi
+    maintain:
+      - name: Refresh npm workspaces
+        run: npm install --no-audit --no-fund
+      - name: Refresh worker dev deps
+        run: |
+          if [ -f services/fulfilment-worker/pyproject.toml ]; then
+            python3.12 -m pip install --user -e "services/fulfilment-worker[dev]"
+          fi
+    startup:
+      - name: PostgreSQL 16 (Compose)
+        run: docker compose up -d --wait postgres
+      - name: Migrate and seed (no-op until W1-api lands)
+        run: npm run db:migrate && npm run db:seed
+    test:
+      - run: npm test
+    lint:
+      - run: npm run lint
+    build:
+      - run: npm run build && npm run labs:build
