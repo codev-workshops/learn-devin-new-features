@@ -21,7 +21,7 @@ Learner: **calibration** · mode: dry-run · run 1 · 2026-10-22T11:30:00Z · ti
 | Think-aloud checkpoint (T+45) | 45 s | 45 s | +0 s | on |
 | Three-minute CISO update | 180 s | 150 s | -30 s | under |
 | Objection 1 (technical) — “A profile is config — what stops a developer turning it off?” | 90 s | 51 s | -39 s | under |
-| Objection 2 (commercial) — “This will block legitimate npm installs.” | 90 s | 47 s | -43 s | under |
+| Objection 2 (commercial) — “This will block legitimate pnpm installs.” | 90 s | 47 s | -43 s | under |
 
 ## Structure (problem → approach → evidence → next step)
 
@@ -40,7 +40,7 @@ Learner: **calibration** · mode: dry-run · run 1 · 2026-10-22T11:30:00Z · ti
 ## Missing key points
 
 - [ ] The enterprise profile is mandatory, so it is a floor nobody below can loosen, while a recommended profile is only a default a lower level may replace (8) — missed; belonged in framing
-- [ ] Network and MCP access are separate allowlists: npm and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved (6) — missed; belonged in checkpoint-10
+- [ ] Network and MCP access are separate allowlists: the package registry and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved (6) — missed; belonged in checkpoint-10
 - [ ] A session already running keeps the profile it resolved until it wakes or reboots, while new sessions get the change straight away (6) — missed; belonged in checkpoint-45
 - [ ] Child sessions are governed by their parent's chain, so delegating work cannot step outside the floor (5) — missed; belonged in update
 - [ ] Write paths are closed in the profile itself: GitHub CLI token removed, git access level, and Devin MCP read-only for automations (5) — missed; belonged in objection-1

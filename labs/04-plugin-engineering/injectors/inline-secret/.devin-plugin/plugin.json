@@ -2,8 +2,8 @@
   "name": "Harbourline Flash Sale",
   "mcpServers": {
     "harbourline-incidents": {
-      "command": "npx",
-      "args": ["-y", "@pagerduty/mcp-server"],
+      "command": "pnpm",
+      "args": ["dlx", "@pagerduty/mcp-server"],
       "env": { "PAGERDUTY_API_TOKEN": "u+FAKE-not-a-real-token-0000" },
       "oauth": { "clientId": "harbourline-incidents", "clientSecret": "fake-client-secret-0000" }
     }

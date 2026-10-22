@@ -7,7 +7,7 @@
 # (and, once the worker has decremented, onHand) going negative.
 #
 # usage: scenarios/oversell.sh [--sku LH-LAMP-03] [--brand lumen-home] [--concurrency 20]
-# Reset: npm run lab:reset -- <nn>   (db:seed --reset restores on_hand = 3)
+# Reset: pnpm lab:reset -- <nn>   (db:seed --reset restores on_hand = 3)
 # Idempotent: each run adds one more burst; the symptom shape is identical every time.
 set -euo pipefail
 export INJECTOR=oversell
@@ -32,7 +32,7 @@ require_api
 before="$(inventory_on_hand "$BRAND" "$SKU")"
 available_before="$(inventory_available "$BRAND" "$SKU")"
 available=$((available_before > 0 ? available_before : 0))
-[ "$available_before" -gt 0 ] || log "warning: $SKU has $available_before available (onHand $before) — only NEW oversell counts; reset with npm run lab:reset -- <nn> for a clean run"
+[ "$available_before" -gt 0 ] || log "warning: $SKU has $available_before available (onHand $before) — only NEW oversell counts; reset with pnpm lab:reset -- <nn> for a clean run"
 log "$SKU before: onHand $before, available $available_before — firing $CONCURRENCY concurrent checkouts of 1 unit"
 
 work="$(mktemp -d)"

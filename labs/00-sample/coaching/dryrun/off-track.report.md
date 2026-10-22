@@ -26,7 +26,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T09:40:00Z · timing:
 
 - **Problem** — weak: “there are a lot of problems. Actually, the oversell one is bad, the rounding one is bad, and the leak is a security thing”
 - **Approach** — missing
-- **Evidence** — weak: “I will know it worked when npm test is green and the report balances”
+- **Evidence** — weak: “I will know it worked when pnpm test is green and the report balances”
 - **Next step** — weak: “The next step is to start the session”
 - Update order (Outcome → Evidence → Risk → Next action → Ask) held: no
 
@@ -50,7 +50,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T09:40:00Z · timing:
 - Repeated words: bad (×2), so, yeah (×3)
 - Coach asked “did you say…?”: never
 - Article/plural slips: "a few hundred maybe" — give the number from the brief; "the migrations" — no migrations were specified
-- Re-record: “So, basically, there are a lot of problems.”; “And I will know it worked when npm test is green and the report balances, isn't it?”
+- Re-record: “So, basically, there are a lot of problems.”; “And I will know it worked when pnpm test is green and the report balances, isn't it?”
 
 ## Three stems for next time
 

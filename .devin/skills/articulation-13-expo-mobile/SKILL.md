@@ -1,6 +1,6 @@
 ---
 name: coach-13-expo-mobile
-description: Voice articulation coach for lab 13 (Expo mobile on iOS and Android, order status on both phones). Use when the learner types `@skills:coach-13-expo-mobile <handle>` or runs `npm run coach:dryrun -- 13`.
+description: Voice articulation coach for lab 13 (Expo mobile on iOS and Android, order status on both phones). Use when the learner types `@skills:coach-13-expo-mobile <handle>` or runs `pnpm coach:dryrun -- 13`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -55,4 +55,4 @@ Objection 1 is commercial, objection 2 technical. Listen for acknowledge → bou
 
 ## Dry-run
 
-With `--dry-run <transcript>` use the transcript's `[mm:ss]` markers (`timing_method: markers`), grade inline, print the report and skip the progress-log push. `npm run coach:dryrun -- 13` validates the committed strong, mediocre and off-track reports.
+With `--dry-run <transcript>` use the transcript's `[mm:ss]` markers (`timing_method: markers`), grade inline, print the report and skip the progress-log push. `pnpm coach:dryrun -- 13` validates the committed strong, mediocre and off-track reports.

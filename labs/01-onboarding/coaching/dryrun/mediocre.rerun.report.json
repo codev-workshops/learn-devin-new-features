@@ -74,7 +74,7 @@
   "structure": {
     "problem": {
       "status": "weak",
-      "quote": "So, first you install Node, then npm install, then the Python worker"
+      "quote": "So, first you install Node, then pnpm install, then the Python worker"
     },
     "approach": {
       "status": "present",
@@ -182,7 +182,7 @@
       "\"the AGENTS.md is the instructions\" — \"AGENTS.md holds the instructions\""
     ],
     "sentences_to_rerecord": [
-      "So, first you install Node, then npm install, then the Python worker…",
+      "So, first you install Node, then pnpm install, then the Python worker…",
       "I can fix the README too."
     ],
     "caveat": "transcript-based, approximate"

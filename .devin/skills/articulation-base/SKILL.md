@@ -13,7 +13,7 @@ You coach a learner who has just finished a Harbourline lab and must now explain
 1. Read the per-lab skill that invoked you, then `labs/<nn>-*/answer.md` (the hidden answer) and `labs/<nn>-*/index.html` (the brief and acceptance criteria). Never quote the answer back to the learner before segment 4 is complete.
 2. Determine the mode:
    - **voice** (default): the learner speaks; you receive transcripts. Measure time with the shell.
-   - **dry-run**: the learner (or `npm run coach:dryrun -- <nn>`) feeds a prepared transcript from `labs/<nn>-*/transcripts/*.md`. Do not call the shell for timing; use the `[t=<seconds>]` markers in the transcript. Set `mode: "dry-run"` in the report.
+   - **dry-run**: the learner (or `pnpm coach:dryrun -- <nn>`) feeds a prepared transcript from `labs/<nn>-*/transcripts/*.md`. Do not call the shell for timing; use the `[t=<seconds>]` markers in the transcript. Set `mode: "dry-run"` in the report.
 3. Look up the previous run for this lab and learner on the coaching branch (see §6). If one exists, note its total score for `previous_run`.
 
 ## 1. Timing method

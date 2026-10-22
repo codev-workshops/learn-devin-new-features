@@ -10,7 +10,7 @@
 #
 # usage: scenarios/rounding-drift.sh [--orders 40] [--brand lumen-home] [--seed 7]
 #   Baskets are deterministic for a given --seed so a run is reproducible.
-# Reset: npm run lab:reset -- <nn>
+# Reset: pnpm lab:reset -- <nn>
 set -euo pipefail
 export INJECTOR=rounding-drift
 # shellcheck source-path=SCRIPTDIR

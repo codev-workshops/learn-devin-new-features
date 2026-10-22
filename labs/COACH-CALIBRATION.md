@@ -8,7 +8,7 @@ Plan §5 / W5-coach. One deliberately generic mediocre transcript —
 content-free answer lands in a narrow band: the spread across all labs must be **≤ 15 points**.
 
 ```
-node labs/coach-dryrun/calibrate.mjs            # check reports + this table (also runs in npm test)
+node labs/coach-dryrun/calibrate.mjs            # check reports + this table (also runs in pnpm test)
 node labs/coach-dryrun/calibrate.mjs --write    # regenerate the table below after re-grading
 ```
 

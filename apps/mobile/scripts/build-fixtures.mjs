@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Turns the frozen seed spec (packages/contracts/seed-spec.yaml) into the JSON fixture the mock
-// API serves. The output is committed so Metro and Jest need no pre-step; `npm test` fails when it
+// API serves. The output is committed so Metro and Jest need no pre-step; `pnpm test` fails when it
 // drifts from the spec (test/fixtures.test.ts).
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -91,7 +91,7 @@ if (isMain) {
     const current = existsSync(outPath) ? readFileSync(outPath, "utf8") : "";
     if (current !== json) {
       console.error(
-        "src/mocks/fixtures/seed.json is out of date; run `npm run fixtures -w apps/mobile`",
+        "src/mocks/fixtures/seed.json is out of date; run `pnpm --filter @harbourline/mobile run fixtures`",
       );
       process.exit(1);
     }

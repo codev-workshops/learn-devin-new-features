@@ -70,7 +70,7 @@
       "actual_seconds": 47,
       "delta_seconds": -43,
       "verdict": "under",
-      "question": "This will block legitimate npm installs."
+      "question": "This will block legitimate pnpm installs."
     }
   ],
   "structure": {
@@ -140,7 +140,7 @@
     },
     {
       "id": "mm2",
-      "point": "Network and MCP access are separate allowlists: npm and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved",
+      "point": "Network and MCP access are separate allowlists: the package registry and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved",
       "weight": 6,
       "mentioned": false,
       "belonged_in": "checkpoint-10"

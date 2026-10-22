@@ -178,7 +178,7 @@
     },
     {
       "id": "mm5",
-      "point": "Sessions ran under a profile allowing only npm and the PayGate sandbox, and the blocked Python install did not widen it",
+      "point": "Sessions ran under a profile allowing only the package registry and the PayGate sandbox, and the blocked Python install did not widen it",
       "weight": 4,
       "mentioned": false,
       "belonged_in": "update"

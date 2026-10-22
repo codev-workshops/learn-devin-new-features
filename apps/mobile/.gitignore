@@ -1,4 +1,4 @@
-# Continuous Native Generation: android/ and ios/ at the app root are produced by `npx expo prebuild`.
+# Continuous Native Generation: android/ and ios/ at the app root are produced by `pnpm exec expo prebuild`.
 # modules/harbourline-haptics/ios is hand-written source and is tracked.
 /android/
 /ios/

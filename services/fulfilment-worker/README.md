@@ -47,10 +47,10 @@ docker compose -f docker-compose.yml -f docker-compose.services.yml --profile st
 ## Gates
 
 ```sh
-pytest -q && ruff check . && ruff format --check .       # or: npm run test / lint / build -w services/fulfilment-worker
+pytest -q && ruff check . && ruff format --check .       # or: pnpm --filter @harbourline/fulfilment-worker test / lint / build
 HARBOURLINE_TEST_DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline pytest -q tests/test_store_postgres.py
 PYTHON=python3.12 scripts/demo-duplicate-webhook.sh      # wire-level duplicate-webhook proof
 ```
 
 The Postgres test creates a `worker_test` schema from `db/expected-schema.sql`, so it runs against the root
-`npm run db:up` database without touching the API's tables.
+`pnpm db:up` database without touching the API's tables.

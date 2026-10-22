@@ -14,9 +14,9 @@ These defects are **features of the course**. Never fix them on `main`; remediat
 ## Demonstrating a plant
 
 ```bash
-npm run db:seed -- --reset                       # universal reset
+pnpm db:seed -- --reset                       # universal reset
 sed -i 's/it.skip(/it(/' services/api/test/planted.test.ts   # on a throwaway branch only
-npm test -w services/api                         # the un-skipped tests now fail
+pnpm --filter @harbourline/api test                         # the un-skipped tests now fail
 git checkout -- services/api/test/planted.test.ts
 ```
 

@@ -18,7 +18,7 @@
 # builds a fresh cart + checkout and ages nothing (same mechanics).
 #
 # usage: scenarios/abandoned-carts.sh [--brand lumen-home] [--older-than 48] [--count 1] [--fresh] [--wait 20] [--sweeper auto|worker|contract]
-# Reset: npm run lab:reset -- <nn>
+# Reset: pnpm lab:reset -- <nn>
 set -euo pipefail
 export INJECTOR=abandoned-carts
 # shellcheck source-path=SCRIPTDIR

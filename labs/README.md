@@ -20,14 +20,14 @@ labs/
 
 ## Commands
 
-From the repo root (`labs` is an npm workspace) or from `labs/`:
+From the repo root (`labs` is an pnpm workspace) or from `labs/`:
 
 | Command | What it does |
 |---|---|
-| `npm run labs:build` (root) / `npm run build` (labs) | renders `labs/NN-slug/index.html` for every lab and `labs/index.html` |
+| `pnpm labs:build` (root) / `pnpm build` (labs) | renders `labs/NN-slug/index.html` for every lab and `labs/index.html` |
 | `node labs/build.mjs --check` | runs every rule, writes nothing (use as a lint gate) |
-| `npm test` (labs) | Vitest suite for the build rules and the dry-run harness |
-| `npm run coach:dryrun -- <nn>` | validates `labs/<nn>-*/coaching/dryrun/` |
+| `pnpm test` (labs) | Vitest suite for the build rules and the dry-run harness |
+| `pnpm coach:dryrun -- <nn>` | validates `labs/<nn>-*/coaching/dryrun/` |
 | `node labs/coach-dryrun.mjs --render <report.json>` | prints the Markdown form of a report |
 
 Generated pages are git-ignored; open `labs/index.html` straight from `file://`.

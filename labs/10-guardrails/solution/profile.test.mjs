@@ -15,7 +15,7 @@ describe('lab 10 reference policy matrix', () => {
     for (const [n, p] of Object.entries(WORLD.profiles)) expect(validateProfile(n, p).problems).toEqual([]);
   });
 
-  it('lets a normal session reach npm and the PayGate sandbox and nothing else', () => {
+  it('lets a normal session reach the package registry and the PayGate sandbox and nothing else', () => {
     const eff = resolve(WORLD, 'dev-session');
     expect(eff.profiles).toEqual(['harbourline-floor', 'harbourline-dev']);
     expect(can(eff, 'registry.npmjs.org')).toBe(true);

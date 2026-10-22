@@ -1,6 +1,6 @@
 # AGENTS.md — services/fulfilment-worker (owner: W1-worker)
 
-- Python 3.12. Gates: `pytest -q`, `ruff check .`, `ruff format --check .` (the workspace `npm run test/lint/build`
+- Python 3.12. Gates: `pytest -q`, `ruff check .`, `ruff format --check .` (the workspace `pnpm test/lint/build`
   forward to them). Run them from this directory before every commit.
 - Money is `Decimal` built from two-fractional-digit strings; `money.parse` rejects floats on purpose. Brand rules
   live in `brands.py` and mirror `packages/contracts/seed-spec.yaml`.

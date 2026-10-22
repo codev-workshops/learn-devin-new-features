@@ -1,6 +1,6 @@
 ---
 name: coach-05-code-scans
-description: Voice articulation coach for lab 05 (Code Scans lifecycle — brand leak, unverified PayGate signature, slow Lamp Week page). Use when the learner types `@skills:coach-05-code-scans <handle>` or runs `npm run coach:dryrun -- 05`. Started manually by the learner only.
+description: Voice articulation coach for lab 05 (Code Scans lifecycle — brand leak, unverified PayGate signature, slow Lamp Week page). Use when the learner types `@skills:coach-05-code-scans <handle>` or runs `pnpm coach:dryrun -- 05`. Started manually by the learner only.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -45,4 +45,4 @@ Model answers live in `labs/05-code-scans/answer.md#model-answers-to-the-objecti
 
 ## Dry-run
 
-With `--dry-run <transcript>`, read the transcript file, use its `[mm:ss]` markers, skip the git push, and print the report. `npm run coach:dryrun -- 05` validates the committed strong / mediocre / off-track reports against the transcripts.
+With `--dry-run <transcript>`, read the transcript file, use its `[mm:ss]` markers, skip the git push, and print the report. `pnpm coach:dryrun -- 05` validates the committed strong / mediocre / off-track reports against the transcripts.

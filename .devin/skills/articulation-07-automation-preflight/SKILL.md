@@ -1,6 +1,6 @@
 ---
 name: coach-07-automation-preflight
-description: Voice articulation coach for lab 07 (Automation with Preflight, one investigation per real PayGate webhook failure). Use when the learner types `@skills:coach-07-automation-preflight <handle>` or runs `npm run coach:dryrun -- 07`.
+description: Voice articulation coach for lab 07 (Automation with Preflight, one investigation per real PayGate webhook failure). Use when the learner types `@skills:coach-07-automation-preflight <handle>` or runs `pnpm coach:dryrun -- 07`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -55,4 +55,4 @@ Objection 1 is technical, objection 2 commercial. Listen for acknowledge → bou
 
 ## Dry-run
 
-With `--dry-run <transcript>` use the transcript's `[mm:ss]` markers (`timing_method: markers`), grade inline, print the report and skip the progress-log push. `npm run coach:dryrun -- 07` validates the committed strong, mediocre and off-track reports.
+With `--dry-run <transcript>` use the transcript's `[mm:ss]` markers (`timing_method: markers`), grade inline, print the report and skip the progress-log push. `pnpm coach:dryrun -- 07` validates the committed strong, mediocre and off-track reports.

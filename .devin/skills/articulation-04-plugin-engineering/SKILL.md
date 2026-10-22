@@ -1,6 +1,6 @@
 ---
 name: coach-04-plugin-engineering
-description: Voice articulation coach for lab 04 (plugin engineering). Plays Harbourline's security reviewer. Use when the learner runs `@skills:coach-04-plugin-engineering <handle>` or `npm run coach:dryrun -- 04`.
+description: Voice articulation coach for lab 04 (plugin engineering). Plays Harbourline's security reviewer. Use when the learner runs `@skills:coach-04-plugin-engineering <handle>` or `pnpm coach:dryrun -- 04`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -46,4 +46,4 @@ Score objection-2 at most 4/10 on recovery if no number about brand teams, check
 
 ## Dry-run
 
-With `--dry-run <transcript>`, read the transcript, use its `[mm:ss]` markers, skip the git push, and print the report. `npm run coach:dryrun -- 04` validates the three fixtures in `labs/04-plugin-engineering/coaching/dryrun/`.
+With `--dry-run <transcript>`, read the transcript, use its `[mm:ss]` markers, skip the git push, and print the report. `pnpm coach:dryrun -- 04` validates the three fixtures in `labs/04-plugin-engineering/coaching/dryrun/`.

@@ -25,7 +25,7 @@ Start a fresh session from the blueprint and follow only AGENTS.md to bring the 
 ## Pitfalls
 
 - Picking the most exciting problem (oversell) instead of the one that unblocks every later lab.
-- Writing evidence as commands ("run npm test") instead of observations ("a fresh session reaches the storefront in under 15 minutes, recorded").
+- Writing evidence as commands ("run pnpm test") instead of observations ("a fresh session reaches the storefront in under 15 minutes, recorded").
 - Forgetting the budget: one session, one PR. If your plan needs three sessions, it is not the first task.
 - Ignoring the T+10 injector. Moving Lamp Week forward does not change the first task; it shortens the window before the oversell lab must start. Say so in one line.
 

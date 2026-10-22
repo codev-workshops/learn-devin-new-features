@@ -1,11 +1,11 @@
 ---
 name: coach-10-guardrails
-description: Voice articulation coach for lab 10 (enterprise guardrails and security profiles). Plays Harbourline's CISO. Use when the learner runs `@skills:coach-10-guardrails <handle>` or `npm run coach:dryrun -- 10`.
+description: Voice articulation coach for lab 10 (enterprise guardrails and security profiles). Plays Harbourline's CISO. Use when the learner runs `@skills:coach-10-guardrails <handle>` or `pnpm coach:dryrun -- 10`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
 
-# Coach — lab 10 (npm and the PayGate sandbox, nothing else)
+# Coach — lab 10 (the package registry and the PayGate sandbox, nothing else)
 
 Read `.devin/skills/articulation-base/SKILL.md` first and follow it for protocol, rubric and progress log. Override: the report shape and segment ids come from `labs/coach-report.schema.json` (`schema_version: "1.0"`) and `labs/10-guardrails/lab.json`, not from the base's older field list; dry-run timings come from the `[mm:ss]` markers. This file only supplies the lab-specific material.
 
@@ -27,23 +27,23 @@ Read `.devin/skills/articulation-base/SKILL.md` first and follow it for protocol
 
 ## Must mention (accuracy, 30 points)
 
-| id  | weight | point                                                                                                                                                   | belongs in    |
-| --- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| mm1 | 8      | The enterprise profile is mandatory, so it is a floor nobody below can loosen, while a recommended profile is only a default a lower level may replace  | framing       |
-| mm2 | 6      | Network and MCP access are separate allowlists: npm and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved | checkpoint-10 |
-| mm3 | 6      | A session already running keeps the profile it resolved until it wakes or reboots, while new sessions get the change straight away                      | checkpoint-45 |
-| mm4 | 5      | Child sessions are governed by their parent's chain, so delegating work cannot step outside the floor                                                   | update        |
-| mm5 | 5      | Write paths are closed in the profile itself: GitHub CLI token removed, git access level, and Devin MCP read-only for automations                       | objection-1   |
+| id  | weight | point                                                                                                                                                                    | belongs in    |
+| --- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
+| mm1 | 8      | The enterprise profile is mandatory, so it is a floor nobody below can loosen, while a recommended profile is only a default a lower level may replace                   | framing       |
+| mm2 | 6      | Network and MCP access are separate allowlists: the package registry and the PayGate sandbox go in the host list and the MCP list stays empty until a server is approved | checkpoint-10 |
+| mm3 | 6      | A session already running keeps the profile it resolved until it wakes or reboots, while new sessions get the change straight away                                       | checkpoint-45 |
+| mm4 | 5      | Child sessions are governed by their parent's chain, so delegating work cannot step outside the floor                                                                    | update        |
+| mm5 | 5      | Write paths are closed in the profile itself: GitHub CLI token removed, git access level, and Devin MCP read-only for automations                                        | objection-1   |
 
 ## Objections (segment 4)
 
 | #   | objection                                                    | acknowledgement cue                                                                             |
 | --- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
 | 1   | A profile is config — what stops a developer turning it off? | "It is a setting…" then who can edit a mandatory profile, the ignored opt-out and the clamp     |
-| 2   | This will block legitimate npm installs.                     | "That would hurt…" then the lockfile host count and the two Python hosts the build really needs |
+| 2   | This will block legitimate pnpm installs.                    | "That would hurt…" then the lockfile host count and the two Python hosts the build really needs |
 
 Score objection-2 at most 4/10 on recovery if no number of hosts, packages or builds is spoken. Score objection-1 at most 5/10 if the learner says AI Guardrails stop network traffic, or claims an approval inside a session can widen a mandatory floor.
 
 ## Dry-run
 
-With `--dry-run <transcript>`, read the transcript, use its `[mm:ss]` markers, skip the git push, and print the report. `npm run coach:dryrun -- 10` validates the three fixtures in `labs/10-guardrails/coaching/dryrun/`.
+With `--dry-run <transcript>`, read the transcript, use its `[mm:ss]` markers, skip the git push, and print the report. `pnpm coach:dryrun -- 10` validates the three fixtures in `labs/10-guardrails/coaching/dryrun/`.

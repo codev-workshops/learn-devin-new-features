@@ -7,7 +7,7 @@
   "difficulty": "core",
   "prerequisites": [
     "Lab 00 done (or you know the Harbourline brands and planted-defect rule)",
-    "Repo connected to your Devin org; `npm install` done at the root; Postgres up (`npm run db:up`)",
+    "Repo connected to your Devin org; `pnpm install` done at the root; Postgres up (`pnpm db:up`)",
     "You can open pull requests on the repo and your Devin role can run Devin Review (see section 6)"
   ],
   "credentials": {
@@ -35,7 +35,7 @@
         "integration": "Local stack (Postgres, services/api tests)",
         "required": true,
         "fixture": "None — the rounding evidence is a test you run; there is no fixture substitute for it",
-        "note": "`npm run db:up` then `npm test -w services/api`"
+        "note": "`pnpm db:up` then `pnpm --filter @harbourline/api test`"
       }
     ],
     "fixture_only_story": "Without Devin Review access you review the committed patch yourself, using the reference findings export as the reviewer's output: decide which findings are Bugs to fix, which Flag you accept or dispute and why, write the review rule you would add, then fix every actionable finding on a local throwaway branch and prove the rounding with a test. Criteria 2, 4 and 6 become observer-only; every other criterion is still yours.",
@@ -47,7 +47,7 @@
   "scenarios": {
     "reset": [
       "git checkout main && git pull --ff-only",
-      "npm run lab:reset -- 06",
+      "pnpm lab:reset -- 06",
       "git branch --list 'lab06/*' | grep -v 'lab06/price-drift-fix' | xargs -r git branch -D",
       "git fetch origin lab06/price-drift-fix"
     ],
@@ -71,7 +71,7 @@
     },
     {
       "name": "rounding-proof",
-      "command": "npm test -w services/api -- -t rounding",
+      "command": "pnpm --filter @harbourline/api test -t rounding",
       "when": "before you claim the totals are safe",
       "behaviour": "With the regression test from your remediation branch in place, the run shows the subtotal the PR produces for two €19.90 Merino socks — the number the tech lead will ask for."
     }

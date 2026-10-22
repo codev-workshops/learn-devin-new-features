@@ -44,7 +44,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T14:20:00Z · timing:
 - [ ] Reproduced with the duplicate-webhook injector: one payment, two confirmations, stock taken twice (5) — missed; belonged in checkpoint-30
 - [ ] After the change the isolation evidence goes first and the refund is limited to same-brand merchandisers (4) — missed; belonged in checkpoint-90
 - [ ] Brand isolation checked on every endpoint, and the order-by-id endpoint leaks across brands (5) — missed; belonged in update
-- [ ] Sessions ran under a profile allowing only npm and the PayGate sandbox, and the blocked Python install did not widen it (4) — missed; belonged in update
+- [ ] Sessions ran under a profile allowing only the package registry and the PayGate sandbox, and the blocked Python install did not widen it (4) — missed; belonged in update
 - [x] How many orders and customers were double-charged and need a refund (3) — “Around thirty orders were double-charged across both brands, about twenty-five customers”
 - [ ] The payment webhook signature is read but never verified, which is a second risk (3) — missed; belonged in objection-2
 

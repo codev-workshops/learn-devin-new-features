@@ -98,7 +98,7 @@ require_api() {
   require_cmd curl jq
   local health
   health="$(api GET /health 2>/dev/null || true)"
-  [ "$(last_status)" = "200" ] || die "API not reachable at $HARBOURLINE_API_URL (GET /health → $(last_status)). Start it with: npm run dev"
+  [ "$(last_status)" = "200" ] || die "API not reachable at $HARBOURLINE_API_URL (GET /health → $(last_status)). Start it with: pnpm dev"
   log "API ok: $(printf '%s' "$health" | jq -c . 2>/dev/null || echo "$health")"
 }
 

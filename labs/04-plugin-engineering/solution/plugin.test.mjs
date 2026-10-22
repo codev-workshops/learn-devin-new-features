@@ -57,7 +57,7 @@ describe('lab 04 reference plugin', () => {
     expect(runPreToolHook(PLUGIN, 'git push origin main', { HARBOURLINE_SALE_FREEZE: '1' }).exit).toBe(2);
     expect(runPreToolHook(PLUGIN, 'git push origin main').exit).toBe(0);
     expect(runPreToolHook(PLUGIN, 'git push origin devin/sale-banner', { HARBOURLINE_SALE_FREEZE: '1' }).exit).toBe(0);
-    expect(runPreToolHook(PLUGIN, 'npm run gates', { HARBOURLINE_SALE_FREEZE: '1' }).exit).toBe(0);
+    expect(runPreToolHook(PLUGIN, 'pnpm gates', { HARBOURLINE_SALE_FREEZE: '1' }).exit).toBe(0);
     for (const c of ['git push origin HEAD:main', 'git push -f origin +main', 'git push origin refs/heads/main', 'git push origin main && echo ok'])
       expect(runPreToolHook(PLUGIN, c, { HARBOURLINE_SALE_FREEZE: '1' }).exit, c).toBe(2);
     for (const c of ['git push origin main-fix', 'git push origin feature/main', 'git push origin main.v2'])

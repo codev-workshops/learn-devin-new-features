@@ -6,7 +6,7 @@
   "duration_minutes": 180,
   "difficulty": "advanced",
   "prerequisites": [
-    "Repo cloned, Node 22, `npm install` done at the root",
+    "Repo cloned, Node 22, `pnpm install` done at the root",
     "Lab 00 warm-up done once (framing stems and the update skeleton)",
     "Linux path: a Devin session whose VM exposes `/dev/kvm` and the Android SDK (emulator, platform-tools, one x86_64 system image) — see `docs/blueprint.proposed.mobile.yaml`",
     "Optional iOS path: permission to start a Devin session with platform `macos` (Xcode 16.1 or newer, iOS Simulator)"
@@ -24,7 +24,7 @@
         "integration": "Android emulator on the Linux session VM",
         "required": true,
         "fixture": "`labs/13-expo-mobile/evidence/android/` holds reference screenshots from the course build.",
-        "note": "Needs `/dev/kvm`; without it the emulator is too slow to be useful and you stop at `npm run build` (expo export)."
+        "note": "Needs `/dev/kvm`; without it the emulator is too slow to be useful and you stop at `pnpm build` (expo export)."
       },
       {
         "integration": "macOS Devin session (Xcode, iOS Simulator) — optional",
@@ -36,7 +36,7 @@
         "integration": "Live `services/api` (`EXPO_PUBLIC_API_MODE=live`) — optional",
         "required": false,
         "fixture": "Mock mode stands in for it.",
-        "note": "Needs `npm run db:up`, migrate, seed and `npm run dev -w services/api` (port 3001); the emulator reaches the host at `http://10.0.2.2:3001`."
+        "note": "Needs `pnpm db:up`, migrate, seed and `pnpm --filter @harbourline/api run dev` (port 3001); the emulator reaches the host at `http://10.0.2.2:3001`."
       }
     ],
     "not_exercised": [
@@ -47,11 +47,11 @@
   },
   "scenarios": {
     "reset": [
-      "npm run lab:reset -- 13",
+      "pnpm lab:reset -- 13",
       "rm -rf apps/mobile/android apps/mobile/ios apps/mobile/dist",
-      "npm run build --workspace apps/mobile"
+      "pnpm --filter @harbourline/mobile run build"
     ],
-    "clean_state": "No `apps/mobile/android/` or `apps/mobile/ios/` folder exists, `git status` is clean, and `npm run build --workspace apps/mobile` ends with an Android `expo export` into `apps/mobile/dist`. No emulator is running yet (`adb devices` lists nothing). Without Docker, skip the first command: mock mode needs only Node."
+    "clean_state": "No `apps/mobile/android/` or `apps/mobile/ios/` folder exists, `git status` is clean, and `pnpm --filter @harbourline/mobile run build` ends with an Android `expo export` into `apps/mobile/dist`. No emulator is running yet (`adb devices` lists nothing). Without Docker, skip the first command: mock mode needs only Node."
   },
   "injectors": [
     {

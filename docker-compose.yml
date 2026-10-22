@@ -28,7 +28,7 @@ services:
       timeout: 3s
       retries: 12
 
-  # Order API (W1-api). Local development usually runs `npm run dev -w services/api` against the
+  # Order API (W1-api). Local development usually runs `pnpm --filter @harbourline/api run dev` against the
   # postgres service instead; this service exists for the deploy/rollback and incident labs.
   api:
     build:

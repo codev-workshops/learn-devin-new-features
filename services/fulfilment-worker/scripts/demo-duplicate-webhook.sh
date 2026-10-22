@@ -2,7 +2,7 @@
 # End-to-end proof of PLANTED.md#duplicate-webhook using the real wire path:
 #   paygate-fake fire --duplicate  ->  worker inbox (HMAC verified)  ->  worker tick
 # Both deliveries carry the same event_id; the worker applies both, so LH-LAMP-03 goes 3 -> 1.
-# Needs: python3.12 (or python3 >= 3.12), node 22, `npm run build -w services/paygate-fake`.
+# Needs: python3.12 (or python3 >= 3.12), node 22, `pnpm --filter @harbourline/paygate-fake run build`.
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -15,7 +15,7 @@ export PAYGATE_SECRET="${PAYGATE_SECRET:-harbourline-local-paygate-secret}"
 export WORKER_STORE_PATH="${WORKER_STORE_PATH:-$(mktemp -d)/store.json}"
 export PYTHONPATH="$worker/src${PYTHONPATH:+:$PYTHONPATH}"
 
-[ -f "$paygate/dist/cli.js" ] || (cd "$repo" && npm run build -w services/paygate-fake >/dev/null)
+[ -f "$paygate/dist/cli.js" ] || (cd "$repo" && pnpm --filter @harbourline/paygate-fake run build >/dev/null)
 
 echo "# 1. seed the Lamp Week order (1x LH-LAMP-03 reserved, 3 on hand) into $WORKER_STORE_PATH"
 seed="$($PY -m fulfilment_worker seed-demo)"

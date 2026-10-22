@@ -8,19 +8,19 @@ A production-shaped but deliberately imperfect multi-brand e-commerce fixture us
 
 ## 2. Stack and gates
 
-Node 22 + npm 10 workspaces (`apps/*`, `services/*`, `packages/*`, `labs`), Python 3.12 for `services/fulfilment-worker`, PostgreSQL 16 via `docker compose` (`mirror.gcr.io/library/postgres:16-alpine`).
+Node 22 + pnpm 10 workspaces (`apps/*`, `services/*`, `packages/*`, `labs`), Python 3.12 for `services/fulfilment-worker`, PostgreSQL 16 via `docker compose` (`mirror.gcr.io/library/postgres:16-alpine`).
 
-| Command                                                           | Does                                                                             |
-| ----------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `npm run db:up` / `db:down`                                       | Start (and wait for) / stop Postgres                                             |
-| `npm run db:migrate`, `npm run db:seed`                           | Delegated to `services/api`; `db:seed -- --reset` rebuilds the seed-spec dataset |
-| `npm run lab:reset -- <nn>`                                       | Reseed, then `scenarios/lab-reset.sh <nn>` when present                          |
-| `npm test`, `npm run lint`, `npm run build`, `npm run labs:build` | The four gates; `npm run gates` runs all four                                    |
-| `npm run coach:dryrun -- <nn>`                                    | Transcript-driven articulation coach dry run                                     |
+| Command                                                   | Does                                                                             |
+| --------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `pnpm db:up` / `db:down`                                  | Start (and wait for) / stop Postgres                                             |
+| `pnpm db:migrate`, `pnpm db:seed`                         | Delegated to `services/api`; `db:seed -- --reset` rebuilds the seed-spec dataset |
+| `pnpm lab:reset -- <nn>`                                  | Reseed, then `scenarios/lab-reset.sh <nn>` when present                          |
+| `pnpm test`, `pnpm lint`, `pnpm build`, `pnpm labs:build` | The four gates; `pnpm gates` runs all four                                       |
+| `pnpm coach:dryrun -- <nn>`                               | Transcript-driven articulation coach dry run                                     |
 
-Root scripts go through `scripts/ws.mjs`, which runs a script in every workspace that defines it and treats a not-yet-delivered workspace as "nothing to do". That is why all four gates are green on an empty tree; each W1 child is responsible for adding real `test`, `lint` and `build` scripts to its workspace. Python services must also pass `pytest -q` and `ruff check` locally; they are invoked from the workspace `test`/`lint` scripts, not from the root.
+Root scripts are native pnpm: `pnpm -r --if-present run <script>` runs a script in every workspace that defines it and treats a workspace without it as "nothing to do", while `db:*`, `labs:build` and `coach:dryrun` use `pnpm --filter <pkg>`. Each workspace owns its real `test`, `lint` and `build` scripts. Python services must also pass `pytest -q` and `ruff check` locally; they are invoked from the workspace `test`/`lint` scripts, not from the root.
 
-Before every commit: `npm run gates`. Conventional-commit messages. One PR per task, no stacked PRs. Merge to `main` only after Devin Review is clean on the final head and the gates are green with the latest `origin/main` merged in.
+Before every commit: `pnpm gates`. Conventional-commit messages. One PR per task, no stacked PRs. Merge to `main` only after Devin Review is clean on the final head and the gates are green with the latest `origin/main` merged in.
 
 ## 3. Shared-file ownership
 
@@ -28,7 +28,7 @@ Children work in parallel. Touch only the paths your brief owns. If a shared or 
 
 | Path                                                                                                               | Owner                           | Rule for everyone else                                                              |
 | ------------------------------------------------------------------------------------------------------------------ | ------------------------------- | ----------------------------------------------------------------------------------- |
-| root `package.json`, `package-lock.json`, `scripts/ws.mjs`, `scripts/lab-reset.mjs`                                | W0-A                            | Add scripts inside your own workspace `package.json`; root names are pre-registered |
+| root `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `.npmrc`, `scripts/lab-reset.mjs`                    | W0-A                            | Add scripts inside your own workspace `package.json`; root names are pre-registered |
 | root `docker-compose.yml`                                                                                          | W0-A, then W1-api adds `api`    | Other services add their own `compose.<name>.yml` and reference it from docs        |
 | `packages/contracts/openapi.yaml`, `seed-spec.yaml`, `src/index.ts`                                                | W0-A, **frozen after W0**       | Propose changes through the parent as a W1-api follow-up PR                         |
 | `.devin/config.json`, `.devin/rules/`, `.devin/hooks.v1.json`, `.devin/skills/harbourline-dev/`, root `AGENTS.md`  | W0-A                            | Per-service `AGENTS.md` files are owned by the service's child                      |

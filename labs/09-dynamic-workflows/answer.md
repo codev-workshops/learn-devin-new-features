@@ -81,7 +81,7 @@ def audit_stage(inv):
         expected = inv[route_file]
         prompt = (COMMON + f"Audit services/api/src/routes/{route_file} for cross-brand leaks. Endpoints in scope "
                   f"(exactly these): {json.dumps(expected)}. Read the code and the services it calls; you may run "
-                  "the API tests (npm ci && npm test -w services/api) but change nothing. Report every endpoint in "
+                  "the API tests (pnpm install --frozen-lockfile && pnpm --filter @harbourline/api test) but change nothing. Report every endpoint in "
                   "endpoints_checked using the same 'METHOD /path' strings, each confirmed leak in leaks as "
                   "'METHOD /path: one-line reason', and file:line evidence in one string.")
         res = await call(prompt, "audit", AUDIT_SCHEMA, f"audit-{route_file}", "lite")
@@ -105,7 +105,7 @@ async def fix_stage(audit):
     branch = f"audit/lab09-{stem}-fix"  # one branch per route file: fixers never collide
     prompt = (COMMON + f"Fix these confirmed leaks in services/api/src/routes/{audit['route_file']} and nothing "
               f"else: {json.dumps(audit['leaks'], sort_keys=True)}. Add or un-skip a Vitest test per leak that "
-              "fails before and passes after. Run npm ci && npm test -w services/api && npm run lint -w services/api. "
+              "fails before and passes after. Run pnpm install --frozen-lockfile && pnpm --filter @harbourline/api test && pnpm --filter @harbourline/api run lint. "
               f"Commit on a new branch {branch} cut from {BASE_SHA} and push it. This is a throwaway demo branch.")
     fix = await call(prompt, "fix", FIX_SCHEMA, f"fix-{stem}", None)
     log(f"fix-{stem}: {fix['branch']} @ {fix['commit_sha'][:7]}")

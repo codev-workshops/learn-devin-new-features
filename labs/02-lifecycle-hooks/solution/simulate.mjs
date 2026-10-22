@@ -4,7 +4,7 @@
 // and prints what the agent would see. Fixture path for learners without the Devin CLI.
 //
 //   node labs/02-lifecycle-hooks/solution/simulate.mjs --config .devin/hooks.v1.json \
-//        --event PreToolUse --tool exec --command 'npm run db:seed -- --reset'
+//        --event PreToolUse --tool exec --command 'pnpm db:seed -- --reset'
 //
 // Two behaviours the docs do not state are ASSUMED and labelled in the output:
 // a config that does not parse loads no hooks (fail-open), and a hook that exceeds its

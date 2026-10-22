@@ -7,7 +7,7 @@
   "difficulty": "core",
   "prerequisites": [
     "Lab 03 done (rules and skills in this repo), so you know what a skill and a rule look like on their own",
-    "Repo cloned, `npm install` done at the root (the offline checker and its tests run under `labs/`)",
+    "Repo cloned, `pnpm install` done at the root (the offline checker and its tests run under `labs/`)",
     "A Devin account where you can open Customize → Plugins; organization-admin rights are needed only for the shared-scope steps",
     "Optional: the Devin CLI installed locally, to load the plugin from a folder on your machine"
   ],
@@ -56,7 +56,7 @@
       "git switch main && git status --short",
       "git branch --list 'lab04/*' | xargs -r git branch -D",
       "rm -rf ~/harbourline-flash-sale ~/harbourline-flash-sale.zip",
-      "npm run lab:reset -- 04"
+      "pnpm lab:reset -- 04"
     ],
     "clean_state": "On `main` with `git status --short` empty, no local `lab04/*` branches, no `~/harbourline-flash-sale` working folder, and no plugin named `harbourline-flash-sale` installed at any scope you control (check Customize → Plugins at Personal and Organization). The seed-spec dataset is loaded for both brands."
   },

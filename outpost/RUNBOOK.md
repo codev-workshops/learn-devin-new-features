@@ -16,7 +16,7 @@ Sources: [overview](https://docs.devin.ai/cloud/outposts/overview), [quickstart]
 
 ## 2. Build the worker image
 
-From a clean checkout. `outpost/build.sh` bundles the committed HEAD with `git bundle` and builds from the repo root; the Dockerfile clones that bundle into `/workspace/repos/learn-devin-new-features` (origin reset to GitHub) and runs `npm ci --ignore-scripts`. `outpost/Dockerfile.dockerignore` admits only the bundle and `smoke.sh`, so untracked files, `.env` files and uncommitted edits never enter the build context:
+From a clean checkout. `outpost/build.sh` bundles the committed HEAD with `git bundle` and builds from the repo root; the Dockerfile clones that bundle into `/workspace/repos/learn-devin-new-features` (origin reset to GitHub) and runs `pnpm install --frozen-lockfile --ignore-scripts`. `outpost/Dockerfile.dockerignore` admits only the bundle and `smoke.sh`, so untracked files, `.env` files and uncommitted edits never enter the build context:
 
 ```bash
 outpost/build.sh   # tags harbourline-outpost-worker:<short-sha> and :latest

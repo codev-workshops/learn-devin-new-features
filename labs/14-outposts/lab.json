@@ -6,7 +6,7 @@
   "duration_minutes": 120,
   "difficulty": "advanced",
   "prerequisites": [
-    "Repo cloned, `npm install` done at the root, Node 22",
+    "Repo cloned, `pnpm install` done at the root, Node 22",
     "Lab 00 warm-up done once (framing stems and the update skeleton)",
     "Docker on the machine you will build the worker image on (any Linux host or the Devin VM)",
     "Optional live path: an organization with Outposts enabled, an admin who can create an Outpost, and a v3 API token with the `account.outposts.write` scope"
@@ -54,7 +54,7 @@
   },
   "scenarios": {
     "reset": [
-      "npm run lab:reset -- 14",
+      "pnpm lab:reset -- 14",
       "docker compose -f outpost/compose.outpost.yml down -v (only if you started live workers)",
       "git checkout -- outpost/ labs/14-outposts/ && rm -f labs/14-outposts/OUTPOST-REPORT.md"
     ],

@@ -43,7 +43,7 @@ Checker on the reference (`node labs/04-plugin-engineering/solution/plugin-check
 }
 ```
 
-`cd labs && npx vitest run 04-plugin-engineering` replays every criterion and injector (8 tests).
+`cd labs && pnpm exec vitest run 04-plugin-engineering` replays every criterion and injector (8 tests).
 
 ## Install routes
 

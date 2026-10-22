@@ -34,7 +34,7 @@ The reference implementation lives in `labs/02-lifecycle-hooks/solution/` (outsi
 - `psql-ro.sh` — sets `default_transaction_read_only=on` through `PGOPTIONS`, so a `DELETE` fails with "cannot execute DELETE in a read-only transaction".
 - `posttool-audit.mjs` / `.devin/hook-audit.log` — one JSON line per decision and per executed command (`*.log` is git-ignored).
 - `stop-check.mjs` — refuses to stop while `db/migrations/*currency-nullable*.sql` is present; lets the second stop through.
-- `simulate.mjs` — the offline replay; `hooks.test.mjs` is the evidence table as a Vitest suite (`npm test` in `labs/`).
+- `simulate.mjs` — the offline replay; `hooks.test.mjs` is the evidence table as a Vitest suite (`pnpm test` in `labs/`).
 
 ## Worked prompt sequence
 
@@ -60,9 +60,9 @@ If you have no Devin CLI, the last two prompts become replay runs: `node labs/02
 
 | Case | Outcome | What proves it |
 |---|---|---|
-| `npm test` | allow | exit 0, input unchanged |
-| `npm run db:seed -- --reset` (lab DB) | allow | exit 0 |
-| `DATABASE_URL=…staging… npm run db:seed -- --reset` | block | exit 2, reason "targets … not the lab database" |
+| `pnpm test` | allow | exit 0, input unchanged |
+| `pnpm db:seed -- --reset` (lab DB) | allow | exit 0 |
+| `DATABASE_URL=…staging… pnpm db:seed -- --reset` | block | exit 2, reason "targets … not the lab database" |
 | `psql "$DATABASE_URL" -c "delete from carts"` | rewrite | `updatedInput.command` calls `psql-ro.sh`; PostgreSQL answers "read-only transaction"; cart count unchanged |
 | `docker compose exec postgres psql … -c "delete …"` | rewrite | `-e PGOPTIONS='-c default_transaction_read_only=on'` is injected after `exec` (the host wrapper does not exist inside the container) |
 | `psql -c 'SET default_transaction_read_only=off; …'` | block | exit 2; switching the transaction mode is refused |
@@ -90,13 +90,13 @@ If you have no Devin CLI, the last two prompts become replay runs: `node labs/02
 
 ## Model answers to the objections
 
-- **Technical — "Isn't this just a lint rule?"** Acknowledge: both encode a policy. Boundary: a lint rule checks code someone wrote; a hook runs at the moment the agent calls the tool, on the actual command, and can refuse or rewrite it — there is nothing to lint in `npm run db:seed -- --reset`. Evidence: the staging reset was denied with exit 2 and the audit line; the `psql` delete was rewritten and failed read-only, with the row count unchanged. Offer: keep the lint rule for migrations in review *and* the hook for execution; they cover different moments.
+- **Technical — "Isn't this just a lint rule?"** Acknowledge: both encode a policy. Boundary: a lint rule checks code someone wrote; a hook runs at the moment the agent calls the tool, on the actual command, and can refuse or rewrite it — there is nothing to lint in `pnpm db:seed -- --reset`. Evidence: the staging reset was denied with exit 2 and the audit line; the `psql` delete was rewritten and failed read-only, with the row count unchanged. Offer: keep the lint rule for migrations in review *and* the hook for execution; they cover different moments.
 - **Commercial / governance — "If the hook has a bug, are we locked out of our own database?"** Acknowledge: a policy that blocks everything is an outage. Boundary: hooks only govern the agent's tool calls, never a human's terminal, and they are read from a file on a branch — removing it and starting a new session restores the old behaviour. Evidence: the malformed-config injector showed the opposite risk (fail-open), and the slow hook was killed at its timeout rather than hanging the session. Offer: a CI check that parses `hooks.v1.json` and replays the evidence table on every PR, so a broken policy never merges, plus the audit log for the on-call engineer.
 - **Follow-up the coach may ask — "So which is it, open or closed?"** Inside the script: closed (bad input → exit 2). Around the script (bad config, crash, timeout): open. Say both, then the CI check.
 
 ## Debrief
 
-**Alternatives considered.** (a) A rule in `AGENTS.md` / `.devin/rules/` — cheapest, but advisory: the model can ignore or forget it. (b) Permissions in `.devin/config.json` (`deny: ["Bash(npm run db:seed*)"]`) — enforced and simple, but pattern-based on the command text: it cannot inspect `DATABASE_URL`, cannot rewrite, and cannot explain why. (c) Database-side controls (a read-only role for the agent, no network route to staging) — the strongest, and the right long-term answer, but they live outside the repo and take a DBA ticket. (d) Hooks — enforced, inspect the full input, rewrite, log, and live in the repo for review.
+**Alternatives considered.** (a) A rule in `AGENTS.md` / `.devin/rules/` — cheapest, but advisory: the model can ignore or forget it. (b) Permissions in `.devin/config.json` (`deny: ["Bash(pnpm db:seed*)"]`) — enforced and simple, but pattern-based on the command text: it cannot inspect `DATABASE_URL`, cannot rewrite, and cannot explain why. (c) Database-side controls (a read-only role for the agent, no network route to staging) — the strongest, and the right long-term answer, but they live outside the repo and take a DBA ticket. (d) Hooks — enforced, inspect the full input, rewrite, log, and live in the repo for review.
 
 **When each would win.** (a) for style and conventions; (b) when a command is always forbidden regardless of arguments; (c) for production, always, alongside hooks; (d) when the decision depends on arguments or context and the customer wants evidence in the repo.
 

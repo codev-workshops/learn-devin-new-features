@@ -37,9 +37,13 @@ RUN curl -fsSL --proto '=https' --tlsv1.2 -o /tmp/chrome.deb \
 ENV DEVIN_CHROME_PATH=/usr/bin/google-chrome
 
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
-COPY --from=node /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
-RUN ln -sf ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
-    && ln -sf ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+COPY --from=node /usr/local/lib/node_modules/corepack /usr/local/lib/node_modules/corepack
+# Corepack provides the pinned pnpm (root package.json `packageManager`); its cache lives
+# outside any home directory so the unprivileged worker user can read it.
+ENV COREPACK_HOME=/opt/corepack
+RUN ln -sf ../lib/node_modules/corepack/dist/corepack.js /usr/local/bin/corepack \
+    && corepack enable && corepack prepare pnpm@10.34.7 --activate \
+    && chmod -R a+rX /opt/corepack
 
 # /home/devin/.devin/worker is created here so fresh named volumes inherit devin ownership.
 # No passwordless sudo: these workers are long-lived, so sessions get no root. Rebuild the
@@ -59,7 +63,7 @@ WORKDIR /workspace
 RUN git clone --quiet /opt/harbourline-repo.bundle repos/${REPO_NAME} \
     && git -C repos/${REPO_NAME} remote set-url origin ${REPO_URL} \
     && cd repos/${REPO_NAME} \
-    && npm ci --no-audit --no-fund --ignore-scripts
+    && pnpm install --frozen-lockfile --ignore-scripts
 
 # The image's entrypoint is the Devin CLI; arguments go straight to `devin`.
 CMD ["worker", "start"]

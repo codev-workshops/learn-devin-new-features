@@ -1,5 +1,5 @@
 {
-  "description": "Reference policy matrix for lab 10: an enterprise mandatory floor (npm + PayGate sandbox only), an organization recommended default and a stricter automations default.",
+  "description": "Reference policy matrix for lab 10: an enterprise mandatory floor (package registry + PayGate sandbox only), an organization recommended default and a stricter automations default.",
   "profiles": {
     "harbourline-floor": {
       "scope": "enterprise",

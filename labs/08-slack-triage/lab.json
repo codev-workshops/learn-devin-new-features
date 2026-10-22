@@ -7,7 +7,7 @@
   "difficulty": "core",
   "prerequisites": [
     "Lab 12 done or read (Devin Oncall responders), so the responder page is familiar",
-    "Repo cloned, `npm install` done at the root (the offline triage replay and its tests run under `labs/`)",
+    "Repo cloned, `pnpm install` done at the root (the offline triage replay and its tests run under `labs/`)",
     "For the live path: your personal Slack account connected in Settings → Connections → Slack, and a test channel that only you are in. Never a shared support channel",
     "Optional: a Microsoft Teams test channel with the Devin AI app added, for the Teams variant"
   ],
@@ -50,7 +50,7 @@
       "git switch main && git status --short",
       "git branch --list 'lab08/*' | xargs -r git branch -D",
       "rm -f ~/harbourline-triage-scratchpad.json ~/harbourline-triage-notes.md",
-      "npm run lab:reset -- 08"
+      "pnpm lab:reset -- 08"
     ],
     "clean_state": "On `main` with `git status --short` empty, no local `lab08/*` branches, no scratchpad or notes file in your home folder, and no responder or automation of yours watching a Slack or Teams channel (pause or delete it on the Oncall and Automations pages). The offline replay of the base export reports 7 messages, 6 reports and 4 issues."
   },

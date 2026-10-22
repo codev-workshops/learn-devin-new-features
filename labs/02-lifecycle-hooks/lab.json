@@ -6,8 +6,8 @@
   "duration_minutes": 120,
   "difficulty": "core",
   "prerequisites": [
-    "Repo cloned locally, `npm install` done at the root, Node 22",
-    "PostgreSQL up with `npm run db:up` and seeded with `npm run db:seed -- --reset` (only needed to see the read-only wrapper reject a write for real)",
+    "Repo cloned locally, `pnpm install` done at the root, Node 22",
+    "PostgreSQL up with `pnpm db:up` and seeded with `pnpm db:seed -- --reset` (only needed to see the read-only wrapper reject a write for real)",
     "Lab 00 done once, so you know how the voice coach works",
     "Work on a throwaway branch such as `lab/02-<your-handle>`; never commit hooks to `main`"
   ],
@@ -41,11 +41,11 @@
   },
   "scenarios": {
     "reset": [
-      "npm run lab:reset -- 02",
+      "pnpm lab:reset -- 02",
       "git checkout main -- .devin/hooks.v1.json",
       "rm -f .devin/hook-audit.log"
     ],
-    "clean_state": "`.devin/hooks.v1.json` is `{}`, `git status --short` shows nothing under `db/` or `.devin/`, `scenarios/bad-migration.patch` is not applied (no `db/migrations/*currency-nullable*.sql`), and `npm run db:seed -- --reset` has just rebuilt the seed dataset in the lab database."
+    "clean_state": "`.devin/hooks.v1.json` is `{}`, `git status --short` shows nothing under `db/` or `.devin/`, `scenarios/bad-migration.patch` is not applied (no `db/migrations/*currency-nullable*.sql`), and `pnpm db:seed -- --reset` has just rebuilt the seed dataset in the lab database."
   },
   "injectors": [
     {

@@ -92,7 +92,7 @@ for (const [name, content] of Object.entries(outputs)) {
 
 if (check && stale.length) {
   console.error(
-    `gen-mocks: ${stale.join(", ")} out of date with packages/contracts — run \`npm run mocks:gen -w apps/web\``,
+    `gen-mocks: ${stale.join(", ")} out of date with packages/contracts — run \`pnpm --filter @harbourline/web run mocks:gen\``,
   );
   process.exit(1);
 }

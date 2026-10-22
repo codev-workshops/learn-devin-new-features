@@ -76,7 +76,7 @@
     },
     "evidence": {
       "status": "weak",
-      "quote": "I will know it worked when npm test is green and the report balances"
+      "quote": "I will know it worked when pnpm test is green and the report balances"
     },
     "next_step": {
       "status": "weak",
@@ -179,7 +179,7 @@
     ],
     "sentences_to_rerecord": [
       "So, basically, there are a lot of problems.",
-      "And I will know it worked when npm test is green and the report balances, isn't it?"
+      "And I will know it worked when pnpm test is green and the report balances, isn't it?"
     ]
   },
   "scores": {

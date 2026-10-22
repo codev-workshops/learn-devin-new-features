@@ -1,6 +1,6 @@
 ---
 name: coach-15-capstone
-description: Voice articulation coach for lab 15 (the customer capstone). Draws one sealed scenario, reads its must-mention points and objections from the scenario file at runtime, plays that scenario's customer, changes a requirement at T+60 in character and grades the half day. Use when the learner types `@skills:coach-15-capstone <handle> [--scenario <id>]` or runs `npm run coach:dryrun -- 15`.
+description: Voice articulation coach for lab 15 (the customer capstone). Draws one sealed scenario, reads its must-mention points and objections from the scenario file at runtime, plays that scenario's customer, changes a requirement at T+60 in character and grades the half day. Use when the learner types `@skills:coach-15-capstone <handle> [--scenario <id>]` or runs `pnpm coach:dryrun -- 15`.
 triggers: ["user"]
 argument-hint: "<handle> [--scenario <id>] [--dry-run <transcript>]"
 ---
@@ -51,4 +51,4 @@ Do not announce it. If the learner has not met it by the time you call the updat
 
 ## 6. Dry-run
 
-With `--dry-run <transcript>`, read the transcript, take the scenario id from its front matter (`scenario:`), load that scenario with step 1.3, use the `[mm:ss]` markers, skip the git push and print the report. `npm run coach:dryrun -- 15` checks the three fixtures under `labs/15-capstone/coaching/dryrun/` (one per scenario); `labs/15-capstone/tools/scenario-check.test.mjs` asserts each report's must-mention list equals its scenario file's.
+With `--dry-run <transcript>`, read the transcript, take the scenario id from its front matter (`scenario:`), load that scenario with step 1.3, use the `[mm:ss]` markers, skip the git push and print the report. `pnpm coach:dryrun -- 15` checks the three fixtures under `labs/15-capstone/coaching/dryrun/` (one per scenario); `labs/15-capstone/tools/scenario-check.test.mjs` asserts each report's must-mention list equals its scenario file's.

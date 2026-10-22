@@ -1,6 +1,6 @@
 ---
 name: articulation-sample
-description: Worked example of a per-lab articulation coach, for lab 00 (the sample lab). Use when the learner says "coach me on lab 00" or runs `npm run coach:dryrun -- 00`.
+description: Worked example of a per-lab articulation coach, for lab 00 (the sample lab). Use when the learner says "coach me on lab 00" or runs `pnpm coach:dryrun -- 00`.
 triggers: ["user"]
 argument-hint: "[--dry-run <transcript>]"
 ---
@@ -34,4 +34,4 @@ Follow `.devin/skills/articulation-base/SKILL.md` for protocol, timing, rubric, 
 
 ## Dry-run
 
-With `--dry-run <transcript>`, read the transcript file, use its `[t=…]` markers, skip the git push, and write the report to stdout. `npm run coach:dryrun -- 00` does exactly this with `labs/00-sample/transcripts/good.md`.
+With `--dry-run <transcript>`, read the transcript file, use its `[t=…]` markers, skip the git push, and write the report to stdout. `pnpm coach:dryrun -- 00` does exactly this with `labs/00-sample/transcripts/good.md`.

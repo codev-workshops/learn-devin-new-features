@@ -18,16 +18,16 @@ Expo SDK 54 · React Native 0.81 · Expo Router 6 · TypeScript strict. Read the
 
 - Build against `@harbourline/contracts` (resolved to its TypeScript source by `metro.config.js`, `tsconfig.json` and `jest.config.js`). Money stays a two-decimal string + currency; convert with `toMinor`/`fromMinor` only inside `src/api/money.ts` and `src/mocks/store.ts`.
 - `EXPO_PUBLIC_API_MODE=mock` (default) serves the seed in-process; `live` talks to `services/api` at `EXPO_PUBLIC_API_BASE_URL` (default `http://10.0.2.2:3001`, the Android emulator's host loopback).
-- Regenerate the fixture after a seed-spec change: `npm run fixtures`. `npm run build` fails if `seed.json` drifts.
-- `android/` and `ios/` are generated (`npx expo prebuild`); configure native behaviour in `app.json`. Never edit them by hand.
+- Regenerate the fixture after a seed-spec change: `pnpm fixtures`. `pnpm build` fails if `seed.json` drifts.
+- `android/` and `ios/` are generated (`pnpm exec expo prebuild`); configure native behaviour in `app.json`. Never edit them by hand.
 - Do not build iOS from Linux. `modules/harbourline-haptics/ios` is compiled and verified only by the macOS (W4-13) child.
 - Lint/format are workspace-local (`eslint.config.mjs`, `.prettierignore`) because the root ignores `apps/**`.
 
 ## Commands
 
 ```bash
-npm test --workspace apps/mobile        # jest --ci
-npm run lint --workspace apps/mobile    # prettier --check, eslint, tsc --noEmit
-npm run build --workspace apps/mobile   # fixture check + expo export (android)
-npm run android --workspace apps/mobile # prebuild + build + install on the running emulator
+pnpm --filter @harbourline/mobile test        # jest --ci
+pnpm --filter @harbourline/mobile run lint    # prettier --check, eslint, tsc --noEmit
+pnpm --filter @harbourline/mobile run build   # fixture check + expo export (android)
+pnpm --filter @harbourline/mobile run android # prebuild + build + install on the running emulator
 ```

@@ -9,7 +9,7 @@ Say what the problem costs and what will be different on Monday before you say a
 - "I am using Devin to … and I am deliberately not using it to …"
 - "You will know it worked when …"
 
-Sinhala-first note: lead with the outcome. Do not walk through the setup steps in order ("first Node, then npm, then Docker…") before saying what changes for the new starter.
+Sinhala-first note: lead with the outcome. Do not walk through the setup steps in order ("first Node, then pnpm, then Docker…") before saying what changes for the new starter.
 
 ### Think-aloud checkpoints (T+10 and T+40)
 

@@ -14,7 +14,7 @@ role: Group Finance Director, Harbourline, with the external auditor on the line
 
 **Feature request** — Trailhead's support team needs a partial-refund action in the admin console so they stop refunding by hand in the PayGate dashboard.
 
-**Governance constraint** — Before any new endpoint ships, Ms Hale wants evidence that no existing endpoint lets one brand read another brand's data. And every Devin session on this work may reach only the npm registry and the PayGate sandbox — nothing else on the network.
+**Governance constraint** — Before any new endpoint ships, Ms Hale wants evidence that no existing endpoint lets one brand read another brand's data. And every Devin session on this work may reach only the package registry and the PayGate sandbox — nothing else on the network.
 
 ## Requirement change at T+60
 
@@ -22,7 +22,7 @@ role: Group Finance Director, Harbourline, with the external auditor on the line
 
 ## Injected blocker
 
-The fulfilment worker's Python dependencies cannot be installed because the network profile allows only npm and the PayGate sandbox. A learner who widens the allow-list to reach PyPI breaks the constraint; acceptable moves are a pre-built environment (blueprint), a vendored wheel already in the image, or reasoning from the worker code and its existing tests.
+The fulfilment worker's Python dependencies cannot be installed because the network profile allows only the package registry and the PayGate sandbox. A learner who widens the allow-list to reach PyPI breaks the constraint; acceptable moves are a pre-built environment (blueprint), a vendored wheel already in the image, or reasoning from the worker code and its existing tests.
 
 ## Must-mention
 
@@ -32,7 +32,7 @@ The fulfilment worker's Python dependencies cannot be installed because the netw
 | mm2 | 5      | checkpoint-30  | Reproduced with the duplicate-webhook injector: one payment, two confirmations, stock taken twice          |
 | mm3 | 4      | checkpoint-90  | After the change the isolation evidence goes first and the refund is limited to same-brand merchandisers   |
 | mm4 | 5      | update         | Brand isolation checked on every endpoint, and the order-by-id endpoint leaks across brands                |
-| mm5 | 4      | update         | Sessions ran under a profile allowing only npm and the PayGate sandbox, and the blocked Python install did not widen it |
+| mm5 | 4      | update         | Sessions ran under a profile allowing only the package registry and the PayGate sandbox, and the blocked Python install did not widen it |
 | mm6 | 3      | update         | How many orders and customers were double-charged and need a refund                                       |
 | mm7 | 3      | objection-2    | The payment webhook signature is read but never verified, which is a second risk                           |
 

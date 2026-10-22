@@ -61,7 +61,7 @@ After each injector, ask Devin to rerun the resolver for `money.ts` and explain 
 - **wrong-glob:** `trailhead-vat.md` moves to `skipped` ("service/api/…" is misspelt; "src/routes/*.ts" is relative to the service, not the repo root); the tax conflict disappears because the rule is not in context at all — the most dangerous result, because it looks clean. Restore the solution globs and the resolver loads it again.
 - **global-skill:** `skill_collisions` lists `checkout-review` at `~/.config/devin/skills/…` and `.devin/skills/…`. Rename the personal one (for example `my-quick-review`); the shared name belongs to the reviewed procedure.
 
-`npm test` in `labs/` runs the same table as `solution/resolve.test.mjs`.
+`pnpm test` in `labs/` runs the same table as `solution/resolve.test.mjs`.
 
 ## Pitfalls
 

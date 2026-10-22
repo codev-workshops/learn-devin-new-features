@@ -2,7 +2,7 @@
   "name": "@harbourline/api",
   "version": "0.1.0",
   "private": true,
-  "description": "Kad\u00e9 Commerce order API: catalog, cart, checkout, orders, admin console and PayGate webhook receiver (Express 5 + PostgreSQL 16).",
+  "description": "Harbourline order API: catalog, cart, checkout, orders, admin console and PayGate webhook receiver (Express 5 + PostgreSQL 16).",
   "type": "module",
   "engines": {
     "node": ">=22 <23"
@@ -21,7 +21,7 @@
     "db:seed": "tsx src/seed/cli.ts"
   },
   "dependencies": {
-    "@harbourline/contracts": "0.1.0",
+    "@harbourline/contracts": "workspace:*",
     "express": "^5.1.0",
     "node-pg-migrate": "^9.0.0",
     "pg": "^8.16.3",

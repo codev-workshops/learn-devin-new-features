@@ -1,6 +1,6 @@
 ---
 name: coach-11-acu-analytics
-description: Voice articulation coach for lab 11 (ACU governance and analytics — organization limits vs per-user tiers, Newest vs Legacy analytics). Use when the learner types `@skills:coach-11-acu-analytics <handle>` or runs `npm run coach:dryrun -- 11`.
+description: Voice articulation coach for lab 11 (ACU governance and analytics — organization limits vs per-user tiers, Newest vs Legacy analytics). Use when the learner types `@skills:coach-11-acu-analytics <handle>` or runs `pnpm coach:dryrun -- 11`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -55,4 +55,4 @@ Objection 1 is commercial, objection 2 technical. Listen for acknowledge → bou
 
 ## Dry-run
 
-With `--dry-run <transcript>` use the transcript's `[mm:ss]` markers (`timing_method: markers`), grade inline, print the report and skip the progress-log push. `npm run coach:dryrun -- 11` validates the committed strong, mediocre and off-track reports.
+With `--dry-run <transcript>` use the transcript's `[mm:ss]` markers (`timing_method: markers`), grade inline, print the report and skip the progress-log push. `pnpm coach:dryrun -- 11` validates the committed strong, mediocre and off-track reports.

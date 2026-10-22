@@ -1,4 +1,4 @@
-// Metro config for the npm-workspaces monorepo.
+// Metro config for the pnpm-workspaces monorepo.
 // - `@harbourline/contracts` resolves to its TypeScript source so the app never depends on
 //   `packages/contracts/dist` having been built first.
 // - Native singletons (react, react-native, screens, safe-area) are pinned to this workspace's

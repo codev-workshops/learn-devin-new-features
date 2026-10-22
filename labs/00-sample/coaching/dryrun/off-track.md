@@ -17,7 +17,7 @@ Planted: twelve fillers (actually ×4, basically ×2, so yeah ×3, you know ×1,
 [00:35] LEARNER: It costs you money — during Lamp Week you sold lamps you did not have, so maybe forty orders, and the rounding is a few cents on three percent of orders, so, yeah, that adds up.
 [01:05] (pause 12 s)
 [01:17] LEARNER: Um, I would just ask Devin to look at all of it and fix what it finds, like, in one go, and then we run the tests.
-[01:40] LEARNER: And I will know it worked when npm test is green and the report balances, isn't it? Actually, basically, that's it.
+[01:40] LEARNER: And I will know it worked when pnpm test is green and the report balances, isn't it? Actually, basically, that's it.
 [01:52] LEARNER: Done.
 --- segment: checkpoint-10 ---
 [02:10] COACH: Ten minutes in. What are you looking at right now, and what will you check next?
