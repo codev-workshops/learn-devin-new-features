@@ -27,14 +27,14 @@ First read `.devin/skills/articulation-base/SKILL.md` and follow it for protocol
 
 ## Must-mention (accuracy, 30 points)
 
-| id  | weight | point                                                                                                                        |
-| --- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| mm1 | 6      | Only the first 16 KiB of each AGENTS.md is injected automatically; the cap is per file, so keep files short and front-loaded |
-| mm2 | 6      | The blueprint prepares the machine (initialize, maintenance, knowledge); AGENTS.md tells Devin how to work in the repo       |
-| mm3 | 5      | Knowledge notes are migrating to Skills; repeated setup guidance becomes a skill rather than more AGENTS.md text             |
-| mm4 | 4      | Ask Devin for read-only questions about the code, an Agent session for work that has to run, with a reason                   |
-| mm5 | 5      | `lab:reset` is the one supported reset and only reseeds the local lab database, so nobody wipes the shared one               |
-| mm6 | 4      | The stale blueprint path (payroll-worker instead of fulfilment-worker) broke the snapshot build, and the fix was proven      |
+| id  | weight | point                                                                                                                                                       |
+| --- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| mm1 | 6      | Only the first 16 KiB of each AGENTS.md is injected automatically; the cap is per file, so keep files short and front-loaded                                |
+| mm2 | 6      | The blueprint prepares the machine (initialize, maintenance, knowledge); AGENTS.md tells Devin how to work in the repo                                      |
+| mm3 | 5      | Knowledge notes are migrating to Skills; repeated setup guidance becomes a skill rather than more AGENTS.md text                                            |
+| mm4 | 4      | Ask Devin for read-only questions about the code, an Agent session for work that has to run, with a reason                                                  |
+| mm5 | 5      | `lab:reset` is the one supported reset; it reseeds whatever `DATABASE_URL` names (local Compose by default, no host guard), so the docs keep that URL local |
+| mm6 | 4      | The stale blueprint path (payroll-worker instead of fulfilment-worker) broke the snapshot build, and the fix was proven                                     |
 
 Credit a point when the meaning is there with its key number, path or name; paraphrase is fine. mm2 and mm5 belong in framing or update; mm6 in checkpoint-10; mm1 in checkpoint-40; mm3, mm4 in update.
 

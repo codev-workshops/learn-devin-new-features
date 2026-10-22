@@ -15,7 +15,7 @@ Planted: one filler (actually ×1), no tag questions, no long pauses, no omitted
 [00:00] COACH: One minute, and I'm not an engineer. What's the problem and what will Devin change? Go.
 [00:03] LEARNER: Today every new engineer loses their first week to setup, and last month one of them wiped the shared database by following an old note.
 [00:20] LEARNER: Starting Monday, the machine Devin works on comes up ready by itself, because the blueprint prepares the machine, and AGENTS.md tells Devin how to work in the repo.
-[00:41] LEARNER: The only reset anyone is pointed at is lab:reset, which reseeds the local lab database and never the shared one.
+[00:41] LEARNER: The only reset anyone is pointed at is lab:reset; it reseeds the local database by default, so no doc exports a shared URL.
 [01:02] LEARNER: You will know it worked when Monday's starter runs every check on day one without asking anyone. Done.
 
 --- segment: checkpoint-10 ---

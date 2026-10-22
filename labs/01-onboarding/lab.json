@@ -52,7 +52,7 @@
       "npm run lab:reset -- 01",
       "node labs/01-onboarding/tools/agents-budget.mjs"
     ],
-    "clean_state": "The injector revert prints `reverted` and `git status --short` is clean (no `docs/SETUP.md`, no `services/api/src/AGENTS.md`, no `labs/01-onboarding/.env.lab`). `lab:reset` reseeds the local lab database from the seed spec. The budget tool lists six `AGENTS.md` files, all under the limit, with exit code 0. Without Docker, skip the second command: everything else in this lab needs only the clone."
+    "clean_state": "The injector revert prints `reverted` and `git status --short` is clean (no `docs/SETUP.md`, no `services/api/src/AGENTS.md`, no `labs/01-onboarding/.env.lab`). `lab:reset` reseeds whatever `DATABASE_URL` names from the seed spec — the local Compose database when it is unset; it has no host guard, so check `echo $DATABASE_URL` is empty or points at `localhost` before running it. The budget tool lists six `AGENTS.md` files, all under the limit, with exit code 0. Without Docker, skip the second command: everything else in this lab needs only the clone."
   },
   "injectors": [
     {
@@ -68,7 +68,7 @@
     {
       "name": "missing-paygate-secret",
       "when": "T+50 min",
-      "behaviour": "`bash labs/01-onboarding/injectors/inject.sh missing-paygate-secret` writes `labs/01-onboarding/.env.lab` in which the webhook signing key differs between the fake payment provider and the services. Explain what a new engineer would see, and where the key's name (never its value) should be documented."
+      "behaviour": "`bash labs/01-onboarding/injectors/inject.sh missing-paygate-secret` writes `labs/01-onboarding/.env.lab` in which the fake payment provider signs with a rotated key and delivers to the fulfilment worker inbox (port 3003) instead of the API. Explain what a new engineer would see, and where the key's name (never its value) should be documented."
     }
   ],
   "coach": {

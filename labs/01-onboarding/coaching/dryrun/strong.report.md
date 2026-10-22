@@ -43,7 +43,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T10:00:00Z · timing:
 - [x] The blueprint prepares the machine (initialize, maintenance, knowledge); AGENTS.md tells Devin how to work in the repo (6) — “the blueprint prepares the machine, and AGENTS.md tells Devin how to work in the repo”
 - [x] Knowledge notes are migrating to Skills; repeated setup guidance becomes a skill rather than more AGENTS.md text (5) — “The repeated setup steps live in one skill, kade-dev, because our old Knowledge notes are moving to Skills”
 - [x] Ask Devin for read-only questions about the code, an Agent session for work that has to run, with a reason (4) — “I used Ask Devin, because it only reads the code; for the gates and the reset I used an Agent session, because those have to run”
-- [x] `lab:reset` is the one supported reset and only reseeds the local lab database, so nobody wipes the shared one (5) — “lab:reset, which reseeds the local lab database and never the shared one”
+- [x] `lab:reset` is the one supported reset; it reseeds whatever `DATABASE_URL` names (local Compose by default, no host guard), so the docs keep that URL local (5) — “lab:reset; it reseeds the local database by default, so no doc exports a shared URL”
 - [x] The stale blueprint path (payroll-worker instead of fulfilment-worker) broke the snapshot build, and the fix was proven (4) — “still installs services/payroll-worker, and that folder no longer exists”
 
 ## Clarity and pronunciation (transcript-based, approximate)

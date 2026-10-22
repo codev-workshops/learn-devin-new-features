@@ -170,7 +170,7 @@
     },
     {
       "id": "mm5",
-      "point": "`lab:reset` is the one supported reset and only reseeds the local lab database, so nobody wipes the shared one",
+      "point": "`lab:reset` is the one supported reset; it reseeds whatever `DATABASE_URL` names (local Compose by default, no host guard), so the docs keep that URL local",
       "weight": 5,
       "mentioned": true,
       "evidence_quote": "use lab:reset instead of the reset command, so the shared database is safe",
