@@ -17,6 +17,8 @@ class ApprovedHours:
     hourly_rate_cents: int
     iso_week: str
     hours: Decimal
+    work_date: str = ""
+    in_period: bool = True
 
 
 @dataclass(frozen=True)
@@ -30,16 +32,26 @@ class PayLine:
 
 
 def compute_pay_lines(rows: list[ApprovedHours]) -> list[PayLine]:
-    """Aggregates approved hours per user. Overtime is computed per ISO week above 40 hours."""
+    """Aggregates in-period approved hours per user.
+
+    Overtime is per ISO week above 40 hours, in date order. Rows outside the period (from
+    the same ISO weeks) count toward the weekly threshold but are not paid in this export.
+    """
+    weekly_hours: dict[tuple[int, str], Decimal] = {}
     by_user: dict[int, dict] = {}
-    for row in rows:
+    for row in sorted(rows, key=lambda r: (r.user_id, r.iso_week, r.work_date)):
+        key = (row.user_id, row.iso_week)
+        before = weekly_hours.get(key, Decimal("0"))
+        weekly_hours[key] = before + row.hours
+        regular = max(Decimal("0"), min(row.hours, OVERTIME_THRESHOLD_HOURS - before))
+        if not row.in_period:
+            continue
         entry = by_user.setdefault(
             row.user_id,
             {"row": row, "regular": Decimal("0"), "overtime": Decimal("0")},
         )
-        week_regular = min(row.hours, OVERTIME_THRESHOLD_HOURS)
-        entry["regular"] += week_regular
-        entry["overtime"] += row.hours - week_regular
+        entry["regular"] += regular
+        entry["overtime"] += row.hours - regular
 
     lines = []
     for user_id in sorted(by_user):
@@ -59,6 +71,14 @@ def compute_pay_lines(rows: list[ApprovedHours]) -> list[PayLine]:
     return lines
 
 
+FORMULA_PREFIXES = ("=", "+", "-", "@", "\t", "\r")
+
+
+def safe_cell(value: str) -> str:
+    """Neutralises spreadsheet formulas in user-controlled text."""
+    return f"'{value}" if value.startswith(FORMULA_PREFIXES) else value
+
+
 def render_csv(lines: list[PayLine]) -> str:
     buffer = io.StringIO()
     writer = csv.writer(buffer, lineterminator="\n")
@@ -67,8 +87,8 @@ def render_csv(lines: list[PayLine]) -> str:
         writer.writerow(
             [
                 line.user_id,
-                line.email,
-                line.name,
+                safe_cell(line.email),
+                safe_cell(line.name),
                 f"{line.regular_hours:.2f}",
                 f"{line.overtime_hours:.2f}",
                 line.amount_cents,

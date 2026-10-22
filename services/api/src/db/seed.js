@@ -6,6 +6,7 @@ async function seed(db, { reset = false } = {}) {
   const { rows } = await db.query('SELECT COUNT(*)::int AS count FROM tenants');
   if (Number(rows[0].count) > 0) {
     if (!reset) return { skipped: true };
+    if (process.env.NODE_ENV === 'production') throw new Error('Refusing to reset seed data when NODE_ENV=production');
     for (const table of RESET_ORDER) {
       await db.query(`DELETE FROM ${table}`);
     }
@@ -28,7 +29,11 @@ async function seed(db, { reset = false } = {}) {
     if (user.manager) managers[user.email] = user.manager;
   }
   for (const [email, managerEmail] of Object.entries(managers)) {
-    await db.query('UPDATE users SET manager_id = $1 WHERE id = $2', [userIds[managerEmail], userIds[email]]);
+    await db.query('UPDATE users SET manager_id = $1 WHERE id = $2 AND tenant_id = $3', [
+      userIds[managerEmail],
+      userIds[email],
+      tenantIds[USERS.find((user) => user.email === email).tenant],
+    ]);
   }
 
   const projectIds = {};

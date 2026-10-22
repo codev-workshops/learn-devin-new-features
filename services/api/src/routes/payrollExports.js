@@ -3,9 +3,10 @@ const schemas = require('../validation/schemas');
 const { validate } = require('../middleware/validate');
 const { requireRole } = require('../middleware/auth');
 const { asyncHandler } = require('../middleware/asyncHandler');
-const { badRequest, notFound } = require('../errors');
+const { badRequest, conflict, notFound } = require('../errors');
 const { serializeExport } = require('../serializers');
 const { recordAudit } = require('../audit');
+const { withTransaction } = require('../db/transaction');
 
 const MAX_PERIOD_DAYS = 31;
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -57,21 +58,28 @@ function payrollExportRoutes(db) {
         idempotencyKey,
       ]);
       if (existing.rows.length) {
-        return res.status(200).json({ data: serializeExport(existing.rows[0]) });
+        const previous = serializeExport(existing.rows[0]);
+        if (previous.periodStart !== periodStart || previous.periodEnd !== periodEnd) {
+          throw conflict('This Idempotency-Key was already used for a different period');
+        }
+        return res.status(200).json({ data: previous });
       }
 
-      const { rows } = await db.query(
-        `INSERT INTO payroll_exports (tenant_id, requested_by, period_start, period_end, idempotency_key)
-         VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-        [req.user.tenantId, req.user.id, periodStart, periodEnd, idempotencyKey],
-      );
-      await recordAudit(db, {
-        tenantId: req.user.tenantId,
-        actorId: req.user.id,
-        action: 'payroll_export.requested',
-        entity: 'payroll_export',
-        entityId: rows[0].id,
-        details: { periodStart, periodEnd },
+      const rows = await withTransaction(db, async (client) => {
+        const inserted = await client.query(
+          `INSERT INTO payroll_exports (tenant_id, requested_by, period_start, period_end, idempotency_key)
+           VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+          [req.user.tenantId, req.user.id, periodStart, periodEnd, idempotencyKey],
+        );
+        await recordAudit(client, {
+          tenantId: req.user.tenantId,
+          actorId: req.user.id,
+          action: 'payroll_export.requested',
+          entity: 'payroll_export',
+          entityId: inserted.rows[0].id,
+          details: { periodStart, periodEnd },
+        });
+        return inserted.rows;
       });
       req.log?.info({ payrollExportId: rows[0].id, periodStart, periodEnd }, 'Payroll export queued');
       return res.status(202).json({ data: serializeExport(rows[0]) });

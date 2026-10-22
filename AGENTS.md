@@ -3,7 +3,7 @@
 Practice platform for recent Devin features. A multi-tenant workforce app (web, API, payroll worker, mobile) plus promptless labs under `labs/`.
 
 ## Non-negotiables
-- Every SQL query is parameterized and scoped by `tenant_id`. Employees see only their own rows; managers see themselves and direct reports; admins see their whole tenant and never another tenant.
+- Every SQL query is parameterized and scoped by `tenant_id` (exceptions are listed in `.devin/rules/tenant-isolation.md`). Employees see only their own rows; managers see themselves and direct reports; admins see their whole tenant and never another tenant.
 - Validate every API request body, query and route param with the Joi schemas in `services/api/src/validation/schemas.js`. Errors use `{ error: { code, message, details? } }`.
 - Write an `audit_log` row for every state change in the API.
 - Frontend: React 19 + TypeScript strict + MUI only; server state goes through the TanStack Query hooks in `apps/web/src/api/hooks.ts`.

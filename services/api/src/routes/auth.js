@@ -3,9 +3,10 @@ const jwt = require('jsonwebtoken');
 const schemas = require('../validation/schemas');
 const { validate } = require('../middleware/validate');
 const { asyncHandler } = require('../middleware/asyncHandler');
-const { unauthorized } = require('../errors');
+const { notFound, unauthorized } = require('../errors');
 
 // Training-only login: seeded users sign in with their email address and no password.
+// Disabled when NODE_ENV=production unless ALLOW_DEMO_LOGIN=true.
 function authRoutes(db, config) {
   const router = express.Router();
 
@@ -13,6 +14,7 @@ function authRoutes(db, config) {
     '/login',
     validate(schemas.login),
     asyncHandler(async (req, res) => {
+      if (config.demoLogin === false) throw notFound('Demo login is disabled');
       const { email } = req.validated.body;
       const { rows } = await db.query(
         `SELECT u.id, u.tenant_id, u.email, u.name, u.role, t.slug AS tenant_slug, t.name AS tenant_name

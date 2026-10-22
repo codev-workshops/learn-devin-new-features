@@ -26,7 +26,12 @@ export const useHoursReport = (params: { from: string; to: string; groupBy: 'pro
   useQuery({ queryKey: ['reports', 'hours', params], queryFn: () => get<HoursReport>('/reports/hours', params) })
 
 export const usePayrollExports = () =>
-  useQuery({ queryKey: ['payroll-exports'], queryFn: () => get<PayrollExport[]>('/payroll-exports') })
+  useQuery({
+    queryKey: ['payroll-exports'],
+    queryFn: () => get<PayrollExport[]>('/payroll-exports'),
+    refetchInterval: (query) =>
+      query.state.data?.some((item) => item.status === 'queued' || item.status === 'running') ? 3000 : false,
+  })
 
 function useInvalidate(...keys: string[]) {
   const client = useQueryClient()

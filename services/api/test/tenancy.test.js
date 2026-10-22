@@ -37,7 +37,7 @@ describe('tenant isolation and role scoping', () => {
   test('employees cannot query other users', async () => {
     const mia = await (await ctx.as('mia.manager@acme.test')).get('/api/me');
     const res = await (await ctx.as('eli@acme.test')).get(`/api/timesheets?userId=${mia.body.data.id}`);
-    expect(res.status).toBe(403);
+    expect(res.status).toBe(404);
   });
 
   test('projects are tenant scoped and admin-only to create', async () => {

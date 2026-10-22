@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from payroll_worker.export import ApprovedHours, compute_pay_lines, render_csv, totals
+from payroll_worker.export import ApprovedHours, compute_pay_lines, render_csv, safe_cell, totals
 
 
 def row(user_id, week, hours, rate=4500):
@@ -38,3 +38,27 @@ def test_csv_shape():
 def test_empty_period():
     assert render_csv([]).count("\n") == 1
     assert totals([]) == (Decimal("0"), 0)
+
+
+def test_partial_week_counts_hours_outside_period_toward_overtime():
+    week = [
+        ApprovedHours(1, "a@acme.test", "A", 1000, "2026-W40", Decimal("10"), f"2026-09-{d}", True)
+        for d in (28, 29, 30)
+    ] + [
+        ApprovedHours(
+            1, "a@acme.test", "A", 1000, "2026-W40", Decimal("10"), f"2026-10-0{d}", False
+        )
+        for d in (1, 2)
+    ]
+    # September export: 30 in-period hours, all under the 40h weekly threshold.
+    sept = compute_pay_lines(week)[0]
+    assert (sept.regular_hours, sept.overtime_hours) == (Decimal("30"), Decimal("0"))
+    # October export of the same week: 10 regular, then 10 overtime.
+    october = [r.__class__(**{**r.__dict__, "in_period": not r.in_period}) for r in week]
+    line = compute_pay_lines(october)[0]
+    assert (line.regular_hours, line.overtime_hours) == (Decimal("10"), Decimal("10"))
+
+
+def test_formula_cells_are_neutralised():
+    assert safe_cell("=HYPERLINK(1)") == "'=HYPERLINK(1)"
+    assert safe_cell("Eli") == "Eli"

@@ -6,6 +6,7 @@ const { badRequest, forbidden, notFound, conflict } = require('../errors');
 const { serializeEntry } = require('../serializers');
 const { visibleUserIds, appendIdFilter, canReview } = require('../scope');
 const { recordAudit } = require('../audit');
+const { withTransaction } = require('../db/transaction');
 
 const ENTRY_SELECT = `
   SELECT e.id, e.user_id, u.name AS user_name, e.project_id, p.code AS project_code, p.name AS project_name,
@@ -39,8 +40,8 @@ function timesheetRoutes(db) {
     if (!rows.length) throw badRequest('Unknown or archived project');
   }
 
-  async function audit(req, action, entityId, details) {
-    await recordAudit(db, { tenantId: req.user.tenantId, actorId: req.user.id, action, entity: 'timesheet_entry', entityId, details });
+  async function audit(client, req, action, entityId, details) {
+    await recordAudit(client, { tenantId: req.user.tenantId, actorId: req.user.id, action, entity: 'timesheet_entry', entityId, details });
   }
 
   router.get(
@@ -52,7 +53,7 @@ function timesheetRoutes(db) {
       const clauses = ['e.tenant_id = $1'];
       const visible = await visibleUserIds(db, req.user);
       if (userId !== undefined) {
-        if (visible !== null && !visible.includes(userId)) throw forbidden();
+        if (visible !== null && !visible.includes(userId)) throw notFound('User not found');
         appendIdFilter(clauses, params, 'e.user_id', [userId]);
       } else {
         appendIdFilter(clauses, params, 'e.user_id', visible);
@@ -80,13 +81,16 @@ function timesheetRoutes(db) {
     asyncHandler(async (req, res) => {
       const { projectId, workDate, hours, description } = req.validated.body;
       await assertActiveProject(req.user.tenantId, projectId);
-      const { rows } = await db.query(
-        `INSERT INTO timesheet_entries (tenant_id, user_id, project_id, work_date, hours, description)
-         VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
-        [req.user.tenantId, req.user.id, projectId, workDate, hours, description],
-      );
-      await audit(req, 'timesheet.created', rows[0].id, { workDate, hours });
-      res.status(201).json({ data: serializeEntry(await loadEntry(req.user.tenantId, rows[0].id)) });
+      const id = await withTransaction(db, async (client) => {
+        const { rows } = await client.query(
+          `INSERT INTO timesheet_entries (tenant_id, user_id, project_id, work_date, hours, description)
+           VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+          [req.user.tenantId, req.user.id, projectId, workDate, hours, description],
+        );
+        await audit(client, req, 'timesheet.created', rows[0].id, { workDate, hours });
+        return rows[0].id;
+      });
+      res.status(201).json({ data: serializeEntry(await loadEntry(req.user.tenantId, id)) });
     }),
   );
 
@@ -106,12 +110,15 @@ function timesheetRoutes(db) {
         return `${columns[key]} = $${params.length}`;
       });
       params.push(req.user.tenantId, entry.id);
-      await db.query(
-        `UPDATE timesheet_entries SET ${sets.join(', ')}, status = 'draft', updated_at = now()
-          WHERE tenant_id = $${params.length - 1} AND id = $${params.length}`,
-        params,
-      );
-      await audit(req, 'timesheet.updated', entry.id, changes);
+      await withTransaction(db, async (client) => {
+        const result = await client.query(
+          `UPDATE timesheet_entries SET ${sets.join(', ')}, status = 'draft', updated_at = now()
+            WHERE tenant_id = $${params.length - 1} AND id = $${params.length} AND status IN ('draft', 'rejected')`,
+          params,
+        );
+        if (result.rowCount === 0) throw conflict('The entry changed while you were editing it');
+        await audit(client, req, 'timesheet.updated', entry.id, changes);
+      });
       res.json({ data: serializeEntry(await loadEntry(req.user.tenantId, entry.id)) });
     }),
   );
@@ -122,8 +129,14 @@ function timesheetRoutes(db) {
     asyncHandler(async (req, res) => {
       const entry = await loadOwnEntry(req.user, req.validated.params.id);
       if (entry.status !== 'draft') throw conflict('Only draft entries can be deleted');
-      await db.query('DELETE FROM timesheet_entries WHERE tenant_id = $1 AND id = $2', [req.user.tenantId, entry.id]);
-      await audit(req, 'timesheet.deleted', entry.id, {});
+      await withTransaction(db, async (client) => {
+        const result = await client.query(
+          "DELETE FROM timesheet_entries WHERE tenant_id = $1 AND id = $2 AND status = 'draft'",
+          [req.user.tenantId, entry.id],
+        );
+        if (result.rowCount === 0) throw conflict('Only draft entries can be deleted');
+        await audit(client, req, 'timesheet.deleted', entry.id, {});
+      });
       res.status(204).end();
     }),
   );
@@ -134,11 +147,15 @@ function timesheetRoutes(db) {
     asyncHandler(async (req, res) => {
       const entry = await loadOwnEntry(req.user, req.validated.params.id);
       if (!EDITABLE.includes(entry.status)) throw conflict(`Entries that are ${entry.status} cannot be submitted`);
-      await db.query(
-        "UPDATE timesheet_entries SET status = 'submitted', updated_at = now() WHERE tenant_id = $1 AND id = $2",
-        [req.user.tenantId, entry.id],
-      );
-      await audit(req, 'timesheet.submitted', entry.id, {});
+      await withTransaction(db, async (client) => {
+        const result = await client.query(
+          `UPDATE timesheet_entries SET status = 'submitted', updated_at = now()
+            WHERE tenant_id = $1 AND id = $2 AND status IN ('draft', 'rejected')`,
+          [req.user.tenantId, entry.id],
+        );
+        if (result.rowCount === 0) throw conflict('The entry changed before it could be submitted');
+        await audit(client, req, 'timesheet.submitted', entry.id, {});
+      });
       res.json({ data: serializeEntry(await loadEntry(req.user.tenantId, entry.id)) });
     }),
   );
@@ -155,13 +172,16 @@ function timesheetRoutes(db) {
         const entry = await loadEntry(req.user.tenantId, req.validated.params.id);
         if (!(await canReview(db, req.user, entry.user_id))) throw forbidden('You cannot review this entry');
         if (entry.status !== 'submitted') throw conflict(`Entries that are ${entry.status} cannot be reviewed`);
-        await db.query(
-          `UPDATE timesheet_entries
-              SET status = $1, reviewed_by = $2, reviewed_at = now(), review_note = $3, updated_at = now()
-            WHERE tenant_id = $4 AND id = $5`,
-          [status, req.user.id, req.validated.body.note || null, req.user.tenantId, entry.id],
-        );
-        await audit(req, `timesheet.${status}`, entry.id, { note: req.validated.body.note });
+        await withTransaction(db, async (client) => {
+          const result = await client.query(
+            `UPDATE timesheet_entries
+                SET status = $1, reviewed_by = $2, reviewed_at = now(), review_note = $3, updated_at = now()
+              WHERE tenant_id = $4 AND id = $5 AND status = 'submitted'`,
+            [status, req.user.id, req.validated.body.note || null, req.user.tenantId, entry.id],
+          );
+          if (result.rowCount === 0) throw conflict('The entry was already reviewed');
+          await audit(client, req, `timesheet.${status}`, entry.id, { note: req.validated.body.note });
+        });
         res.json({ data: serializeEntry(await loadEntry(req.user.tenantId, entry.id)) });
       }),
     );

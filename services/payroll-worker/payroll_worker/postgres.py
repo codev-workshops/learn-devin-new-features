@@ -1,4 +1,7 @@
-"""PostgreSQL repository. Every query is parameterized and scoped by tenant_id."""
+"""PostgreSQL repository. Queries are parameterized; job queries are scoped by tenant_id.
+
+CLAIM_SQL is the one cross-tenant query: it picks the next job from the shared queue.
+"""
 
 from decimal import Decimal
 
@@ -13,6 +16,7 @@ UPDATE payroll_exports
  WHERE id = (
    SELECT id FROM payroll_exports
     WHERE status = 'queued'
+       OR (status = 'running' AND started_at < now() - make_interval(secs => %s))
     ORDER BY created_at, id
     LIMIT 1
     FOR UPDATE SKIP LOCKED
@@ -20,34 +24,38 @@ UPDATE payroll_exports
 RETURNING id, tenant_id, period_start::text, period_end::text, attempts
 """
 
+# Whole ISO weeks that overlap the period, so overtime thresholds see hours outside it.
 APPROVED_HOURS_SQL = """
 SELECT u.id, u.email, u.name, u.hourly_rate_cents,
        to_char(e.work_date, 'IYYY-"W"IW') AS iso_week,
-       SUM(e.hours) AS hours
+       SUM(e.hours) AS hours,
+       e.work_date::text AS work_date,
+       e.work_date BETWEEN %(start)s AND %(end)s AS in_period
   FROM timesheet_entries e
-  JOIN users u ON u.id = e.user_id AND u.tenant_id = e.tenant_id
- WHERE e.tenant_id = %s
+  JOIN users u ON u.id = e.user_id AND u.tenant_id = %(tenant)s
+ WHERE e.tenant_id = %(tenant)s
    AND e.status = 'approved'
-   AND e.work_date BETWEEN %s AND %s
- GROUP BY u.id, u.email, u.name, u.hourly_rate_cents, iso_week
- ORDER BY u.id, iso_week
+   AND e.work_date BETWEEN date_trunc('week', %(start)s::date)::date
+                       AND date_trunc('week', %(end)s::date)::date + 6
+ GROUP BY u.id, u.email, u.name, u.hourly_rate_cents, e.work_date
+ ORDER BY u.id, e.work_date
 """
 
 
 class PostgresRepository:
-    def __init__(self, conn: psycopg.Connection):
+    def __init__(self, conn: psycopg.Connection, lease_seconds: int = 900):
         self.conn = conn
+        self.lease_seconds = lease_seconds
 
     def claim_next(self) -> ExportJob | None:
         with self.conn.transaction():
-            row = self.conn.execute(CLAIM_SQL).fetchone()
+            row = self.conn.execute(CLAIM_SQL, (self.lease_seconds,)).fetchone()
         return ExportJob(*row) if row else None
 
     def approved_hours(self, job: ExportJob) -> list[ApprovedHours]:
-        rows = self.conn.execute(
-            APPROVED_HOURS_SQL, (job.tenant_id, job.period_start, job.period_end)
-        ).fetchall()
-        return [ApprovedHours(*row[:5], Decimal(row[5])) for row in rows]
+        params = {"tenant": job.tenant_id, "start": job.period_start, "end": job.period_end}
+        rows = self.conn.execute(APPROVED_HOURS_SQL, params).fetchall()
+        return [ApprovedHours(*row[:5], Decimal(row[5]), row[6], row[7]) for row in rows]
 
     def mark_succeeded(self, job: ExportJob, file_path: str, hours: Decimal, cents: int) -> None:
         with self.conn.transaction():
