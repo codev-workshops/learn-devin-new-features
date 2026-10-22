@@ -29,7 +29,7 @@ repos:
             "emulator" "system-images;android-35;google_apis;x86_64"
           echo no | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd \
             -n kade_android -k "system-images;android-35;google_apis;x86_64" -d pixel_6 --force
-          {
+          grep -q 'android-sdk/platform-tools' "$HOME/.bashrc" 2>/dev/null || {
             echo 'export ANDROID_HOME="$HOME/android-sdk"'
             echo 'export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"'
           } >> "$HOME/.bashrc"
