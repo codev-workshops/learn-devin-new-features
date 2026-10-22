@@ -1,6 +1,7 @@
 // Evidence table for lab 04: the reference plugin and each injector, read through plugin-check.mjs.
 import path from 'node:path';
-import { readFileSync } from 'node:fs';
+import os from 'node:os';
+import { cpSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { inspect, proposeEdit, reviseUpload, runPreToolHook } from './plugin-check.mjs';
@@ -22,6 +23,20 @@ describe('lab 04 reference plugin', () => {
   it('kit check flags a manifest-only bundle', () => {
     const k = inspect(path.join(INJECTORS, 'revision-2', 'kade-flash-sale'), { kit: true });
     expect(k.problems).toHaveLength(5);
+  });
+
+  it('kit check needs the manifest, both named procedures and a real PreToolUse command', () => {
+    const tmp = mkdtempSync(path.join(os.tmpdir(), 'kit-'));
+    cpSync(PLUGIN, tmp, { recursive: true });
+    rmSync(path.join(tmp, '.devin-plugin'), { recursive: true });
+    renameSync(path.join(tmp, 'skills', 'flash-sale-incident'), path.join(tmp, 'skills', 'banner-copy'));
+    writeFileSync(path.join(tmp, 'skills', 'banner-copy', 'SKILL.md'), '---\nname: banner-copy\n---\n');
+    writeFileSync(path.join(tmp, 'hooks.json'), JSON.stringify({ PreToolUse: [] }));
+    const k = inspect(tmp, { kit: true }).problems.join('\n');
+    rmSync(tmp, { recursive: true });
+    expect(k).toMatch(/no \.devin-plugin\/plugin\.json manifest/);
+    expect(k).toMatch(/missing skill skills\/flash-sale-incident/);
+    expect(k).toMatch(/no PreToolUse hook command/);
   });
 
   it('bundles both procedures as skills, plus rules, a subagent, a hook and an MCP', () => {
