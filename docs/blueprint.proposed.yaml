@@ -3,11 +3,13 @@
 # Keep this file and the settings in sync. No secrets here. Every step is idempotent.
 # History: W0-A drafted the first version; W0-B applied it (22 Oct 2026) after verifying each
 # command on a session VM, dropping the stale payroll-worker steps and unverified docker pulls.
+# W1-api (22 Oct 2026) added `cp -n .env.example .env` (DATABASE_URL for db:migrate/db:seed).
 # W2-12 (22 Oct 2026) applied it to the settings blueprint and added the fulfilment-worker pip install
 # (pytest/ruff for the worker gates); `npm test` also needs `npm run build` (contracts dist) and `npm run db:up` first.
 initialize: |
   export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
   nvm install 22 >/dev/null && nvm alias default 22 >/dev/null
+  cp -n .env.example .env || true
 maintenance: |
   export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"; nvm use 22 >/dev/null
   npm install --no-audit --no-fund
@@ -27,7 +29,7 @@ knowledge:
       npm run gates   (test, lint, build, labs:build) && npm run coach:dryrun -- 00
   - name: startup
     contents: |
-      npm run db:up (Compose Postgres 16 from mirror.gcr.io) && npm run db:migrate && npm run db:seed — both db scripts are no-ops until W1-api lands. Lab pages: npm run labs:build, then open labs/index.html from file://.
+      npm run db:up (Compose Postgres 16 from mirror.gcr.io) && npm run db:migrate && npm run db:seed -- --reset (node-pg-migrate reads DATABASE_URL from the root .env created by initialize). API: npm run dev -w services/api (3001); KADE_NOW=2026-10-22T09:00:00Z pins the clock. Lab pages: npm run labs:build, then open labs/index.html from file://.
   - name: notes
     contents: |
       Node 22 via nvm (root engines ">=22 <23"); gates also pass on Node 20/24. Python deps for services/fulfilment-worker come from maintenance (pip install -e "services/fulfilment-worker[dev]"). On a fresh VM run npm run build and npm run db:up before npm run gates (services/api tests import the built contracts and need Postgres).
