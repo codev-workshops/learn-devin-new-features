@@ -1,0 +1,103 @@
+{
+  "number": 15,
+  "slug": "capstone",
+  "title": "Customer capstone — one sealed envelope: an incident, a feature request and a governance constraint",
+  "feature": "Learner's choice. You pick and combine the Devin capabilities from labs 01–14; nothing on this page tells you which.",
+  "duration_minutes": 240,
+  "difficulty": "advanced",
+  "prerequisites": [
+    "Labs 01–14 attempted (at least their fixture paths), so you know what each capability does and costs",
+    "Repo cloned, `npm install` done at the root, Node 22, Docker for `npm run db:up`",
+    "A facilitator or the capstone coach to hand you a sealed envelope; you never choose or open it yourself",
+    "Half a day blocked in your calendar, with the voice call free to stay connected while you work"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Kadé stack (API, worker, PayGate fake, seed data, scenario injectors)",
+        "required": true,
+        "fixture": "`npm run db:up && npm run lab:reset -- 15`, then `npm run dev:api`; every injector in `scenarios/` talks only to the API.",
+        "note": "Zero credentials. This is the only part every envelope needs."
+      },
+      {
+        "integration": "Observability, paging and cloud evidence (Datadog, PagerDuty, AWS, GCP, BigQuery, Workspace)",
+        "required": false,
+        "fixture": "`fixtures/mcp/` and its local shim, `observability/` and `infra/` (the same fixtures labs 07, 08 and 12 use).",
+        "note": "Use a live connection only if your organization already has one; never ask anyone for credentials."
+      },
+      {
+        "integration": "Governance surfaces (Security Profiles, AI Guardrails, ACU limits, Outposts)",
+        "required": false,
+        "fixture": "The offline models from labs 10, 11 and 14 (`labs/10-guardrails/solution/`, `labs/11-acu-analytics/tools/`, `labs/14-outposts/tools/`).",
+        "note": "Changing a real organization setting needs an admin; the observer path is acceptable if you say so."
+      },
+      {
+        "integration": "Slack or Teams",
+        "required": false,
+        "fixture": "Speak the customer update on the call; a written copy goes in your capstone report.",
+        "note": "Post nowhere the customer did not ask for."
+      }
+    ],
+    "fixture_only_story": "Every envelope can be completed with the local stack and the repo's fixtures. Where a live integration would have been the natural choice, say so, show what the fixture proved and list the live step as not exercised.",
+    "not_exercised": [
+      "Any live integration your organization has not already connected (you list which).",
+      "Organization-level settings you are not an admin for (you describe them, you do not change them)."
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "npm run db:up",
+      "npm run lab:reset -- 15",
+      "git switch main && git status --short (must print nothing) — work on your own leaf branch, never on main"
+    ],
+    "clean_state": "Seed-spec dataset for both brands, no scenario orders, every planted defect still in place on `main`, `bad-migration.patch` not applied, `scenarios/.state/` empty, and you have not read anything under `labs/15-capstone/scenarios/`."
+  },
+  "injectors": [
+    {
+      "name": "envelope",
+      "when": "T+0",
+      "behaviour": "The coach (or your facilitator) reads one sealed envelope to you in the customer's voice. It names an incident, a feature request and a governance constraint. You get it once; take notes."
+    },
+    {
+      "name": "requirement-change",
+      "when": "T+60 min",
+      "behaviour": "The customer changes one requirement, in character, without warning. Decide out loud what you keep, what you drop and what you re-plan."
+    },
+    {
+      "name": "injected-blocker",
+      "when": "between T+60 and T+150",
+      "behaviour": "Something you depend on stops working the way you expected. The coach will not tell you what it is."
+    },
+    {
+      "name": "cost-challenge",
+      "when": "objection round",
+      "behaviour": "Someone with a budget asks what this half day cost and whether it was worth it. Have your numbers."
+    },
+    {
+      "name": "security-objection",
+      "when": "objection round",
+      "behaviour": "Someone responsible for risk challenges a choice you made. You get a follow-up question if your answer skips evidence."
+    }
+  ],
+  "coach": {
+    "skill": "coach-15-capstone",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "90-second framing after the envelope", "target_seconds": 90 },
+      { "id": "checkpoint-30", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+30)", "at_minute": 30, "target_seconds": 45 },
+      { "id": "checkpoint-90", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+90, after the change)", "at_minute": 90, "target_seconds": 45 },
+      { "id": "checkpoint-150", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+150)", "at_minute": 150, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "Four-minute unscripted customer update", "target_seconds": 240 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 with follow-up", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 with follow-up", "target_seconds": 90 },
+      { "id": "objection-3", "kind": "objection", "label": "Objection 3 with follow-up", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — introduction and feature index", "url": "https://docs.devin.ai/", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — voice mode (start a call from the message box; transcript lands in session history)", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Skills (repo skills under .devin/skills, @skills: invocation, triggers)", "url": "https://docs.devin.ai/product-guides/skills", "date": "fetched 2026-10-22" },
+    { "title": "Devin release notes 2026 (window used by the course: Aug 21 – Oct 21, 2026)", "url": "https://docs.devin.ai/release-notes/2026", "date": "fetched 2026-10-22" }
+  ]
+}

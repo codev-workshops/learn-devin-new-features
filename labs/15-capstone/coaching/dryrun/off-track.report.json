@@ -1,0 +1,256 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 15,
+    "slug": "capstone",
+    "coach": "coach-15-capstone"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T14:20:00Z",
+    "run_index": 1,
+    "transcript": "labs/15-capstone/coaching/dryrun/off-track.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "90-second framing after the envelope",
+      "target_seconds": 90,
+      "actual_seconds": 135,
+      "delta_seconds": 45,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-30",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+30)",
+      "target_seconds": 45,
+      "actual_seconds": 70,
+      "delta_seconds": 25,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-90",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+90, after the change)",
+      "target_seconds": 45,
+      "actual_seconds": 20,
+      "delta_seconds": -25,
+      "verdict": "under"
+    },
+    {
+      "segment": "checkpoint-150",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+150)",
+      "target_seconds": 45,
+      "actual_seconds": 75,
+      "delta_seconds": 30,
+      "verdict": "over"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Four-minute unscripted customer update",
+      "target_seconds": 240,
+      "actual_seconds": 120,
+      "delta_seconds": -120,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 with follow-up",
+      "target_seconds": 90,
+      "actual_seconds": 40,
+      "delta_seconds": -50,
+      "verdict": "under",
+      "question": "An audit of every endpoint sounds expensive. Why not sample ten?"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 with follow-up",
+      "target_seconds": 90,
+      "actual_seconds": 35,
+      "delta_seconds": -55,
+      "verdict": "under",
+      "question": "You let an AI agent work on our payment webhooks. What stops it from breaking the signature check?"
+    },
+    {
+      "segment": "objection-3",
+      "kind": "objection",
+      "label": "Objection 3 with follow-up",
+      "target_seconds": 90,
+      "actual_seconds": 130,
+      "delta_seconds": 40,
+      "verdict": "over",
+      "question": "I am the auditor. How do I verify your evidence without trusting Devin?"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "missing",
+      "quote": "I will start with the refund button because that is the thing the support team asked for"
+    },
+    "approach": {
+      "status": "weak",
+      "quote": "So the plan is refund, then the worker, then the audit."
+    },
+    "evidence": {
+      "status": "missing",
+      "quote": "It is basically working."
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "Can we look at it tomorrow?"
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 10.4,
+    "filler_count": 12,
+    "filler_rate_per_minute": 1.15,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 1
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "you know",
+        "count": 1
+      },
+      {
+        "word": "like",
+        "count": 2
+      },
+      {
+        "word": "um",
+        "count": 6
+      }
+    ],
+    "tag_questions": 2,
+    "tag_question_examples": [
+      "Um, okay, so I will start with the refund button because that is the thing the support team asked for, right?",
+      "Um, it is taking longer than I thought because the API has no refund endpoint, no?"
+    ],
+    "long_pauses": [
+      {
+        "at": "02:47",
+        "seconds": 12,
+        "segment": "checkpoint-30"
+      },
+      {
+        "at": "05:30",
+        "seconds": 14,
+        "segment": "checkpoint-150"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "The worker processes the same payment webhook twice because it ignores the event id, so it must dedupe on it",
+      "weight": 6,
+      "mentioned": true,
+      "belonged_in": "framing",
+      "evidence_quote": "the worker processes the same payment webhook twice because it ignores the event id, so it must dedupe on it"
+    },
+    {
+      "id": "mm2",
+      "point": "Reproduced with the duplicate-webhook injector: one payment, two confirmations, stock taken twice",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "checkpoint-30"
+    },
+    {
+      "id": "mm3",
+      "point": "After the change the isolation evidence goes first and the refund is limited to same-brand merchandisers",
+      "weight": 4,
+      "mentioned": false,
+      "belonged_in": "checkpoint-90"
+    },
+    {
+      "id": "mm4",
+      "point": "Brand isolation checked on every endpoint, and the order-by-id endpoint leaks across brands",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "checkpoint-150"
+    },
+    {
+      "id": "mm5",
+      "point": "Sessions ran under a profile allowing only npm and the PayGate sandbox, and the blocked Python install did not widen it",
+      "weight": 4,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm6",
+      "point": "How many orders and customers were double-charged and need a refund",
+      "weight": 3,
+      "mentioned": true,
+      "belonged_in": "update",
+      "evidence_quote": "Around thirty orders were double-charged across both brands, about twenty-five customers"
+    },
+    {
+      "id": "mm7",
+      "point": "The payment webhook signature is read but never verified, which is a second risk",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "objection-2"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [
+      "Um, okay, so I will start with the refund button because that is the thing the support team asked for, right?",
+      "So I added PyPI to the allowed hosts and then it worked."
+    ],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 9,
+      "max": 30,
+      "anchor": "Only the dedupe cause and the affected count stated; no reproduction, no T+60 re-plan, no isolation audit, no profile evidence, no signature risk (anchor: 0–10 = two of seven points)."
+    },
+    "structure": {
+      "score": 7,
+      "max": 25,
+      "anchor": "Feature before incident; no evidence anywhere; the update ends on a question (anchor: 5–9 = parts missing)."
+    },
+    "customer_relevance": {
+      "score": 6,
+      "max": 20,
+      "anchor": "The auditor's constraint is deferred and the T+60 change is never acknowledged; widening the network breaks the envelope (anchor: 0–7 = customer outcome absent)."
+    },
+    "brevity_and_fluency": {
+      "score": 3,
+      "max": 15,
+      "anchor": "Seven of eight segments off target; twelve fillers in 10.4 minutes, two tag questions, two long pauses (anchor: 0–4 = most segments off, frequent fillers)."
+    },
+    "recovery": {
+      "score": 2,
+      "max": 10,
+      "anchor": "No objection held the pattern; every follow-up was needed and none produced evidence (anchor: 0–3 = conceded or deflected)."
+    },
+    "total": 27
+  },
+  "stems": [
+    "\"Customers are being charged twice; that goes first.\" — rank by cost before choosing the fun problem.",
+    "\"I kept the constraint and did this instead…\" — never widen a permission to get past a blocker; say what you did instead.",
+    "\"You can re-run this without me: …\" — give the auditor one command and one table."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 15 (scenario double-charge-audit); no previous run to compare with."
+}
