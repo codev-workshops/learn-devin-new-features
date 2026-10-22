@@ -1,0 +1,7 @@
+{
+  "$comment": "Google Workspace fixtures: a merchandiser Sheet and the incident Doc, both in infra/workspace.",
+  "sheets": {
+    "1KadeLampWeek2026PlanningSheetFixture": "infra/workspace/merchandiser-sheet-lamp-week.json"
+  },
+  "docs": { "1KadeIncident2187DocFixture": "infra/workspace/incident-doc-2187.md" }
+}

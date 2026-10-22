@@ -1,0 +1,48 @@
+[
+  {
+    "name": "order_date",
+    "type": "DATE",
+    "mode": "REQUIRED",
+    "description": "UTC date the order was placed"
+  },
+  {
+    "name": "brand",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "lumen-home | trailhead-supply"
+  },
+  {
+    "name": "sku",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Base SKU (variants rolled up)"
+  },
+  {
+    "name": "orders",
+    "type": "INT64",
+    "mode": "REQUIRED",
+    "description": "Orders containing the SKU"
+  },
+  { "name": "units", "type": "INT64", "mode": "REQUIRED", "description": "Units ordered" },
+  {
+    "name": "gross_revenue",
+    "type": "NUMERIC",
+    "mode": "REQUIRED",
+    "description": "Σ lineTotal in the brand currency (string-decimal in the CSV)"
+  },
+  { "name": "currency", "type": "STRING", "mode": "REQUIRED", "description": "USD | EUR" },
+  {
+    "name": "on_hand_eod",
+    "type": "INT64",
+    "mode": "NULLABLE",
+    "description": "On-hand at 23:59 UTC; negative = oversold"
+  },
+  { "name": "refunded_orders", "type": "INT64", "mode": "REQUIRED" },
+  {
+    "name": "duplicate_webhooks",
+    "type": "INT64",
+    "mode": "REQUIRED",
+    "description": "payment.* events with an event_id already processed that day"
+  },
+  { "name": "exported_at", "type": "TIMESTAMP", "mode": "REQUIRED" }
+]

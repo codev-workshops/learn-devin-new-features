@@ -1,0 +1,5 @@
+{
+  "$comment": "GCP fixtures served by the shim as YAML text; descriptors live in infra/gcp.",
+  "cloud_run_services": ["infra/gcp/cloud-run-fulfilment-worker.yaml"],
+  "pubsub": "infra/gcp/pubsub-paygate-webhooks.yaml"
+}

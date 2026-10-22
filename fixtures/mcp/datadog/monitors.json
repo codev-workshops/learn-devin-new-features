@@ -1,0 +1,7 @@
+{
+  "$comment": "Datadog GET /api/v1/monitor shape: the two monitors from observability/datadog inlined by the shim.",
+  "monitors": [
+    { "$file": "observability/datadog/monitor-negative-on-hand.json" },
+    { "$file": "observability/datadog/monitor-webhook-failure-rate.json" }
+  ]
+}

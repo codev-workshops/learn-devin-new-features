@@ -1,0 +1,172 @@
+{
+  "$comment": "OTLP/JSON: the same PayGate event evt_9f2a7c01 delivered twice (attempt 1 and 2) for order LH-100611. The worker processes both: two payment_received events, two stock decrements, two queued emails. No span checks event_id against processed_events.",
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          { "key": "service.name", "value": { "stringValue": "kade-fulfilment-worker" } },
+          { "key": "service.version", "value": { "stringValue": "2026.10.15" } },
+          { "key": "deployment.environment", "value": { "stringValue": "prod" } },
+          { "key": "cloud.provider", "value": { "stringValue": "gcp" } },
+          { "key": "cloud.region", "value": { "stringValue": "europe-west1" } }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": { "name": "kade.worker", "version": "1.0.0" },
+          "spans": [
+            {
+              "traceId": "77e1d2c3b4a5968778695a4b3c2d1e0f",
+              "spanId": "aaaa000011112222",
+              "name": "webhook.process payment.succeeded",
+              "kind": 5,
+              "startTimeUnixNano": "1792634801118000000",
+              "endTimeUnixNano": "1792634801190000000",
+              "attributes": [
+                { "key": "messaging.system", "value": { "stringValue": "kade.outbox" } },
+                { "key": "paygate.event_id", "value": { "stringValue": "evt_9f2a7c01" } },
+                { "key": "paygate.attempt", "value": { "intValue": "1" } },
+                { "key": "kade.order.number", "value": { "stringValue": "LH-100611" } },
+                { "key": "kade.idempotency.checked", "value": { "boolValue": false } }
+              ],
+              "status": { "code": 1 }
+            },
+            {
+              "traceId": "77e1d2c3b4a5968778695a4b3c2d1e0f",
+              "spanId": "aaaa000011112223",
+              "parentSpanId": "aaaa000011112222",
+              "name": "UPDATE kade.inventory",
+              "kind": 3,
+              "startTimeUnixNano": "1792634801130000000",
+              "endTimeUnixNano": "1792634801135000000",
+              "attributes": [
+                { "key": "db.system", "value": { "stringValue": "postgresql" } },
+                {
+                  "key": "db.statement",
+                  "value": {
+                    "stringValue": "UPDATE inventory SET on_hand = on_hand - $1 WHERE sku = $2 AND warehouse = $3"
+                  }
+                },
+                { "key": "kade.sku", "value": { "stringValue": "LH-LAMP-03" } },
+                { "key": "kade.inventory.on_hand_after", "value": { "intValue": "-29" } }
+              ],
+              "status": { "code": 1 }
+            },
+            {
+              "traceId": "77e1d2c3b4a5968778695a4b3c2d1e0f",
+              "spanId": "aaaa000011112224",
+              "parentSpanId": "aaaa000011112222",
+              "name": "INSERT kade.order_events",
+              "kind": 3,
+              "startTimeUnixNano": "1792634801140000000",
+              "endTimeUnixNano": "1792634801143000000",
+              "attributes": [
+                {
+                  "key": "db.statement",
+                  "value": {
+                    "stringValue": "INSERT INTO order_events (order_id, type, source, detail) VALUES ($1, 'payment_received', 'webhook', $2)"
+                  }
+                }
+              ],
+              "status": { "code": 1 }
+            },
+            {
+              "traceId": "77e1d2c3b4a5968778695a4b3c2d1e0f",
+              "spanId": "aaaa000011112225",
+              "parentSpanId": "aaaa000011112222",
+              "name": "INSERT kade.outbox",
+              "kind": 3,
+              "startTimeUnixNano": "1792634801150000000",
+              "endTimeUnixNano": "1792634801153000000",
+              "attributes": [
+                {
+                  "key": "db.statement",
+                  "value": {
+                    "stringValue": "INSERT INTO outbox (kind, order_id, payload) VALUES ('email_queued', $1, $2)"
+                  }
+                },
+                { "key": "kade.email.template", "value": { "stringValue": "order_confirmed" } }
+              ],
+              "status": { "code": 1 }
+            },
+
+            {
+              "traceId": "77e1d2c3b4a5968778695a4b3c2d1e10",
+              "spanId": "bbbb000011112222",
+              "name": "webhook.process payment.succeeded",
+              "kind": 5,
+              "startTimeUnixNano": "1792634803902000000",
+              "endTimeUnixNano": "1792634803970000000",
+              "attributes": [
+                { "key": "messaging.system", "value": { "stringValue": "kade.outbox" } },
+                { "key": "paygate.event_id", "value": { "stringValue": "evt_9f2a7c01" } },
+                { "key": "paygate.attempt", "value": { "intValue": "2" } },
+                { "key": "kade.order.number", "value": { "stringValue": "LH-100611" } },
+                { "key": "kade.idempotency.checked", "value": { "boolValue": false } }
+              ],
+              "status": { "code": 1 }
+            },
+            {
+              "traceId": "77e1d2c3b4a5968778695a4b3c2d1e10",
+              "spanId": "bbbb000011112223",
+              "parentSpanId": "bbbb000011112222",
+              "name": "UPDATE kade.inventory",
+              "kind": 3,
+              "startTimeUnixNano": "1792634803915000000",
+              "endTimeUnixNano": "1792634803920000000",
+              "attributes": [
+                { "key": "db.system", "value": { "stringValue": "postgresql" } },
+                {
+                  "key": "db.statement",
+                  "value": {
+                    "stringValue": "UPDATE inventory SET on_hand = on_hand - $1 WHERE sku = $2 AND warehouse = $3"
+                  }
+                },
+                { "key": "kade.sku", "value": { "stringValue": "LH-LAMP-03" } },
+                { "key": "kade.inventory.on_hand_after", "value": { "intValue": "-30" } }
+              ],
+              "status": { "code": 1 }
+            },
+            {
+              "traceId": "77e1d2c3b4a5968778695a4b3c2d1e10",
+              "spanId": "bbbb000011112224",
+              "parentSpanId": "bbbb000011112222",
+              "name": "INSERT kade.order_events",
+              "kind": 3,
+              "startTimeUnixNano": "1792634803925000000",
+              "endTimeUnixNano": "1792634803928000000",
+              "attributes": [
+                {
+                  "key": "db.statement",
+                  "value": {
+                    "stringValue": "INSERT INTO order_events (order_id, type, source, detail) VALUES ($1, 'payment_received', 'webhook', $2)"
+                  }
+                }
+              ],
+              "status": { "code": 1 }
+            },
+            {
+              "traceId": "77e1d2c3b4a5968778695a4b3c2d1e10",
+              "spanId": "bbbb000011112225",
+              "parentSpanId": "bbbb000011112222",
+              "name": "INSERT kade.outbox",
+              "kind": 3,
+              "startTimeUnixNano": "1792634803935000000",
+              "endTimeUnixNano": "1792634803938000000",
+              "attributes": [
+                {
+                  "key": "db.statement",
+                  "value": {
+                    "stringValue": "INSERT INTO outbox (kind, order_id, payload) VALUES ('email_queued', $1, $2)"
+                  }
+                },
+                { "key": "kade.email.template", "value": { "stringValue": "order_confirmed" } }
+              ],
+              "status": { "code": 1 }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

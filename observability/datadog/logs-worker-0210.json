@@ -1,0 +1,94 @@
+{
+  "$comment": "Datadog Logs search result (v2 shape) for service:kade-fulfilment-worker between 02:05 and 02:15 UTC on 2026-10-22. Note the duplicate event_id processed twice and the negative stock after the second decrement.",
+  "meta": { "page": { "after": null }, "elapsed": 61, "status": "done" },
+  "data": [
+    {
+      "id": "AQAAAZB0001",
+      "type": "log",
+      "attributes": {
+        "timestamp": "2026-10-22T02:06:41.118Z",
+        "service": "kade-fulfilment-worker",
+        "status": "info",
+        "message": "webhook payment.succeeded evt_9f2a7c01 attempt=1 order=LH-100611 processed; stock LH-LAMP-03 -> -29",
+        "attributes": {
+          "event_id": "evt_9f2a7c01",
+          "attempt": 1,
+          "order_number": "LH-100611",
+          "sku": "LH-LAMP-03",
+          "on_hand_after": -29
+        }
+      }
+    },
+    {
+      "id": "AQAAAZB0002",
+      "type": "log",
+      "attributes": {
+        "timestamp": "2026-10-22T02:06:43.902Z",
+        "service": "kade-fulfilment-worker",
+        "status": "info",
+        "message": "webhook payment.succeeded evt_9f2a7c01 attempt=2 order=LH-100611 processed; stock LH-LAMP-03 -> -30",
+        "attributes": {
+          "event_id": "evt_9f2a7c01",
+          "attempt": 2,
+          "order_number": "LH-100611",
+          "sku": "LH-LAMP-03",
+          "on_hand_after": -30
+        }
+      }
+    },
+    {
+      "id": "AQAAAZB0003",
+      "type": "log",
+      "attributes": {
+        "timestamp": "2026-10-22T02:06:43.955Z",
+        "service": "kade-fulfilment-worker",
+        "status": "info",
+        "message": "outbox: email order_confirmed queued for LH-100611 (2 pending for this order)",
+        "attributes": { "order_number": "LH-100611", "outbox_pending": 2 }
+      }
+    },
+    {
+      "id": "AQAAAZB0004",
+      "type": "log",
+      "attributes": {
+        "timestamp": "2026-10-22T02:09:58.230Z",
+        "service": "kade-fulfilment-worker",
+        "status": "error",
+        "message": "ReservationError: cannot reserve 1 of LH-LAMP-03 at US-NJ: on_hand=-36 (allow_negative=false)",
+        "attributes": {
+          "sku": "LH-LAMP-03",
+          "warehouse": "US-NJ",
+          "on_hand": -36,
+          "order_number": "LH-100619"
+        }
+      }
+    },
+    {
+      "id": "AQAAAZB0005",
+      "type": "log",
+      "attributes": {
+        "timestamp": "2026-10-22T02:10:02.004Z",
+        "service": "kade-fulfilment-worker",
+        "status": "warn",
+        "message": "paygate retry: evt_c1d884aa attempt=3 for LH-100619 (previous attempts failed with ReservationError)",
+        "attributes": { "event_id": "evt_c1d884aa", "attempt": 3, "order_number": "LH-100619" }
+      }
+    },
+    {
+      "id": "AQAAAZB0006",
+      "type": "log",
+      "attributes": {
+        "timestamp": "2026-10-22T02:10:14.771Z",
+        "service": "kade-api",
+        "status": "info",
+        "message": "POST /checkout 201 LH-100620 reservation LH-LAMP-03 x1 (read available=3? no: read -36, wrote -37) 38ms",
+        "attributes": {
+          "route": "POST /checkout",
+          "status_code": 201,
+          "order_number": "LH-100620",
+          "duration_ms": 38
+        }
+      }
+    }
+  ]
+}

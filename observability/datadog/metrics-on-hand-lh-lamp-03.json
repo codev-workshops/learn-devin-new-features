@@ -1,0 +1,53 @@
+{
+  "$comment": "Datadog metrics query result (v1 /api/v1/query shape) for min:kade.inventory.on_hand{sku:LH-LAMP-03} from 2026-10-21T22:00Z to 2026-10-22T03:00Z, 10-minute points. The Lamp Week deploy lands at 22:40; stock goes from 3 to -37 between 00:50 and 02:10; RB-101's manual bump to 50 at 02:31 is eaten again by 02:50.",
+  "status": "ok",
+  "res_type": "time_series",
+  "from_date": 1792620000000,
+  "to_date": 1792638000000,
+  "query": "min:kade.inventory.on_hand{sku:LH-LAMP-03}",
+  "series": [
+    {
+      "metric": "kade.inventory.on_hand",
+      "scope": "sku:LH-LAMP-03,brand:lumen-home,env:prod",
+      "expression": "min:kade.inventory.on_hand{sku:LH-LAMP-03}",
+      "unit": [{ "family": "general", "name": "unit", "plural": "units" }],
+      "interval": 600,
+      "pointlist": [
+        [1792620000000, 3],
+        [1792620600000, 3],
+        [1792621200000, 3],
+        [1792621800000, 3],
+        [1792622400000, 3],
+        [1792623000000, 3],
+        [1792623600000, 3],
+        [1792624200000, 3],
+        [1792624800000, 3],
+        [1792625400000, 3],
+        [1792626000000, 3],
+        [1792626600000, 3],
+        [1792627200000, 3],
+        [1792627800000, 3],
+        [1792628400000, 3],
+        [1792629000000, 3],
+        [1792629600000, 3],
+        [1792630200000, -4],
+        [1792630800000, -9],
+        [1792631400000, -15],
+        [1792632000000, -22],
+        [1792632600000, -27],
+        [1792633200000, -31],
+        [1792633800000, -34],
+        [1792634400000, -37],
+        [1792635000000, -37],
+        [1792635600000, 50],
+        [1792636200000, 44],
+        [1792636800000, 31],
+        [1792637400000, 12],
+        [1792638000000, -3]
+      ],
+      "start": 1792620000000,
+      "end": 1792638000000,
+      "length": 31
+    }
+  ]
+}
