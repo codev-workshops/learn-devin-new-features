@@ -38,6 +38,14 @@ export function labDatabase() {
   return parseDbUrl(process.env.KADE_LAB_DATABASE_URL || LAB_DATABASE_URL_DEFAULT);
 }
 
+function unwrap(value, open, close) {
+  return value.length >= 2 && value.startsWith(open) && value.endsWith(close) ? value.slice(1, -1) : value;
+}
+
+function unquote(value) {
+  return unwrap(unwrap(value, '"', '"'), "'", "'");
+}
+
 // libpq lets query parameters override the authority part (postgres://localhost/kade?host=staging).
 const CONNECTION_OVERRIDES = ['host', 'hostaddr', 'port', 'dbname', 'service'];
 
@@ -45,7 +53,7 @@ export function parseDbUrl(url) {
   try {
     const u = new URL(url);
     const overridden = CONNECTION_OVERRIDES.some((k) => u.searchParams.has(k));
-    return { host: u.hostname.replace(/^\[|\]$/g, ''), port: u.port || '5432', db: u.pathname.replace(/^\//, ''), overridden };
+    return { host: unwrap(u.hostname, '[', ']'), port: u.port || '5432', db: u.pathname.replace(/^\//, ''), overridden };
   } catch {
     return null;
   }
@@ -65,7 +73,7 @@ const INLINE_DATABASE_URL = /(?:^|[\s;&|(])(?:export\s+)?DATABASE_URL=("[^"]*"|'
  * may override an earlier one), plus the hook's env, else the lab default when none is inline.
  */
 export function candidateDatabaseUrls(command) {
-  const inline = [...command.matchAll(INLINE_DATABASE_URL)].map((m) => m[1].replace(/^["']|["']$/g, ''));
+  const inline = [...command.matchAll(INLINE_DATABASE_URL)].map((m) => unquote(m[1]));
   const ambient = process.env.DATABASE_URL || LAB_DATABASE_URL_DEFAULT;
   return inline.length ? [...inline, ambient] : [ambient];
 }
