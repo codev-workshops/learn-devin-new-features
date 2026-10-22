@@ -1,0 +1,102 @@
+{
+  "number": 3,
+  "slug": "customization-scopes",
+  "title": "Customization scopes — standardise checkout review without overriding brand teams",
+  "feature": "Devin customization scopes: root and nested AGENTS.md, AGENTS.local.md, .devin/rules trigger frontmatter (always_on, glob, manual, model_decision), repo and global skills, personal / organization / enterprise plugin scopes",
+  "duration_minutes": 90,
+  "difficulty": "core",
+  "prerequisites": [
+    "Repo cloned locally, `npm install` done at the root, Node 22",
+    "Lab 00 done once, so you know how the voice coach works",
+    "Work on a throwaway branch such as `lab/03-<your-handle>`; never commit rules or skills from this lab to `main`",
+    "No database is needed: this lab changes instruction files only"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Offline scope resolver — default path",
+        "required": false,
+        "fixture": "`node labs/03-customization-scopes/solution/resolve.mjs --file <path> [--home /tmp/kade-home] [--mention <rule>]` lists which instruction files and rules would be in context for that path, which were skipped and why, conflicting statements and same-named skills",
+        "note": "Models the documented loading rules; every behaviour the docs leave open is printed under `assumptions`"
+      },
+      {
+        "integration": "Devin web app (Agent mode) or Devin CLI on your throwaway branch",
+        "required": false,
+        "fixture": "Skip the live check; the resolver output is your evidence",
+        "note": "With a live session, open `services/api/src/money.ts` and ask which rules and instruction files are in context; compare with the resolver"
+      },
+      {
+        "integration": "Organization or enterprise Customize settings (plugins, rules, skills at org/enterprise scope)",
+        "required": false,
+        "fixture": "Describe the layer in your scope matrix; do not change shared org settings for a lab",
+        "note": "Editing those scopes needs org or enterprise settings access, which most learners do not have"
+      },
+      {
+        "integration": "Devin web app (Agent mode) for the voice coach in section 8",
+        "required": false,
+        "fixture": "Run the drill against a timer and self-score with the rubric in the answer",
+        "note": "Coaching is always started by you; nothing is scheduled"
+      }
+    ],
+    "fixture_only_story": "Everything is offline: you write the shared checklist rule, the Trailhead rule, the repo skill and the ownership file on a throwaway branch, apply each injector, and keep the resolver JSON for `services/api/src/money.ts` and `services/api/src/routes/catalog.ts` before and after each fix as evidence. The sandbox home `/tmp/kade-home` stands in for your real home directory, so no global file on your machine is touched.",
+    "not_exercised": [
+      "What a live Devin session actually loads for a given path — the resolver models the documented rules and labels its assumptions",
+      "Organization and enterprise scope changes in Customize settings — need admin access and would affect other people's sessions",
+      "Precedence between two loaded instructions that disagree — not stated in the docs; the lab resolves it by design (one owner, the rest defer) instead of relying on load order"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "git checkout main -- .devin/rules .devin/skills",
+      "git clean -fd -- .devin/rules .devin/skills .github",
+      "rm -f AGENTS.local.md services/api/src/AGENTS.md",
+      "rm -rf /tmp/kade-home"
+    ],
+    "clean_state": "`.devin/rules/` holds only `repo-conventions.md` and `money-and-brands.md`, there is no `.devin/skills/checkout-review/`, no `.github/CODEOWNERS`, no `AGENTS.local.md` at the root and no `services/api/src/AGENTS.md`, and `/tmp/kade-home` does not exist. `node labs/03-customization-scopes/solution/resolve.mjs --file services/api/src/money.ts` exits 0 and lists the root and `services/api` AGENTS.md files and the two existing rules."
+  },
+  "injectors": [
+    {
+      "name": "nested-conflict",
+      "when": "T+20 min, once your checklist and brand rule resolve cleanly",
+      "behaviour": "Copy `labs/03-customization-scopes/injectors/nested-conflict.AGENTS.md` to `services/api/src/AGENTS.md`. A Platform engineer left notes one directory deeper that state the opposite tax presentation. Find out what is in context for `money.ts` now, and fix it without deleting the engineer's file."
+    },
+    {
+      "name": "local-override",
+      "when": "T+35 min",
+      "behaviour": "Copy `labs/03-customization-scopes/injectors/local-override.AGENTS.local.md` to `AGENTS.local.md` at the repo root. Find out who sees it, whether `git status` shows it and what happens to the checklist statement it contradicts."
+    },
+    {
+      "name": "wrong-glob",
+      "when": "T+50 min",
+      "behaviour": "Copy `labs/03-customization-scopes/injectors/trailhead-vat.wrong-glob.md` over `.devin/rules/trailhead-vat.md`. The Trailhead team rewrote their globs from memory. Check which files the rule now covers and correct it."
+    },
+    {
+      "name": "global-skill",
+      "when": "T+60 min",
+      "behaviour": "Create `/tmp/kade-home/.config/devin/skills/checkout-review/` and copy `labs/03-customization-scopes/injectors/global-skill.SKILL.md` into it as `SKILL.md`, then resolve with `--home /tmp/kade-home`. A reviewer's personal shortcut now has the same name as the team's procedure. Decide what to change and where."
+    }
+  ],
+  "coach": {
+    "skill": "coach-03-customization-scopes",
+    "skill_path": ".devin/skills/articulation-03-customization-scopes/SKILL.md",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
+      { "id": "checkpoint-10", "kind": "checkpoint", "label": "Think-aloud checkpoint", "at_minute": 10, "target_seconds": 45 },
+      { "id": "checkpoint-45", "kind": "checkpoint", "label": "Think-aloud checkpoint", "at_minute": 45, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "3-minute update to both team leads", "target_seconds": 180 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 (technical)", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 (commercial, one follow-up allowed)", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — AGENTS.md (automatic loading, 16 KiB injected)", "url": "https://docs.devin.ai/onboard-devin/agents-md", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — CLI rules (AGENTS.local.md, nested files, .devin/rules trigger frontmatter, global rules)", "url": "https://docs.devin.ai/cli/extensibility/rules", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — CLI skills overview (project and global skill locations)", "url": "https://docs.devin.ai/cli/extensibility/skills/overview", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Skills (repo skills, triggers, one active skill, @skills: invocation)", "url": "https://docs.devin.ai/product-guides/skills", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Plugins (personal, organization and enterprise scopes; governance)", "url": "https://docs.devin.ai/product-guides/plugins", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Knowledge (org-level guidance, for comparison)", "url": "https://docs.devin.ai/product-guides/knowledge", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Voice mode", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" }
+  ]
+}
