@@ -1,0 +1,119 @@
+{
+  "number": 10,
+  "slug": "guardrails",
+  "title": "npm and the PayGate sandbox, nothing else — a security floor every session inherits",
+  "feature": "Enterprise guardrails: Security Profiles (network allowlist, MCP allowlist, Devin MCP read-only, git access level, GitHub CLI token), mandatory vs recommended bindings, child-session and snapshot-build resolution, running-session timing, and AI Guardrails message screening",
+  "duration_minutes": 75,
+  "difficulty": "advanced",
+  "prerequisites": [
+    "Lab 01 done (blueprint, AGENTS.md and skills), so you know what a snapshot build installs",
+    "Repo cloned, `npm install` done at the root (the offline resolver and its tests run under `labs/`)",
+    "A Devin account. Enterprise-admin or organization-admin rights are needed only to save and bind profiles; without them you take the observer path",
+    "Optional: access to the Devin API, to bind a profile to snapshot builds"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Devin Enterprise Settings → Security Profiles (enterprise admin)",
+        "required": false,
+        "fixture": "`node labs/10-guardrails/solution/profile-resolve.mjs --world <your-matrix.json> --check <hosts>` resolves the same bindings offline",
+        "note": "Only enterprise-scope profiles can be bound as the enterprise default; mandatory floors are set here"
+      },
+      {
+        "integration": "Devin Organization Settings → Security Profiles (organization admin)",
+        "required": false,
+        "fixture": "Edit `bindings.org_default`, `automations_default` and `automations` in your copy of the reference matrix",
+        "note": "Organization admins bind the org default, the automations default and individual automations"
+      },
+      {
+        "integration": "Devin Enterprise Settings → Guardrails (Manage enterprise settings)",
+        "required": false,
+        "fixture": "Classify the three messages in `injectors/guardrail-messages.md` against each action level on paper",
+        "note": "Guardrails are enterprise-wide; organizations cannot set their own"
+      },
+      {
+        "integration": "Any Devin session, no admin rights (observer path)",
+        "required": true,
+        "fixture": "Run `labs/10-guardrails/solution/probe.sh` inside the session to see which hosts the governing profile lets it reach",
+        "note": "Members cannot edit profiles; they can observe the effect and write the change request"
+      },
+      {
+        "integration": "Devin API — snapshot-build binding",
+        "required": false,
+        "fixture": "The `snapshot-build` target in the reference matrix",
+        "note": "Builds can be given their own binding or opted out, subject to the same floors"
+      }
+    ],
+    "fixture_only_story": "Without any admin rights you still write the whole policy matrix as a JSON world, resolve every kind of session against it with the offline resolver until each target reaches exactly the hosts the CISO allowed, replay the injectors (a floor downgraded to recommended, a floor tightened mid-lab, a GitHub-token draft, a hurried wildcard draft, a mid-session access request and three incoming messages for AI Guardrails), probe what your own session can actually reach, and hand an admin a change request they can paste into settings.",
+    "not_exercised": [
+      "Saving and binding profiles in Enterprise or Organization settings; the reference answer resolves them offline",
+      "Binding a profile to snapshot builds through the Devin API",
+      "Switching AI Guardrails modes and reading real violations in the audit log"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "git switch main && git status --short",
+      "git branch --list 'lab10/*' | xargs -r git branch -D",
+      "rm -rf ~/lab10",
+      "npm run lab:reset -- 10"
+    ],
+    "clean_state": "On `main` with `git status --short` empty, no local `lab10/*` branches and no `~/lab10` working folder. If you are an admin, no profile named `kade-*` exists at any scope you control and no profile is bound to your test automation or session; otherwise note which profile already governs your sessions (run `probe.sh` once and keep its output)."
+  },
+  "injectors": [
+    {
+      "name": "recommended-floor",
+      "when": "T+15 min",
+      "behaviour": "The platform lead asks you to set the enterprise profile to recommended \"so teams can unblock themselves\" (`injectors/recommended-floor.json`). Predict what an opted-out session and a child of a normal session can reach, then resolve both."
+    },
+    {
+      "name": "mid-session-request",
+      "when": "During the matrix",
+      "behaviour": "A session tries to download browsers from `cdn.playwright.dev` and asks you to approve access. Say what approving does in the session and whether it can reach the host afterwards (`--grant cdn.playwright.dev`)."
+    },
+    {
+      "name": "floor-tightened",
+      "when": "T+45 min",
+      "behaviour": "The CISO narrows the PayGate entry to the API host only (`injectors/floor-tightened.json`). A session started before the change is still running. Say what it can reach now, after its next wake, and what a new session gets (`--then`)."
+    },
+    {
+      "name": "snapshot-build-python",
+      "when": "After the matrix",
+      "behaviour": "The repo blueprint also installs the Python fulfilment worker. Resolve the `snapshot-build` target and check `pypi.org` and `files.pythonhosted.org`. Decide who must change what."
+    },
+    {
+      "name": "gh-token-keep",
+      "when": "Any time",
+      "behaviour": "A teammate drafts two profiles that keep the GitHub CLI token (`injectors/gh-token-keep.json`). Find why neither saves, before running `--validate`."
+    },
+    {
+      "name": "broad-wildcard",
+      "when": "Any time",
+      "behaviour": "A hurried draft floor (`injectors/broad-wildcard.json`) uses a trailing wildcard, a leading wildcard with no dot and a URL. Name one hostname each entry lets through that the CISO never meant."
+    },
+    {
+      "name": "guardrail-messages",
+      "when": "T+60 min",
+      "behaviour": "Three incoming messages (`injectors/guardrail-messages.md`), one of them a PR comment. For each AI Guardrails action, say what the sender sees and what the security team can read later."
+    }
+  ],
+  "coach": {
+    "skill": "coach-10-guardrails",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
+      { "id": "checkpoint-10", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+10)", "at_minute": 10, "target_seconds": 45 },
+      { "id": "checkpoint-45", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+45)", "at_minute": 45, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "Three-minute CISO update", "target_seconds": 180 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 (technical)", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 (commercial)", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — Security Profiles", "url": "https://docs.devin.ai/product-guides/security-profiles", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — AI Guardrails", "url": "https://docs.devin.ai/enterprise/features/ai-guardrails", "date": "fetched 2026-10-22" },
+    { "title": "Devin release notes 2026 — Security Profiles, snapshot-build binding and related entries", "url": "https://docs.devin.ai/release-notes/2026", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Voice mode", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" }
+  ]
+}
