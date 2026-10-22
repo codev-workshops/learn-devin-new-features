@@ -18,15 +18,15 @@ Everything here drives the platform **only through the frozen OpenAPI contract**
 export KADE_API_URL=http://localhost:3001        # default
 scenarios/oversell.sh --concurrency 20           # exit 0 = symptom observed
 scenarios/duplicate-webhook.sh --wait 20
-scenarios/abandoned-carts.sh --older-than 48     # add --fresh when the seeded carts are used up
-scenarios/rounding-drift.sh --orders 40 --seed 7
+scenarios/abandoned-carts.sh --older-than 48     # --sweeper worker|contract|auto; --fresh when the seeded carts are used up
+scenarios/rounding-drift.sh --orders 40 --seed 7   # default --brand lumen-home (8.25% ties drift against services/api)
 git apply scenarios/bad-migration.patch && npm run db:migrate   # lab 2: a hook should block this
 npm run lab:reset -- 12
 ```
 
 Exit codes (shared, `lib/common.sh`): `0` symptom observed · `2` precondition/usage (API down, missing `curl`/`jq`/`openssl`) · `3` no symptom — the plant looks fixed · `4` accepted by the API but the worker-side symptom did not appear within `--wait`. Every run ends with a `SYMPTOM:`/`NO SYMPTOM:` line and a machine-readable `RESULT: {…}` line; what each injector created is appended to `scenarios/.state/<injector>.jsonl` (gitignored) for the debrief.
 
-Webhooks are signed with `PAYGATE_SECRET` (default `kade-local-paygate-secret`, see `.env.example`). `services/paygate-fake` reaches the same duplicate/late outcomes with its `--duplicate` and `--delay` knobs (`PUT /knobs` at runtime, or `paygate-fake fire --duplicate …`); these scripts are the path that needs only the API. `lab-reset.sh` turns the knobs off again when PayGate is reachable at `PAYGATE_URL`.
+Webhooks are signed with `PAYGATE_SECRET`; the `.env.example` default is assumed only when `KADE_API_URL` is a loopback address, anything else must set it explicitly. `abandoned-carts.sh` runs the real sweeper (`python3 -m fulfilment_worker sweep`, which cancels the order and drops its lines) when the worker is importable and `DATABASE_URL` is set, and falls back to the contract-visible part (`DELETE /carts/{cartId}`) otherwise. `services/paygate-fake` reaches the same duplicate/late outcomes with its `--duplicate` and `--delay` knobs (`PUT /knobs` at runtime, or `paygate-fake fire --duplicate …`); these scripts are the path that needs only the API. `lab-reset.sh` turns the knobs off again when PayGate is reachable at `PAYGATE_URL`.
 
 ## Tests
 

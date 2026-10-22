@@ -21,7 +21,14 @@
 set -euo pipefail
 
 KADE_API_URL="${KADE_API_URL:-http://localhost:3001}"
-PAYGATE_SECRET="${PAYGATE_SECRET:-kade-local-paygate-secret}"
+# The published local default (.env.example) is only assumed for a loopback API; anything else
+# must set PAYGATE_SECRET explicitly so a shared deployment is never signed with a known key.
+if [ -z "${PAYGATE_SECRET:-}" ]; then
+  case "$KADE_API_URL" in
+  http://localhost* | http://127.0.0.1* | http://\[::1\]*) PAYGATE_SECRET="kade-local-paygate-secret" ;;
+  *) PAYGATE_SECRET="" ;;
+  esac
+fi
 SCENARIOS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 KADE_SCENARIO_STATE_DIR="${KADE_SCENARIO_STATE_DIR:-$SCENARIOS_DIR/.state}"
 
@@ -98,6 +105,7 @@ require_api() {
 # sign_body <raw-json>  → "sha256=<hex>" exactly as PayGate signs it.
 sign_body() {
   require_cmd openssl
+  [ -n "$PAYGATE_SECRET" ] || die "PAYGATE_SECRET is required when KADE_API_URL is not a loopback address ($KADE_API_URL)"
   printf 'sha256=%s' "$(printf '%s' "$1" | openssl dgst -sha256 -hmac "$PAYGATE_SECRET" | sed 's/^.* //')"
 }
 
@@ -165,6 +173,13 @@ inventory_on_hand() {
   local brand="$1" sku="$2"
   KADE_BRAND="$brand" KADE_USER="$(merchandiser_for "$brand")" KADE_ROLE=merchandiser api GET /admin/inventory |
     jq --arg sku "$sku" '[.[] | select(.sku == $sku) | .onHand] | add // 0'
+}
+
+# inventory_available <brand> <sku>  → total available (onHand - reserved) via GET /admin/inventory
+inventory_available() {
+  local brand="$1" sku="$2"
+  KADE_BRAND="$brand" KADE_USER="$(merchandiser_for "$brand")" KADE_ROLE=merchandiser api GET /admin/inventory |
+    jq --arg sku "$sku" '[.[] | select(.sku == $sku) | .available] | add // 0'
 }
 
 # order_events <brand> <order-id>  → JSON array
