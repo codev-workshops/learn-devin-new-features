@@ -77,6 +77,7 @@ describe("catalog + cart", () => {
     expect(screen.getByTestId("qty-LH-LAMP-01")).toHaveTextContent("1");
     expect(screen.getByTestId("cart-totals")).toHaveTextContent(/\$8\.51/);
     expect(screen.getByTestId("cart-totals")).toHaveTextContent(/\$119\.66/);
+    expect(screen.getByTestId("haptics-mode")).toHaveTextContent(/JS fallback/);
   });
 
   it("switches collection and keeps component-backed bundles orderable", async () => {
