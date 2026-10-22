@@ -38,7 +38,7 @@ export const CATEGORIES = [
     plant: 'currency-rounding',
     re: /rounding|1[- ]cent|receipt says|incl\. vat/i,
     diagnosis:
-      'Root cause: the API totals use floats and half-up rounding while the worker recomputes with Decimal and banker\'s rounding, so VAT-inclusive EUR lines drift by one cent on about 3% of Trailhead orders.',
+      'Root cause: the API totals use floats and half-up rounding while the worker recomputes with Decimal and banker\'s rounding, so VAT-inclusive EUR lines drift by one cent on about 3% of Trailhead orders (services/api/src/money.ts vs services/fulfilment-worker/src/fulfilment_worker/totals.py).',
   },
   {
     key: 'ghost-order',
@@ -79,6 +79,7 @@ export function fromTeams(messages) {
 }
 
 export function loadMessages({ inject = [], platform = 'slack' } = {}) {
+  if (platform === 'teams' && inject.length) throw new Error('injectors replay the Slack export only; run --platform teams without --inject');
   if (platform === 'teams') return fromTeams(readJson(path.join(LAB_DIR, 'fixtures', 'kade-bugs.teams.json')));
   const base = readJsonl(path.join(LAB_DIR, 'fixtures', 'kade-bugs.jsonl'));
   const extra = inject.flatMap((name) => {
@@ -186,8 +187,21 @@ export function checkScratchpad(learner, reference) {
   for (const t of learner.triaged) {
     for (const f of ['channel', 'ts', 'reporter']) if (!t[f]) problems.push(`triaged item ${t.ts ?? '?'} has no ${f}`);
   }
-  const seen = new Set(learner.triaged.map((t) => t.ts));
-  for (const t of reference.scratchpad.triaged) if (!seen.has(t.ts)) problems.push(`report ${t.ts} was not triaged`);
+  const seen = new Map(learner.triaged.map((t) => [t.ts, t]));
+  const counts = new Map();
+  for (const t of learner.triaged) counts.set(t.ts, (counts.get(t.ts) ?? 0) + 1);
+  for (const [ts, n] of counts) if (n > 1) problems.push(`report ${ts} is triaged ${n} times`);
+  for (const t of reference.scratchpad.triaged) {
+    const got = seen.get(t.ts);
+    if (!got) {
+      problems.push(`report ${t.ts} was not triaged`);
+      continue;
+    }
+    for (const f of ['channel', 'reporter', 'issue']) {
+      if (got[f] && got[f] !== t[f]) problems.push(`report ${t.ts} has ${f} ${got[f]}, expected ${t[f]}`);
+    }
+    if (!got.issue) problems.push(`triaged item ${t.ts} has no issue`);
+  }
   for (const ts of reference.ignored) if (seen.has(ts)) problems.push(`noise message ${ts} was triaged`);
   for (const [issue, dups] of Object.entries(reference.scratchpad.duplicates)) {
     const got = new Set(learner.duplicates[issue] ?? []);
