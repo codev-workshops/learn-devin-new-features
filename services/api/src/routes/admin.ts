@@ -172,13 +172,12 @@ export function adminRouter(db: Db): Router {
         throw notFound(`price list ${req.params.priceListId} not found in ${brand.id}`);
       const unknown = await tx.query<{ sku: string }>(
         `SELECT s.sku FROM unnest($1::text[]) AS s(sku)
-          WHERE NOT EXISTS (SELECT 1 FROM products p WHERE p.sku = s.sku AND p.brand = $2)
-            AND NOT EXISTS (SELECT 1 FROM variants v JOIN products p ON p.sku = v.product_sku WHERE v.sku = s.sku AND p.brand = $2)`,
+          WHERE NOT EXISTS (SELECT 1 FROM products p WHERE p.sku = s.sku AND p.brand = $2)`,
         [parsed.map((p) => p.sku), brand.id],
       );
       if (unknown.rows.length) {
         throw badRequest(
-          `unknown SKUs for ${brand.id}: ${unknown.rows.map((u) => u.sku).join(", ")}`,
+          `unknown product SKUs for ${brand.id} (prices are set per product, not per variant): ${unknown.rows.map((u) => u.sku).join(", ")}`,
         );
       }
       await tx.query(

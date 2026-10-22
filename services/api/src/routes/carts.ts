@@ -32,11 +32,11 @@ export function cartsRouter(db: Db): Router {
 
   r.get("/:cartId", async (req, res) => {
     const brand = await getBrandRow(db, req.caller.brand);
-    res.json(await loadCart(db, brand, req.params.cartId));
+    res.json(await loadCart(db, brand, req.params.cartId, req.caller));
   });
 
   r.delete("/:cartId", async (req, res) => {
-    const cart = await getCartRow(db, req.caller.brand, req.params.cartId);
+    const cart = await getCartRow(db, req.caller.brand, req.params.cartId, req.caller);
     await db.query("DELETE FROM carts WHERE id = $1", [cart.id]);
     res.status(204).end();
   });
@@ -47,10 +47,13 @@ export function cartsRouter(db: Db): Router {
     const sku = v.sku("sku");
     const quantity = v.integer("quantity", { min: 1, max: 99 });
     v.throwIfInvalid();
-    const cart = await getCartRow(db, brand.id, req.params.cartId);
+    const cart = await getCartRow(db, brand.id, req.params.cartId, req.caller);
     if (cart.status !== "open") throw conflict(`cart ${cart.id} is ${cart.status}`);
     const sellable = await resolveSellable(db, brand.id, sku!);
     if (!sellable) throw conflict(`SKU ${sku} is not sold by ${brand.id}`);
+    if (sellable.has_variants && !sellable.is_variant) {
+      throw conflict(`SKU ${sku} has variants; add a variant SKU (e.g. ${sku}-…) instead`);
+    }
     const priced = await currentPrice(db, brand.id, sellable.sku, brand.currency);
     const t = now();
     const existing = await db.query<{ id: string; quantity: number }>(
@@ -87,7 +90,7 @@ export function cartsRouter(db: Db): Router {
     const v = new Validator(req.body);
     const quantity = v.integer("quantity", { min: 0, max: 99 });
     v.throwIfInvalid();
-    const cart = await getCartRow(db, brand.id, req.params.cartId);
+    const cart = await getCartRow(db, brand.id, req.params.cartId, req.caller);
     if (cart.status !== "open") throw conflict(`cart ${cart.id} is ${cart.status}`);
     if (!UUID.test(req.params.lineId)) throw notFound(`line ${req.params.lineId} not found`);
     const line = await db.query<{ id: string }>(

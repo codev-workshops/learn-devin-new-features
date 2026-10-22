@@ -429,6 +429,116 @@ describe("admin", () => {
   });
 });
 
+describe("review follow-ups", () => {
+  const OTHER = "customer-002@lumen-home.test";
+  it("keeps carts private to their owner (staff may still read them)", async () => {
+    const id = await cartWith(h, LUMEN, LUMEN_CUSTOMER, [{ sku: "LH-LAMP-05", quantity: 1 }]);
+    await h.api.get(`/carts/${id}`).set(as(LUMEN, OTHER)).expect(404);
+    await h.api
+      .patch(`/carts/${id}/lines/${id}`)
+      .set(as(LUMEN, OTHER))
+      .send({ quantity: 2 })
+      .expect(404);
+    await h.api.delete(`/carts/${id}`).set(as(LUMEN, OTHER)).expect(404);
+    await h.api
+      .get(`/carts/${id}`)
+      .set(as(LUMEN, LUMEN_MERCH, "merchandiser"))
+      .expect(200);
+  });
+  it("rejects a variant parent SKU as a cart line", async () => {
+    const id = await cartWith(h, TRAILHEAD, TRAILHEAD_CUSTOMER, []);
+    const res = await h.api
+      .post(`/carts/${id}/lines`)
+      .set(as(TRAILHEAD, TRAILHEAD_CUSTOMER))
+      .send({ sku: "TS-JKT-01", quantity: 1 })
+      .expect(409);
+    expect(res.body.message).toMatch(/variant/);
+  });
+  it("checks out pre-orders without reserving stock", async () => {
+    const cartId = await cartWith(h, TRAILHEAD, TRAILHEAD_CUSTOMER, [
+      { sku: "TS-TENT-03", quantity: 1 },
+    ]);
+    const res = await h.api
+      .post("/checkout")
+      .set(as(TRAILHEAD, TRAILHEAD_CUSTOMER))
+      .send({ cartId, email: TRAILHEAD_CUSTOMER, shippingAddress: { ...ADDRESS, country: "DE" } })
+      .expect(201);
+    expect(res.body.order.lines[0].sku).toBe("TS-TENT-03");
+    expect(res.body.payment.redirectUrl).toMatch(/\/checkout\//);
+  });
+  it("checks out bundles by reserving their components", async () => {
+    const before = await h.db.query<{ reserved: number }>(
+      "SELECT reserved FROM inventory WHERE sku = 'LH-POT-01'",
+    );
+    const cartId = await cartWith(h, LUMEN, LUMEN_CUSTOMER, [{ sku: "LH-BNDL-02", quantity: 1 }]);
+    await h.api
+      .post("/checkout")
+      .set(as(LUMEN, LUMEN_CUSTOMER))
+      .send({ cartId, email: LUMEN_CUSTOMER, shippingAddress: ADDRESS })
+      .expect(201);
+    const after = await h.db.query<{ reserved: number }>(
+      "SELECT reserved FROM inventory WHERE sku = 'LH-POT-01'",
+    );
+    expect(after.rows[0]!.reserved - before.rows[0]!.reserved).toBe(1);
+  });
+  it("splits an order line across warehouses when one cannot cover it", async () => {
+    await h.db.query("UPDATE inventory SET on_hand = 1, reserved = 0 WHERE sku = 'TS-PACK-01-L'");
+    const cartId = await cartWith(h, TRAILHEAD, TRAILHEAD_CUSTOMER, [
+      { sku: "TS-PACK-01-L", quantity: 2 },
+    ]);
+    const res = await h.api
+      .post("/checkout")
+      .set(as(TRAILHEAD, TRAILHEAD_CUSTOMER))
+      .send({ cartId, email: TRAILHEAD_CUSTOMER, shippingAddress: { ...ADDRESS, country: "DE" } })
+      .expect(201);
+    expect(
+      res.body.order.lines.map((l: { warehouse: string; quantity: number }) => [
+        l.warehouse,
+        l.quantity,
+      ]),
+    ).toEqual([
+      ["DE-HAM", 1],
+      ["NL-RTM", 1],
+    ]);
+  });
+  it("does not let another customer replay an idempotency key, and closes a cart exactly once", async () => {
+    const cartId = await cartWith(h, LUMEN, LUMEN_CUSTOMER, [{ sku: "LH-LAMP-05", quantity: 1 }]);
+    const body = {
+      cartId,
+      email: LUMEN_CUSTOMER,
+      shippingAddress: ADDRESS,
+      idempotencyKey: `shared-${cartId}`,
+    };
+    await h.api.post("/checkout").set(as(LUMEN, LUMEN_CUSTOMER)).send(body).expect(201);
+    await h.api
+      .post("/checkout")
+      .set(as(LUMEN, OTHER))
+      .send({ ...body, email: OTHER })
+      .expect(404);
+    const again = await h.api
+      .post("/checkout")
+      .set(as(LUMEN, LUMEN_CUSTOMER))
+      .send({ ...body, idempotencyKey: undefined })
+      .expect(409);
+    expect(again.body.code).toBe("conflict");
+  });
+  it("rejects variant SKUs in price lists instead of failing on the foreign key", async () => {
+    const lists = await h.api
+      .get("/admin/price-lists")
+      .set(as(TRAILHEAD, TRAILHEAD_MERCH, "merchandiser"))
+      .expect(200);
+    const res = await h.api
+      .put("/admin/price-lists/trailhead-supply-base")
+      .set(as(TRAILHEAD, TRAILHEAD_MERCH, "merchandiser"))
+      .send({
+        ...lists.body[0],
+        entries: [{ sku: "TS-JKT-01-M-BLK", price: { amount: "1.00", currency: "EUR" } }],
+      })
+      .expect(400);
+    expect(res.body.message).toMatch(/per product/);
+  });
+});
+
 describe("webhooks", () => {
   const event = {
     event_id: "evt_test_1",

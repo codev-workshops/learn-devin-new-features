@@ -67,9 +67,12 @@ export async function getProductRow(db: Queryable, brand: BrandId, sku: string) 
 
 /** Resolves a sellable SKU (product or variant) to its product row within the brand. */
 export async function resolveSellable(db: Queryable, brand: BrandId, sku: string) {
-  const { rows } = await db.query<ProductRow & { sellable_sku: string; is_variant: boolean }>(
+  const { rows } = await db.query<
+    ProductRow & { sellable_sku: string; is_variant: boolean; has_variants: boolean }
+  >(
     `SELECT p.sku, p.brand, p.name, p.description, p.collection, p.preorder, p.bundle, p.safety_stock, p.low_stock,
-            COALESCE(v.sku, p.sku) AS sellable_sku, (v.sku IS NOT NULL) AS is_variant
+            COALESCE(v.sku, p.sku) AS sellable_sku, (v.sku IS NOT NULL) AS is_variant,
+            EXISTS (SELECT 1 FROM variants pv WHERE pv.product_sku = p.sku) AS has_variants
        FROM products p
        LEFT JOIN variants v ON v.sku = $1 AND v.product_sku = p.sku
       WHERE p.brand = $2 AND (p.sku = $1 OR v.sku = $1)
