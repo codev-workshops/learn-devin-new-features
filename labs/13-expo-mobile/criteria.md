@@ -7,7 +7,7 @@ You are done when all of the following are observable by someone who was not on 
 5. **Gates.** `npm test`, `npm run lint` and `npm run build` in the `apps/mobile` workspace pass; paste the summary lines.
 6. **iOS build (optional).** The same app built for the iOS Simulator on a macOS machine. The report names the Xcode version and how it was selected (`DEVELOPER_DIR` or `xcode-select`).
 7. **iOS order status (optional).** A Simulator screenshot of the same order in the same status as item 2.
-8. **Native module (optional).** A Simulator screenshot of the Cart tab showing `Haptics: native (kade-haptics)`, and the line in `ios/Podfile.lock` that proves `KadeHaptics` was autolinked.
+8. **Native module (optional).** A Simulator screenshot of the Cart tab showing `Haptics: native (harbourline-haptics)`, and the line in `ios/Podfile.lock` that proves `HarbourlineHaptics` was autolinked.
 9. **Reproducible setup.** A blueprint (or a proposed one in the report) with one document per platform, each starting with its `runs-on:` line, containing only commands you actually ran. Say which document a future Android session and a future iOS session would boot from.
 10. **Credential and platform honesty.** A short "not exercised" list: at least physical-device haptics and store signing, plus anything else you skipped.
 11. **Articulation drill completed** with the voice coach (section 8) or against a timer, and the gap report (or your self-score) saved as `labs/13-expo-mobile/MOBILE-REPORT.coach.md`. Do not commit it.

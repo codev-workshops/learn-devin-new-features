@@ -142,7 +142,7 @@ export function runPreToolHook(pluginDir, command, env = {}) {
   const hook = cfg.PreToolUse[0].hooks[0];
   const r = spawnSync('sh', ['-c', hook.command], {
     input: JSON.stringify({ hook_event_name: 'PreToolUse', tool_name: 'exec', tool_input: { command } }),
-    env: { ...process.env, KADE_SALE_FREEZE: '', ...env },
+    env: { ...process.env, HARBOURLINE_SALE_FREEZE: '', ...env },
     encoding: 'utf8',
     timeout: hook.timeout * 1000,
   });
@@ -154,7 +154,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   let out;
   if (a === '--revise') out = reviseUpload(b, c);
   else if (a === '--propose') out = proposeEdit(JSON.parse(readFileSync(b, 'utf8')));
-  else if (a === '--hook') out = runPreToolHook(b, c, { KADE_SALE_FREEZE: process.env.KADE_SALE_FREEZE ?? '' });
+  else if (a === '--hook') out = runPreToolHook(b, c, { HARBOURLINE_SALE_FREEZE: process.env.HARBOURLINE_SALE_FREEZE ?? '' });
   else if (a === '--kit') out = inspect(b, { kit: true });
   else if (a && a !== '--help') out = inspect(a, b === '--repo-name' ? { repoName: c } : {});
   else {

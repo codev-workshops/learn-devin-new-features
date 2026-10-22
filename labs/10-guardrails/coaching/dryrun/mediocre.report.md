@@ -51,7 +51,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T10:00:00Z · timing:
 - Repeated words: I think (×1)
 - Coach asked “did you say…?”: never
 - Article/plural slips: "everyone gets it" — say which sessions: "new sessions now, running sessions on their next wake"
-- Re-record: “So I made three profiles in a JSON file, kade-floor, kade-dev and kade-automation…”; “If something breaks we can actually add hosts later, that's fine, right?”
+- Re-record: “So I made three profiles in a JSON file, harbourline-floor, harbourline-dev and harbourline-automation…”; “If something breaks we can actually add hosts later, that's fine, right?”
 
 ## Three stems for next time
 

@@ -1,7 +1,7 @@
 ## Customer brief
 
 > "PayGate retries failed webhooks three times; we want one investigation per incident, not three."
-> — Kadé payments lead, Thursday stand-up
+> — Harbourline payments lead, Thursday stand-up
 
 Last week the payments lead wired PayGate's delivery-failure notifications straight into a Devin Automation with a Webhook trigger. Every notification started a session. One bad morning produced eleven sessions for what turned out to be two problems: a Lumen Home order whose confirmation webhook kept hitting a 503, and a Lumen Home `payment.failed` event rejected for a bad signature. The rest were retries of the same event, a delivery that recovered on its second attempt, a notification PayGate sent twice, a `test.ping` and one notification with no event id at all.
 

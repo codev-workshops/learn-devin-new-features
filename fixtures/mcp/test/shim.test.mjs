@@ -53,7 +53,7 @@ describe("MCP handshake", () => {
       clientInfo: { name: "smoke", version: "0" },
     });
     assert.equal(init.result.protocolVersion, "2025-06-18");
-    assert.equal(init.result.serverInfo.name, "kade-fixtures");
+    assert.equal(init.result.serverInfo.name, "harbourline-fixtures");
     assert.ok(init.result.capabilities.tools && init.result.capabilities.resources);
     child.stdin.write(
       JSON.stringify({ jsonrpc: "2.0", method: "notifications/initialized" }) + "\n",
@@ -112,8 +112,8 @@ describe("tools", () => {
     assert.equal(
       (
         await callTool("aws_ecs_describe_services", {
-          cluster: "kade-prod",
-          services: ["kade-web"],
+          cluster: "harbourline-prod",
+          services: ["harbourline-web"],
         })
       ).result.isError,
       true,
@@ -121,19 +121,19 @@ describe("tools", () => {
     assert.equal(
       (
         await callTool("aws_ecs_describe_task_definition", {
-          task_definition: "arn:aws:ecs:us-east-1:123456789012:task-definition/kade-api:47",
+          task_definition: "arn:aws:ecs:us-east-1:123456789012:task-definition/harbourline-api:47",
         })
       ).result.isError,
       false,
     );
     assert.equal(
-      (await callTool("gcp_cloudrun_get_service", { name: "kade-api" })).result.isError,
+      (await callTool("gcp_cloudrun_get_service", { name: "harbourline-api" })).result.isError,
       true,
     );
     assert.equal(
       (
         await callTool("gcp_pubsub_describe", {
-          subscription: "projects/kade-prod/subscriptions/paygate-webhooks-worker",
+          subscription: "projects/harbourline-prod/subscriptions/paygate-webhooks-worker",
         })
       ).result.isError,
       false,
@@ -153,24 +153,24 @@ describe("tools", () => {
     assert.equal(
       (
         await callTool("aws_ecs_describe_task_definition", {
-          task_definition: "arn:aws:ecs:us-east-1:999999999999:task-definition/kade-api:47",
+          task_definition: "arn:aws:ecs:us-east-1:999999999999:task-definition/harbourline-api:47",
         })
       ).result.isError,
       true,
     );
     assert.equal(
-      (await callTool("aws_ecs_describe_services", { cluster: "kade-prod", services: [] })).result
+      (await callTool("aws_ecs_describe_services", { cluster: "harbourline-prod", services: [] })).result
         .isError,
       true,
     );
     assert.equal(
-      (await callTool("bigquery_list_tables", { dataset: "kade-prod.analytics" })).result.isError,
+      (await callTool("bigquery_list_tables", { dataset: "harbourline-prod.analytics" })).result.isError,
       false,
     );
     assert.equal(
       (
         await callTool("gcp_cloudrun_get_service", {
-          name: "projects/kade-prod/locations/europe-west1/services/kade-fulfilment-worker",
+          name: "projects/harbourline-prod/locations/europe-west1/services/harbourline-fulfilment-worker",
         })
       ).result.isError,
       false,
@@ -178,7 +178,7 @@ describe("tools", () => {
     assert.equal(
       (
         await callTool("gcp_cloudrun_get_service", {
-          name: "projects/other-tenant/locations/europe-west1/services/kade-fulfilment-worker",
+          name: "projects/other-tenant/locations/europe-west1/services/harbourline-fulfilment-worker",
         })
       ).result.isError,
       true,
@@ -189,7 +189,7 @@ describe("tools", () => {
 describe("Lamp Week story is consistent across providers", () => {
   it("PagerDuty: incident 2187 is acknowledged, carries the Datadog monitor id and a 7-entry timeline with the RB-101 note", async () => {
     const inc = parsed(await callTool("pagerduty_get_incident", { incident_id: "2187" })).incident;
-    assert.equal(inc.id, "Q3KADE0210LAMP");
+    assert.equal(inc.id, "Q3HARBOURLINE0210LAMP");
     assert.equal(inc.status, "acknowledged");
     assert.match(inc.description, /48213771/);
     const log = parsed(
@@ -209,13 +209,13 @@ describe("Lamp Week story is consistent across providers", () => {
     assert.match(onHand.message, /RB-102/);
     const series = parsed(
       await callTool("datadog_query_metrics", {
-        query: "min:kade.inventory.on_hand{sku:LH-LAMP-03}",
+        query: "min:harbourline.inventory.on_hand{sku:LH-LAMP-03}",
       }),
     ).series[0];
     assert.equal(Math.min(...series.pointlist.map((p) => p[1])), -37);
     const logs = parsed(
       await callTool("datadog_search_logs", {
-        query: "service:kade-fulfilment-worker evt_9f2a7c01",
+        query: "service:harbourline-fulfilment-worker evt_9f2a7c01",
       }),
     ).data;
     assert.equal(logs.length, 2);
@@ -224,7 +224,7 @@ describe("Lamp Week story is consistent across providers", () => {
       [1, 2],
     );
   });
-  it("AWS: the kade-api deployment at 22:40 precedes the 02:10 page; secrets are ARNs, never values", async () => {
+  it("AWS: the harbourline-api deployment at 22:40 precedes the 02:10 page; secrets are ARNs, never values", async () => {
     const svc = parsed(await callTool("aws_ecs_describe_services", {})).services[0];
     assert.equal(svc.deployments[0].createdAt, "2026-10-21T22:40:12Z");
     const td = parsed(await callTool("aws_ecs_describe_task_definition", {}));
@@ -232,7 +232,7 @@ describe("Lamp Week story is consistent across providers", () => {
       assert.match(s.valueFrom, /^arn:aws:secretsmanager:/);
     const objs = parsed(
       await callTool("aws_s3_list_objects", {
-        bucket: "kade-prod-exports",
+        bucket: "harbourline-prod-exports",
         prefix: "orders_daily/dt=2026-10-22",
       }),
     );
@@ -274,15 +274,15 @@ describe("resources", () => {
     const { result } = await rpc("resources/list", {});
     const uris = result.resources.map((r) => r.uri);
     assert.ok(
-      uris.includes("kade-fixture://observability/runbooks/RB-102-negative-on-hand-oversell.md"),
+      uris.includes("harbourline-fixture://observability/runbooks/RB-102-negative-on-hand-oversell.md"),
     );
-    assert.ok(uris.includes("kade-fixture://infra/bigquery/orders_daily.csv"));
+    assert.ok(uris.includes("harbourline-fixture://infra/bigquery/orders_daily.csv"));
     assert.ok(!uris.some((u) => u.includes("tools.json")));
     const read = await rpc("resources/read", {
-      uri: "kade-fixture://observability/runbooks/RB-101-negative-on-hand-cache.md",
+      uri: "harbourline-fixture://observability/runbooks/RB-101-negative-on-hand-cache.md",
     });
     assert.match(read.result.contents[0].text, /# RB-101/);
-    const missing = await rpc("resources/read", { uri: "kade-fixture://../../package.json" });
+    const missing = await rpc("resources/read", { uri: "harbourline-fixture://../../package.json" });
     assert.equal(missing.error.code, -32002);
   });
 });

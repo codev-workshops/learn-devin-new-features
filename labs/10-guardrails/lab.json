@@ -59,7 +59,7 @@
       "rm -rf ~/lab10",
       "npm run lab:reset -- 10"
     ],
-    "clean_state": "On `main` with `git status --short` empty, no local `lab10/*` branches and no `~/lab10` working folder. If you are an admin, no profile named `kade-*` exists at any scope you control and no profile is bound to your test automation or session; otherwise note which profile already governs your sessions (run `probe.sh` once and keep its output)."
+    "clean_state": "On `main` with `git status --short` empty, no local `lab10/*` branches and no `~/lab10` working folder. If you are an admin, no profile named `harbourline-*` exists at any scope you control and no profile is bound to your test automation or session; otherwise note which profile already governs your sessions (run `probe.sh` once and keep its output)."
   },
   "injectors": [
     {

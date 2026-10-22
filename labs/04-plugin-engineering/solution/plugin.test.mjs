@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { inspect, proposeEdit, reviseUpload, runPreToolHook } from './plugin-check.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const PLUGIN = path.join(HERE, 'kade-flash-sale');
+const PLUGIN = path.join(HERE, 'harbourline-flash-sale');
 const INJECTORS = path.join(HERE, '..', 'injectors');
 
 describe('lab 04 reference plugin', () => {
@@ -15,13 +15,13 @@ describe('lab 04 reference plugin', () => {
 
   it('is a valid manifest plugin with no problems', () => {
     expect(r.kind).toBe('manifest');
-    expect(r.name).toBe('kade-flash-sale');
+    expect(r.name).toBe('harbourline-flash-sale');
     expect(r.problems).toEqual([]);
     expect(inspect(PLUGIN, { kit: true }).problems).toEqual([]);
   });
 
   it('kit check flags a manifest-only bundle', () => {
-    const k = inspect(path.join(INJECTORS, 'revision-2', 'kade-flash-sale'), { kit: true });
+    const k = inspect(path.join(INJECTORS, 'revision-2', 'harbourline-flash-sale'), { kit: true });
     expect(k.problems).toHaveLength(5);
   });
 
@@ -40,12 +40,12 @@ describe('lab 04 reference plugin', () => {
   });
 
   it('bundles both procedures as skills, plus rules, a subagent, a hook and an MCP', () => {
-    expect(r.commands).toEqual(['/kade-flash-sale:flash-sale-incident', '/kade-flash-sale:flash-sale-release']);
+    expect(r.commands).toEqual(['/harbourline-flash-sale:flash-sale-incident', '/harbourline-flash-sale:flash-sale-release']);
     expect(r.rules).toEqual(['AGENTS.md', 'rules/sale-pricing.md']);
     expect(r.agents).toEqual(['release-checker']);
     expect(r.hooks).toEqual(['PreToolUse']);
     expect(r.mcpServers).toEqual([
-      { name: 'kade-incidents', source: '.mcp.json', envRefs: ['PAGERDUTY_API_TOKEN'], literals: [], needsConnection: true },
+      { name: 'harbourline-incidents', source: '.mcp.json', envRefs: ['PAGERDUTY_API_TOKEN'], literals: [], needsConnection: true },
     ]);
   });
 
@@ -54,14 +54,14 @@ describe('lab 04 reference plugin', () => {
   });
 
   it('freeze hook blocks a push to main only while the freeze is on', () => {
-    expect(runPreToolHook(PLUGIN, 'git push origin main', { KADE_SALE_FREEZE: '1' }).exit).toBe(2);
+    expect(runPreToolHook(PLUGIN, 'git push origin main', { HARBOURLINE_SALE_FREEZE: '1' }).exit).toBe(2);
     expect(runPreToolHook(PLUGIN, 'git push origin main').exit).toBe(0);
-    expect(runPreToolHook(PLUGIN, 'git push origin devin/sale-banner', { KADE_SALE_FREEZE: '1' }).exit).toBe(0);
-    expect(runPreToolHook(PLUGIN, 'npm run gates', { KADE_SALE_FREEZE: '1' }).exit).toBe(0);
+    expect(runPreToolHook(PLUGIN, 'git push origin devin/sale-banner', { HARBOURLINE_SALE_FREEZE: '1' }).exit).toBe(0);
+    expect(runPreToolHook(PLUGIN, 'npm run gates', { HARBOURLINE_SALE_FREEZE: '1' }).exit).toBe(0);
     for (const c of ['git push origin HEAD:main', 'git push -f origin +main', 'git push origin refs/heads/main', 'git push origin main && echo ok'])
-      expect(runPreToolHook(PLUGIN, c, { KADE_SALE_FREEZE: '1' }).exit, c).toBe(2);
+      expect(runPreToolHook(PLUGIN, c, { HARBOURLINE_SALE_FREEZE: '1' }).exit, c).toBe(2);
     for (const c of ['git push origin main-fix', 'git push origin feature/main', 'git push origin main.v2'])
-      expect(runPreToolHook(PLUGIN, c, { KADE_SALE_FREEZE: '1' }).exit, c).toBe(0);
+      expect(runPreToolHook(PLUGIN, c, { HARBOURLINE_SALE_FREEZE: '1' }).exit, c).toBe(0);
   });
 });
 
@@ -75,7 +75,7 @@ describe('lab 04 injectors', () => {
   });
 
   it('a partial revision-2 upload replaces the bundle: everything it left out is gone', () => {
-    const d = reviseUpload(PLUGIN, path.join(INJECTORS, 'revision-2', 'kade-flash-sale'));
+    const d = reviseUpload(PLUGIN, path.join(INJECTORS, 'revision-2', 'harbourline-flash-sale'));
     expect(d.result).toEqual(['.devin-plugin/plugin.json', 'skills/flash-sale-release/SKILL.md']);
     expect(d.changed).toEqual(d.result);
     expect(d.removed).toEqual(expect.arrayContaining(['.mcp.json', 'hooks.json', 'AGENTS.md', 'agents/release-checker.md', 'skills/flash-sale-incident/SKILL.md']));

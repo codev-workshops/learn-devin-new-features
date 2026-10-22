@@ -24,18 +24,18 @@ export interface Session {
 
 export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
 
-export class KadeApiError extends Error {
+export class HarbourlineApiError extends Error {
   constructor(
     public readonly status: number,
     public readonly body: ApiError,
   ) {
     super(`${body.code}: ${body.message}`);
-    this.name = "KadeApiError";
+    this.name = "HarbourlineApiError";
   }
 }
 
 /** Typed client for the frozen OpenAPI contract (packages/contracts/openapi.yaml). */
-export interface KadeApi {
+export interface HarbourlineApi {
   listBrands(): Promise<Brand[]>;
   listCollections(s: Session): Promise<Collection[]>;
   getCollection(s: Session, slug: string): Promise<CollectionPage>;
@@ -64,7 +64,7 @@ export function sessionHeaders(s?: Session): Record<string, string> {
   return h;
 }
 
-export function createHttpApi(baseUrl: string, fetchImpl: FetchLike): KadeApi {
+export function createHttpApi(baseUrl: string, fetchImpl: FetchLike): HarbourlineApi {
   const base = baseUrl.replace(/\/$/, "");
 
   async function call<T>(method: string, path: string, s?: Session, body?: unknown): Promise<T> {
@@ -80,7 +80,7 @@ export function createHttpApi(baseUrl: string, fetchImpl: FetchLike): KadeApi {
     const json = text ? JSON.parse(text) : null;
     if (!res.ok) {
       const err: ApiError = json ?? { code: "internal", message: `HTTP ${res.status}` };
-      throw new KadeApiError(res.status, err);
+      throw new HarbourlineApiError(res.status, err);
     }
     return json as T;
   }

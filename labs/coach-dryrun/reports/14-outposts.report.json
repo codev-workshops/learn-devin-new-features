@@ -143,7 +143,7 @@
   "must_mention": [
     {
       "id": "mm1",
-      "point": "Commands, file edits and repo access run on Kadé's worker in the VPC while inference and planning stay in Devin Cloud",
+      "point": "Commands, file edits and repo access run on Harbourline's worker in the VPC while inference and planning stay in Devin Cloud",
       "weight": 6,
       "mentioned": false,
       "belonged_in": "framing"

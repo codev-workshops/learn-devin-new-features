@@ -20,5 +20,5 @@ export type {
   Totals,
   Variant,
   ApiError,
-} from "@kade/contracts";
-export { BRAND_IDS, HEADERS, ORDER_STATUSES } from "@kade/contracts";
+} from "@harbourline/contracts";
+export { BRAND_IDS, HEADERS, ORDER_STATUSES } from "@harbourline/contracts";

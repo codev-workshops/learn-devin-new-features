@@ -1,5 +1,5 @@
 /**
- * Shared TypeScript types for Kadé Commerce, mirroring packages/contracts/openapi.yaml.
+ * Shared TypeScript types for Harbourline, mirroring packages/contracts/openapi.yaml.
  * Hand-maintained and frozen in W0; keep field names identical to the OpenAPI schemas.
  */
 
@@ -32,9 +32,9 @@ export type WebhookEventType = (typeof WEBHOOK_EVENT_TYPES)[number];
 
 /** Fake-login headers. There is no token; the headers are the whole auth story. */
 export const HEADERS = {
-  brand: "X-Kade-Brand",
-  user: "X-Kade-User",
-  role: "X-Kade-Role",
+  brand: "X-Harbourline-Brand",
+  user: "X-Harbourline-User",
+  role: "X-Harbourline-Role",
   paygateSignature: "X-PayGate-Signature",
   paygateEventId: "X-PayGate-Event-Id",
 } as const;

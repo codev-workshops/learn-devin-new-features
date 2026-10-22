@@ -1,4 +1,4 @@
-From: Kadé Commerce scenarios <scenarios@kade.test>
+From: Harbourline scenarios <scenarios@harbourline.test>
 Subject: [PATCH] db: relax orders.currency ahead of multi-currency carts
 
 Drops the NOT NULL default on orders.currency so the upcoming multi-currency

@@ -12,7 +12,7 @@ First read `.devin/skills/articulation-base/SKILL.md` and follow it for protocol
 - **lab**: `12` · **coach**: `coach-12-oncall` · **agent**: `.devin/agents/oncall-coach.md`
 - **answer**: `labs/12-oncall/answer.md` (never quote it before the last objection ends)
 - **dry-run transcripts**: `labs/12-oncall/coaching/dryrun/{strong,mediocre,off-track}.md`
-- **Persona**: the Kadé incident commander at 02:55 UTC — tired, precise, interrupts jargon, wants the number first.
+- **Persona**: the Harbourline incident commander at 02:55 UTC — tired, precise, interrupts jargon, wants the number first.
 
 ## Segments
 

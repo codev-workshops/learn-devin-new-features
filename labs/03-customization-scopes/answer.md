@@ -18,7 +18,7 @@ The reference files live in `labs/03-customization-scopes/solution/layers/` as `
 - `.devin/rules/checkout-review.md` — Platform's checklist, `trigger: glob` on `services/api/src/**/*.ts` and `apps/web/src/**`. Its tax and rounding statements are written as `[tax.presentation:defer]` / `[tax.rounding:defer]`: "follows the brand's own rule file".
 - `.devin/rules/trailhead-vat.md` — Trailhead's rule, `trigger: glob` on `money.ts`, the checkout/orders/carts routes and services, and `apps/web/src/**`. It owns `[tax.presentation]`, `[tax.rounding]` and `[shipping.threshold]`.
 - `.devin/skills/checkout-review/SKILL.md` — the review procedure: list the brand rules for the changed paths, walk the checklist, cite the brand rule where the checklist defers, run the gates.
-- `.github/CODEOWNERS` — the checklist and skill to `@kade/platform`, `.devin/rules/trailhead-*.md` to `@kade/trailhead`.
+- `.github/CODEOWNERS` — the checklist and skill to `@harbourline/platform`, `.devin/rules/trailhead-*.md` to `@harbourline/trailhead`.
 
 The bracketed keys are a lab convention, not a Devin feature: they make "who owns this topic" greppable and let `solution/resolve.mjs` flag two files stating the same key without one deferring.
 
@@ -43,7 +43,7 @@ Add .devin/rules/trailhead-vat.md, owned by Trailhead, with trigger: glob on ser
 ```
 
 ```prompt
-Add a repo skill .devin/skills/checkout-review/SKILL.md that applies the brand rule files for the changed paths before the shared checklist, and a .github/CODEOWNERS that sends the checklist and skill to @kade/platform and .devin/rules/trailhead-*.md to @kade/trailhead.
+Add a repo skill .devin/skills/checkout-review/SKILL.md that applies the brand rule files for the changed paths before the shared checklist, and a .github/CODEOWNERS that sends the checklist and skill to @harbourline/platform and .devin/rules/trailhead-*.md to @harbourline/trailhead.
 ```
 
 ```prompt
@@ -65,7 +65,7 @@ After each injector, ask Devin to rerun the resolver for `money.ts` and explain 
 
 ## Pitfalls
 
-- Assuming a glob scopes by brand. Globs scope by path, and Kadé's brands share `money.ts`, the routes and `apps/web`, so the Trailhead rule also loads for a Lumen change; it must say which brand it applies to (`[brand.applies]`).
+- Assuming a glob scopes by brand. Globs scope by path, and Harbourline's brands share `money.ts`, the routes and `apps/web`, so the Trailhead rule also loads for a Lumen change; it must say which brand it applies to (`[brand.applies]`).
 - Expecting the deeper or later file to win. Both are in context; the model sees two instructions and may follow either.
 - A glob written relative to a package instead of the repo root, or with a typo: the rule is dead and nothing warns you.
 - Naming an injector or a sample file `AGENTS.md` inside `labs/` — it would itself become a nested instruction file. That is why the lab ships `nested-conflict.AGENTS.md` and `dot-devin/`.
@@ -87,7 +87,7 @@ After each injector, ask Devin to rerun the resolver for `money.ts` and explain 
 
 ## Debrief
 
-**Alternatives considered.** (a) One big root `AGENTS.md` with a Trailhead section — simple, always loaded, but Trailhead needs Platform approval for every edit and it loads for unrelated files. (b) A nested `AGENTS.md` owned by Trailhead — works where Trailhead has its own directory; Kadé's brands share `services/api/src/`, so the glob-triggered rule fits better. (c) An organization-scope plugin or Knowledge entry for the checklist — reaches every repo, but changes need org settings access and are not reviewed in the repo's PRs. (d) Repo rules per owner with explicit deferral and CODEOWNERS — reviewable, path-targeted and owned by the team that knows the domain.
+**Alternatives considered.** (a) One big root `AGENTS.md` with a Trailhead section — simple, always loaded, but Trailhead needs Platform approval for every edit and it loads for unrelated files. (b) A nested `AGENTS.md` owned by Trailhead — works where Trailhead has its own directory; Harbourline's brands share `services/api/src/`, so the glob-triggered rule fits better. (c) An organization-scope plugin or Knowledge entry for the checklist — reaches every repo, but changes need org settings access and are not reviewed in the repo's PRs. (d) Repo rules per owner with explicit deferral and CODEOWNERS — reviewable, path-targeted and owned by the team that knows the domain.
 
 **When each would win.** (a) for a small team with one owner; (b) when the brand or team owns a directory; (c) when the same checklist must apply to many repos; (d) when several teams share one codebase and each owns a topic. Anything that must be enforced rather than advised belongs in an enterprise-required plugin, a hook or CI — not only in markdown.
 

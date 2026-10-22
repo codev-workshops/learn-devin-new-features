@@ -34,7 +34,7 @@ Planted: four fillers (actually ×2, basically ×1, you know ×1), one tag quest
 --- segment: update ---
 [03:05] COACH: Three minutes. Give me the update with proof on both platforms. Go.
 [03:08] LEARNER: So the order screen works on both phones. Basically the same order shows packed on Android and on iOS.
-[03:35] LEARNER: On iOS the cart says native kade-haptics, which is a Swift module, and on Android it is actually the JS fallback, so nothing breaks there.
+[03:35] LEARNER: On iOS the cart says native harbourline-haptics, which is a Swift module, and on Android it is actually the JS fallback, so nothing breaks there.
 [04:10] LEARNER: The screenshots are in the evidence folder.
 [04:40] LEARNER: Next we can actually ship it if you are happy.
 [05:35] LEARNER: Done.

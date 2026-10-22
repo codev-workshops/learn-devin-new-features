@@ -12,8 +12,8 @@ Fixture for `@skills:coach-00-sample dryrun --dry-run labs/00-sample/coaching/dr
 Timings come from the `[mm:ss]` markers; the clock for each segment runs from the coach's "Go" (or the learner's first line) to the learner's "Done."
 
 --- segment: framing ---
-[00:00] COACH: Hi, I'm the Kadé platform lead. You have read the brief. In sixty seconds: what will you put in front of Devin first, and why? Go.
-[00:03] LEARNER: The first task is onboarding. Kadé runs two brands, Lumen Home and Trailhead Supply, on one shared codebase and one shared Postgres database, and right now a new engineer needs a week to run it and someone reset that shared database on day two.
+[00:00] COACH: Hi, I'm the Harbourline platform lead. You have read the brief. In sixty seconds: what will you put in front of Devin first, and why? Go.
+[00:03] LEARNER: The first task is onboarding. Harbourline runs two brands, Lumen Home and Trailhead Supply, on one shared codebase and one shared Postgres database, and right now a new engineer needs a week to run it and someone reset that shared database on day two.
 [00:22] LEARNER: That costs you roughly five engineer-days per hire plus one outage, and every later fix — the oversell, the leak, the rounding — needs a safe local stack first.
 [00:36] LEARNER: I will use Devin's environment setup with a blueprint and a root AGENTS.md, because that is the only capability that removes the shared-database risk without touching a migration during your schema freeze.
 [00:52] LEARNER: I will know it worked when a fresh session, following only the instructions, brings up the storefront in under fifteen minutes on a recording, and the reset script points at the lab database only.

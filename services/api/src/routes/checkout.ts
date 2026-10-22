@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { Router } from "express";
-import type { Address, CheckoutResult } from "@kade/contracts";
+import type { Address, CheckoutResult } from "@harbourline/contracts";
 import type { Db } from "../db.js";
 import { config, now } from "../config.js";
 import { conflict, outOfStock, validationFailed } from "../errors.js";

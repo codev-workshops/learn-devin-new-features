@@ -27,7 +27,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T13:00:00Z · timing:
 ## Structure (problem → approach → evidence → next step)
 
 - **Problem** — present: “Paid orders are arriving empty”
-- **Approach** — present: “Before any session starts I make kade-eu the only platform for this work”
+- **Approach** — present: “Before any session starts I make harbourline-eu the only platform for this work”
 - **Evidence** — present: “the abandoned-carts injector shows the symptom on main and is silent on the fix branch”
 - **Next step** — present: “Ask: approve the refunds for the fourteen customers today”
 - Update order (Outcome → Evidence → Risk → Next action → Ask) held: yes
@@ -43,7 +43,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T13:00:00Z · timing:
 - [x] The sweeper deletes carts older than 48 hours even with a pending payment, so the late webhook creates a paid order with no lines (6) — “the cart sweeper deletes carts older than 48 hours even with a pending payment, so the late webhook creates a paid order with no lines”
 - [x] Reproduced on the local stack with the abandoned-carts injector before changing any code (5) — “reproduced it on the local stack with the abandoned-carts injector before changing any code”
 - [x] Re-planned after the change: team updates carry counts only, no customer e-mails or order ids, and gift cards stay Trailhead-only (4) — “I re-planned after the change: team updates carry counts only, no customer e-mails or order ids, and gift cards stay Trailhead-only”
-- [x] Every session ran on the kade-eu outpost and the second session waited in the queue instead of moving to the cloud (4) — “every session ran on the kade-eu outpost and the second session waited in the queue instead of moving to the cloud”
+- [x] Every session ran on the harbourline-eu outpost and the second session waited in the queue instead of moving to the cloud (4) — “every session ran on the harbourline-eu outpost and the second session waited in the queue instead of moving to the cloud”
 - [x] Gift cards are a separate pull request and VAT is charged when the card is redeemed, not when it is sold (4) — “Gift cards are a separate pull request and VAT is charged when the card is redeemed, not when it is sold”
 - [x] Fourteen affected customers listed for refunds, with the fix as an open pull request and the re-run that proves it (4) — “Fourteen affected customers listed for refunds, with the fix as an open pull request and the re-run that proves it”
 - [x] The half day's session count and ACU, and the step a person would have done more cheaply (3) — “The half day was three sessions and nineteen ACU”

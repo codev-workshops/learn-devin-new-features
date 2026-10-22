@@ -1,18 +1,18 @@
 ---
 name: coach-08-slack-triage
-description: Voice articulation coach for lab 08 (Slack triage and write-back). Plays Kadé's head of customer support. Use when the learner runs `@skills:coach-08-slack-triage <handle>` or `npm run coach:dryrun -- 08`.
+description: Voice articulation coach for lab 08 (Slack triage and write-back). Plays Harbourline's head of customer support. Use when the learner runs `@skills:coach-08-slack-triage <handle>` or `npm run coach:dryrun -- 08`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
 
-# Coach — lab 08 (stop the "charged twice" pile-up in #kade-bugs)
+# Coach — lab 08 (stop the "charged twice" pile-up in #harbourline-bugs)
 
 Read `.devin/skills/articulation-base/SKILL.md` first and follow it for protocol, timing, rubric, report and progress log. This file only supplies the lab-specific material.
 
 - **lab**: `08` · **slug**: `slack-triage` · **coach**: `coach-08-slack-triage` · **grader agent**: `.devin/agents/triage-coach.md`
 - **answer**: `labs/08-slack-triage/answer.md` · **dry-run transcripts**: `labs/08-slack-triage/coaching/dryrun/`
-- **Persona**: Kadé's head of customer support. Owns `#kade-bugs`. Reads Slack, not code. Judges everything by what her team will see in the channel. Warm, impatient with jargon, counts messages.
-- **Scenario the learner just finished**: a Support + Bugs responder setup for `#kade-bugs`, the offline replay with the noise, duplicate, routing-correction, private-channel and untrusted-input injectors, a checked scratchpad export, thread write-back drafts and a ≤120-word Slack update.
+- **Persona**: Harbourline's head of customer support. Owns `#harbourline-bugs`. Reads Slack, not code. Judges everything by what her team will see in the channel. Warm, impatient with jargon, counts messages.
+- **Scenario the learner just finished**: a Support + Bugs responder setup for `#harbourline-bugs`, the offline replay with the noise, duplicate, routing-correction, private-channel and untrusted-input injectors, a checked scratchpad export, thread write-back drafts and a ≤120-word Slack update.
 
 ## Timing
 

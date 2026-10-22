@@ -123,7 +123,7 @@ export function createMockFetch(store: MockStore = new MockStore()) {
       if (url.pathname !== "/brands" && (!brand || !user)) {
         return jsonResponse(401, {
           code: "unauthorized",
-          message: "X-Kade-Brand and X-Kade-User are required",
+          message: "X-Harbourline-Brand and X-Harbourline-User are required",
         });
       }
       const params: Record<string, string> = {};

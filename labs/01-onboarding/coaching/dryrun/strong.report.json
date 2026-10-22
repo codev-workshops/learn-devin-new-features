@@ -126,7 +126,7 @@
       "point": "Knowledge notes are migrating to Skills; repeated setup guidance becomes a skill rather than more AGENTS.md text",
       "weight": 5,
       "mentioned": true,
-      "evidence_quote": "The repeated setup steps live in one skill, kade-dev, because our old Knowledge notes are moving to Skills",
+      "evidence_quote": "The repeated setup steps live in one skill, harbourline-dev, because our old Knowledge notes are moving to Skills",
       "belonged_in": "update"
     },
     {

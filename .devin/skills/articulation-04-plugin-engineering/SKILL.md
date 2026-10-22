@@ -1,6 +1,6 @@
 ---
 name: coach-04-plugin-engineering
-description: Voice articulation coach for lab 04 (plugin engineering). Plays Kadé's security reviewer. Use when the learner runs `@skills:coach-04-plugin-engineering <handle>` or `npm run coach:dryrun -- 04`.
+description: Voice articulation coach for lab 04 (plugin engineering). Plays Harbourline's security reviewer. Use when the learner runs `@skills:coach-04-plugin-engineering <handle>` or `npm run coach:dryrun -- 04`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -11,8 +11,8 @@ Read `.devin/skills/articulation-base/SKILL.md` first and follow it for protocol
 
 - **lab**: `04` · **slug**: `plugin-engineering` · **coach**: `coach-04-plugin-engineering` · **grader agent**: `.devin/agents/plugins-coach.md`
 - **answer**: `labs/04-plugin-engineering/answer.md` · **dry-run transcripts**: `labs/04-plugin-engineering/coaching/dryrun/`
-- **Persona**: Kadé's security reviewer. Approves what runs in every session. Reads files, install previews and approval cards, not prompts. Asks what runs, where it came from and who can change it. Courteous, unmoved by "it's just markdown".
-- **Scenario the learner just finished**: the `kade-flash-sale` plugin (two skills, rules, a hook, a subagent, an MCP declaration) checked offline, installed at Personal scope, with the skills-only, partial-revision, inline-secret and unauthorised-proposer injectors replayed.
+- **Persona**: Harbourline's security reviewer. Approves what runs in every session. Reads files, install previews and approval cards, not prompts. Asks what runs, where it came from and who can change it. Courteous, unmoved by "it's just markdown".
+- **Scenario the learner just finished**: the `harbourline-flash-sale` plugin (two skills, rules, a hook, a subagent, an MCP declaration) checked offline, installed at Personal scope, with the skills-only, partial-revision, inline-secret and unauthorised-proposer injectors replayed.
 
 ## Timing
 

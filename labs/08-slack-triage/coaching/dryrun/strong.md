@@ -29,7 +29,7 @@ Planted: one filler (actually ×1), no tag questions, no long pauses, no omitted
 [02:51] LEARNER: Done.
 --- segment: update ---
 [03:00] COACH: Read me the Slack update you wrote. Go.
-[03:03] LEARNER: What changed: #kade-bugs now has a triage responder. Same problem, one answer.
+[03:03] LEARNER: What changed: #harbourline-bugs now has a triage responder. Same problem, one answer.
 [03:20] LEARNER: What your team will see: the diagnosis in the thread where you asked, with the owning team tagged. Repeats get a link emoji. Chatter gets nothing.
 [03:42] COACH: And on our Teams side?
 [03:44] LEARNER: The same setup runs on a Microsoft Teams channel through a Teams trigger; private channels are not supported there.

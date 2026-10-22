@@ -1,14 +1,14 @@
 openapi: 3.1.0
 info:
-  title: Kadé Commerce API
+  title: Harbourline API
   version: 1.0.0
-  summary: Storefront, cart, checkout, orders, admin and PayGate webhook contract for the Kadé Commerce lab fixture.
+  summary: Storefront, cart, checkout, orders, admin and PayGate webhook contract for the Harbourline lab fixture.
   description: |
     Frozen in W0 (see AGENTS.md). Changes go through the parent as a W1-api follow-up PR.
 
-    Authentication is a deliberate fake: every request carries `X-Kade-Brand` (which brand's data
-    the caller may see) and `X-Kade-User` (an email from the seed). Merchandiser and admin routes
-    additionally require `X-Kade-Role`. No tokens, no sessions, no real PII.
+    Authentication is a deliberate fake: every request carries `X-Harbourline-Brand` (which brand's data
+    the caller may see) and `X-Harbourline-User` (an email from the seed). Merchandiser and admin routes
+    additionally require `X-Harbourline-Role`. No tokens, no sessions, no real PII.
 
     Money is a decimal string in major units (`"12.50"`) with an ISO 4217 currency. Lumen Home is
     USD with tax added at checkout; Trailhead Supply is EUR with 19% VAT included in list prices.
@@ -394,17 +394,17 @@ components:
     brandHeader:
       type: apiKey
       in: header
-      name: X-Kade-Brand
+      name: X-Harbourline-Brand
       description: Brand id (`lumen-home` or `trailhead-supply`). Scopes every read and write.
     userHeader:
       type: apiKey
       in: header
-      name: X-Kade-User
+      name: X-Harbourline-User
       description: Seeded user email. Fake login; no verification.
     roleHeader:
       type: apiKey
       in: header
-      name: X-Kade-Role
+      name: X-Harbourline-Role
       description: "`customer` (default), `merchandiser` or `admin`. Required on /admin routes."
     paygateSignature:
       type: apiKey

@@ -17,7 +17,7 @@ npm run db:seed -- --reset       # truncate every table and rebuild the seed —
 npm run db:seed -- --verify      # recompute the dataset and compare row counts and checksums with the database
 ```
 
-`DATABASE_URL` (default `postgres://kade:kade@localhost:5432/kade`) selects the database. The seed is
+`DATABASE_URL` (default `postgres://harbourline:harbourline@localhost:5432/harbourline`) selects the database. The seed is
 byte-for-byte reproducible: identical ids, timestamps and totals on every run because every random
 choice comes from a PRNG seeded with `seed: 20261022` and every clock reading is `as_of`.
 

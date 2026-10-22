@@ -6,7 +6,7 @@ import {
   MONEY_PATTERN,
   WEBHOOK_EVENT_TYPES,
   type PaymentWebhookEvent,
-} from "@kade/contracts";
+} from "@harbourline/contracts";
 import type { Db } from "../db.js";
 import { config, now } from "../config.js";
 import { badRequest, invalidSignature } from "../errors.js";

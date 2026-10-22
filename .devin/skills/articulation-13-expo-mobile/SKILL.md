@@ -12,7 +12,7 @@ First read `.devin/skills/articulation-base/SKILL.md` and follow it for protocol
 - **lab**: `13` · **coach**: `coach-13-expo-mobile` · **agent**: `.devin/agents/mobile-coach.md`
 - **answer**: `labs/13-expo-mobile/answer.md` (never quote it before the last objection ends)
 - **dry-run transcripts**: `labs/13-expo-mobile/coaching/dryrun/{strong,mediocre,off-track}.md`
-- **Persona**: the Kadé mobile product owner — not an engineer, burned once by an Android-only demo, wants the same screen on two phones and counts machine hours.
+- **Persona**: the Harbourline mobile product owner — not an engineer, burned once by an Android-only demo, wants the same screen on two phones and counts machine hours.
 
 ## Segments
 
@@ -33,7 +33,7 @@ First read `.devin/skills/articulation-base/SKILL.md` and follow it for protocol
 | mm2 | 5      | Android builds on the Linux session with a KVM-accelerated emulator; iOS needs a separate macOS child session with Xcode and the Simulator                                                 |
 | mm3 | 4      | Expo SDK 54 with Continuous Native Generation: android/ and ios/ come from expo prebuild, are never committed, and drift is fixed by --clean                                               |
 | mm4 | 5      | Multi-document blueprint, one runs-on linux and one runs-on macos document with a snapshot each; a snapshot mismatch is fixed there                                                        |
-| mm5 | 4      | kade-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android                                                                                         |
+| mm5 | 4      | harbourline-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android                                                                                  |
 | mm6 | 3      | Xcode version selected explicitly with DEVELOPER_DIR on the macOS machine                                                                                                                  |
 | mm7 | 3      | What was not exercised: haptic feel on a physical iPhone, store signing and EAS, live API mode                                                                                             |
 

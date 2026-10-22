@@ -1,10 +1,10 @@
 ## Customer brief
 
-> **From:** Amara Okafor, COO, Kadé Commerce
+> **From:** Amara Okafor, COO, Harbourline
 > **To:** The Devin lead on duty today
 > **Subject:** One morning, three problems, no script
 >
-> Every week someone at Kadé brings three things to the same stand-up: something broke last night, a brand team wants something new by a date, and legal, finance or security adds a rule we did not have last week. Today that someone is you, and I want to see how you run it with Devin.
+> Every week someone at Harbourline brings three things to the same stand-up: something broke last night, a brand team wants something new by a date, and legal, finance or security adds a rule we did not have last week. Today that someone is you, and I want to see how you run it with Devin.
 >
 > You will get one sealed envelope. Inside is a real-shaped morning for one of our brands: an incident that is costing us orders or money right now, a feature a brand lead has promised to a customer, and a constraint you must not break while you do either. Nobody will tell you which Devin capabilities to use. Choosing them, and saying why, is the job.
 >

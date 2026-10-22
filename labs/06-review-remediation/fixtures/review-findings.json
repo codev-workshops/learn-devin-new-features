@@ -13,8 +13,8 @@
       "cwe": "CWE-639",
       "title": "Price override is gated on a client-chosen role",
       "location": "services/api/src/routes/checkout.ts — `isStaff(req.caller) ? overrides[line.sku]`",
-      "reasoning": "`req.caller.role` comes from the `X-Kade-Role` request header (`services/api/src/middleware/auth.ts`), so any shopper who sends `X-Kade-Role: merchandiser` with `priceOverrides` sets their own price.",
-      "verified": "On the PR branch a Lumen customer with X-Kade-Role: merchandiser and priceOverrides {\"LH-LAMP-05\": \"0.01\"} gets a 201 with unit price 0.01 USD and order total 7.96 USD (0.01 + 7.95 shipping)."
+      "reasoning": "`req.caller.role` comes from the `X-Harbourline-Role` request header (`services/api/src/middleware/auth.ts`), so any shopper who sends `X-Harbourline-Role: merchandiser` with `priceOverrides` sets their own price.",
+      "verified": "On the PR branch a Lumen customer with X-Harbourline-Role: merchandiser and priceOverrides {\"LH-LAMP-05\": \"0.01\"} gets a 201 with unit price 0.01 USD and order total 7.96 USD (0.01 + 7.95 shipping)."
     },
     {
       "id": "F2",

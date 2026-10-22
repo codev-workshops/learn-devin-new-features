@@ -28,7 +28,9 @@ describe("merchandiser console", () => {
     await user.click(screen.getByRole("button", { name: "Sign in" }));
     expect(await screen.findByRole("heading", { level: 1, name: "Inventory" })).toBeInTheDocument();
     expect(await screen.findByText("LH-LAMP-01")).toBeInTheDocument();
-    expect(window.sessionStorage.getItem("kade.admin.session")).toContain("maya@lumenhome.test");
+    expect(window.sessionStorage.getItem("harbourline.admin.session")).toContain(
+      "maya@lumenhome.test",
+    );
   });
 
   it("refuses customers with a 403 from the contract", async () => {

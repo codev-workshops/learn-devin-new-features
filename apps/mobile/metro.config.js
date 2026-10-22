@@ -1,5 +1,5 @@
 // Metro config for the npm-workspaces monorepo.
-// - `@kade/contracts` resolves to its TypeScript source so the app never depends on
+// - `@harbourline/contracts` resolves to its TypeScript source so the app never depends on
 //   `packages/contracts/dist` having been built first.
 // - Native singletons (react, react-native, screens, safe-area) are pinned to this workspace's
 //   copies: the root hoists newer versions for other packages and a second copy of React or a
@@ -35,7 +35,7 @@ config.resolver.nodeModulesPaths = [
 ];
 const defaultResolveRequest = config.resolver.resolveRequest;
 config.resolver.resolveRequest = (context, moduleName, platform) => {
-  if (moduleName === "@kade/contracts") {
+  if (moduleName === "@harbourline/contracts") {
     return { type: "sourceFile", filePath: contractsSource };
   }
   const pinned = singletons.find((n) => moduleName === n || moduleName.startsWith(`${n}/`));

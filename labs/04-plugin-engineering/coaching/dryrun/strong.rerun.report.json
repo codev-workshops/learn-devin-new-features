@@ -81,7 +81,7 @@
     },
     "approach": {
       "status": "present",
-      "quote": "The kade-flash-sale plugin ships both procedures as skills"
+      "quote": "The harbourline-flash-sale plugin ships both procedures as skills"
     },
     "evidence": {
       "status": "present",
@@ -113,7 +113,7 @@
       "point": "One plugin ships both procedures as skills together with the freeze rule, the push guard hook, the reviewer subagent and the incident MCP",
       "weight": 8,
       "mentioned": true,
-      "evidence_quote": "The kade-flash-sale plugin ships both procedures as skills, together with the freeze rule, the push guard hook, the release-checker subagent and the incident MCP declaration",
+      "evidence_quote": "The harbourline-flash-sale plugin ships both procedures as skills, together with the freeze rule, the push guard hook, the release-checker subagent and the incident MCP declaration",
       "belonged_in": "framing"
     },
     {

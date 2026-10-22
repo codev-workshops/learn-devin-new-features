@@ -1,6 +1,6 @@
 ## Customer brief
 
-Hi — this is Tomás, tech lead for checkout at **Kadé Commerce**. During Lamp Week a **Lumen Home** customer added the Studio Clamp Lamp to her cart at the old price, the flash-sale price went live an hour later, and checkout still charged her the old one. That is the `price-drift` ticket, and a developer has opened a fix: PR #26, "re-price cart lines from the current price list at checkout".
+Hi — this is Tomás, tech lead for checkout at **Harbourline**. During Lamp Week a **Lumen Home** customer added the Studio Clamp Lamp to her cart at the old price, the flash-sale price went live an hour later, and checkout still charged her the old one. That is the `price-drift` ticket, and a developer has opened a fix: PR #26, "re-price cart lines from the current price list at checkout".
 
 The fix touches totals and tax for both brands. Trailhead Supply prices include 19% VAT, Lumen adds 8.25% sales tax, and our fulfilment worker recomputes every order with its own rounding. We cannot ship a rounding regression before Black Friday. A one-cent difference between the API and the worker leaves finance with a reconciliation queue, and a wrong VAT figure on an invoice causes much worse problems.
 

@@ -3,9 +3,9 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "kade-fulfilment-worker"
+name = "harbourline-fulfilment-worker"
 version = "0.1.0"
-description = "Kadé Commerce fulfilment worker: outbox consumer, inventory reservations, payment-webhook processor, abandoned-cart sweeper, Decimal totals."
+description = "Harbourline fulfilment worker: outbox consumer, inventory reservations, payment-webhook processor, abandoned-cart sweeper, Decimal totals."
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
@@ -16,7 +16,7 @@ postgres = ["psycopg[binary]>=3.1,<4"]
 dev = ["pytest>=8", "ruff>=0.6", "pyyaml>=6", "psycopg[binary]>=3.1,<4"]
 
 [project.scripts]
-kade-worker = "fulfilment_worker.cli:main"
+harbourline-worker = "fulfilment_worker.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

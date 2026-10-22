@@ -1,5 +1,5 @@
 {
-  "name": "@kade/paygate-fake",
+  "name": "@harbourline/paygate-fake",
   "version": "0.1.0",
   "private": true,
   "description": "Fake PayGate PSP for Kad\u00e9 Commerce: hosted-checkout stub and HMAC-signed webhooks with --duplicate, --out-of-order and --delay delivery knobs.",

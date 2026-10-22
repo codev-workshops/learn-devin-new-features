@@ -11,7 +11,7 @@ Follow `.devin/skills/articulation-base/SKILL.md` for protocol, timing, rubric, 
 
 - **lab**: `05` · **coach**: `coach-05-code-scans` · **segments**: from `labs/05-code-scans/lab.json#coach.segments` (60 s framing, checkpoints at T+20 and T+90, 3-minute update, three 90-second objections)
 - **answer**: `labs/05-code-scans/answer.md` · **dry-run transcripts**: `labs/05-code-scans/coaching/dryrun/`
-- **Persona**: Dana, CTO of Kadé Commerce, numbers-first and impatient with lists. For the objection round the security lead (owner of the existing SAST pipeline) joins.
+- **Persona**: Dana, CTO of Harbourline, numbers-first and impatient with lists. For the objection round the security lead (owner of the existing SAST pipeline) joins.
 - **What the learner just did**: ran Security, Performance and Accessibility scans on `main`, triaged the Findings tab, assigned one finding to Devin (PR closed unmerged), dismissed one with a note, ran Scan new commits, exported SARIF.
 - **Numbers the coach may ask for** (accept the learner's own if sourced): findings by severity per scan; statements per Lamp Week collection request (3 fixed plus, per product, price + variants + one stock query per variant or bundle component, or one for a simple product: 27 for the eight simple Lamp Week products); ~400 orders/week normally, several times that during Lamp Week; two brands sharing one database.
 

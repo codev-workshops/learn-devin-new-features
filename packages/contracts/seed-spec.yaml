@@ -1,4 +1,4 @@
-# Kadé Commerce seed-data specification (frozen in W0).
+# Harbourline seed-data specification (frozen in W0).
 # db/seed (W1-api) must generate exactly this dataset, deterministically, from `seed: 20261022`.
 # `npm run db:seed -- --reset` drops and re-creates it; it is the universal lab reset.
 version: 1
@@ -586,7 +586,7 @@ users:
         name: Lena Vogel,
       }
   admins:
-    - { email: ops@kade.test, brand: null, role: admin, name: Platform Ops }
+    - { email: ops@harbourline.test, brand: null, role: admin, name: Platform Ops }
   customers:
     rule: 120 deterministic customers per brand, `customer-<nnn>@<brand>.test`; no real names or addresses
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import type { Collection } from "@kade/contracts";
+import type { Collection } from "@harbourline/contracts";
 import type { Db } from "../db.js";
 import { notFound } from "../errors.js";
 import { requireCaller } from "../middleware/auth.js";

@@ -4,10 +4,10 @@
   "res_type": "time_series",
   "from_date": 1792620000000,
   "to_date": 1792638000000,
-  "query": "( sum:kade.webhooks.processed{outcome:error}.as_count() / sum:kade.webhooks.processed{*}.as_count() ) * 100",
+  "query": "( sum:harbourline.webhooks.processed{outcome:error}.as_count() / sum:harbourline.webhooks.processed{*}.as_count() ) * 100",
   "series": [
     {
-      "metric": "kade.webhooks.failure_rate",
+      "metric": "harbourline.webhooks.failure_rate",
       "scope": "env:prod",
       "unit": [{ "family": "percentage", "name": "percent", "plural": "percent" }],
       "interval": 900,

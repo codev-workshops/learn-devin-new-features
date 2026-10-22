@@ -28,7 +28,7 @@ repos:
             "build-tools;35.0.0" "build-tools;36.0.0" \
             "emulator" "system-images;android-35;google_apis;x86_64"
           echo no | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd \
-            -n kade_android -k "system-images;android-35;google_apis;x86_64" -d pixel_6 --force
+            -n harbourline_android -k "system-images;android-35;google_apis;x86_64" -d pixel_6 --force
           grep -q 'android-sdk/platform-tools' "$HOME/.bashrc" 2>/dev/null || {
             echo 'export ANDROID_HOME="$HOME/android-sdk"'
             echo 'export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"'
@@ -44,7 +44,7 @@ repos:
       - name: Headless Android emulator (KVM)
         run: |
           export ANDROID_HOME="$HOME/android-sdk"
-          nohup "$ANDROID_HOME/emulator/emulator" -avd kade_android -no-window \
+          nohup "$ANDROID_HOME/emulator/emulator" -avd harbourline_android -no-window \
             -gpu swiftshader_indirect -no-audio -no-boot-anim -no-snapshot -accel on \
             >/tmp/emulator.log 2>&1 &
     test:
@@ -54,7 +54,7 @@ repos:
     build:
       - run: npm run build --workspace apps/mobile
 ---
-# macOS document: iOS toolchain for the optional modules/kade-haptics Swift module.
+# macOS document: iOS toolchain for the optional modules/harbourline-haptics Swift module.
 # Exercised by the W4-13 macOS child on 2026-10-22 with Xcode 26.6 (17F113, iOS SDK 26.5) on
 # macOS 26.6.2, simulator iPhone 17 / iOS 26.5. Every command below ran unattended there.
 # The `brew install cocoapods` fallback was not taken (CocoaPods 1.17.0 was already present).
@@ -100,7 +100,7 @@ repos:
           export PATH="/opt/homebrew/opt/node@22/bin:$PATH" LANG=en_US.UTF-8
           export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
           cd apps/mobile
-          xcodebuild -workspace ios/KadCommerce.xcworkspace -scheme KadCommerce \
+          xcodebuild -workspace ios/Harbourline.xcworkspace -scheme Harbourline \
             -sdk iphonesimulator -configuration Release \
             -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' \
             -derivedDataPath ios/build build

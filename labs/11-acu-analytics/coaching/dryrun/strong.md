@@ -13,7 +13,7 @@ Planted: one filler (actually ×1), no tag questions, no long pauses, no omitted
 
 --- segment: framing ---
 [00:00] COACH: Sixty seconds. Why were two people blocked, and what will you change? Go.
-[00:04] LEARNER: Two people were blocked this morning by two different caps. Kadé has an organization limit per brand team and a personal tier per member, Devin enforces both independently, and either one stops new work. Raising one never lifts the other.
+[00:04] LEARNER: Two people were blocked this morning by two different caps. Harbourline has an organization limit per brand team and a personal tier per member, Devin enforces both independently, and either one stops new work. Raising one never lifts the other.
 [00:30] LEARNER: The Trailhead lead hit the team cap; the Lumen engineer hit his personal cap. I will fix each one with the cap that blocked it, and give you one number per team for the budget.
 [00:58] LEARNER: You will know it works when both of them can start a session today and Trailhead stays open through the sale. Done.
 

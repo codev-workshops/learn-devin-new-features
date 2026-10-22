@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Offline replay of a #kade-bugs triage run for lab 08.
+// Offline replay of a #harbourline-bugs triage run for lab 08.
 //
 //   node labs/08-slack-triage/solution/triage-sim.mjs [--inject all|noise,duplicate,...] [--platform slack|teams]
 //   node labs/08-slack-triage/solution/triage-sim.mjs --inject all --check <your-scratchpad.json>
@@ -80,8 +80,8 @@ export function fromTeams(messages) {
 
 export function loadMessages({ inject = [], platform = 'slack' } = {}) {
   if (platform === 'teams' && inject.length) throw new Error('injectors replay the Slack export only; run --platform teams without --inject');
-  if (platform === 'teams') return fromTeams(readJson(path.join(LAB_DIR, 'fixtures', 'kade-bugs.teams.json')));
-  const base = readJsonl(path.join(LAB_DIR, 'fixtures', 'kade-bugs.jsonl'));
+  if (platform === 'teams') return fromTeams(readJson(path.join(LAB_DIR, 'fixtures', 'harbourline-bugs.teams.json')));
+  const base = readJsonl(path.join(LAB_DIR, 'fixtures', 'harbourline-bugs.jsonl'));
   const extra = inject.flatMap((name) => {
     if (!INJECTORS.includes(name)) throw new Error(`unknown injector "${name}" (known: ${INJECTORS.join(', ')})`);
     return readJsonl(path.join(LAB_DIR, 'injectors', `${name}.jsonl`));

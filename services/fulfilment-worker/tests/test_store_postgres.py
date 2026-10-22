@@ -1,6 +1,6 @@
 """Runs the duplicate-webhook plant through PostgresStore against db/expected-schema.sql.
 
-Needs a reachable database: ``KADE_TEST_DATABASE_URL=postgres://kade:kade@localhost:5432/kade``
+Needs a reachable database: ``HARBOURLINE_TEST_DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline``
 (``npm run db:up`` at the repo root). Skipped otherwise so ``pytest -q`` stays green offline.
 """
 
@@ -11,10 +11,10 @@ import pytest
 
 from fulfilment_worker import fixtures, outbox, webhooks
 
-DATABASE_URL = os.environ.get("KADE_TEST_DATABASE_URL")
+DATABASE_URL = os.environ.get("HARBOURLINE_TEST_DATABASE_URL")
 SCHEMA = Path(__file__).resolve().parents[1] / "db" / "expected-schema.sql"
 
-pytestmark = pytest.mark.skipif(not DATABASE_URL, reason="KADE_TEST_DATABASE_URL not set")
+pytestmark = pytest.mark.skipif(not DATABASE_URL, reason="HARBOURLINE_TEST_DATABASE_URL not set")
 
 
 @pytest.fixture

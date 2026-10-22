@@ -13,7 +13,7 @@
 3. Sort the findings (`fixtures/review-findings.json` is the reference). F1 and F2 are Bugs; F3 is an Investigate flag; F4 is informational; F5 is the rule problem.
 4. Copy F2 into the chat. Ask for a seeded SKU and quantity that break it, then confirm with the test below. Two €19.90 socks: `19.90 * 2 * 100` is `3979.9999999999995`, so `Math.floor` gives 39.79. Three socks happen to come out right (59.70), so a quick spot check misses it.
 5. Cut `lab06/<handle>` from the PR branch. Add the test first and run it: both cases fail on the PR's code. Commit it with each case marked `it.fails(...)`, so `npm run gates` stays green while the test records the defect. Push and open your remediation PR against `main`, marked do-not-merge. Its first review sees PR #26's code plus the expected-failure test, so it reports the same findings; this is the baseline that re-review will resolve. In the fix commit, switch both cases back to `it(...)`.
-6. Fix: remove `priceOverrides` (no client-controlled field may change a price, and `X-Kade-Role` is self-declared), drop `toCents` and pass `unitPrice` and `quantity` to `computeTotals` unchanged, and move re-pricing before the transaction opens (this resolves F3). Do not touch `money.ts`: `currency-rounding` is a separate plant and stays as it is.
+6. Fix: remove `priceOverrides` (no client-controlled field may change a price, and `X-Harbourline-Role` is self-declared), drop `toCents` and pass `unitPrice` and `quantity` to `computeTotals` unchanged, and move re-pricing before the transaction opens (this resolves F3). Do not touch `money.ts`: `currency-rounding` is a separate plant and stays as it is.
 7. Replace the review rule (F5): target every money computation under `services/api/src/**`, not one file. Ban rounding outside `money.ts` and client-controlled price inputs. If you have admin access, add it as a rule card in the rules editor too, so a PR cannot weaken it by editing `REVIEW.md`.
 8. Push the fix commits to the same remediation PR. The new commits trigger a re-review of that PR: F1, F2, F3 and F5 should be resolved, and F4 remains as informational. PR #26 itself is not re-reviewed, because its head never changes.
 9. Unchanged-diff injector: push an empty commit and request a review. Expect the skip, and say why.
@@ -59,13 +59,13 @@ index d07c649..bc07411 100644
 -- Do not merge changes to checkout totals without a second reviewer from payments.
 +- Any change under `src/**` that computes, rounds or overrides a price, tax or total needs a test in `test/` that pins the amounts for both brands (Lumen tax-exclusive, Trailhead VAT-inclusive), including a quantity of 2.
 +- Rounding only through the helpers in `src/money.ts`; a new `Math.floor`, `Math.round` or `toFixed` on money elsewhere is a Bug.
-+- No request field or header the client controls may change a price; `X-Kade-Role` is self-declared.
++- No request field or header the client controls may change a price; `X-Harbourline-Role` is self-declared.
 +- Changes to this file need a second reviewer from payments.
 diff --git a/services/api/src/routes/checkout.ts b/services/api/src/routes/checkout.ts
 index 560babc..581dce0 100644
 --- a/services/api/src/routes/checkout.ts
 +++ b/services/api/src/routes/checkout.ts
-@@ -4,7 +4,7 @@ import type { Address, CheckoutResult } from "@kade/contracts";
+@@ -4,7 +4,7 @@ import type { Address, CheckoutResult } from "@harbourline/contracts";
  import type { Db } from "../db.js";
  import { config, now } from "../config.js";
  import { conflict, outOfStock, validationFailed } from "../errors.js";

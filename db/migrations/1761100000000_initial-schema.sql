@@ -1,5 +1,5 @@
 -- Up Migration
--- Kadé Commerce schema (W1-api). Applied with `npm run db:migrate` (node-pg-migrate, SQL files).
+-- Harbourline schema (W1-api). Applied with `npm run db:migrate` (node-pg-migrate, SQL files).
 -- Money columns are numeric(12,2) and are rendered as decimal strings at the API boundary.
 
 CREATE TABLE brands (

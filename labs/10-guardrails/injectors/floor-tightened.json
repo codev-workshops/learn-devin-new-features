@@ -1,7 +1,7 @@
 {
   "description": "Injector floor-tightened: at T+45 the CISO narrows the PayGate entry to the API host only. Use with --then against the reference world.",
   "profiles": {
-    "kade-floor": {
+    "harbourline-floor": {
       "scope": "enterprise",
       "enforcement": "mandatory",
       "network": [
@@ -11,7 +11,7 @@
       "mcp": [],
       "gh_token": "remove"
     },
-    "kade-dev": {
+    "harbourline-dev": {
       "scope": "org",
       "enforcement": "recommended",
       "network": [
@@ -21,7 +21,7 @@
       "git": "full",
       "devin_mcp_read_only": false
     },
-    "kade-automation": {
+    "harbourline-automation": {
       "scope": "org",
       "enforcement": "recommended",
       "network": [
@@ -33,13 +33,13 @@
   },
   "bindings": {
     "enterprise_default": {
-      "profile": "kade-floor"
+      "profile": "harbourline-floor"
     },
     "org_default": {
-      "profile": "kade-dev"
+      "profile": "harbourline-dev"
     },
     "automations_default": {
-      "profile": "kade-automation"
+      "profile": "harbourline-automation"
     },
     "automations": {
       "webhook-triage": "inherit"

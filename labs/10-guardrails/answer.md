@@ -9,15 +9,15 @@ Two Devin features answer the CISO, and they do different jobs:
 
 ## The reference matrix
 
-`solution/kade-guardrails.json`:
+`solution/harbourline-guardrails.json`:
 
 | Profile | Scope | Enforcement | Network | MCP | Devin MCP | Git | GitHub CLI token |
 |---|---|---|---|---|---|---|---|
-| `kade-floor` | enterprise | **mandatory** | `registry.npmjs.org`, `*.sandbox.paygate.example` | none allowed | (unset) | (unset) | removed |
-| `kade-dev` | org | recommended | same two | (unset) | read/write | Full | (unset) |
-| `kade-automation` | org | recommended | `registry.npmjs.org` | (unset) | read-only | Read-only | (unset) |
+| `harbourline-floor` | enterprise | **mandatory** | `registry.npmjs.org`, `*.sandbox.paygate.example` | none allowed | (unset) | (unset) | removed |
+| `harbourline-dev` | org | recommended | same two | (unset) | read/write | Full | (unset) |
+| `harbourline-automation` | org | recommended | `registry.npmjs.org` | (unset) | read-only | Read-only | (unset) |
 
-Bindings: enterprise default → `kade-floor`; organization default → `kade-dev`; automations default → `kade-automation`; `webhook-triage` automation → inherit; snapshot builds → inherit.
+Bindings: enterprise default → `harbourline-floor`; organization default → `harbourline-dev`; automations default → `harbourline-automation`; `webhook-triage` automation → inherit; snapshot builds → inherit.
 
 Why each choice:
 
@@ -26,7 +26,7 @@ Why each choice:
 - An empty MCP allowlist means no MCP server until the CISO approves one by name. MCP servers do not need to be in the network list; the two lists are independent.
 - The floor leaves git and Devin MCP unset so the organization default can give people Full git; the automations default narrows both for robots.
 
-Resolver output (`node labs/10-guardrails/solution/profile-resolve.mjs --world labs/10-guardrails/solution/kade-guardrails.json --check registry.npmjs.org,api.sandbox.paygate.example,pypi.org,files.pythonhosted.org --grant cdn.playwright.dev`), summarised:
+Resolver output (`node labs/10-guardrails/solution/profile-resolve.mjs --world labs/10-guardrails/solution/harbourline-guardrails.json --check registry.npmjs.org,api.sandbox.paygate.example,pypi.org,files.pythonhosted.org --grant cdn.playwright.dev`), summarised:
 
 | Target | Profiles in force | Winning level | Git | Devin MCP RO | Token | npm | PayGate sandbox | pypi | Note |
 |---|---|---|---|---|---|---|---|---|---|
@@ -50,11 +50,11 @@ The resolver encodes exactly these five rules. Rule 4's handling of a child that
 
 ## Injector answers
 
-- **recommended-floor** — with `kade-floor` recommended, `opt-out-session` resolves to no profiles at all: every host reachable, token kept. `child-of-dev` drops to `kade-dev` only, which happens to match the CISO's list today but is one org-admin edit away from not doing so. One sentence: *recommended is a suggestion any lower level can replace; mandatory is the floor.*
+- **recommended-floor** — with `harbourline-floor` recommended, `opt-out-session` resolves to no profiles at all: every host reachable, token kept. `child-of-dev` drops to `harbourline-dev` only, which happens to match the CISO's list today but is one org-admin edit away from not doing so. One sentence: *recommended is a suggestion any lower level can replace; mandatory is the floor.*
 - **mid-session-request** — approving the request adds `cdn.playwright.dev` to that session only. Under a mandatory floor that does not list the host, the grant is clamped: the session still cannot reach it. Fix at source instead: set `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`, or ask the CISO to add the host to the floor.
 - **floor-tightened** — the running session keeps `*.sandbox.paygate.example` (so `webhooks.sandbox.paygate.example` still works) until its next wake; after waking, and for every new session, only `api.sandbox.paygate.example` is in the floor. If the change is urgent, ask owners to put running sessions to sleep (or end them) so they re-resolve.
 - **snapshot-build-python** — the build reaches npm (every one of the 1,302 remote packages in `package-lock.json` resolves to `registry.npmjs.org`, and the three install scripts — `esbuild`, `fsevents`, `msw` — fetch nothing else) but the blueprint's `pip install -e "services/fulfilment-worker[dev]"` needs `pypi.org` and `files.pythonhosted.org`. A snapshot-build binding cannot loosen a mandatory floor, so either the CISO adds those two hosts to the floor, or the build stops installing Python packages. That is the CISO's call; the change request names the two hosts and the one blueprint line.
-- **gh-token-keep** — `kade-gh` keeps the token but its network list has no `api.github.com`; `kade-gh-readonly` keeps the token with Read-only git. The documentation makes both conditions a requirement for keeping the token, so expect neither to save. `--validate` exits 1 with one problem each.
+- **gh-token-keep** — `harbourline-gh` keeps the token but its network list has no `api.github.com`; `harbourline-gh-readonly` keeps the token with Read-only git. The documentation makes both conditions a requirement for keeping the token, so expect neither to save. `--validate` exits 1 with one problem each.
 - **broad-wildcard** — `registry.npmjs.org*` also matches `registry.npmjs.org.evil.example`; `*paygate.example` also matches `evil-paygate.example` and `evilpaygate.example`; `https://registry.npmjs.org/` is a URL, not a hostname (no scheme, port or path).
 - **guardrail-messages** — message 1 is data exfiltration, message 2 (PR comment) is prompt injection, message 3 is ordinary work.
 
@@ -82,7 +82,7 @@ You cannot edit profiles or guardrails, but you can still prove what governs you
 Prompts belong here and only here. A session can help you write and check the matrix; it cannot change settings you lack rights to.
 
 ```prompt
-In labs/10-guardrails, copy solution/kade-guardrails.json to ~/lab10/matrix.json. Add a target for an
+In labs/10-guardrails, copy solution/harbourline-guardrails.json to ~/lab10/matrix.json. Add a target for an
 automation called "refund-audit" that inherits the automations default, then run profile-resolve.mjs with
 --validate and --check registry.npmjs.org,api.sandbox.paygate.example,example.com for every target.
 Give me a table: target, profiles in force, winning level, git, Devin MCP read-only, token, and which

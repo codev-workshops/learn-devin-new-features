@@ -1,0 +1,62 @@
+{
+  "$comment": "describe-services shape. Note the deployment at 22:40 UTC on 2026-10-21 (Lamp Week) — the one every incident timeline should start from.",
+  "services": [
+    {
+      "serviceArn": "arn:aws:ecs:us-east-1:123456789012:service/harbourline-prod/harbourline-api",
+      "serviceName": "harbourline-api",
+      "clusterArn": "arn:aws:ecs:us-east-1:123456789012:cluster/harbourline-prod",
+      "status": "ACTIVE",
+      "desiredCount": 3,
+      "runningCount": 3,
+      "pendingCount": 0,
+      "launchType": "FARGATE",
+      "taskDefinition": "arn:aws:ecs:us-east-1:123456789012:task-definition/harbourline-api:47",
+      "deploymentConfiguration": {
+        "maximumPercent": 200,
+        "minimumHealthyPercent": 100,
+        "deploymentCircuitBreaker": { "enable": true, "rollback": true }
+      },
+      "deployments": [
+        {
+          "id": "ecs-svc/8821",
+          "status": "PRIMARY",
+          "taskDefinition": "arn:aws:ecs:us-east-1:123456789012:task-definition/harbourline-api:47",
+          "desiredCount": 3,
+          "runningCount": 3,
+          "createdAt": "2026-10-21T22:40:12Z",
+          "updatedAt": "2026-10-21T22:46:30Z",
+          "rolloutState": "COMPLETED",
+          "rolloutStateReason": "ECS deployment ecs-svc/8821 completed."
+        },
+        {
+          "id": "ecs-svc/8790",
+          "status": "INACTIVE",
+          "taskDefinition": "arn:aws:ecs:us-east-1:123456789012:task-definition/harbourline-api:46",
+          "desiredCount": 0,
+          "runningCount": 0,
+          "createdAt": "2026-10-14T09:15:02Z",
+          "updatedAt": "2026-10-21T22:46:30Z",
+          "rolloutState": "COMPLETED"
+        }
+      ],
+      "events": [
+        {
+          "id": "evt-9001",
+          "createdAt": "2026-10-21T22:46:30Z",
+          "message": "(service harbourline-api) has reached a steady state."
+        },
+        {
+          "id": "evt-9000",
+          "createdAt": "2026-10-21T22:40:12Z",
+          "message": "(service harbourline-api) has started 3 tasks: task-definition harbourline-api:47 (image harbourline-api:2026.10.21-lampweek)."
+        }
+      ],
+      "healthCheckGracePeriodSeconds": 30,
+      "tags": [
+        { "key": "service", "value": "harbourline-api" },
+        { "key": "env", "value": "prod" }
+      ]
+    }
+  ],
+  "failures": []
+}

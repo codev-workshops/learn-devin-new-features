@@ -2,7 +2,7 @@
 id: double-charge-audit
 brand: both
 customer: Marcus Lindqvist
-role: Group Finance Director, Kadé Commerce, with the external auditor on the line
+role: Group Finance Director, Harbourline, with the external auditor on the line
 ---
 # Sealed scenario — double charges, partial refunds and the audit
 

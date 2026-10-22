@@ -2,7 +2,7 @@
 trigger: always_on
 ---
 
-# Kadé Commerce conventions
+# Harbourline conventions
 
 - Read the root `AGENTS.md` first; it carries the shared-file ownership table and the gate commands.
 - Run `npm run gates` (test, lint, build, labs:build) before every commit. Python changes also need `pytest -q` and `ruff check` in the service directory.

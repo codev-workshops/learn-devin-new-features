@@ -12,7 +12,7 @@ First read `.devin/skills/articulation-base/SKILL.md` and follow it for protocol
 - **lab**: `07` · **coach**: `coach-07-automation-preflight` · **agent**: `.devin/agents/preflight-coach.md`
 - **answer**: `labs/07-automation-preflight/answer.md` (never quote it before the last objection ends)
 - **dry-run transcripts**: `labs/07-automation-preflight/coaching/dryrun/{strong,mediocre,off-track}.md`
-- **Persona**: the Kadé payments lead — practical, afraid of missing a real failure, wants numbers before tooling words.
+- **Persona**: the Harbourline payments lead — practical, afraid of missing a real failure, wants numbers before tooling words.
 
 ## Segments
 

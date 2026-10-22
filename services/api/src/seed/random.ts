@@ -37,7 +37,7 @@ export class Rng {
 
 /** Name-derived UUID (v5-shaped) so ids survive a `--reset`. */
 export function uuidFor(name: string): string {
-  const hex = createHash("sha1").update(`kade-commerce:${name}`).digest("hex").slice(0, 32);
+  const hex = createHash("sha1").update(`harbourline:${name}`).digest("hex").slice(0, 32);
   return [
     hex.slice(0, 8),
     hex.slice(8, 12),

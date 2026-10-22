@@ -1,9 +1,9 @@
 import request from "supertest";
-import { HEADERS, type BrandId, type Role } from "@kade/contracts";
+import { HEADERS, type BrandId, type Role } from "@harbourline/contracts";
 import { createApp } from "../src/app.js";
 import { createDb, type Db } from "../src/db.js";
 
-process.env.KADE_NOW ??= "2026-10-22T09:00:00Z";
+process.env.HARBOURLINE_NOW ??= "2026-10-22T09:00:00Z";
 
 export const LUMEN: BrandId = "lumen-home";
 export const TRAILHEAD: BrandId = "trailhead-supply";

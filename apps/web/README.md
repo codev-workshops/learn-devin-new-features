@@ -1,4 +1,4 @@
-# Kadé Commerce web
+# Harbourline web
 
 Two brand storefronts and the merchandiser console in a single Vite app.
 

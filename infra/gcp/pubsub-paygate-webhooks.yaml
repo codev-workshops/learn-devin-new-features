@@ -2,27 +2,27 @@
 # (after the 202) to the topic; the worker consumes with at-least-once delivery, which is
 # why event_id must be the idempotency key (seed-spec → duplicate-webhook).
 topics:
-  - name: projects/kade-prod/topics/paygate-webhooks
-    labels: { service: kade-api, env: prod }
+  - name: projects/harbourline-prod/topics/paygate-webhooks
+    labels: { service: harbourline-api, env: prod }
     messageRetentionDuration: 604800s
     schemaSettings:
-      schema: projects/kade-prod/schemas/PaymentWebhookEvent
+      schema: projects/harbourline-prod/schemas/PaymentWebhookEvent
       encoding: JSON
 subscriptions:
-  - name: projects/kade-prod/subscriptions/paygate-webhooks-worker
-    topic: projects/kade-prod/topics/paygate-webhooks
+  - name: projects/harbourline-prod/subscriptions/paygate-webhooks-worker
+    topic: projects/harbourline-prod/topics/paygate-webhooks
     ackDeadlineSeconds: 30
     retryPolicy: { minimumBackoff: 10s, maximumBackoff: 600s }
     deadLetterPolicy:
-      deadLetterTopic: projects/kade-prod/topics/paygate-webhooks-dlq
+      deadLetterTopic: projects/harbourline-prod/topics/paygate-webhooks-dlq
       maxDeliveryAttempts: 5
     enableExactlyOnceDelivery: false # at-least-once: the worker must dedupe on event_id
-    labels: { service: kade-fulfilment-worker, env: prod }
-  - name: projects/kade-prod/subscriptions/paygate-webhooks-audit
-    topic: projects/kade-prod/topics/paygate-webhooks
+    labels: { service: harbourline-fulfilment-worker, env: prod }
+  - name: projects/harbourline-prod/subscriptions/paygate-webhooks-audit
+    topic: projects/harbourline-prod/topics/paygate-webhooks
     ackDeadlineSeconds: 60
     bigqueryConfig:
-      table: kade-prod:analytics.paygate_webhooks_raw
+      table: harbourline-prod:analytics.paygate_webhooks_raw
       useTopicSchema: true
       writeMetadata: true
 # Snapshot of subscription metrics at 2026-10-22T02:30Z (fixture for the MCP shim):

@@ -1,4 +1,4 @@
-import { BRAND_IDS, type BrandId, type Role } from "@kade/contracts";
+import { BRAND_IDS, type BrandId, type Role } from "@harbourline/contracts";
 import { createContext, useContext, useState, type FormEvent } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router";
 import type { Identity } from "../lib/api";
@@ -33,7 +33,9 @@ export function AdminLayout() {
     <AdminContext.Provider value={value}>
       <div className="admin" data-brand={session.brand}>
         <header className="admin-header">
-          <span className="brand-mark">Kadé Merchandiser · {BRAND_NAMES[session.brand]}</span>
+          <span className="brand-mark">
+            Harbourline Merchandiser · {BRAND_NAMES[session.brand]}
+          </span>
           <nav aria-label="Console">
             <NavLink to="/admin" end>
               Inventory
@@ -79,8 +81,8 @@ function AdminLogin({ onLogin }: { onLogin: (s: AdminSession) => void }) {
     <main className="admin login" id="main">
       <h1>Merchandiser sign-in</h1>
       <p className="muted">
-        Fake auth: these three values are sent as <code>X-Kade-Brand</code>,{" "}
-        <code>X-Kade-User</code> and <code>X-Kade-Role</code>. No password.
+        Fake auth: these three values are sent as <code>X-Harbourline-Brand</code>,{" "}
+        <code>X-Harbourline-User</code> and <code>X-Harbourline-Role</code>. No password.
       </p>
       <form onSubmit={submit} className="stack">
         <label>

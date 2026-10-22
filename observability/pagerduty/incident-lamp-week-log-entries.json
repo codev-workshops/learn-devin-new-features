@@ -8,7 +8,7 @@
       "channel": {
         "type": "api",
         "summary": "Datadog",
-        "details": "min:kade.inventory.on_hand{sku:LH-LAMP-03} = -37"
+        "details": "min:harbourline.inventory.on_hand{sku:LH-LAMP-03} = -37"
       }
     },
     {
@@ -58,7 +58,7 @@
       "channel": {
         "type": "api",
         "summary": "Datadog",
-        "details": "min:kade.inventory.on_hand{sku:LH-LAMP-03} = -3; webhook failure rate monitor 48213802 in WARN (5.8%)"
+        "details": "min:harbourline.inventory.on_hand{sku:LH-LAMP-03} = -3; webhook failure rate monitor 48213802 in WARN (5.8%)"
       }
     },
     {

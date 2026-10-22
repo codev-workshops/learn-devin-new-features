@@ -7,7 +7,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@kade/contracts": ["../../packages/contracts/src/index.ts"]
+      "@harbourline/contracts": ["../../packages/contracts/src/index.ts"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "scripts/**/*.mjs", ".expo/types/**/*.ts", "expo-env.d.ts"],

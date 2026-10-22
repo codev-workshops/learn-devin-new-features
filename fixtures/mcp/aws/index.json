@@ -1,6 +1,6 @@
 {
   "$comment": "AWS fixtures served by the shim; the descriptors live in infra/aws.",
-  "ecs_services": { "$file": "infra/aws/ecs-service-kade-api.json" },
-  "ecs_task_definition": { "$file": "infra/aws/ecs-task-definition-kade-api.json" },
+  "ecs_services": { "$file": "infra/aws/ecs-service-harbourline-api.json" },
+  "ecs_task_definition": { "$file": "infra/aws/ecs-task-definition-harbourline-api.json" },
   "s3_exports": { "$file": "infra/aws/s3-export-bucket.json" }
 }

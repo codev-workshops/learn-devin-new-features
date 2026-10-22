@@ -1,6 +1,6 @@
-# Kadé Commerce — mobile (Expo)
+# Harbourline — mobile (Expo)
 
-Shopping app for the two Kadé brands against the frozen OpenAPI contract: pick a brand, browse
+Shopping app for the two Harbourline brands against the frozen OpenAPI contract: pick a brand, browse
 collections, add to cart (with iOS haptics when the optional native module is linked), and follow
 order status through the event timeline.
 
@@ -34,7 +34,7 @@ adb wait-for-device && npx expo run:android
 
 ## iOS (not exercised here)
 
-`modules/kade-haptics` wraps `UIImpactFeedbackGenerator` behind the Expo Modules API. It only
+`modules/harbourline-haptics` wraps `UIImpactFeedbackGenerator` behind the Expo Modules API. It only
 compiles on macOS; see `docs/blueprint.proposed.mobile.yaml` (second document) for the recipe.
 On Android, web, Expo Go and any build without the module, `impact()` resolves `false` and the app
 keeps working.

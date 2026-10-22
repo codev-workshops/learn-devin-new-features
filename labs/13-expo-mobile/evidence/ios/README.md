@@ -25,8 +25,8 @@ GA Xcode 26.6 is the `xcode-select` default and its iOS 26.5 SDK matches an inst
 | 3 | `npm test --workspace apps/mobile` (35/35), `npm run lint --workspace apps/mobile`, `npm run build --workspace apps/mobile` | 5 s / 4 s / 10 s |
 | 4 | `cd apps/mobile && npx expo prebuild --platform ios --no-install` | 1.2 s |
 | 5 | `cd apps/mobile/ios && LANG=en_US.UTF-8 pod install` | 27 s first, 8.5 s after the podspec fix |
-| 6 | `xcodebuild -workspace ios/KadCommerce.xcworkspace -scheme KadCommerce -sdk iphonesimulator -configuration Release -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' -derivedDataPath ios/build build` | 88 s first (arm64 + x86_64), 48 s incremental |
-| 7 | `xcrun simctl install booted ios/build/Build/Products/Release-iphonesimulator/KadCommerce.app && xcrun simctl launch booted test.kade.commerce` | < 5 s |
+| 6 | `xcodebuild -workspace ios/Harbourline.xcworkspace -scheme Harbourline -sdk iphonesimulator -configuration Release -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' -derivedDataPath ios/build build` | 88 s first (arm64 + x86_64), 48 s incremental |
+| 7 | `xcrun simctl install booted ios/build/Build/Products/Release-iphonesimulator/Harbourline.app && xcrun simctl launch booted test.harbourline.commerce` | < 5 s |
 | 8 | `xcrun simctl io booted screenshot <file>.png && sips -Z 1200 <file>.png` | — |
 
 Release embeds the JS bundle (mock API mode), so no Metro was needed. UI driven by clicks in Simulator:
@@ -34,22 +34,22 @@ Lumen Home → Add (Arc Floor Lamp) → Cart tab → Orders tab → LH-001003 `S
 
 ## Errors hit and fixes
 
-1. **`KadeHaptics` missing from `Podfile.lock`.** `expo-modules-autolinking resolve -p apple`
-   listed `kade-haptics` (pod `KadeHaptics`, `modules/kade-haptics/ios`), but `use_expo_modules!`
+1. **`HarbourlineHaptics` missing from `Podfile.lock`.** `expo-modules-autolinking resolve -p apple`
+   listed `harbourline-haptics` (pod `HarbourlineHaptics`, `modules/harbourline-haptics/ios`), but `use_expo_modules!`
    silently skipped it: the podspec declared `platforms = { :ios => '16.4' }` while the generated
    Podfile targets iOS 15.1, so `supports_platform?` was false. Fix: podspec `:ios => '15.1'`
    (same floor as `ExpoModulesCore`; every API used exists since iOS 13) and an explicit
-   `swift_version = '5.9'`. After `pod install`: `Installing KadeHaptics (0.1.0)` and
-   `KadeHaptics (from ../modules/kade-haptics/ios)` in `Podfile.lock` — **autolinked: yes**.
+   `swift_version = '5.9'`. After `pod install`: `Installing HarbourlineHaptics (0.1.0)` and
+   `HarbourlineHaptics (from ../modules/harbourline-haptics/ios)` in `Podfile.lock` — **autolinked: yes**.
 2. **Swift deprecation warning** `'Constants' is deprecated: Use Constant or Property instead`
    (ExpoModulesCore 3.0). Replaced with `Constant("isAvailable") { true }`; rebuild has zero
-   warnings in `KadeHapticsModule.swift`. JS still reads `NativeModule.isAvailable`; the Android
+   warnings in `HarbourlineHapticsModule.swift`. JS still reads `NativeModule.isAvailable`; the Android
    fallback (`requireOptionalNativeModule` → `null` → `impact()` resolves `false`) is untouched.
 
 ## Result
 
 `01-brand-picker.png` (brand picker), `02-cart-haptics-native.png` (Cart shows
-**`Haptics: native (kade-haptics)`**), `03-order-status.png` (LH-001003, `Shipped` pill + timeline).
+**`Haptics: native (harbourline-haptics)`**), `03-order-status.png` (LH-001003, `Shipped` pill + timeline).
 
 ## Not exercised
 

@@ -11,7 +11,7 @@ Follow `.devin/skills/articulation-base/SKILL.md` for protocol, timing, rubric, 
 
 - **lab**: `06` · **coach**: `coach-06-review-remediation` · **segments**: from `labs/06-review-remediation/lab.json#coach.segments` (60 s framing, checkpoints at T+10 and T+50, 3-minute update, two 90-second objections)
 - **answer**: `labs/06-review-remediation/answer.md` · **dry-run transcripts**: `labs/06-review-remediation/coaching/dryrun/`
-- **Persona**: Tomás, checkout tech lead at Kadé Commerce, sceptical of AI review and asks "show me the test". For the objection round the PR author joins.
+- **Persona**: Tomás, checkout tech lead at Harbourline, sceptical of AI review and asks "show me the test". For the objection round the PR author joins.
 - **What the learner just did**: reviewed PR #26 with Devin Review at a chosen effort level, sorted Bugs / Flags / Security, quoted one finding into chat, fixed the findings on a throwaway branch with a regression test, re-reviewed, tried an unchanged-diff re-review, answered the disputed flag and replaced the bypassable review rule. Nothing merged.
 - **Numbers the coach may ask for** (accept the learner's own if sourced): two €19.90 socks check out at 39.79 on the PR and 39.80 on `main`; three socks are unaffected (59.70); a self-declared merchandiser pinned a lamp at 0.01 USD (total 7.96); two extra queries per cart line inside the transaction; Lumen 8.25% exclusive, Trailhead 19% VAT inclusive.
 

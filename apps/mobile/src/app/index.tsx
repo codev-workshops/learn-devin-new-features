@@ -3,12 +3,12 @@ import React from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
 import type { Brand } from "@/api";
-import { useKade } from "@/state/store";
+import { useHarbourline } from "@/state/store";
 import { Card, ErrorBanner, Loading, Muted, Screen, Title } from "@/ui/primitives";
 import { brandAccent, palette } from "@/ui/theme";
 
 export function BrandPicker() {
-  const { brands, error, selectBrand, dismissError } = useKade();
+  const { brands, error, selectBrand, dismissError } = useHarbourline();
   if (!brands.length && !error) return <Loading label="Loading brands…" />;
 
   const onPick = (b: Brand) => {

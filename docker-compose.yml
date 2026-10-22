@@ -1,4 +1,4 @@
-# Local infrastructure for Kadé Commerce.
+# Local infrastructure for Harbourline.
 #
 # Owned by W0-A (this file) and W1-api (adds the `api` service). Every other
 # service lives in docker-compose.services.yml (overlay, owned by W1-worker):
@@ -6,23 +6,24 @@
 #
 # The image is pulled from mirror.gcr.io because Docker Hub rate-limits
 # anonymous pulls from Devin VMs.
-name: kade
+name: harbourline
 
 services:
   postgres:
     image: mirror.gcr.io/library/postgres:16-alpine
-    container_name: kade-postgres
+    container_name: harbourline-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-kade}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kade}
-      POSTGRES_DB: ${POSTGRES_DB:-kade}
+      POSTGRES_USER: ${POSTGRES_USER:-harbourline}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-harbourline}
+      POSTGRES_DB: ${POSTGRES_DB:-harbourline}
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
-      - kade-pgdata:/var/lib/postgresql/data
+      - harbourline-pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-kade} -d ${POSTGRES_DB:-kade}"]
+      test:
+        ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-harbourline} -d ${POSTGRES_DB:-harbourline}"]
       interval: 5s
       timeout: 3s
       retries: 12
@@ -34,9 +35,9 @@ services:
       context: .
       dockerfile: services/api/Dockerfile
     environment:
-      DATABASE_URL: postgres://${POSTGRES_USER:-kade}:${POSTGRES_PASSWORD:-kade}@postgres:5432/${POSTGRES_DB:-kade}
+      DATABASE_URL: postgres://${POSTGRES_USER:-harbourline}:${POSTGRES_PASSWORD:-harbourline}@postgres:5432/${POSTGRES_DB:-harbourline}
       API_PORT: "3001"
-      PAYGATE_SECRET: ${PAYGATE_SECRET:-kade-local-paygate-secret}
+      PAYGATE_SECRET: ${PAYGATE_SECRET:-harbourline-local-paygate-secret}
       PAYGATE_URL: ${PAYGATE_URL:-http://localhost:3002}
     ports:
       - "3001:3001"
@@ -46,4 +47,4 @@ services:
     profiles: ["api"]
 
 volumes:
-  kade-pgdata:
+  harbourline-pgdata:

@@ -9,7 +9,7 @@ import { CartScreen } from "@/app/shop/cart";
 import { CatalogScreen } from "@/app/shop/index";
 import { OrdersScreen } from "@/app/shop/orders";
 import { OrderScreen } from "@/app/shop/order/[orderId]";
-import { KadeProvider, useKade } from "@/state/store";
+import { HarbourlineProvider, useHarbourline } from "@/state/store";
 
 const mockPush = jest.fn();
 const mockReplace = jest.fn();
@@ -29,7 +29,7 @@ function makeApi() {
 }
 
 function PickBrand({ brand }: { brand: "lumen-home" | "trailhead-supply" }) {
-  const { selectBrand, session } = useKade();
+  const { selectBrand, session } = useHarbourline();
   React.useEffect(() => {
     if (!session) selectBrand(brand);
   }, [brand, selectBrand, session]);
@@ -45,9 +45,9 @@ describe("brand picker", () => {
   it("lists both brands and navigates to the shop", async () => {
     const { api } = makeApi();
     render(
-      <KadeProvider api={api}>
+      <HarbourlineProvider api={api}>
         <BrandPicker />
-      </KadeProvider>,
+      </HarbourlineProvider>,
     );
     expect(await screen.findByText("Lumen Home")).toBeOnTheScreen();
     expect(screen.getByText("Trailhead Supply")).toBeOnTheScreen();
@@ -60,11 +60,11 @@ describe("catalog + cart", () => {
   it("shows Lamp Week products with sale pricing and adds one to the cart", async () => {
     const { api } = makeApi();
     render(
-      <KadeProvider api={api}>
+      <HarbourlineProvider api={api}>
         <PickBrand brand="lumen-home" />
         <CatalogScreen />
         <CartScreen />
-      </KadeProvider>,
+      </HarbourlineProvider>,
     );
     expect(await screen.findByTestId("product-LH-LAMP-01")).toBeOnTheScreen();
     expect(screen.getByText("$103.20")).toBeOnTheScreen();
@@ -83,10 +83,10 @@ describe("catalog + cart", () => {
   it("switches collection and keeps component-backed bundles orderable", async () => {
     const { api } = makeApi();
     render(
-      <KadeProvider api={api}>
+      <HarbourlineProvider api={api}>
         <PickBrand brand="lumen-home" />
         <CatalogScreen />
-      </KadeProvider>,
+      </HarbourlineProvider>,
     );
     await screen.findByTestId("catalog");
     fireEvent.press(screen.getByTestId("collection-bundles"));
@@ -103,11 +103,11 @@ describe("orders", () => {
     }).items[0];
     mockParams = { orderId: pending.id };
     render(
-      <KadeProvider api={api}>
+      <HarbourlineProvider api={api}>
         <PickBrand brand="trailhead-supply" />
         <OrdersScreen />
         <OrderScreen />
-      </KadeProvider>,
+      </HarbourlineProvider>,
     );
     expect(await screen.findByTestId(`order-${pending.number}`)).toBeOnTheScreen();
     expect(await screen.findByTestId("order-timeline")).toBeOnTheScreen();

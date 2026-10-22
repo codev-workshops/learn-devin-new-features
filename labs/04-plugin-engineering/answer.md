@@ -13,7 +13,7 @@ What it is not: a guaranteed guardrail. Plugin hooks run only in local sessions 
 
 ## The reference plugin
 
-`labs/04-plugin-engineering/solution/kade-flash-sale/`:
+`labs/04-plugin-engineering/solution/harbourline-flash-sale/`:
 
 | File | What it is |
 | --- | --- |
@@ -22,23 +22,23 @@ What it is not: a guaranteed guardrail. Plugin hooks run only in local sessions 
 | `skills/flash-sale-incident/SKILL.md` | The first-hour incident procedure |
 | `AGENTS.md` | Always-on rule: sale freeze, which command to use when, no tokens in chat |
 | `rules/sale-pricing.md` | Triggered rule (`trigger: glob`) for money and stock during a sale |
-| `agents/release-checker.md` | Subagent `kade-flash-sale:release-checker` (local sessions only) |
-| `hooks.json` | `PreToolUse` on `exec`: exit 2 for `git push … main` while `KADE_SALE_FREEZE=1` |
-| `.mcp.json` | `kade-incidents` server with `PAGERDUTY_API_TOKEN: "${PAGERDUTY_API_TOKEN}"` |
+| `agents/release-checker.md` | Subagent `harbourline-flash-sale:release-checker` (local sessions only) |
+| `hooks.json` | `PreToolUse` on `exec`: exit 2 for `git push … main` while `HARBOURLINE_SALE_FREEZE=1` |
+| `.mcp.json` | `harbourline-incidents` server with `PAGERDUTY_API_TOKEN: "${PAGERDUTY_API_TOKEN}"` |
 
 The hook command is self-contained (`node -e …`) so it does not depend on where the plugin is unpacked.
 
-Checker on the reference (`node labs/04-plugin-engineering/solution/plugin-check.mjs --kit labs/04-plugin-engineering/solution/kade-flash-sale`), abridged:
+Checker on the reference (`node labs/04-plugin-engineering/solution/plugin-check.mjs --kit labs/04-plugin-engineering/solution/harbourline-flash-sale`), abridged:
 
 ```json
 {
   "kind": "manifest",
-  "name": "kade-flash-sale",
-  "commands": ["/kade-flash-sale:flash-sale-incident", "/kade-flash-sale:flash-sale-release"],
+  "name": "harbourline-flash-sale",
+  "commands": ["/harbourline-flash-sale:flash-sale-incident", "/harbourline-flash-sale:flash-sale-release"],
   "rules": ["AGENTS.md", "rules/sale-pricing.md"],
   "agents": ["release-checker"],
   "hooks": ["PreToolUse"],
-  "mcpServers": [{ "name": "kade-incidents", "envRefs": ["PAGERDUTY_API_TOKEN"], "literals": [], "needsConnection": true }],
+  "mcpServers": [{ "name": "harbourline-incidents", "envRefs": ["PAGERDUTY_API_TOKEN"], "literals": [], "needsConnection": true }],
   "problems": []
 }
 ```
@@ -61,26 +61,26 @@ A repository install also needs the organization to have access to that reposito
 These are the prompts the reference run used. They live here only; the lab page stays promptless.
 
 ```prompt
-Package the flash-sale release checklist and the first-hour incident procedure as one Devin plugin named kade-flash-sale in ~/kade-flash-sale. Include: two skills, an always-on AGENTS.md, a glob-triggered pricing rule, a release-checker subagent, a PreToolUse hook that blocks git push to main while KADE_SALE_FREEZE=1, and a PagerDuty MCP server whose token is a ${PAGERDUTY_API_TOKEN} reference. No literal credentials anywhere. Then run labs/04-plugin-engineering/solution/plugin-check.mjs on the folder and fix every problem it reports.
+Package the flash-sale release checklist and the first-hour incident procedure as one Devin plugin named harbourline-flash-sale in ~/harbourline-flash-sale. Include: two skills, an always-on AGENTS.md, a glob-triggered pricing rule, a release-checker subagent, a PreToolUse hook that blocks git push to main while HARBOURLINE_SALE_FREEZE=1, and a PagerDuty MCP server whose token is a ${PAGERDUTY_API_TOKEN} reference. No literal credentials anywhere. Then run labs/04-plugin-engineering/solution/plugin-check.mjs on the folder and fix every problem it reports.
 ```
 
 ```prompt
-Install ~/kade-flash-sale as a plugin for me only (personal scope). Show me the approval card before you install it. Do not install it for the organization.
+Install ~/harbourline-flash-sale as a plugin for me only (personal scope). Show me the approval card before you install it. Do not install it for the organization.
 ```
 
 ```prompt
-Before you check anything: if I upload labs/04-plugin-engineering/injectors/revision-2/kade-flash-sale as a new revision of kade-flash-sale, list the files the plugin will contain afterwards. Then run plugin-check.mjs --revise against the reference and compare.
+Before you check anything: if I upload labs/04-plugin-engineering/injectors/revision-2/harbourline-flash-sale as a new revision of harbourline-flash-sale, list the files the plugin will contain afterwards. Then run plugin-check.mjs --revise against the reference and compare.
 ```
 
 ```prompt
-Propose an edit to the organization plugin kade-flash-sale: in skills/flash-sale-release/SKILL.md change "fewer than 10 units" to "fewer than 25 units". I cannot edit organization plugins myself; raise it for an admin to approve and tell me who has to act.
+Propose an edit to the organization plugin harbourline-flash-sale: in skills/flash-sale-release/SKILL.md change "fewer than 10 units" to "fewer than 25 units". I cannot edit organization plugins myself; raise it for an admin to approve and tell me who has to act.
 ```
 
 ## Injector answers
 
-- **skills-only-brand-repo** — installs as a separate skills-only plugin named after the repo (`/lumen-checklists:lumen-sale-checklist` with the checker's `--repo-name`). It cannot carry a rule, hook, MCP or subagent, and it does not replace `kade-flash-sale`; both would be installed side by side. Better: fold its steps into the shared release skill.
+- **skills-only-brand-repo** — installs as a separate skills-only plugin named after the repo (`/lumen-checklists:lumen-sale-checklist` with the checker's `--repo-name`). It cannot carry a rule, hook, MCP or subagent, and it does not replace `harbourline-flash-sale`; both would be installed side by side. Better: fold its steps into the shared release skill.
 - **partial-revision** — a new revision replaces the uploaded bundle. `--revise` shows the result is exactly two files; six are removed (`AGENTS.md`, `rules/sale-pricing.md`, `agents/release-checker.md`, `hooks.json`, `.mcp.json`, the incident skill). Restore from version history, or upload the full folder with the one change. Running sessions keep what they loaded at start.
-- **inline-secret** — (1) `"Kade Flash Sale"` is not a valid name: lowercase with `-` or `.`; (2) a literal token in `env` is stripped — use `${PAGERDUTY_API_TOKEN}` and connect after install; (3) an MCP config with a client secret is rejected at activation; a plugin may set an OAuth client ID and scopes only.
+- **inline-secret** — (1) `"Harbourline Flash Sale"` is not a valid name: lowercase with `-` or `.`; (2) a literal token in `env` is stripped — use `${PAGERDUTY_API_TOKEN}` and connect after install; (3) an MCP config with a client secret is rejected at activation; a plugin may set an OAuth client ID and scopes only.
 - **unauthorised-proposer** — `--propose` returns `outcome: "proposal"`, `applied: false`, `awaiting: "platform-admin"` with a one-line diff. In the product the admin sees an approval card that opens the diff against the saved plugin; nothing changes until it is approved, and then only for new sessions.
 - **hook-fails-open** — no. Plugin hooks load in local sessions only, and fail open. The guarantee is branch protection on `main`; the hook catches the mistake earlier.
 

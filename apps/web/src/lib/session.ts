@@ -1,4 +1,4 @@
-import type { BrandId, Role } from "@kade/contracts";
+import type { BrandId, Role } from "@harbourline/contracts";
 
 export interface AdminSession {
   brand: BrandId;
@@ -6,8 +6,8 @@ export interface AdminSession {
   role: Role;
 }
 
-const ADMIN_KEY = "kade.admin.session";
-const SHOPPER_KEY = (brand: BrandId) => `kade.shop.${brand}`;
+const ADMIN_KEY = "harbourline.admin.session";
+const SHOPPER_KEY = (brand: BrandId) => `harbourline.shop.${brand}`;
 
 interface ShopperState {
   user: string;
@@ -63,5 +63,5 @@ export function setShopperCart(brand: BrandId, cartId: string | undefined) {
 export function clearSession() {
   const s = storage();
   if (!s) return;
-  for (const key of Object.keys(s)) if (key.startsWith("kade.")) s.removeItem(key);
+  for (const key of Object.keys(s)) if (key.startsWith("harbourline.")) s.removeItem(key);
 }

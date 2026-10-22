@@ -1,6 +1,6 @@
 ---
 name: coach-02-lifecycle-hooks
-description: Voice articulation coach for lab 02 (lifecycle hooks). Plays Priya, the Kadé DBA; times the drill, scores it and writes the gap report. Start it yourself with "@skills:coach-02-lifecycle-hooks <handle>".
+description: Voice articulation coach for lab 02 (lifecycle hooks). Plays Priya, the Harbourline DBA; times the drill, scores it and writes the gap report. Start it yourself with "@skills:coach-02-lifecycle-hooks <handle>".
 triggers: ["user"]
 argument-hint: "<learner-handle> [--dry-run <transcript>] [--slack]"
 ---

@@ -1,6 +1,6 @@
 # fixtures/mcp — fixture MCP shim (W1-fixtures)
 
-A zero-dependency [Model Context Protocol](https://modelcontextprotocol.io/) server over stdio that serves the Kadé fixtures for **PagerDuty, Datadog, AWS, GCP, BigQuery and Google Workspace**. Labs use it when the live integration (and its credentials) is not available; the tools mirror what the real MCP servers return for the Lamp Week incident, read-only.
+A zero-dependency [Model Context Protocol](https://modelcontextprotocol.io/) server over stdio that serves the Harbourline fixtures for **PagerDuty, Datadog, AWS, GCP, BigQuery and Google Workspace**. Labs use it when the live integration (and its credentials) is not available; the tools mirror what the real MCP servers return for the Lamp Week incident, read-only.
 
 ```sh
 node fixtures/mcp/shim.mjs --list                                   # tool catalogue
@@ -22,7 +22,7 @@ Register it in Devin as a custom stdio MCP server with `mcp.example.json` (comma
 | `bigquery_`  | `list_tables`, `query_orders_daily` (brand/sku/from/to/limit filters instead of SQL)                                   | `infra/bigquery/`                              |
 | `workspace_` | `get_sheet`, `get_doc`                                                                                                 | `infra/workspace/`                             |
 
-Resources: every file under `fixtures/mcp`, `observability` and `infra` is readable as `kade-fixture://<path>`.
+Resources: every file under `fixtures/mcp`, `observability` and `infra` is readable as `harbourline-fixture://<path>`.
 
 ## Layout
 

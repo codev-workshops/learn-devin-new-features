@@ -1,6 +1,6 @@
 ---
 name: checkout-review
-description: Platform checkout-review checklist for Kadé PRs that touch checkout, carts, orders or money. Applies the brand's own rule file before the shared checklist.
+description: Platform checkout-review checklist for Harbourline PRs that touch checkout, carts, orders or money. Applies the brand's own rule file before the shared checklist.
 triggers: ["user"]
 ---
 

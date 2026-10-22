@@ -3,7 +3,7 @@ import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { formatMoney, type Order, type OrderEvent } from "@/api";
-import { useAsync, useKade } from "@/state/store";
+import { useAsync, useHarbourline } from "@/state/store";
 import { Button, Card, ErrorBanner, Loading, Muted, Pill, Screen, Title } from "@/ui/primitives";
 import { palette, statusColor, statusLabel } from "@/ui/theme";
 
@@ -36,7 +36,7 @@ export function EventTimeline({ events }: { events: OrderEvent[] }) {
 
 export function OrderScreen() {
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
-  const { api, session, notifyOrdersChanged } = useKade();
+  const { api, session, notifyOrdersChanged } = useHarbourline();
   const order = useAsync<Order>(
     () => (session && orderId ? api.getOrder(session, orderId) : null),
     [session?.brand, orderId],

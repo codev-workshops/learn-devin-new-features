@@ -105,7 +105,7 @@ export function startServer(opts: ServerOptions): Promise<PayGateServer> {
         const orderId = str(body.orderId ?? body.order_id);
         const amount = str(body.amount);
         const currency = str(body.currency) as Currency | undefined;
-        const brand = str(body.brand) ?? "kade";
+        const brand = str(body.brand) ?? "harbourline";
         if (!orderId || !amount || !currency) {
           return json(res, 400, {
             code: "bad_request",

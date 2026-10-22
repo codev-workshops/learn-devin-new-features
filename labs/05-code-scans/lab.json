@@ -6,7 +6,7 @@
   "duration_minutes": 150,
   "difficulty": "core",
   "prerequisites": [
-    "Lab 00 done (or you know the Kadé brands and planted-defect rule)",
+    "Lab 00 done (or you know the Harbourline brands and planted-defect rule)",
     "Repo connected to your Devin org; `npm ci` done at the root",
     "Your Devin role includes the Use code scans permission (see section 6)"
   ],

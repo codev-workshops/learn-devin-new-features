@@ -1,13 +1,13 @@
 ## Customer brief
 
 > "Customers keep emailing to ask whether their order has left the warehouse. Put 'packed' and 'shipped' on their phone, and show me it works on both phones before we tell anyone."
-> — Kadé product owner, mobile roadmap review
+> — Harbourline product owner, mobile roadmap review
 
-Kadé's support inbox gets roughly 140 "where is my order?" emails a week across Lumen Home and Trailhead Supply, and about two thirds of them are for orders that are already packed or shipped. The product owner wants the order-status screen in the Kadé mobile app (`apps/mobile`, Expo SDK 54) to be the place customers look first: the status pill and the event timeline for `packed` and `shipped` orders, on Android and on iOS.
+Harbourline's support inbox gets roughly 140 "where is my order?" emails a week across Lumen Home and Trailhead Supply, and about two thirds of them are for orders that are already packed or shipped. The product owner wants the order-status screen in the Harbourline mobile app (`apps/mobile`, Expo SDK 54) to be the place customers look first: the status pill and the event timeline for `packed` and `shipped` orders, on Android and on iOS.
 
 The product owner has been burned before: last quarter a "works on my machine" demo turned out to be an Android-only build, and iOS customers got a crash on launch. This time they want proof from both platforms — screenshots of the same order in the same state — and a plain list of what was not tried.
 
-The app already has a cart that triggers a small "add to cart" haptic on iOS through an optional native module, `apps/mobile/modules/kade-haptics`. Android has no such module and must keep working. Treat the haptic as nice-to-have: the order-status proof matters more.
+The app already has a cart that triggers a small "add to cart" haptic on iOS through an optional native module, `apps/mobile/modules/harbourline-haptics`. Android has no such module and must keep working. Treat the haptic as nice-to-have: the order-status proof matters more.
 
 ## Stakeholders and constraints
 

@@ -1,8 +1,8 @@
 {
-  "name": "@kade/web",
+  "name": "@harbourline/web",
   "version": "0.1.0",
   "private": true,
-  "description": "Kadé Commerce storefront (/shop/:brand) and merchandiser console (/admin) — React 19 + Vite, MSW mocks generated from packages/contracts.",
+  "description": "Harbourline storefront (/shop/:brand) and merchandiser console (/admin) — React 19 + Vite, MSW mocks generated from packages/contracts.",
   "type": "module",
   "engines": {
     "node": ">=20.19"

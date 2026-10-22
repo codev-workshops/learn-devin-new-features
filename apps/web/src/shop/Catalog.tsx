@@ -1,4 +1,4 @@
-import type { Product } from "@kade/contracts";
+import type { Product } from "@harbourline/contracts";
 import { Link, useParams } from "react-router";
 import { ErrorNote, Loading, Price, Status, label, statusTone } from "../components/ui";
 import { api } from "../lib/api";

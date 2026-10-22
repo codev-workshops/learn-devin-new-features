@@ -117,7 +117,7 @@ describe("scripts", () => {
 
 describe("bad-migration.patch", () => {
   it("applies to an empty tree, adds a migration that drops the NOT NULL default, and reverts cleanly", () => {
-    const dir = mkdtempSync(join(tmpdir(), "kade-badmig-"));
+    const dir = mkdtempSync(join(tmpdir(), "harbourline-badmig-"));
     const git = (...a) => spawnSync("git", a, { cwd: dir, encoding: "utf8" });
     assert.equal(git("init", "-q").status, 0);
     assert.equal(git("apply", "--check", join(scenarios, "bad-migration.patch")).status, 0);
@@ -131,7 +131,7 @@ describe("bad-migration.patch", () => {
     assert.ok(!existsSync(file));
   });
   it("also applies on top of an existing db/migrations directory", () => {
-    const dir = mkdtempSync(join(tmpdir(), "kade-badmig-"));
+    const dir = mkdtempSync(join(tmpdir(), "harbourline-badmig-"));
     spawnSync("git", ["init", "-q"], { cwd: dir });
     spawnSync("mkdir", ["-p", join(dir, "db/migrations")]);
     writeFileSync(
@@ -148,7 +148,7 @@ describe("bad-migration.patch", () => {
 
 describe("lab-reset.sh", () => {
   it("reverts an applied bad-migration.patch, clears recorded state and prints the lab's starting state", () => {
-    const stateDir = mkdtempSync(join(tmpdir(), "kade-state-"));
+    const stateDir = mkdtempSync(join(tmpdir(), "harbourline-state-"));
     writeFileSync(join(stateDir, "oversell.jsonl"), '{"at":"x"}\n');
     // Apply the patch to the real working tree, then let lab-reset revert it.
     const applied = spawnSync("git", ["apply", "scenarios/bad-migration.patch"], {
@@ -160,7 +160,7 @@ describe("lab-reset.sh", () => {
       const r = spawnSync("bash", ["scenarios/lab-reset.sh", "02"], {
         cwd: root,
         encoding: "utf8",
-        env: { ...process.env, KADE_SCENARIO_STATE_DIR: stateDir },
+        env: { ...process.env, HARBOURLINE_SCENARIO_STATE_DIR: stateDir },
       });
       assert.equal(r.status, 0, r.stderr);
       assert.match(r.stdout, /reverted scenarios\/bad-migration.patch/);
@@ -180,7 +180,7 @@ describe("lab-reset.sh", () => {
     const ok = spawnSync("bash", ["scenarios/lab-reset.sh", "99"], {
       cwd: root,
       encoding: "utf8",
-      env: { ...process.env, KADE_SCENARIO_STATE_DIR: mkdtempSync(join(tmpdir(), "s-")) },
+      env: { ...process.env, HARBOURLINE_SCENARIO_STATE_DIR: mkdtempSync(join(tmpdir(), "s-")) },
     });
     assert.equal(ok.status, 0);
     assert.match(ok.stdout, /no lab-specific steps for lab 99/);

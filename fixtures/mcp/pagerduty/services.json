@@ -1,26 +1,26 @@
 {
   "services": [
     {
-      "id": "PKADEAPI",
+      "id": "PHARBOURLINEAPI",
       "type": "service",
-      "name": "Kadé Commerce — Platform",
+      "name": "Harbourline — Platform",
       "status": "critical",
-      "escalation_policy": { "id": "PKADEEP1", "summary": "Platform on-call" },
+      "escalation_policy": { "id": "PHARBOURLINEEP1", "summary": "Platform on-call" },
       "integrations": [
         { "id": "PDATADOG", "summary": "Datadog", "type": "events_api_v2_inbound_integration" }
       ],
-      "html_url": "https://kade.pagerduty.test/service-directory/PKADEAPI"
+      "html_url": "https://harbourline.pagerduty.test/service-directory/PHARBOURLINEAPI"
     },
     {
-      "id": "PKADEWRK",
+      "id": "PHARBOURLINEWRK",
       "type": "service",
-      "name": "Kadé Commerce — Fulfilment worker",
+      "name": "Harbourline — Fulfilment worker",
       "status": "warning",
-      "escalation_policy": { "id": "PKADEEP1", "summary": "Platform on-call" },
+      "escalation_policy": { "id": "PHARBOURLINEEP1", "summary": "Platform on-call" },
       "integrations": [
         { "id": "PDATADOG2", "summary": "Datadog", "type": "events_api_v2_inbound_integration" }
       ],
-      "html_url": "https://kade.pagerduty.test/service-directory/PKADEWRK"
+      "html_url": "https://harbourline.pagerduty.test/service-directory/PHARBOURLINEWRK"
     }
   ],
   "limit": 25,

@@ -1,5 +1,5 @@
 {
-  "outpost": "kade-vpc",
+  "outpost": "harbourline-vpc",
   "description": "Injector: two containers were started from one copied data dir, so both present the same acceptor id.",
   "events": [
     { "t": 0, "op": "worker_online", "worker": "worker-a" },

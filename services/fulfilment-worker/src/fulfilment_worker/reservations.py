@@ -10,7 +10,7 @@ from fulfilment_worker.clock import Clock
 from fulfilment_worker.models import InventoryRow, Order, OrderEvent, iso, new_id
 from fulfilment_worker.store import Store
 
-log = logging.getLogger("kade.worker.reservations")
+log = logging.getLogger("harbourline.worker.reservations")
 
 
 class OutOfStockError(RuntimeError):

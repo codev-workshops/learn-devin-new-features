@@ -1,4 +1,4 @@
-import type { Money } from "@kade/contracts";
+import type { Money } from "@harbourline/contracts";
 import type { ReactNode } from "react";
 import { formatMoney } from "../lib/money";
 

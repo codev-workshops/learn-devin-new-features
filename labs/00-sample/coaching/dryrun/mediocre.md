@@ -12,7 +12,7 @@ Fixture for `@skills:coach-00-sample dryrun --dry-run labs/00-sample/coaching/dr
 Planted: six fillers (actually ×2, basically ×2, so yeah ×1, you know ×1), one tag question, one 11-second pause at [02:10], and two omitted must-mention points: the business cost (mm2) and the thing the plan refuses to do (mm5).
 
 --- segment: framing ---
-[00:00] COACH: Hi, I'm the Kadé platform lead. You have read the brief. In sixty seconds: what will you put in front of Devin first, and why? Go.
+[00:00] COACH: Hi, I'm the Harbourline platform lead. You have read the brief. In sixty seconds: what will you put in front of Devin first, and why? Go.
 [00:05] LEARNER: So, basically, because there are two brands, Lumen and Trailhead, and because they share one codebase and one database, and because the new engineers take a week, actually, I think the first thing is onboarding.
 [00:30] LEARNER: I would use a blueprint and AGENTS.md for that, because it is the environment thing and it is faster than the other options.
 [00:50] LEARNER: And then the oversell maybe after, you know, because that one is big during Lamp Week.

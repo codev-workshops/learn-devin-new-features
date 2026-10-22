@@ -1,7 +1,7 @@
 {
   "$comment": "Nightly orders export bucket consumed by the BigQuery load (infra/bigquery). list-objects-v2 shape for prefix orders_daily/.",
   "bucket": {
-    "Name": "kade-prod-exports",
+    "Name": "harbourline-prod-exports",
     "Region": "us-east-1",
     "CreationDate": "2026-03-02T08:00:00Z",
     "Versioning": "Enabled",
@@ -14,7 +14,7 @@
         "Expiration": { "Days": 180 }
       }
     ],
-    "Tags": { "service": "kade-exports", "env": "prod" }
+    "Tags": { "service": "harbourline-exports", "env": "prod" }
   },
   "objects": {
     "Prefix": "orders_daily/",

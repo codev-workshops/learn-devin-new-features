@@ -12,7 +12,7 @@ Fixture for `@skills:coach-10-guardrails dryrun --dry-run labs/10-guardrails/coa
 
 --- segment: framing ---
 [00:00] COACH: I'm the CISO. In sixty seconds: where can our sessions talk to now, and what keeps it that way? Go.
-[00:04] LEARNER: So I made three profiles in a JSON file, kade-floor, kade-dev and kade-automation, and basically ran the resolver on them.
+[00:04] LEARNER: So I made three profiles in a JSON file, harbourline-floor, harbourline-dev and harbourline-automation, and basically ran the resolver on them.
 [00:30] LEARNER: The enterprise one is mandatory, which means it's a floor nobody below can loosen. Recommended would just be a default.
 [00:55] LEARNER: Sessions get npm and the sandbox.
 [01:12] LEARNER: Done.

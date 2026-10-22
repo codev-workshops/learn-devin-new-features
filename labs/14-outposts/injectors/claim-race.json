@@ -1,5 +1,5 @@
 {
-  "outpost": "kade-vpc",
+  "outpost": "harbourline-vpc",
   "description": "Injector: both workers see the same queue event and race for S1; the loser gets 409 and keeps watching.",
   "events": [
     { "t": 0, "op": "worker_online", "worker": "worker-a", "manual": true },

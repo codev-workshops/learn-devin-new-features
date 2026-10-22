@@ -1,6 +1,6 @@
-# @kade/contracts
+# @harbourline/contracts
 
-Frozen W0 contracts for Kadé Commerce. Every W1 child builds against these files without waiting for the others.
+Frozen W0 contracts for Harbourline. Every W1 child builds against these files without waiting for the others.
 
 | File             | What it fixes                                                                                           |
 | ---------------- | ------------------------------------------------------------------------------------------------------- |

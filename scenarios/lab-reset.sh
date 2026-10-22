@@ -19,7 +19,7 @@ LAB="${1:-}"
 }
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$HERE/.." && pwd)"
-STATE_DIR="${KADE_SCENARIO_STATE_DIR:-$HERE/.state}"
+STATE_DIR="${HARBOURLINE_SCENARIO_STATE_DIR:-$HERE/.state}"
 PAYGATE_URL="${PAYGATE_URL:-http://localhost:3002}"
 log() { printf '[lab-reset %s] %s\n' "$LAB" "$*"; }
 
@@ -58,4 +58,4 @@ case "$LAB" in
 15) log "starting state: seed-spec dataset; every injector available; no scenario orders; bad-migration.patch not applied" ;;
 *) log "no lab-specific steps for lab $LAB — database reset only" ;;
 esac
-log "done — verify with: git status --short (clean) and GET \${KADE_API_URL:-http://localhost:3001}/admin/inventory?belowSafety=true"
+log "done — verify with: git status --short (clean) and GET \${HARBOURLINE_API_URL:-http://localhost:3001}/admin/inventory?belowSafety=true"

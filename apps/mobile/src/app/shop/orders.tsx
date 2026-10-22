@@ -3,12 +3,12 @@ import React from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { formatMoney, type OrderPage } from "@/api";
-import { useAsync, useKade } from "@/state/store";
+import { useAsync, useHarbourline } from "@/state/store";
 import { Card, ErrorBanner, Loading, Muted, Pill, Screen, Title } from "@/ui/primitives";
 import { palette, statusColor, statusLabel } from "@/ui/theme";
 
 export function OrdersScreen() {
-  const { api, session, ordersVersion } = useKade();
+  const { api, session, ordersVersion } = useHarbourline();
   const orders = useAsync<OrderPage>(
     () => (session ? api.listOrders(session, { limit: 50 }) : null),
     [session?.brand, ordersVersion],

@@ -1,5 +1,5 @@
 # services/paygate-fake — build context is the REPO ROOT (npm workspaces share one lockfile):
-#   docker build -f services/paygate-fake/Dockerfile -t kade-paygate-fake .
+#   docker build -f services/paygate-fake/Dockerfile -t harbourline-paygate-fake .
 FROM mirror.gcr.io/library/node:22-alpine AS build
 WORKDIR /repo
 COPY . .

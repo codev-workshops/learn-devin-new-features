@@ -1,17 +1,17 @@
-# Runbook — Kadé Devin Outpost (`kade-vpc`)
+# Runbook — Harbourline Devin Outpost (`harbourline-vpc`)
 
 Sources: [overview](https://docs.devin.ai/cloud/outposts/overview), [quickstart](https://docs.devin.ai/cloud/outposts/quickstart), [orchestration](https://docs.devin.ai/cloud/outposts/orchestration), [reference](https://docs.devin.ai/cloud/outposts/reference) (fetched 2026-10-22).
 
 ## What runs where
 
-- **On Kadé's worker (inside the VPC):** command execution, file edits, the repository checkout, and any keys you put in the worker's environment.
+- **On Harbourline's worker (inside the VPC):** command execution, file edits, the repository checkout, and any keys you put in the worker's environment.
 - **In Devin Cloud:** planning, inference and session orchestration. The model still sees what a session reads and runs; Outposts move execution, not inference.
 - **Network:** workers make outbound HTTPS connections only. No inbound ports, public IP or VPN.
 
 ## 1. Create the Outpost (org admin, once)
 
-1. Settings → Devin → Outposts → **Create Outpost**, name `kade-vpc`. Outposts must be enabled for the organization (Pro, Max or Teams).
-2. Copy the worker token **now** into the secret manager (e.g. `kade/devin/outposts/kade-vpc`). It is shown once. If it is lost or pasted anywhere else, revoke it and create a new one.
+1. Settings → Devin → Outposts → **Create Outpost**, name `harbourline-vpc`. Outposts must be enabled for the organization (Pro, Max or Teams).
+2. Copy the worker token **now** into the secret manager (e.g. `harbourline/devin/outposts/harbourline-vpc`). It is shown once. If it is lost or pasted anywhere else, revoke it and create a new one.
 3. API alternative: a v3 API token with `account.outposts.write`. Read-only observers need `account.outposts.read` (lists Outposts and workers; cannot create).
 
 ## 2. Build the worker image
@@ -19,16 +19,16 @@ Sources: [overview](https://docs.devin.ai/cloud/outposts/overview), [quickstart]
 From a clean checkout. `outpost/build.sh` bundles the committed HEAD with `git bundle` and builds from the repo root; the Dockerfile clones that bundle into `/workspace/repos/learn-devin-new-features` (origin reset to GitHub) and runs `npm ci --ignore-scripts`. `outpost/Dockerfile.dockerignore` admits only the bundle and `smoke.sh`, so untracked files, `.env` files and uncommitted edits never enter the build context:
 
 ```bash
-outpost/build.sh   # tags kade-outpost-worker:<short-sha> and :latest
-docker run --rm --entrypoint bash kade-outpost-worker /usr/local/bin/kade-outpost-smoke
+outpost/build.sh   # tags harbourline-outpost-worker:<short-sha> and :latest
+docker run --rm --entrypoint bash harbourline-outpost-worker /usr/local/bin/harbourline-outpost-smoke
 node labs/14-outposts/tools/outpost-sim.mjs check-dockerfile outpost/Dockerfile
 ```
 
 Offline smoke build (no Devin CLI, cannot register; proves the other layers):
 
 ```bash
-outpost/build.sh --build-arg BASE_IMAGE=mirror.gcr.io/library/ubuntu:24.04 -t kade-outpost-worker:smoke
-docker run --rm --entrypoint bash kade-outpost-worker:smoke /usr/local/bin/kade-outpost-smoke
+outpost/build.sh --build-arg BASE_IMAGE=mirror.gcr.io/library/ubuntu:24.04 -t harbourline-outpost-worker:smoke
+docker run --rm --entrypoint bash harbourline-outpost-worker:smoke /usr/local/bin/harbourline-outpost-smoke
 ```
 
 Image policy: official `devin-cli:stable` base; Node 22 copied from the official `node:22-bookworm-slim` image (no `curl | bash`); Chrome fetched over HTTPS only; git (required), ffmpeg (screen recording), Chrome with `DEVIN_CHROME_PATH` (Ubuntu's chromium package is a snap stub in containers); non-root `devin` user and **no passwordless sudo** (these workers are long-lived; only grant sudo on machines recycled after each session); no token, key or `.env` in any layer.
@@ -38,18 +38,18 @@ Image policy: official `devin-cli:stable` base; Node 22 copied from the official
 One worker process = one concurrent session. Start one:
 
 ```bash
-export DEVIN_OUTPOSTS_TOKEN="$(your-secret-manager get kade/devin/outposts/kade-vpc)"
-docker run -d --name kade-worker-a --restart unless-stopped -e DEVIN_OUTPOSTS_TOKEN \
-  -v kade-worker-a:/home/devin/.devin/worker kade-outpost-worker worker start --outpost=kade-vpc
+export DEVIN_OUTPOSTS_TOKEN="$(your-secret-manager get harbourline/devin/outposts/harbourline-vpc)"
+docker run -d --name harbourline-worker-a --restart unless-stopped -e DEVIN_OUTPOSTS_TOKEN \
+  -v harbourline-worker-a:/home/devin/.devin/worker harbourline-outpost-worker worker start --outpost=harbourline-vpc
 ```
 
-The equivalent without the env var is `devin worker start --outpost=kade-vpc --token=<token>`; prefer the env var so the token never lands in shell history or `ps`.
+The equivalent without the env var is `devin worker start --outpost=harbourline-vpc --token=<token>`; prefer the env var so the token never lands in shell history or `ps`.
 
 Two workers (payments + storefront at 09:00):
 
 ```bash
 outpost/build.sh
-OUTPOST_NAME=kade-vpc docker compose -f outpost/compose.outpost.yml up -d
+OUTPOST_NAME=harbourline-vpc docker compose -f outpost/compose.outpost.yml up -d
 docker compose -f outpost/compose.outpost.yml ps
 ```
 
@@ -57,9 +57,9 @@ Each worker needs its **own** data directory/volume so it keeps a unique accepto
 
 ## 4. Route engineers to the Outpost
 
-- **Web:** pick `kade-vpc` as the environment when starting a session.
-- **Slack:** `@Devin !outpost kade-vpc fix the PayGate sandbox webhook test`. `!outpost` on its own lists available Outposts; a unique prefix or the ID also works.
-- **Default:** org admin sets Settings → Devin → **Default platform** → `kade-vpc`, so sessions land on the Outpost without anyone choosing it (also settable via the v3 API).
+- **Web:** pick `harbourline-vpc` as the environment when starting a session.
+- **Slack:** `@Devin !outpost harbourline-vpc fix the PayGate sandbox webhook test`. `!outpost` on its own lists available Outposts; a unique prefix or the ID also works.
+- **Default:** org admin sets Settings → Devin → **Default platform** → `harbourline-vpc`, so sessions land on the Outpost without anyone choosing it (also settable via the v3 API).
 
 ## 5. Capacity and queueing
 

@@ -1,6 +1,6 @@
 # Lab 03 reference ownership (team handles are fictional).
-/AGENTS.md                           @kade/platform
-/.devin/rules/checkout-review.md     @kade/platform
-/.devin/skills/checkout-review/      @kade/platform
-/.devin/rules/trailhead-*.md         @kade/trailhead
-/.devin/rules/lumen-*.md             @kade/lumen
+/AGENTS.md                           @harbourline/platform
+/.devin/rules/checkout-review.md     @harbourline/platform
+/.devin/skills/checkout-review/      @harbourline/platform
+/.devin/rules/trailhead-*.md         @harbourline/trailhead
+/.devin/rules/lumen-*.md             @harbourline/lumen

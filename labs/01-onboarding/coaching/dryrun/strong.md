@@ -36,7 +36,7 @@ Planted: one filler (actually ×1), no tag questions, no long pauses, no omitted
 [03:12] LEARNER: Outcome: a fresh session now comes up with every check green and nobody types a setup command.
 [03:35] LEARNER: Evidence: I fixed the one wrong path in the blueprint, ran all four gates on a clean machine, and every one exited zero.
 [04:05] LEARNER: The instructions agree now: I removed the conflicting note and reduced the old setup page to a pointer, and the PayGate key is documented by name only, never by value.
-[04:40] LEARNER: The repeated setup steps live in one skill, kade-dev, because our old Knowledge notes are moving to Skills anyway.
+[04:40] LEARNER: The repeated setup steps live in one skill, harbourline-dev, because our old Knowledge notes are moving to Skills anyway.
 [05:05] LEARNER: For questions like where the seed is defined I used Ask Devin, because it only reads the code; for the gates and the reset I used an Agent session, because those have to run.
 [05:35] LEARNER: Risk: nothing in code stops a reset against a shared address, so I have proposed a guard to the API owners.
 [06:06] LEARNER: Ask: can you add lab:reset to the day-one checklist so Monday's starter learns it first? Done.

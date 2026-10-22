@@ -1,4 +1,4 @@
-import type { PriceList } from "@kade/contracts";
+import type { PriceList } from "@harbourline/contracts";
 import { useState } from "react";
 import { ErrorNote, Loading, Price } from "../components/ui";
 import { api } from "../lib/api";

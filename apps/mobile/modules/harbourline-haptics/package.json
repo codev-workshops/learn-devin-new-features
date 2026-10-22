@@ -1,0 +1,7 @@
+{
+  "name": "harbourline-haptics",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Optional Expo module: UIImpactFeedbackGenerator on add-to-cart (iOS only; JS fallback elsewhere).",
+  "main": "index.ts"
+}

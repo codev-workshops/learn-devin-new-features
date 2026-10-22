@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// Kadé fixture MCP shim — a tiny Model Context Protocol server (stdio, JSON-RPC 2.0, newline
+// Harbourline fixture MCP shim — a tiny Model Context Protocol server (stdio, JSON-RPC 2.0, newline
 // delimited) that serves the PagerDuty, Datadog, AWS, GCP, BigQuery and Google Workspace
 // fixtures under fixtures/mcp, observability/ and infra/. Zero dependencies, read-only, no
 // credentials. Labs point Devin at it when the live integration is not available:
 //
-//   { "mcpServers": { "kade-fixtures": { "command": "node", "args": ["fixtures/mcp/shim.mjs"] } } }
+//   { "mcpServers": { "harbourline-fixtures": { "command": "node", "args": ["fixtures/mcp/shim.mjs"] } } }
 //
 // Methods: initialize, notifications/initialized, ping, tools/list, tools/call,
 // resources/list, resources/read. Tool catalogue: fixtures/mcp/tools.json.
@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 const here = dirname(fileURLToPath(import.meta.url));
 export const root = resolve(here, "..", "..");
 const PROTOCOL_VERSIONS = ["2025-06-18", "2025-03-26", "2024-11-05"];
-const SERVER_INFO = { name: "kade-fixtures", version: "0.1.0" };
+const SERVER_INFO = { name: "harbourline-fixtures", version: "0.1.0" };
 const RESOURCE_ROOTS = ["fixtures/mcp", "observability", "infra"];
 
 const text = (rel) => readFileSync(join(root, rel), "utf8");
@@ -81,11 +81,11 @@ export const handlers = {
     return { incident: inc };
   },
   pagerdutyLogEntries: (_t, a) =>
-    findIncident(a.incident_id)?.id === "Q3KADE0210LAMP"
+    findIncident(a.incident_id)?.id === "Q3HARBOURLINE0210LAMP"
       ? json("observability/pagerduty/incident-lamp-week-log-entries.json")
       : { log_entries: [] },
   pagerdutyAlerts: (_t, a) =>
-    findIncident(a.incident_id)?.id === "Q3KADE0210LAMP"
+    findIncident(a.incident_id)?.id === "Q3HARBOURLINE0210LAMP"
       ? json("observability/pagerduty/alerts-lamp-week.json")
       : { alerts: [] },
   datadogListMonitors: (_t, a) =>
@@ -142,7 +142,7 @@ export const handlers = {
       duplicate_webhooks: Number(r.duplicate_webhooks),
     }));
     return {
-      table: "kade-prod.analytics.orders_daily",
+      table: "harbourline-prod.analytics.orders_daily",
       totalRows: rows.length,
       rows: rows.slice(0, a.limit ?? 1000),
     };
@@ -175,11 +175,11 @@ export function callTool(name, args = {}) {
     const given = args[arg];
     if (given === undefined) continue;
     const values = Array.isArray(given) ? given : [given];
-    // Accept the bare id or a fully-qualified Kadé id (GCP project kade-prod, AWS account 123456789012); never another tenant's.
-    const KADE_PREFIX =
-      /^(projects\/kade-prod\/(locations\/[a-z0-9-]+\/)?[a-z]+\/|arn:aws:[a-z0-9-]+:[a-z0-9-]*:123456789012:[a-z-]+\/(kade-prod\/)?|kade-prod\.)/;
+    // Accept the bare id or a fully-qualified Harbourline id (GCP project harbourline-prod, AWS account 123456789012); never another tenant's.
+    const HARBOURLINE_PREFIX =
+      /^(projects\/harbourline-prod\/(locations\/[a-z0-9-]+\/)?[a-z]+\/|arn:aws:[a-z0-9-]+:[a-z0-9-]*:123456789012:[a-z-]+\/(harbourline-prod\/)?|harbourline-prod\.)/;
     const matches = (v, x) =>
-      String(v) === x || (KADE_PREFIX.test(String(v)) && String(v).replace(KADE_PREFIX, "") === x);
+      String(v) === x || (HARBOURLINE_PREFIX.test(String(v)) && String(v).replace(HARBOURLINE_PREFIX, "") === x);
     const ok = values.length > 0 && values.every((v) => allowed.some((x) => matches(v, x)));
     if (!ok) {
       return {
@@ -252,7 +252,7 @@ export function handle(msg) {
         },
         serverInfo: SERVER_INFO,
         instructions:
-          "Read-only fixtures for the Kadé Commerce labs: PagerDuty incident 2187 (Lamp Week), Datadog monitors/metrics/logs, AWS ECS/S3, GCP Cloud Run/Pub/Sub, BigQuery orders_daily and the merchandiser Sheet / incident Doc. No credentials are involved; nothing can be changed through this server.",
+          "Read-only fixtures for the Harbourline labs: PagerDuty incident 2187 (Lamp Week), Datadog monitors/metrics/logs, AWS ECS/S3, GCP Cloud Run/Pub/Sub, BigQuery orders_daily and the merchandiser Sheet / incident Doc. No credentials are involved; nothing can be changed through this server.",
       });
     }
     case "notifications/initialized":
@@ -275,15 +275,15 @@ export function handle(msg) {
     case "resources/list":
       return reply({
         resources: listResourceFiles().map((p) => ({
-          uri: `kade-fixture://${p}`,
+          uri: `harbourline-fixture://${p}`,
           name: p,
           mimeType: mime(p),
         })),
       });
     case "resources/read": {
       const uri = String(params.uri ?? "");
-      const rel = uri.replace(/^kade-fixture:\/\//, "");
-      if (!uri.startsWith("kade-fixture://") || !listResourceFiles().includes(rel))
+      const rel = uri.replace(/^harbourline-fixture:\/\//, "");
+      if (!uri.startsWith("harbourline-fixture://") || !listResourceFiles().includes(rel))
         return fail(-32002, `Resource not found: ${uri}`);
       return reply({ contents: [{ uri, mimeType: mime(rel), text: text(rel) }] });
     }

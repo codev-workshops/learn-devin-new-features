@@ -90,7 +90,7 @@
     },
     "approach": {
       "status": "present",
-      "quote": "Before any session starts I make kade-eu the only platform for this work"
+      "quote": "Before any session starts I make harbourline-eu the only platform for this work"
     },
     "evidence": {
       "status": "present",
@@ -143,11 +143,11 @@
     },
     {
       "id": "mm4",
-      "point": "Every session ran on the kade-eu outpost and the second session waited in the queue instead of moving to the cloud",
+      "point": "Every session ran on the harbourline-eu outpost and the second session waited in the queue instead of moving to the cloud",
       "weight": 4,
       "mentioned": true,
       "belonged_in": "update",
-      "evidence_quote": "every session ran on the kade-eu outpost and the second session waited in the queue instead of moving to the cloud"
+      "evidence_quote": "every session ran on the harbourline-eu outpost and the second session waited in the queue instead of moving to the cloud"
     },
     {
       "id": "mm5",

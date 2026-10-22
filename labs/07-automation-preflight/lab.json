@@ -24,7 +24,7 @@
         "integration": "Devin Automation with a Webhook trigger — optional",
         "required": false,
         "fixture": "The replay stands in for the Automation runtime; `tools/send-webhook.mjs --dry-run` prints the requests it would send.",
-        "note": "Live: create the Automation, paste the script into Preflight, copy the webhook URL and secret into `KADE_LAB07_WEBHOOK_URL` and `KADE_LAB07_WEBHOOK_SECRET` in your own shell, and run `node labs/07-automation-preflight/tools/send-webhook.mjs`. Disable or delete the Automation when you finish."
+        "note": "Live: create the Automation, paste the script into Preflight, copy the webhook URL and secret into `HARBOURLINE_LAB07_WEBHOOK_URL` and `HARBOURLINE_LAB07_WEBHOOK_SECRET` in your own shell, and run `node labs/07-automation-preflight/tools/send-webhook.mjs`. Disable or delete the Automation when you finish."
       },
       {
         "integration": "PayGate (real payment provider) — not used",

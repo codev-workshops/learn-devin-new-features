@@ -1,6 +1,6 @@
 ## Customer brief
 
-Hi — I lead platform engineering at Kadé Commerce. We run two brands, **Lumen Home** (USD) and **Trailhead Supply** (EUR), and each brand team runs its own flash sales. Every one of them has re-invented the release checklist: Lumen keeps a three-line skill in a repo of its own, Trailhead pastes a long prompt into each session, and neither checks the things that hurt us last quarter (sale prices stored the wrong way, stock reserved too early, a push to `main` in the middle of a sale, an on-call engineer with no first-hour procedure).
+Hi — I lead platform engineering at Harbourline. We run two brands, **Lumen Home** (USD) and **Trailhead Supply** (EUR), and each brand team runs its own flash sales. Every one of them has re-invented the release checklist: Lumen keeps a three-line skill in a repo of its own, Trailhead pastes a long prompt into each session, and neither checks the things that hurt us last quarter (sale prices stored the wrong way, stock reserved too early, a push to `main` in the middle of a sale, an on-call engineer with no first-hour procedure).
 
 What I need from you:
 

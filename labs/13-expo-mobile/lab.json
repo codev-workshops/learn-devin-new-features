@@ -67,7 +67,7 @@
     {
       "name": "ios-only-native-dependency",
       "when": "T+60 min",
-      "behaviour": "The Cart tab must say `Haptics: JS fallback (no-op)` on Android. If the Android build fails on `kade-haptics`, the module's platform list or import path is wrong — explain why the JS fallback, not a platform `if`, keeps Android working."
+      "behaviour": "The Cart tab must say `Haptics: JS fallback (no-op)` on Android. If the Android build fails on `harbourline-haptics`, the module's platform list or import path is wrong — explain why the JS fallback, not a platform `if`, keeps Android working."
     },
     {
       "name": "xcode-version",

@@ -1,6 +1,6 @@
 ## Customer brief
 
-Hi — I run the platform team at **Kadé Commerce**. We operate two online brands on one codebase and one PostgreSQL database: **Lumen Home** (USD, lighting and home goods, tax added at checkout) and **Trailhead Supply** (EUR, outdoor gear, VAT-inclusive prices, free shipping over €80). Together they process roughly 400 orders a week in the quiet season and several times that during Lumen's "Lamp Week" flash sale.
+Hi — I run the platform team at **Harbourline**. We operate two online brands on one codebase and one PostgreSQL database: **Lumen Home** (USD, lighting and home goods, tax added at checkout) and **Trailhead Supply** (EUR, outdoor gear, VAT-inclusive prices, free shipping over €80). Together they process roughly 400 orders a week in the quiet season and several times that during Lumen's "Lamp Week" flash sale.
 
 We have just been given a Devin seat and I have a list of things that hurt: a new engineer takes a week to run the store locally and someone reset the shared database on day two; a merchandiser once saw another brand's order; the Trailhead reconciliation report is off by a few cents on about 3% of orders; and during the last flash sale we sold lamps we did not have. I do not expect you to fix any of that today.
 

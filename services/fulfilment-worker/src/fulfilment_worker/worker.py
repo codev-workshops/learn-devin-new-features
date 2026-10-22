@@ -11,7 +11,7 @@ from fulfilment_worker.clock import Clock, SystemClock
 from fulfilment_worker.config import Settings
 from fulfilment_worker.store import Store
 
-log = logging.getLogger("kade.worker")
+log = logging.getLogger("harbourline.worker")
 
 
 @dataclass

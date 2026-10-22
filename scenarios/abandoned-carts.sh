@@ -54,9 +54,9 @@ case "$SWEEPER" in worker | contract) ;; *) die "--sweeper must be auto, worker 
 log "sweeper mode: $SWEEPER"
 targets="[]"
 if [ "$FRESH" -eq 0 ]; then
-  abandoned="$(KADE_BRAND="$BRAND" KADE_USER="$merch" KADE_ROLE=merchandiser api GET "/admin/carts/abandoned?olderThanHours=$OLDER")"
+  abandoned="$(HARBOURLINE_BRAND="$BRAND" HARBOURLINE_USER="$merch" HARBOURLINE_ROLE=merchandiser api GET "/admin/carts/abandoned?olderThanHours=$OLDER")"
   [ "$(last_status)" = "200" ] || die "GET /admin/carts/abandoned → $API_STATUS"
-  pending_orders="$(KADE_BRAND="$BRAND" KADE_USER="$merch" KADE_ROLE=merchandiser api GET "/admin/orders?status=pending_payment&limit=200" | jq -c '.items')"
+  pending_orders="$(HARBOURLINE_BRAND="$BRAND" HARBOURLINE_USER="$merch" HARBOURLINE_ROLE=merchandiser api GET "/admin/orders?status=pending_payment&limit=200" | jq -c '.items')"
   targets="$(jq -nc --argjson carts "$abandoned" --argjson orders "$pending_orders" --argjson n "$COUNT" '
     [ $carts[] | select(.pendingPaymentId != null) as $c
       | ($orders[] | select(.paymentId == $c.pendingPaymentId or .cartId == $c.cart.id)) as $o
@@ -89,7 +89,7 @@ while IFS= read -r row; do
     SWEEPER_MAX_AGE_HOURS="$OLDER" python3 -m fulfilment_worker sweep >&2 || die "fulfilment_worker sweep failed"
     log "fulfilment worker sweeper ran (max age ${OLDER}h); cart $cart_id should be gone, order $order_id emptied"
   else
-    KADE_BRAND="$BRAND" KADE_USER="$merch" KADE_ROLE=merchandiser api DELETE "/carts/$cart_id" >/dev/null
+    HARBOURLINE_BRAND="$BRAND" HARBOURLINE_USER="$merch" HARBOURLINE_ROLE=merchandiser api DELETE "/carts/$cart_id" >/dev/null
     log "cart $cart_id deleted through the contract (what the sweeper does) → $(last_status); order $order_id still pending"
   fi
 
@@ -104,7 +104,7 @@ while IFS= read -r row; do
   # 3. Wait for the worker: a ghost order is paid/confirmed with zero lines.
   deadline=$(( $(date +%s) + WAIT ))
   while :; do
-    o="$(KADE_BRAND="$BRAND" KADE_USER="$merch" KADE_ROLE=merchandiser api GET "/orders/$order_id")"
+    o="$(HARBOURLINE_BRAND="$BRAND" HARBOURLINE_USER="$merch" HARBOURLINE_ROLE=merchandiser api GET "/orders/$order_id")"
     status="$(printf '%s' "$o" | jq -r .status)"
     lines="$(printf '%s' "$o" | jq '.lines | length')"
     case "$status" in paid | confirmed | packed | shipped | delivered) break ;; esac
@@ -125,7 +125,7 @@ if [ "$ghosts" -gt 0 ]; then
   exit "$EXIT_SYMPTOM"
 fi
 if printf '%s' "$details" | jq -e 'all(.status == "pending_payment" or .status == "cancelled")' >/dev/null; then
-  no_symptom "late webhook accepted but no order was confirmed within ${WAIT}s — is the fulfilment worker running (kade-worker run)?" "$result"
+  no_symptom "late webhook accepted but no order was confirmed within ${WAIT}s — is the fulfilment worker running (harbourline-worker run)?" "$result"
   exit "$EXIT_PENDING"
 fi
 no_symptom "orders were paid with their lines intact — the worker handled the missing cart; plant fixed?" "$result"

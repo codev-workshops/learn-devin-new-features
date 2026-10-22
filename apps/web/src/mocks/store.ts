@@ -20,8 +20,8 @@ import type {
   PriceList,
   Product,
   Role,
-} from "@kade/contracts";
-import { ORDER_STATUSES } from "@kade/contracts";
+} from "@harbourline/contracts";
+import { ORDER_STATUSES } from "@harbourline/contracts";
 import { fromCents, toCents } from "../lib/money";
 import {
   AS_OF,
@@ -65,16 +65,16 @@ export function createStore(now: () => Date = () => new Date()) {
 
   const requireBrand = (c: Caller): BrandId => {
     if (!c.brand || !data.brands.some((b) => b.id === c.brand))
-      fail(400, "bad_request", "Missing or unknown X-Kade-Brand header");
+      fail(400, "bad_request", "Missing or unknown X-Harbourline-Brand header");
     return c.brand as BrandId;
   };
   const requireUser = (c: Caller): string =>
-    c.user ?? fail(400, "bad_request", "Missing X-Kade-User header");
+    c.user ?? fail(400, "bad_request", "Missing X-Harbourline-User header");
   const requireStaff = (c: Caller): BrandId => {
     const b = requireBrand(c);
     requireUser(c);
     if (c.role !== "merchandiser" && c.role !== "admin")
-      fail(403, "forbidden", "X-Kade-Role must be merchandiser or admin");
+      fail(403, "forbidden", "X-Harbourline-Role must be merchandiser or admin");
     return b;
   };
 

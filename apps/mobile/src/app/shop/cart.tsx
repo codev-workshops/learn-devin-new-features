@@ -3,8 +3,8 @@ import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
 import { formatMoney, type Cart, type CartLine } from "@/api";
-import { useKade } from "@/state/store";
-import { isNativeHapticsAvailable } from "../../../modules/kade-haptics";
+import { useHarbourline } from "@/state/store";
+import { isNativeHapticsAvailable } from "../../../modules/harbourline-haptics";
 import { Button, Card, ErrorBanner, Muted, Screen, Title } from "@/ui/primitives";
 import { brandAccent, palette } from "@/ui/theme";
 
@@ -29,7 +29,7 @@ export function TotalsView({ cart }: { cart: Cart }) {
 }
 
 export function CartScreen() {
-  const { session, cart, setLineQuantity, busy, error, dismissError } = useKade();
+  const { session, cart, setLineQuantity, busy, error, dismissError } = useHarbourline();
   if (!session) return null;
   const accent = brandAccent[session.brand];
   const lines = cart?.lines ?? [];
@@ -46,7 +46,8 @@ export function CartScreen() {
         </Muted>
       ) : null}
       <Muted testID="haptics-mode">
-        Haptics: {isNativeHapticsAvailable() ? "native (kade-haptics)" : "JS fallback (no-op)"}
+        Haptics:{" "}
+        {isNativeHapticsAvailable() ? "native (harbourline-haptics)" : "JS fallback (no-op)"}
       </Muted>
       {error ? <ErrorBanner message={error} onDismiss={dismissError} /> : null}
       <FlatList

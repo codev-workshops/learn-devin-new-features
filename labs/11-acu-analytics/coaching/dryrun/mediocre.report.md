@@ -25,7 +25,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T11:00:00Z · timing:
 
 ## Structure (problem → approach → evidence → next step)
 
-- **Problem** — weak: “So Kadé has three organizations, and a contract that renews monthly, and there are tiers”
+- **Problem** — weak: “So Harbourline has three organizations, and a contract that renews monthly, and there are tiers”
 - **Approach** — present: “there are two limits, the organization one and the personal one”
 - **Evidence** — weak: “Trailhead used 3,000, Lumen 4,100, Platform 1,770, the enterprise 8,870, and the sale adds 900”
 - **Next step** — present: “Ask: can you approve the new Trailhead limit?”
@@ -53,7 +53,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T11:00:00Z · timing:
 - Repeated words: "and" chained five times in the framing
 - Coach asked “did you say…?”: never
 - Article/plural slips: "raise the org limit" — say "the organization limit" to finance
-- Re-record: “So Kadé has three organizations, and a contract that renews monthly, and there are tiers, and IdP groups…”
+- Re-record: “So Harbourline has three organizations, and a contract that renews monthly, and there are tiers, and IdP groups…”
 
 ## Three stems for next time
 

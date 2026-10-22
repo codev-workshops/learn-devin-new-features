@@ -7,7 +7,7 @@ import { allowed, grant, hostMatches, resolve, validateProfile } from './profile
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const load = (p) => JSON.parse(readFileSync(path.join(HERE, p), 'utf8'));
-const WORLD = load('kade-guardrails.json');
+const WORLD = load('harbourline-guardrails.json');
 const can = (eff, host) => allowed(eff, host).allowed;
 
 describe('lab 10 reference policy matrix', () => {
@@ -17,7 +17,7 @@ describe('lab 10 reference policy matrix', () => {
 
   it('lets a normal session reach npm and the PayGate sandbox and nothing else', () => {
     const eff = resolve(WORLD, 'dev-session');
-    expect(eff.profiles).toEqual(['kade-floor', 'kade-dev']);
+    expect(eff.profiles).toEqual(['harbourline-floor', 'harbourline-dev']);
     expect(can(eff, 'registry.npmjs.org')).toBe(true);
     expect(can(eff, 'api.sandbox.paygate.example')).toBe(true);
     for (const h of ['api.paygate.example', 'pypi.org', 'api.github.com', 'example.com']) expect(can(eff, h)).toBe(false);
@@ -28,7 +28,7 @@ describe('lab 10 reference policy matrix', () => {
 
   it('ignores a session opt-out under the mandatory floor', () => {
     const eff = resolve(WORLD, 'opt-out-session');
-    expect(eff.profiles).toEqual(['kade-floor']);
+    expect(eff.profiles).toEqual(['harbourline-floor']);
     expect(can(eff, 'example.com')).toBe(false);
     expect(eff.notes[0]).toMatch(/ignored/);
   });
@@ -54,7 +54,7 @@ describe('lab 10 reference policy matrix', () => {
     expect(child.profiles).toEqual(parent.profiles);
     expect(can(child, 'example.com')).toBe(false);
     const looseChild = resolve(load('../injectors/recommended-floor.json'), 'child-of-dev');
-    expect(looseChild.profiles).toEqual(['kade-dev']);
+    expect(looseChild.profiles).toEqual(['harbourline-dev']);
   });
 
   it('runs snapshot builds under the same floor, so the Python install is blocked', () => {
@@ -82,13 +82,13 @@ describe('lab 10 reference policy matrix', () => {
 describe('lab 10 injectors', () => {
   it('rejects keeping the GitHub CLI token without api.github.com or Full git', () => {
     const w = load('../injectors/gh-token-keep.json');
-    expect(validateProfile('kade-gh', w.profiles['kade-gh']).problems[0]).toMatch(/api\.github\.com/);
-    expect(validateProfile('kade-gh-readonly', w.profiles['kade-gh-readonly']).problems[0]).toMatch(/Full git/);
+    expect(validateProfile('harbourline-gh', w.profiles['harbourline-gh']).problems[0]).toMatch(/api\.github\.com/);
+    expect(validateProfile('harbourline-gh-readonly', w.profiles['harbourline-gh-readonly']).problems[0]).toMatch(/Full git/);
   });
 
   it('flags the hurried wildcards and the URL entry', () => {
     const w = load('../injectors/broad-wildcard.json');
-    const v = validateProfile('kade-floor-draft', w.profiles['kade-floor-draft']);
+    const v = validateProfile('harbourline-floor-draft', w.profiles['harbourline-floor-draft']);
     expect(v.problems).toHaveLength(1);
     expect(v.warnings).toHaveLength(2);
     expect(hostMatches('registry.npmjs.org*', 'registry.npmjs.org.evil.example')).toBe(true);

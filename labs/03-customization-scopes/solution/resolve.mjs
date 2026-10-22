@@ -14,7 +14,7 @@ export const ASSUMPTIONS = [
   'Globs are matched against the path relative to the repo root; supported syntax is **, *, ? and {a,b}.',
   'A .devin/rules file without a trigger is treated as always_on.',
   'The docs state no precedence between two loaded instructions that disagree: both are in context. The resolver therefore reports a conflict unless all but one statement explicitly defer.',
-  'Statement keys such as [tax.presentation] and the :defer suffix are a Kadé lab convention that makes conflicts greppable; Devin reads them as plain text.',
+  'Statement keys such as [tax.presentation] and the :defer suffix are a Harbourline lab convention that makes conflicts greppable; Devin reads them as plain text.',
   'Which of two same-named skills (global and repo) wins is not stated here; the resolver reports the collision instead of picking one.',
 ];
 

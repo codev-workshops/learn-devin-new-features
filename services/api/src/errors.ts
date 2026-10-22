@@ -1,4 +1,4 @@
-import type { ApiError, ErrorCode } from "@kade/contracts";
+import type { ApiError, ErrorCode } from "@harbourline/contracts";
 
 export class HttpError extends Error {
   constructor(

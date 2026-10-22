@@ -40,8 +40,8 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T11:10:00Z · timing:
 
 ## Missing key points
 
-- [x] Commands, file edits and repo access run on Kadé's worker in the VPC while inference and planning stay in Devin Cloud (6) — “every command, file edit and repo checkout runs on a Kadé worker inside the VPC … Devin Cloud keeps planning and inference”
-- [x] Worker started with devin worker start plus the outpost name and its token, the token shown once and kept in the secret manager (5) — “devin worker start, the outpost name kade-vpc and its token; the token is shown once, so it went straight into the secret manager”
+- [x] Commands, file edits and repo access run on Harbourline's worker in the VPC while inference and planning stay in Devin Cloud (6) — “every command, file edit and repo checkout runs on a Harbourline worker inside the VPC … Devin Cloud keeps planning and inference”
+- [x] Worker started with devin worker start plus the outpost name and its token, the token shown once and kept in the secret manager (5) — “devin worker start, the outpost name harbourline-vpc and its token; the token is shown once, so it went straight into the secret manager”
 - [x] One session per worker so two containers serve two sessions and the third waits under a banner rather than failing (5) — “one session per worker, so our two containers ran S1 and S2 and S3 waited under the banner”
 - [x] Engineers reach the outpost through the organization default platform and the Slack bang command (4) — “type bang outpost in Slack, or do nothing once an admin makes it the organization default platform”
 - [x] Image bakes in the repo with git, ffmpeg and Chrome via DEVIN_CHROME_PATH and grants no passwordless sudo (4) — “bakes in the repo with git, ffmpeg and Chrome through DEVIN_CHROME_PATH … grants no passwordless sudo”

@@ -4,7 +4,7 @@ import { sign, verify } from "../src/signing.js";
 
 describe("signing", () => {
   it("produces the sha256=<hex> scheme the worker verifies", () => {
-    const sig = sign("kade-local-paygate-secret", '{"a":1}');
+    const sig = sign("harbourline-local-paygate-secret", '{"a":1}');
     expect(sig).toMatch(/^sha256=[0-9a-f]{64}$/);
     expect(sign("whsec_test", "{}")).toBe(sign("whsec_test", Buffer.from("{}")));
   });

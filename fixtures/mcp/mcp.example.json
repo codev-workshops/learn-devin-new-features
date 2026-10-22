@@ -1,7 +1,7 @@
 {
   "$comment": "Devin MCP configuration for the fixture shim. Add it as a stdio MCP server (Settings → MCP Marketplace → custom) or copy into your local MCP config; the command runs from the repo root. No environment variables, tokens or secrets are needed.",
   "mcpServers": {
-    "kade-fixtures": {
+    "harbourline-fixtures": {
       "command": "node",
       "args": ["fixtures/mcp/shim.mjs"]
     }

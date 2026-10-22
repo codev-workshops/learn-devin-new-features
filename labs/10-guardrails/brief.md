@@ -1,6 +1,6 @@
 ## Customer brief
 
-Hi — I'm the CISO at Kadé Commerce. Devin sessions now run for both brands, **Lumen Home** and **Trailhead Supply**, every day, and I have no written answer to the first question my auditors ask: *where can those machines talk to, and who decides?*
+Hi — I'm the CISO at Harbourline. Devin sessions now run for both brands, **Lumen Home** and **Trailhead Supply**, every day, and I have no written answer to the first question my auditors ask: *where can those machines talk to, and who decides?*
 
 Here is what I will sign:
 

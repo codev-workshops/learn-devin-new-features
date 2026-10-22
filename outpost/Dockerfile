@@ -1,10 +1,10 @@
-# Devin Outposts worker image for Kadé Commerce (lab 14).
+# Devin Outposts worker image for Harbourline (lab 14).
 #
 # Build with outpost/build.sh from a clean checkout: it bundles the committed HEAD
 # (`git bundle`), so untracked files, local `.env` files and uncommitted edits never reach
 # the image, then runs `docker build -f outpost/Dockerfile .` from the repo root.
 # Run (token is passed at run time, never baked in):
-#   docker run --rm -e DEVIN_OUTPOSTS_TOKEN kade-outpost-worker worker start --outpost=kade-vpc
+#   docker run --rm -e DEVIN_OUTPOSTS_TOKEN harbourline-outpost-worker worker start --outpost=harbourline-vpc
 #
 # Follows https://docs.devin.ai/cloud/outposts/quickstart (Docker tab) and the machine
 # dependencies in https://docs.devin.ai/cloud/outposts/overview#machine-dependencies.
@@ -49,14 +49,14 @@ RUN useradd --create-home --shell /bin/bash devin \
     && chown -R devin:devin /workspace /home/devin/.devin
 
 # Root-owned and read-only for the worker user.
-COPY --chmod=0444 outpost/repo.bundle /opt/kade-repo.bundle
-COPY --chmod=0555 outpost/smoke.sh /usr/local/bin/kade-outpost-smoke
+COPY --chmod=0444 outpost/repo.bundle /opt/harbourline-repo.bundle
+COPY --chmod=0555 outpost/smoke.sh /usr/local/bin/harbourline-outpost-smoke
 
 USER devin
 
 # The worker runs in /workspace; sessions find their repos under /workspace/repos/<name>.
 WORKDIR /workspace
-RUN git clone --quiet /opt/kade-repo.bundle repos/${REPO_NAME} \
+RUN git clone --quiet /opt/harbourline-repo.bundle repos/${REPO_NAME} \
     && git -C repos/${REPO_NAME} remote set-url origin ${REPO_URL} \
     && cd repos/${REPO_NAME} \
     && npm ci --no-audit --no-fund --ignore-scripts

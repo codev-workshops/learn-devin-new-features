@@ -3,7 +3,7 @@
 //
 //   node labs/07-automation-preflight/tools/send-webhook.mjs [--dry-run] [--only ntf_701,ntf_702] [--gap-ms 500]
 //
-// Reads KADE_LAB07_WEBHOOK_URL and KADE_LAB07_WEBHOOK_SECRET from your shell (never commit them).
+// Reads HARBOURLINE_LAB07_WEBHOOK_URL and HARBOURLINE_LAB07_WEBHOOK_SECRET from your shell (never commit them).
 // The secret travels in the X-Webhook-Secret header. --dry-run prints what would be sent.
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -19,10 +19,10 @@ const events = JSON.parse(readFileSync(path.join(HERE, '..', 'fixtures', 'paygat
   (e) => !only || only.has(e.body.notification_id),
 );
 
-const url = process.env.KADE_LAB07_WEBHOOK_URL;
-const secret = process.env.KADE_LAB07_WEBHOOK_SECRET;
+const url = process.env.HARBOURLINE_LAB07_WEBHOOK_URL;
+const secret = process.env.HARBOURLINE_LAB07_WEBHOOK_SECRET;
 if (!flag('--dry-run') && (!url || !secret)) {
-  console.error('send-webhook: set KADE_LAB07_WEBHOOK_URL and KADE_LAB07_WEBHOOK_SECRET, or pass --dry-run');
+  console.error('send-webhook: set HARBOURLINE_LAB07_WEBHOOK_URL and HARBOURLINE_LAB07_WEBHOOK_SECRET, or pass --dry-run');
   process.exit(2);
 }
 for (const e of events) {

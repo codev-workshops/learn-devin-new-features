@@ -1,4 +1,4 @@
-# Repo blueprint for codev-workshops/learn-devin-new-features (Kadé Commerce).
+# Repo blueprint for codev-workshops/learn-devin-new-features (Harbourline).
 # Mirrors what is applied in Devin's environment settings (schema: https://docs.devin.ai/onboard-devin/environment-yaml).
 # Keep this file and the settings in sync. No secrets here. Every step is idempotent.
 # History: W0-A drafted the first version; W0-B applied it (22 Oct 2026) after verifying each
@@ -9,8 +9,9 @@
 # W1-fixtures (22 Oct 2026) added shellcheck/jq (scenarios/ injectors) and the fixtures-gates knowledge entry.
 # W1-mobile (22 Oct 2026) added the Android SDK/emulator step for apps/mobile; details in blueprint.proposed.mobile.yaml.
 # W1-web (22 Oct 2026) added the Playwright Chromium install for the apps/web smoke tests (`npm run test:e2e -w apps/web`).
-# W4-13 (22 Oct 2026) applied the Linux block plus a second `runs-on: macos` block (iOS Simulator + kade-haptics),
+# W4-13 (22 Oct 2026) applied the Linux block plus a second `runs-on: macos` block (iOS Simulator + harbourline-haptics),
 # every macOS command verified by the W4-13 macOS child (Xcode 26.6, iPhone 17 / iOS 26.5).
+# rename (22 Oct 2026): platform renamed to Harbourline (`@harbourline/*`, `HARBOURLINE_*`, `harbourline` db user/name, `harbourline_android` AVD).
 initialize: |
   export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
   nvm install 22 >/dev/null && nvm alias default 22 >/dev/null
@@ -26,7 +27,7 @@ initialize: |
   fi
   yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
   "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-35" "platforms;android-36" "build-tools;35.0.0" "build-tools;36.0.0" "emulator" "system-images;android-35;google_apis;x86_64" >/dev/null
-  echo no | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd -n kade_android -k "system-images;android-35;google_apis;x86_64" -d pixel_6 --force >/dev/null
+  echo no | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd -n harbourline_android -k "system-images;android-35;google_apis;x86_64" -d pixel_6 --force >/dev/null
   grep -q '^ANDROID_HOME=' "$ENVRC" 2>/dev/null || { echo "ANDROID_HOME=$ANDROID_HOME"; echo "ANDROID_SDK_ROOT=$ANDROID_HOME"; } >> "$ENVRC"
   sudo ln -sf "$ANDROID_HOME/platform-tools/adb" /usr/local/bin/adb
 maintenance: |
@@ -52,7 +53,7 @@ knowledge:
       node labs/coach-dryrun/calibrate.mjs --strict (all 15 coaches on the generic transcript, spread <= 15; --write regenerates labs/COACH-CALIBRATION.md). Progress lives on branch `coaching` (never merged): git fetch origin coaching && git show origin/coaching:coaching/aggregate.mjs > /tmp/aggregate.mjs && node /tmp/aggregate.mjs --ref origin/coaching [--previous <handle> <nn>]
   - name: startup
     contents: |
-      npm run db:up (Compose Postgres 16 from mirror.gcr.io) && npm run db:migrate && npm run db:seed (no-op once seeded; `npm run db:seed -- --reset` is the lab reset and rebuilds the dataset). DATABASE_URL comes from the process env, else the root .env created by initialize, else the local default. Run npm run build first on a fresh VM (seed, tests and lab:reset import the built @kade/contracts). API: npm run dev -w services/api (3001); KADE_NOW=2026-10-22T09:00:00Z pins the clock. Webhook/sweeper injectors also need the worker: (cd services/fulfilment-worker && DATABASE_URL=postgres://kade:kade@localhost:5432/kade python3 -m fulfilment_worker run). Lab pages: npm run labs:build, then open labs/index.html from file://.
+      npm run db:up (Compose Postgres 16 from mirror.gcr.io) && npm run db:migrate && npm run db:seed (no-op once seeded; `npm run db:seed -- --reset` is the lab reset and rebuilds the dataset). DATABASE_URL comes from the process env, else the root .env created by initialize, else the local default. Run npm run build first on a fresh VM (seed, tests and lab:reset import the built @harbourline/contracts). API: npm run dev -w services/api (3001); HARBOURLINE_NOW=2026-10-22T09:00:00Z pins the clock. Webhook/sweeper injectors also need the worker: (cd services/fulfilment-worker && DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline python3 -m fulfilment_worker run). Lab pages: npm run labs:build, then open labs/index.html from file://.
   - name: fixtures-gates
     contents: |
       node --test 'scenarios/test/*.test.mjs' 'fixtures/mcp/test/*.test.mjs' && shellcheck -x scenarios/*.sh scenarios/lib/common.sh   (W1-fixtures; not part of npm test)
@@ -61,7 +62,7 @@ knowledge:
       Node 22 via nvm (root engines ">=22 <23"); gates also pass on Node 20/24. Python deps for services/fulfilment-worker come from maintenance (pip install -e "services/fulfilment-worker[dev]"). On a fresh VM run npm run build and npm run db:up before npm run gates (services/api tests import the built contracts and need Postgres).
   - name: mobile
     contents: |
-      apps/mobile gates: npm test/lint/build --workspace @kade/mobile (build = fixture --check + expo export android). Emulator: $ANDROID_HOME/emulator/emulator -avd kade_android -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -accel on & then (cd apps/mobile && npx expo run:android). Default API mode is in-process mock; EXPO_PUBLIC_API_MODE=live talks to services/api at http://10.0.2.2:3001 from the emulator.
+      apps/mobile gates: npm test/lint/build --workspace @harbourline/mobile (build = fixture --check + expo export android). Emulator: $ANDROID_HOME/emulator/emulator -avd harbourline_android -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -accel on & then (cd apps/mobile && npx expo run:android). Default API mode is in-process mock; EXPO_PUBLIC_API_MODE=live talks to services/api at http://10.0.2.2:3001 from the emulator.
 ---
 # macOS block (W4-13): Node 22, CocoaPods, expo prebuild for iOS and pod install. Xcode comes with the image.
 runs-on: macos
@@ -78,4 +79,4 @@ maintenance: |
 knowledge:
   - name: ios
     contents: |
-      iOS Simulator build (macOS only): (cd apps/mobile && xcodebuild -workspace ios/KadCommerce.xcworkspace -scheme KadCommerce -sdk iphonesimulator -configuration Release -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' -derivedDataPath ios/build build) then xcrun simctl install booted ios/build/Build/Products/Release-iphonesimulator/KadCommerce.app && xcrun simctl launch booted test.kade.commerce. grep KadeHaptics apps/mobile/ios/Podfile.lock proves the Swift module is linked. Gates: npm test/lint/build --workspace apps/mobile.
+      iOS Simulator build (macOS only): (cd apps/mobile && xcodebuild -workspace ios/Harbourline.xcworkspace -scheme Harbourline -sdk iphonesimulator -configuration Release -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' -derivedDataPath ios/build build) then xcrun simctl install booted ios/build/Build/Products/Release-iphonesimulator/Harbourline.app && xcrun simctl launch booted test.harbourline.commerce. grep HarbourlineHaptics apps/mobile/ios/Podfile.lock proves the Swift module is linked. Gates: npm test/lint/build --workspace apps/mobile.

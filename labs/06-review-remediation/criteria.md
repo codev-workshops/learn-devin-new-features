@@ -2,7 +2,7 @@ You are done when all of the following are observable by someone who was not in 
 
 1. **Effort level chosen and justified.** Your evidence names the Devin Review effort level used on the exercise PR and one sentence on why that level fits a change to totals and tax before Black Friday (and what you would use for a docs-only PR).
 2. **Findings sorted.** Every finding on the PR is classified as a Bug to fix, a Flag you accept, a Flag you dispute, or noise. Security findings are listed separately, and you can explain why they appear even though you never asked for a security review.
-3. **The self-declared-role price override is fixed.** On your remediation branch a shopper who sends `X-Kade-Role: merchandiser` with `priceOverrides` cannot change a price, and a test proves it.
+3. **The self-declared-role price override is fixed.** On your remediation branch a shopper who sends `X-Harbourline-Role: merchandiser` with `priceOverrides` cannot change a price, and a test proves it.
 4. **One finding quoted into chat.** You copied one finding (location and explanation) into the Devin Review chat and asked a question about it. The chat answer, and what you did with it, are in your evidence.
 5. **Rounding regression proven and fixed with a test.** A test on your remediation branch fails on the PR's code and passes on yours. It pins the subtotal for two €19.90 Merino socks (`TS-SOCK-01-M`) at 39.80 EUR. Your evidence shows the command and the failing output from before your fix.
 6. **Re-review after the fixes.** Your remediation PR was opened with the failing test before the fix. After you push the fix commits to it, a re-review runs on the new commits. Your evidence shows which findings were resolved and whether anything new appeared.

@@ -1,6 +1,6 @@
 import { setupServer } from "msw/node";
 
-import { createHttpApi, KadeApiError, sessionHeaders } from "@/api/client";
+import { createHttpApi, HarbourlineApiError, sessionHeaders } from "@/api/client";
 import { API_BASE, createHandlers } from "@/mocks/handlers";
 import { MockStore } from "@/mocks/store";
 
@@ -19,9 +19,9 @@ afterAll(() => server.close());
 describe("typed client over MSW", () => {
   it("sends the three fake-auth headers from the contract", () => {
     expect(sessionHeaders(session)).toMatchObject({
-      "X-Kade-Brand": "lumen-home",
-      "X-Kade-User": "customer-001@lumen-home.test",
-      "X-Kade-Role": "customer",
+      "X-Harbourline-Brand": "lumen-home",
+      "X-Harbourline-User": "customer-001@lumen-home.test",
+      "X-Harbourline-Role": "customer",
     });
   });
 
@@ -44,9 +44,9 @@ describe("typed client over MSW", () => {
     expect(fetched.totals.total.amount).toBe(updated.totals.total.amount);
   });
 
-  it("maps API error envelopes to KadeApiError", async () => {
-    await expect(api.getProduct(session, "NOPE-1")).rejects.toBeInstanceOf(KadeApiError);
-    const err = await api.getProduct(session, "NOPE-1").catch((e: KadeApiError) => e);
+  it("maps API error envelopes to HarbourlineApiError", async () => {
+    await expect(api.getProduct(session, "NOPE-1")).rejects.toBeInstanceOf(HarbourlineApiError);
+    const err = await api.getProduct(session, "NOPE-1").catch((e: HarbourlineApiError) => e);
     expect(err).toMatchObject({ status: 404, body: { code: "not_found" } });
   });
 
@@ -54,7 +54,7 @@ describe("typed client over MSW", () => {
     const anon = createHttpApi(API_BASE, (input, init) => fetch(input, init));
     const err = await anon
       .getCart({ brand: "" as never, user: "" }, "x")
-      .catch((e: KadeApiError) => e);
+      .catch((e: HarbourlineApiError) => e);
     expect(err).toMatchObject({ status: 401 });
   });
 

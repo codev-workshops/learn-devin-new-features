@@ -776,7 +776,7 @@
     ],
     "admins": [
       {
-        "email": "ops@kade.test",
+        "email": "ops@harbourline.test",
         "brand": null,
         "role": "admin",
         "name": "Platform Ops"

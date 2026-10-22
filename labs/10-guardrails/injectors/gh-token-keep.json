@@ -1,7 +1,7 @@
 {
   "description": "Injector gh-token-keep: a teammate drafts a profile that keeps the GitHub CLI token. Run with --validate.",
   "profiles": {
-    "kade-gh": {
+    "harbourline-gh": {
       "scope": "org",
       "enforcement": "recommended",
       "network": [
@@ -11,7 +11,7 @@
       "git": "full",
       "gh_token": "keep"
     },
-    "kade-gh-readonly": {
+    "harbourline-gh-readonly": {
       "scope": "org",
       "enforcement": "recommended",
       "git": "read-only",
@@ -20,7 +20,7 @@
   },
   "bindings": {
     "org_default": {
-      "profile": "kade-gh"
+      "profile": "harbourline-gh"
     }
   },
   "targets": {

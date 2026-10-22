@@ -1,4 +1,4 @@
-import { BRAND_IDS, type BrandId, type Currency } from "@kade/contracts";
+import { BRAND_IDS, type BrandId, type Currency } from "@harbourline/contracts";
 import { createContext, useContext, useMemo } from "react";
 import { Link, NavLink, Outlet, useParams } from "react-router";
 import { apiMode, type Identity } from "../lib/api";
@@ -86,7 +86,7 @@ function ShopFrame({ brand }: { brand: BrandId }) {
           <Outlet />
         </main>
         <footer className="shop-footer">
-          Kadé Commerce · {theme.name} · {theme.currency} · API mode {apiMode()}
+          Harbourline · {theme.name} · {theme.currency} · API mode {apiMode()}
         </footer>
       </div>
     </ShopContext.Provider>

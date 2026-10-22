@@ -1,0 +1,40 @@
+{
+  "description": "Reference policy matrix for lab 10: an enterprise mandatory floor (npm + PayGate sandbox only), an organization recommended default and a stricter automations default.",
+  "profiles": {
+    "harbourline-floor": {
+      "scope": "enterprise",
+      "enforcement": "mandatory",
+      "network": ["registry.npmjs.org", "*.sandbox.paygate.example"],
+      "mcp": [],
+      "gh_token": "remove"
+    },
+    "harbourline-dev": {
+      "scope": "org",
+      "enforcement": "recommended",
+      "network": ["registry.npmjs.org", "*.sandbox.paygate.example"],
+      "git": "full",
+      "devin_mcp_read_only": false
+    },
+    "harbourline-automation": {
+      "scope": "org",
+      "enforcement": "recommended",
+      "network": ["registry.npmjs.org"],
+      "git": "read-only",
+      "devin_mcp_read_only": true
+    }
+  },
+  "bindings": {
+    "enterprise_default": { "profile": "harbourline-floor" },
+    "org_default": { "profile": "harbourline-dev" },
+    "automations_default": { "profile": "harbourline-automation" },
+    "automations": { "webhook-triage": "inherit" },
+    "snapshot_builds": "inherit"
+  },
+  "targets": {
+    "dev-session": { "kind": "session", "binding": "inherit" },
+    "opt-out-session": { "kind": "session", "binding": "none" },
+    "webhook-triage-run": { "kind": "automation-session", "automation": "webhook-triage" },
+    "child-of-dev": { "kind": "child", "parent": "dev-session", "binding": "none" },
+    "snapshot-build": { "kind": "snapshot-build" }
+  }
+}

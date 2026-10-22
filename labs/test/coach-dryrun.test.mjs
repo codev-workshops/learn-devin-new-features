@@ -10,7 +10,7 @@ const sampleDryrun = path.join(labsDir, '00-sample', 'coaching', 'dryrun');
 
 let tmpRoot;
 beforeAll(async () => {
-  tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'kade-dryrun-'));
+  tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'harbourline-dryrun-'));
 });
 afterAll(async () => {
   await fs.rm(tmpRoot, { recursive: true, force: true });

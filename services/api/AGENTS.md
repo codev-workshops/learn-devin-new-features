@@ -1,6 +1,6 @@
 # AGENTS.md — services/api
 
-Kadé Commerce order API (Express 5 + TypeScript, PostgreSQL 16). Owned by W1-api together with `db/`.
+Harbourline order API (Express 5 + TypeScript, PostgreSQL 16). Owned by W1-api together with `db/`.
 
 ## Run
 
@@ -11,7 +11,7 @@ npm run db:migrate && npm run db:seed -- --reset
 npm run dev -w services/api         # http://localhost:3001
 ```
 
-`KADE_NOW=2026-10-22T09:00:00Z` pins the API clock (promo windows, abandoned-cart ages); tests set it automatically.
+`HARBOURLINE_NOW=2026-10-22T09:00:00Z` pins the API clock (promo windows, abandoned-cart ages); tests set it automatically.
 
 ## Gates (run from this directory or via root `npm run gates`)
 
@@ -22,7 +22,7 @@ npm run dev -w services/api         # http://localhost:3001
 ## Layout
 
 - `src/app.ts` builds the Express app; `src/server.ts` listens. `src/db.ts` wraps `pg` (numeric → string) and counts statements.
-- `src/middleware/auth.ts` — fake login from `X-Kade-Brand` / `X-Kade-User` / `X-Kade-Role`; `requireRole` guards `/admin`.
+- `src/middleware/auth.ts` — fake login from `X-Harbourline-Brand` / `X-Harbourline-User` / `X-Harbourline-Role`; `requireRole` guards `/admin`.
 - `src/money.ts` — float/half-up money helpers (a planted defect; see `PLANTED.md`).
 - `src/routes/*` — one router per OpenAPI tag; `src/services/*` — SQL helpers and API mappers.
 - `src/seed/*` — deterministic generator from `packages/contracts/seed-spec.yaml` (`generate.ts`), loader (`load.ts`), CLI (`cli.ts`).

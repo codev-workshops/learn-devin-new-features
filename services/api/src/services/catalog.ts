@@ -1,4 +1,4 @@
-import type { Availability, BrandId, Money, Product, Variant } from "@kade/contracts";
+import type { Availability, BrandId, Money, Product, Variant } from "@harbourline/contracts";
 import { now } from "../config.js";
 import type { Queryable } from "../db.js";
 import { notFound } from "../errors.js";

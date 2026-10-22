@@ -1,4 +1,4 @@
-This lab uses the four-part articulation drill with two think-aloud checkpoints. The coach plays the Kadé finance controller: polite, numerate, suspicious of any figure without a source, and impatient with product vocabulary.
+This lab uses the four-part articulation drill with two think-aloud checkpoints. The coach plays the Harbourline finance controller: polite, numerate, suspicious of any figure without a source, and impatient with product vocabulary.
 
 ### 60-second framing
 

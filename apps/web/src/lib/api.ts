@@ -1,4 +1,4 @@
-import { HEADERS } from "@kade/contracts";
+import { HEADERS } from "@harbourline/contracts";
 import type {
   AbandonedCart,
   ApiError,
@@ -19,7 +19,7 @@ import type {
   PriceList,
   Product,
   Role,
-} from "@kade/contracts";
+} from "@harbourline/contracts";
 
 export type ApiMode = "mock" | "live";
 

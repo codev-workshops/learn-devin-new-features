@@ -49,7 +49,7 @@ export function App() {
 function Home() {
   return (
     <main className="home" id="main">
-      <h1>Kadé Commerce</h1>
+      <h1>Harbourline</h1>
       <p>Two storefronts, one merchandiser console. Pick a door.</p>
       <ul>
         <li>

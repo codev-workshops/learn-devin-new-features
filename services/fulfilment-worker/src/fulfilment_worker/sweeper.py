@@ -17,7 +17,7 @@ from fulfilment_worker.clock import Clock
 from fulfilment_worker.models import OrderEvent, iso, new_id
 from fulfilment_worker.store import Store
 
-log = logging.getLogger("kade.worker.sweeper")
+log = logging.getLogger("harbourline.worker.sweeper")
 
 
 @dataclass

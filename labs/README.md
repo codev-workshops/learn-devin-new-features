@@ -1,4 +1,4 @@
-# Kadé Commerce labs
+# Harbourline labs
 
 Static, promptless practice labs. Every lab is a folder `labs/NN-slug/` with five source
 files; `build.mjs` turns each one into a single self-contained HTML page and generates

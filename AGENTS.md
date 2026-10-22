@@ -1,4 +1,4 @@
-# AGENTS.md — Kadé Commerce
+# AGENTS.md — Harbourline
 
 Rules for every agent (Devin child sessions, learners, reviewers) working in this repository. Read this before touching anything; `.devin/rules/` repeats the short version.
 
@@ -31,7 +31,7 @@ Children work in parallel. Touch only the paths your brief owns. If a shared or 
 | root `package.json`, `package-lock.json`, `scripts/ws.mjs`, `scripts/lab-reset.mjs`                                | W0-A                            | Add scripts inside your own workspace `package.json`; root names are pre-registered |
 | root `docker-compose.yml`                                                                                          | W0-A, then W1-api adds `api`    | Other services add their own `compose.<name>.yml` and reference it from docs        |
 | `packages/contracts/openapi.yaml`, `seed-spec.yaml`, `src/index.ts`                                                | W0-A, **frozen after W0**       | Propose changes through the parent as a W1-api follow-up PR                         |
-| `.devin/config.json`, `.devin/rules/`, `.devin/hooks.v1.json`, `.devin/skills/kade-dev/`, root `AGENTS.md`         | W0-A                            | Per-service `AGENTS.md` files are owned by the service's child                      |
+| `.devin/config.json`, `.devin/rules/`, `.devin/hooks.v1.json`, `.devin/skills/harbourline-dev/`, root `AGENTS.md`  | W0-A                            | Per-service `AGENTS.md` files are owned by the service's child                      |
 | `.devin/skills/articulation-base/SKILL.md`                                                                         | W0-A, **frozen after W0**       | Per-lab coaches (`.devin/skills/articulation-<nn>-*/`) are owned by W2 lab children |
 | `.devin/skills/articulation-sample/`, `.devin/agents/sample-coach.md`                                              | W0-A                            | Worked example; copy, don't edit                                                    |
 | `labs/coach-report.schema.json`, `labs/coach-dryrun.mjs`, `labs/build.mjs`, `labs/package.json`, `labs/00-sample/` | W0-B                            | Lab children add `labs/<nn>-*/` only                                                |
@@ -45,7 +45,7 @@ Children work in parallel. Touch only the paths your brief owns. If a shared or 
 
 ## 4. Contracts
 
-`packages/contracts` is the single source of truth for routes, headers, money, order statuses and the seed dataset. Build against it; do not wait for siblings. Fake auth is three headers (`X-Kade-Brand`, `X-Kade-User`, `X-Kade-Role`) — there are no tokens and no real PII anywhere in the seed. Money is a decimal string with two fractional digits plus a currency code; never a float across a boundary.
+`packages/contracts` is the single source of truth for routes, headers, money, order statuses and the seed dataset. Build against it; do not wait for siblings. Fake auth is three headers (`X-Harbourline-Brand`, `X-Harbourline-User`, `X-Harbourline-Role`) — there are no tokens and no real PII anywhere in the seed. Money is a decimal string with two fractional digits plus a currency code; never a float across a boundary.
 
 ## 5. Labs
 
@@ -59,7 +59,7 @@ Never ask the user for credentials. Every live integration (PagerDuty, Datadog, 
 
 - `.devin/config.json` — project config (tool permissions).
 - `.devin/rules/*.md` — `repo-conventions` (always on) and `money-and-brands` (glob on services/apps/db).
-- `.devin/skills/` — `kade-dev` (bring-up and gates), `articulation-base` (coach protocol), `articulation-sample` (lab 00 coach), later `articulation-<nn>-*`.
+- `.devin/skills/` — `harbourline-dev` (bring-up and gates), `articulation-base` (coach protocol), `articulation-sample` (lab 00 coach), later `articulation-<nn>-*`.
 - `.devin/agents/sample-coach.md` — subagent definition for the lab 00 coach.
 - `.devin/hooks.v1.json` — intentionally empty (`{}`); labs that teach hooks add them on a throwaway branch.
 

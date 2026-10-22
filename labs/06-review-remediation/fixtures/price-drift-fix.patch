@@ -12,7 +12,7 @@ diff --git a/services/api/src/routes/checkout.ts b/services/api/src/routes/check
 index f52e323..560babc 100644
 --- a/services/api/src/routes/checkout.ts
 +++ b/services/api/src/routes/checkout.ts
-@@ -4,10 +4,11 @@ import type { Address, CheckoutResult } from "@kade/contracts";
+@@ -4,10 +4,11 @@ import type { Address, CheckoutResult } from "@harbourline/contracts";
  import type { Db } from "../db.js";
  import { config, now } from "../config.js";
  import { conflict, outOfStock, validationFailed } from "../errors.js";

@@ -11,7 +11,7 @@ This is the evidence from the run that built the lab. It is the fixture fallback
 | Boot command | `emulator -avd oba_test -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -no-snapshot -accel on` |
 | Build command | `cd apps/mobile && npx expo run:android --variant release --no-bundler` (prebuild → Gradle 8.14.3 → install) |
 | Build time | 5 min 20 s cold (all four ABIs; add `-PreactNativeArchitectures=x86_64` via `expo-build-properties` to cut it) |
-| Output | `android/app/build/outputs/apk/release/app-release.apk` (65 MB), installed as `test.kade.commerce` |
+| Output | `android/app/build/outputs/apk/release/app-release.apk` (65 MB), installed as `test.harbourline.commerce` |
 | API mode | `mock` (default) — no backend, no credentials |
 | Driven with | `adb shell uiautomator dump` to find the node, `adb shell input tap` on its bounds, `adb exec-out screencap -p` |
 
@@ -33,7 +33,7 @@ Exercised by the macOS child session on 22 Oct 2026 — Xcode 26.6, iPhone 17 Si
 | Screenshot | What it shows |
 | --- | --- |
 | [01-brand-picker.png](ios/01-brand-picker.png) | Brand picker on iOS |
-| [02-cart-haptics-native.png](ios/02-cart-haptics-native.png) | Cart after one Add: `Haptics: native (kade-haptics)` |
+| [02-cart-haptics-native.png](ios/02-cart-haptics-native.png) | Cart after one Add: `Haptics: native (harbourline-haptics)` |
 | [03-order-status.png](ios/03-order-status.png) | `LH-001003` — Shipped pill and timeline, the same order as `android/06-order-shipped.png` |
 
 ## Not exercised in the reference run

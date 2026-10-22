@@ -5,7 +5,7 @@ import { deliver, type Knobs } from "./deliver.js";
 import { buildEvent, isEventType, type Currency } from "./events.js";
 import { startServer } from "./server.js";
 
-const USAGE = `paygate-fake — fake PSP for Kadé Commerce
+const USAGE = `paygate-fake — fake PSP for Harbourline
 
   paygate-fake serve [--port 3002] [--webhook-url URL] [--secret S] [--duplicate] [--out-of-order] [--delay MS]
   paygate-fake fire  --order-id UUID --amount 59.04 --currency USD [--type payment.succeeded]
@@ -55,7 +55,7 @@ export async function main(argv = process.argv.slice(2), env = process.env): Pro
     delayMs: values.delay ? Number(values.delay) : 0,
     gapMs: values.gap ? Number(values.gap) : 0,
   };
-  const secret = values.secret ?? env.PAYGATE_SECRET ?? "kade-local-paygate-secret";
+  const secret = values.secret ?? env.PAYGATE_SECRET ?? "harbourline-local-paygate-secret";
   const webhookUrl =
     values["webhook-url"] ?? env.PAYGATE_WEBHOOK_URL ?? "http://localhost:3001/webhooks/payments";
 

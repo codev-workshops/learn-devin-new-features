@@ -1,15 +1,15 @@
 ## Customer brief
 
 > "Finance wants a cap per team. Trailhead says they'll be blocked in the middle of the Winter Drop."
-> — Kadé finance controller, Friday budget review
+> — Harbourline finance controller, Friday budget review
 
-Kadé Commerce runs three Devin organizations under one enterprise: **Kadé Platform**, **Lumen Home** and **Trailhead Supply**. The contract renews its ACU window every month on the 23rd. Last month the enterprise overspent its plan by a little under ten percent, and finance wants a hard number per brand team before the next window opens. Nobody has been blocked yet, and everyone wants to keep it that way.
+Harbourline runs three Devin organizations under one enterprise: **Harbourline Platform**, **Lumen Home** and **Trailhead Supply**. The contract renews its ACU window every month on the 23rd. Last month the enterprise overspent its plan by a little under ten percent, and finance wants a hard number per brand team before the next window opens. Nobody has been blocked yet, and everyone wants to keep it that way.
 
 This morning (Saturday 14 November 2026) two things happened. Trailhead's engineering lead could not start a Devin session even though her own usage is well under what she was told she has. And a Lumen engineer who is on the on-call rota this month was stopped mid-investigation with a message about his personal limit, while Lumen as a whole has used about two thirds of its budget. Trailhead's Winter Drop sale runs **18–20 November** and needs Devin for flash-sale releases.
 
 To make it worse, the finance controller and the Trailhead lead brought two different dashboards to the meeting and their totals do not match. Finance wants to know which number is "the real one" before signing off on any cap.
 
-`labs/11-acu-analytics/fixtures/kade-consumption.json` is a fictional copy of that enterprise: organizations and their limits, usage tiers, IdP group mappings, members, and usage split by surface. `labs/11-acu-analytics/tools/acu-sim.mjs` applies the documented limit rules to it (run it with `--help`).
+`labs/11-acu-analytics/fixtures/harbourline-consumption.json` is a fictional copy of that enterprise: organizations and their limits, usage tiers, IdP group mappings, members, and usage split by surface. `labs/11-acu-analytics/tools/acu-sim.mjs` applies the documented limit rules to it (run it with `--help`).
 
 ## Stakeholders and constraints
 
