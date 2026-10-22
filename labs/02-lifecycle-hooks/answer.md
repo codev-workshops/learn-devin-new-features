@@ -64,6 +64,8 @@ If you have no Devin CLI, the last two prompts become replay runs: `node labs/02
 | `npm run db:seed -- --reset` (lab DB) | allow | exit 0 |
 | `DATABASE_URL=…staging… npm run db:seed -- --reset` | block | exit 2, reason "targets … not the lab database" |
 | `psql "$DATABASE_URL" -c "delete from carts"` | rewrite | `updatedInput.command` calls `psql-ro.sh`; PostgreSQL answers "read-only transaction"; cart count unchanged |
+| `docker compose exec postgres psql … -c "delete …"` | rewrite | `-e PGOPTIONS='-c default_transaction_read_only=on'` is injected after `exec` (the host wrapper does not exist inside the container) |
+| `psql -c 'SET default_transaction_read_only=off; …'` | block | exit 2; switching the transaction mode is refused |
 | `git apply scenarios/bad-migration.patch` | block | exit 2, reason names the patch and "destructive DDL"; no migration file appears |
 | malformed `hooks.v1.json` | guard not loaded → the call is **allowed** | `/hooks` (or the replay) shows no hooks; this is fail-open |
 | slow hook (sleep 15, timeout 3) | killed after ~3 s, call **not blocked** | replay `outcome: timeout`; the docs do not specify this — record what the CLI did |
@@ -75,6 +77,8 @@ If you have no Devin CLI, the last two prompts become replay runs: `node labs/02
 - **Exit 1 does not block.** A script that crashes (exit 1) or uses `process.exit(1)` for "deny" lets the command through. Only exit 2 or `decision: "block"` blocks.
 - **Fail-open by construction.** A hooks file that does not parse, a missing interpreter or a timed-out hook all end with the guard not deciding. The policy can only fail closed *inside* the script (treat bad input as a block); a broken config file has to be caught before merge — validate it in CI or a pre-commit check.
 - **Rewrite, don't block, the read path.** Blocking every `psql` makes Devin route around it (`docker compose exec postgres psql`, a Node one-off). Rewriting keeps the agent productive and is invisible to it; the guard regex must also catch `psql` after `exec`, `&&` and `;`.
+- **A read-only default is not a read-only role.** `default_transaction_read_only=on` can be switched off by the SQL itself (`SET … = off`, `BEGIN READ WRITE`); the guard and wrapper refuse those strings in arguments, but SQL piped on stdin is invisible to both. Treat the hook as the agent-side layer and ask the DBA for a read-only role as the database-side one.
+- **Parse the target like the client does.** Check every `DATABASE_URL=` in the command (the last one wins in the shell) and reject query parameters such as `?host=` that override the address libpq connects to.
 - **Stop hooks can loop.** Always return early when `stop_hook_active` is true.
 - **Hooks live on the branch.** Committing an enforcing `.devin/hooks.v1.json` to `main` changes every learner's session; keep it on the throwaway branch.
 

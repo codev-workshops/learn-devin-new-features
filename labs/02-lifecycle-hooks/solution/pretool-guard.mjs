@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import {
   DESTRUCTIVE_DDL,
   audit,
-  effectiveDatabaseUrl,
+  candidateDatabaseUrls,
   isLabDatabase,
   projectDir,
   readStdin,
@@ -21,9 +21,13 @@ import {
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const WRAPPER = path.join(HERE, 'psql-ro.sh');
 
-const RESETTING = /\b(?:db:seed\b[^;&|]*--reset|lab:reset|db:reset)\b/;
+const RESETTING = /\b(?:lab:reset|db:reset)\b|\bdb:seed\b.*\s--reset\b/;
 const MIGRATING = /\b(?:db:migrate|node-pg-migrate|migrate\s+up)\b/;
-const APPLYING = /\b(?:git\s+apply|git\s+am|patch\s+-p\d)\b(?!.*(?:\s-R\b|--reverse|--check))/;
+const APPLYING = /\b(?:git\s+apply|git\s+am|patch\s+-p\d)\b/;
+const REVERSING = /\s(?:-R|--reverse|--check)\b/;
+// SQL that would switch a session back to read-write despite the wrapper's default.
+const READ_WRITE_ESCAPE = /default_transaction_read_only|transaction_read_only|read\s+write|session\s+characteristics/i;
+const COMPOSE_EXEC = /\bdocker(?:\s+|-)compose\s+exec\b/;
 const PSQL = /(^|[\s;&|(`])psql(?=\s|$)/g;
 const HAS_PSQL = /(^|[\s;&|(`])psql(?=\s|$)/;
 
@@ -52,12 +56,12 @@ export function decide(event) {
   if (!command.trim()) return { action: 'allow', command };
 
   if (RESETTING.test(command) || MIGRATING.test(command)) {
-    const url = effectiveDatabaseUrl(command);
-    if (!isLabDatabase(url)) {
+    const url = candidateDatabaseUrls(command).find((u) => !isLabDatabase(u));
+    if (url) {
       return { action: 'block', command, reason: `Blocked by lab policy: "${command}" targets ${url}, not the lab database. Reset and migrate only against the lab DB.` };
     }
   }
-  if (APPLYING.test(command)) {
+  if (APPLYING.test(command) && !REVERSING.test(command)) {
     for (const p of patchFiles(command)) {
       if (existsSync(p) && DESTRUCTIVE_DDL.test(upSection(readFileSync(p, 'utf8')))) {
         return { action: 'block', command, reason: `Blocked by lab policy: ${path.basename(p)} adds a migration with destructive DDL (DROP NOT NULL/DEFAULT/COLUMN/TABLE). Ask the DBA.` };
@@ -68,8 +72,16 @@ export function decide(event) {
     const bad = pendingMigrationsAreDestructive();
     if (bad) return { action: 'block', command, reason: `Blocked by lab policy: db/migrations/${bad} contains destructive DDL; refusing to migrate.` };
   }
-  if (HAS_PSQL.test(command) && !command.includes('psql-ro.sh')) {
-    const rewritten = command.replace(PSQL, (_m, pre) => `${pre}"${WRAPPER}"`);
+  if (HAS_PSQL.test(command) || command.includes('psql-ro.sh')) {
+    if (READ_WRITE_ESCAPE.test(command)) {
+      return { action: 'block', command, reason: 'Blocked by lab policy: psql sessions stay read-only; the command tries to switch the transaction mode.' };
+    }
+  }
+  if (HAS_PSQL.test(command)) {
+    // Inside a container the host wrapper does not exist: pass the same read-only default via PGOPTIONS.
+    const rewritten = COMPOSE_EXEC.test(command)
+      ? command.replace(COMPOSE_EXEC, (m) => `${m} -e PGOPTIONS='-c default_transaction_read_only=on'`)
+      : command.replace(PSQL, (_m, pre) => `${pre}"${WRAPPER}"`);
     return { action: 'rewrite', command, rewritten };
   }
   return { action: 'allow', command };

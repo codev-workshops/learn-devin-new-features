@@ -59,9 +59,31 @@ describe('lab 02 reference hooks', () => {
     expect(again.outcome).toBe('allow');
   });
 
-  it('rewrites psql inside docker compose exec too', async () => {
+  it('rewrites psql inside docker compose exec with a container-side read-only default', async () => {
     const r = await pre('docker compose exec postgres psql -U kade kade -c "delete from carts"');
     expect(r.outcome).toBe('rewrite');
+    expect(r.input.command).toBe(`docker compose exec -e PGOPTIONS='-c default_transaction_read_only=on' postgres psql -U kade kade -c "delete from carts"`);
+  });
+
+  it('does not let a mention of the wrapper exempt a second, raw psql', async () => {
+    const r = await pre('echo psql-ro.sh; psql -c "delete from carts"');
+    expect(r.outcome).toBe('rewrite');
+    expect(r.input.command).toMatch(/; "[^"]*psql-ro\.sh" -c/);
+  });
+
+  it('blocks SQL that switches the session back to read-write', async () => {
+    const r = await pre(`psql -c 'SET default_transaction_read_only=off; DELETE FROM carts'`);
+    expect(r.outcome).toBe('block');
+  });
+
+  it('checks every inline DATABASE_URL, not only the first', async () => {
+    const r = await pre('DATABASE_URL=postgres://kade:kade@localhost:5432/kade DATABASE_URL=postgres://kade:kade@staging-db:5432/kade npm run db:seed -- --reset');
+    expect(r.outcome).toBe('block');
+  });
+
+  it('rejects connection-string parameters that override the host', async () => {
+    const r = await pre('DATABASE_URL="postgres://kade:kade@localhost:5432/kade?host=staging-db" npm run db:migrate');
+    expect(r.outcome).toBe('block');
   });
 
   it('records every decision in the audit log', () => {

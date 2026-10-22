@@ -38,10 +38,14 @@ export function labDatabase() {
   return parseDbUrl(process.env.KADE_LAB_DATABASE_URL || LAB_DATABASE_URL_DEFAULT);
 }
 
+// libpq lets query parameters override the authority part (postgres://localhost/kade?host=staging).
+const CONNECTION_OVERRIDES = ['host', 'hostaddr', 'port', 'dbname', 'service'];
+
 export function parseDbUrl(url) {
   try {
     const u = new URL(url);
-    return { host: u.hostname.replace(/^\[|\]$/g, ''), port: u.port || '5432', db: u.pathname.replace(/^\//, '') };
+    const overridden = CONNECTION_OVERRIDES.some((k) => u.searchParams.has(k));
+    return { host: u.hostname.replace(/^\[|\]$/g, ''), port: u.port || '5432', db: u.pathname.replace(/^\//, ''), overridden };
   } catch {
     return null;
   }
@@ -50,15 +54,20 @@ export function parseDbUrl(url) {
 export function isLabDatabase(url) {
   const target = parseDbUrl(url);
   const lab = labDatabase();
-  if (!target || !lab) return false;
+  if (!target || !lab || target.overridden) return false;
   return LAB_DB_HOSTS.has(target.host) && target.port === lab.port && target.db === lab.db;
 }
 
-/** The DATABASE_URL a shell command would run against: inline assignment, else the hook's env, else the lab default. */
-export function effectiveDatabaseUrl(command) {
-  const inline = /(?:^|[\s;&|(])(?:export\s+)?DATABASE_URL=("[^"]*"|'[^']*'|\S+)/.exec(command);
-  if (inline) return inline[1].replace(/^["']|["']$/g, '');
-  return process.env.DATABASE_URL || LAB_DATABASE_URL_DEFAULT;
+const INLINE_DATABASE_URL = /(?:^|[\s;&|(])(?:export\s+)?DATABASE_URL=("[^"]*"|'[^']*'|\S+)/g;
+
+/**
+ * Every DATABASE_URL a shell command could run against: each inline assignment (a later one
+ * may override an earlier one), plus the hook's env, else the lab default when none is inline.
+ */
+export function candidateDatabaseUrls(command) {
+  const inline = [...command.matchAll(INLINE_DATABASE_URL)].map((m) => m[1].replace(/^["']|["']$/g, ''));
+  const ambient = process.env.DATABASE_URL || LAB_DATABASE_URL_DEFAULT;
+  return inline.length ? [...inline, ambient] : [ambient];
 }
 
 /** Destructive DDL in the "Up" part of a node-pg-migrate SQL migration (or a patch adding one). */
