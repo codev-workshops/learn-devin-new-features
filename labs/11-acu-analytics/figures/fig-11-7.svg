@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="t d">
+<title id="t">Figure 11.7 — Enterprise Consumption (placeholder)</title>
+<desc id="d">Screenshot pending: replace with your tenant's view. Enterprise Settings → Consumption, broken down by organization</desc>
+<rect x="8" y="8" width="944" height="524" rx="12" fill="#f5f6f8" stroke="#8a8f99" stroke-width="3" stroke-dasharray="14 10"/>
+<text x="480" y="220" text-anchor="middle" font-family="system-ui,sans-serif" font-size="34" font-weight="700" fill="#1d1d1f">Figure 11.7 — Enterprise Consumption</text>
+<text x="480" y="280" text-anchor="middle" font-family="system-ui,sans-serif" font-size="22" fill="#5c5f66">Enterprise Settings → Consumption, broken down by organization</text>
+<text x="480" y="360" text-anchor="middle" font-family="system-ui,sans-serif" font-size="26" font-weight="600" fill="#8a4b00">screenshot pending: replace with your tenant's view</text>
+</svg>
