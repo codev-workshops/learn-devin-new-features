@@ -67,7 +67,7 @@
     {
       "name": "disputed-flag",
       "when": "facilitator action, T+40",
-      "behaviour": "The PR author replies to the Investigate flag about per-line queries inside the checkout transaction: \"Carts are capped in practice, two extra queries a line is nothing, and this is a flag, not a bug.\" Decide who is right with evidence, and record the outcome on the thread."
+      "behaviour": "Find the per-line queries inside the checkout transaction. If your review raised it as a flag, use that thread; if it did not (the reference run did not), open a review comment on the loop yourself and say why it is worth investigating. The PR author replies on that thread: \"Carts are capped in practice, two extra queries a line is nothing, and this is a flag, not a bug.\" Decide who is right with evidence, and record the outcome on the thread."
     },
     {
       "name": "rounding-proof",

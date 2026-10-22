@@ -137,7 +137,7 @@ What to learn from it:
 
 - The security finding appeared without anyone asking for a security review.
 - Review read `services/api/REVIEW.md` and cited it: the rule *did* fire, through its wording ("money arithmetic lives in `src/money.ts`"). But the test requirement in the rule is tied to `src/money.ts`, so the PR still shipped with no pinned-amount test. Rewriting the rule closes that gap; a PR that edits its own `REVIEW.md` is the bypass to watch for.
-- It did not report the per-line query flag (F3). That is the disputed flag; you bring it to the author yourself, and the evidence decides. Your run may differ; compare yours with this table and with `fixtures/review-findings.json`.
+- It did not report the per-line query flag (F3). That is the disputed flag: open a review comment on the loop yourself so there is a thread, let the author reply there, and let the evidence decide. Your run may differ; compare yours with this table and with `fixtures/review-findings.json`.
 - The "invalid goodwill prices" bug disappears with the same fix as F1: remove `priceOverrides`.
 
 Tests run on throwaway branches confirm the findings:
