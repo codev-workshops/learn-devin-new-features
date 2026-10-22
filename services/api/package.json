@@ -2,7 +2,7 @@
   "name": "@kade/api",
   "version": "0.1.0",
   "private": true,
-  "description": "Kadé Commerce order API: catalog, cart, checkout, orders, admin console and PayGate webhook receiver (Express 5 + PostgreSQL 16).",
+  "description": "Kad\u00e9 Commerce order API: catalog, cart, checkout, orders, admin console and PayGate webhook receiver (Express 5 + PostgreSQL 16).",
   "type": "module",
   "engines": {
     "node": ">=22 <23"
@@ -16,8 +16,8 @@
     "lint": "eslint . && prettier --check . && tsc -p tsconfig.json --noEmit",
     "format": "prettier --write .",
     "test": "vitest run",
-    "db:migrate": "node-pg-migrate --migrations-dir ../../db/migrations --migration-file-language sql up",
-    "db:migrate:down": "node-pg-migrate --migrations-dir ../../db/migrations --migration-file-language sql down",
+    "db:migrate": "node scripts/migrate.mjs up",
+    "db:migrate:down": "node scripts/migrate.mjs down",
     "db:seed": "tsx src/seed/cli.ts"
   },
   "dependencies": {
