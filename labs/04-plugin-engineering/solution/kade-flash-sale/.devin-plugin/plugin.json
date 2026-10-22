@@ -1,0 +1,7 @@
+{
+  "name": "kade-flash-sale",
+  "displayName": "Kadé flash-sale release kit",
+  "version": "1.0.0",
+  "description": "One flash-sale release checklist and first-hour incident procedure for every Kadé brand team: two skills, a freeze rule, a release-checker subagent, a push guard hook and the incident MCP declaration.",
+  "author": { "name": "Kadé platform team" }
+}
