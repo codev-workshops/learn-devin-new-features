@@ -22,7 +22,14 @@ export function hostMatches(pattern, host) {
   return re.test(host);
 }
 
+/** True for a well-formed IPv4 CIDR: four octets 0-255 and a prefix length 0-32. */
+export function isValidCidr(cidr) {
+  const m = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})\/(\d{1,2})$/.exec(cidr);
+  return !!m && m.slice(1, 5).every((o) => Number(o) <= 255) && Number(m[5]) <= 32;
+}
+
 function cidrMatches(cidr, host) {
+  if (!isValidCidr(cidr)) return false;
   const [base, bits] = cidr.split('/');
   const toInt = (ip) => ip.split('.').reduce((a, o) => (a << 8) + Number(o), 0) >>> 0;
   if (!/^\d+\.\d+\.\d+\.\d+$/.test(host)) return false;
@@ -41,8 +48,15 @@ export function validateProfile(name, p) {
     }
   }
   for (const h of p.network ?? []) {
-    if (/[/:]/.test(h) && !/^[0-9.]+\/\d+$/.test(h)) problems.push(`${name}: "${h}" is not a hostname or CIDR (no scheme, port or path)`);
+    if (/^[0-9.]+\/\d+$/.test(h)) {
+      if (!isValidCidr(h)) problems.push(`${name}: "${h}" is not a valid IPv4 CIDR (octets 0-255, prefix /0-/32)`);
+    } else if (/[/:]/.test(h)) problems.push(`${name}: "${h}" is not a hostname or CIDR (no scheme, port or path)`);
     if (/\*$/.test(h) || /^\*[^.]/.test(h)) warnings.push(`${name}: "${h}" is over-broad — e.g. it also matches "${h.replace(/^\*/, 'evil-').replace(/\*$/, '.evil.example')}"`);
+  }
+  if (p.enforcement === 'mandatory') {
+    for (const key of ['network', 'mcp']) {
+      if (!Array.isArray(p[key])) problems.push(`${name}: a mandatory floor must list its ${key} allowlist — an absent list means unrestricted`);
+    }
   }
   if (!['mandatory', 'recommended'].includes(p.enforcement)) problems.push(`${name}: enforcement must be mandatory or recommended`);
   return { problems, warnings };
