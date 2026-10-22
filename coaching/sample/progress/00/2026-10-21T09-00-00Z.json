@@ -1,0 +1,209 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 0,
+    "slug": "sample",
+    "coach": "coach-00-sample"
+  },
+  "learner": "sample",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-21T09:00:00Z",
+    "run_index": 1,
+    "transcript": "labs/00-sample/coaching/dryrun/mediocre.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 74,
+      "delta_seconds": 14,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 52,
+      "delta_seconds": 7,
+      "verdict": "over"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Customer update",
+      "target_seconds": 120,
+      "actual_seconds": 141,
+      "delta_seconds": 21,
+      "verdict": "over",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "How do you know Devin will respect our no-schema-change rule?",
+      "target_seconds": 90,
+      "actual_seconds": 62,
+      "delta_seconds": -28,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "question": "Why pay for an agent to write a plan a senior engineer writes in ten minutes?",
+      "target_seconds": 90,
+      "actual_seconds": 100,
+      "delta_seconds": 10,
+      "verdict": "over"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "present",
+      "quote": "the new engineers take a week, actually, I think the first thing is onboarding"
+    },
+    "approach": {
+      "status": "weak",
+      "quote": "because it is the environment thing and it is faster than the other options"
+    },
+    "evidence": {
+      "status": "weak",
+      "quote": "I will know it worked when the tests pass and the new person can run it"
+    },
+    "next_step": {
+      "status": "present",
+      "quote": "Next action is to open a PR with the AGENTS.md and a reset script"
+    },
+    "order_held": true
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 7.2,
+    "filler_count": 6,
+    "filler_rate_per_minute": 0.83,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 2
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "That's the plan, no?"
+    ],
+    "long_pauses": [
+      {
+        "at": "02:10",
+        "seconds": 11,
+        "segment": "checkpoint-10"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Both brands run on a single shared codebase and database",
+      "weight": 8,
+      "mentioned": true,
+      "evidence_quote": "there are two brands, Lumen and Trailhead, and because they share one codebase and one database",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "The cost of the chosen problem stated in orders, money or engineer-days",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm3",
+      "point": "One Devin capability for the first session with one reason it beats an alternative",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "I would use a blueprint and AGENTS.md for that, because it is the environment thing and it is faster than the other options",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm4",
+      "point": "The proof of success described as an observable artefact rather than a command",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "we will run the setup in a fresh session and check that it comes up. I think a recording would be good too",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "One thing the plan refuses to do because of the schema freeze, main or budget",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "because (×3 in the opening sentence)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"the new engineers take a week\" — \"a new engineer takes a week\""
+    ],
+    "sentences_to_rerecord": [
+      "So, basically, because there are two brands…"
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 19,
+      "max": 30,
+      "anchor": "Brands, capability and a (weak) proof were named; the cost and the refused action were never stated (anchor: 17–21 = three of five points, proof stated as a command)."
+    },
+    "structure": {
+      "score": 16,
+      "max": 25,
+      "anchor": "Four parts present but approach and evidence weak; the framing front-loaded three \"because\" clauses before the headline (anchor: 14–17 = all parts findable, order broken once)."
+    },
+    "customer_relevance": {
+      "score": 12,
+      "max": 20,
+      "anchor": "One number (400 orders) and it was hedged; the deadline change was absorbed in one line (anchor: 10–13 = one number, hedged)."
+    },
+    "brevity_and_fluency": {
+      "score": 8,
+      "max": 15,
+      "anchor": "Framing and update over target, objection 1 well under; six fillers in 7.2 minutes, one tag question, one 11-second pause (anchor: 7–9 = two segments off target, fillers around 1/min)."
+    },
+    "recovery": {
+      "score": 6,
+      "max": 10,
+      "anchor": "Objection answers acknowledged and offered but skipped the evidence step; the \"how many orders\" interruption produced a hedge (anchor: 5–6 = pattern partly held)."
+    },
+    "total": 61
+  },
+  "stems": [
+    "\"The first task is X. It costs you Y. Here is the proof.\" — headline first, reasons second.",
+    "\"It costs you… per week\" — put one number on the problem before naming the fix.",
+    "\"What I will not do this week is…\" — name the constraint you are respecting."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 00; no previous run to compare with."
+}

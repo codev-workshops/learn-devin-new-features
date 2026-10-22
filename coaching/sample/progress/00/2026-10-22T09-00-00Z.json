@@ -1,0 +1,189 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 0,
+    "slug": "sample",
+    "coach": "coach-00-sample"
+  },
+  "learner": "sample",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T09:00:00Z",
+    "run_index": 1,
+    "transcript": "labs/00-sample/coaching/dryrun/strong.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 58,
+      "delta_seconds": -2,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 40,
+      "delta_seconds": -5,
+      "verdict": "on"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Customer update",
+      "target_seconds": 120,
+      "actual_seconds": 118,
+      "delta_seconds": -2,
+      "verdict": "on",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "How do you know Devin will respect our no-schema-change rule?",
+      "target_seconds": 90,
+      "actual_seconds": 85,
+      "delta_seconds": -5,
+      "verdict": "on"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "question": "Why pay for an agent to write a plan a senior engineer writes in ten minutes?",
+      "target_seconds": 90,
+      "actual_seconds": 95,
+      "delta_seconds": 5,
+      "verdict": "on"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "present",
+      "quote": "a new engineer needs a week to run it and someone reset that shared database on day two"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "I will use Devin's environment setup with a blueprint and a root AGENTS.md"
+    },
+    "evidence": {
+      "status": "present",
+      "quote": "brings up the storefront in under fifteen minutes on a recording"
+    },
+    "next_step": {
+      "status": "present",
+      "quote": "open one PR with AGENTS.md, the reset script and a proposed blueprint in docs"
+    },
+    "order_held": true
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 6.6,
+    "filler_count": 1,
+    "filler_rate_per_minute": 0.15,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 1
+      }
+    ],
+    "tag_questions": 0,
+    "tag_question_examples": [],
+    "long_pauses": []
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Both brands run on a single shared codebase and database",
+      "weight": 8,
+      "mentioned": true,
+      "evidence_quote": "Kadé runs two brands, Lumen Home and Trailhead Supply, on one shared codebase and one shared Postgres database",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "The cost of the chosen problem stated in orders, money or engineer-days",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "roughly five engineer-days per hire plus one outage",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm3",
+      "point": "One Devin capability for the first session with one reason it beats an alternative",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "environment setup with a blueprint and a root AGENTS.md, because that is the only capability that removes the shared-database risk without touching a migration",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm4",
+      "point": "The proof of success described as an observable artefact rather than a command",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "a fresh session, following only the instructions, brings up the storefront in under fifteen minutes on a recording",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "One thing the plan refuses to do because of the schema freeze, main or budget",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "on a throwaway branch, never on main",
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"zero touches of the shared database\" — \"touch\" is uncountable here; \"no contact with\""
+    ],
+    "sentences_to_rerecord": [
+      "Ask: I need thirty minutes of the on-call engineer's time"
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 28,
+      "max": 30,
+      "anchor": "All five points named with a quotable sentence; cost given as engineer-days plus one outage (anchor: 27–30 = every point, one with a number)."
+    },
+    "structure": {
+      "score": 23,
+      "max": 25,
+      "anchor": "Problem, approach, evidence, next step each present and in order; update kept Outcome → Evidence → Risk → Next action → Ask (anchor: 22–25 = all four present, order held)."
+    },
+    "customer_relevance": {
+      "score": 17,
+      "max": 20,
+      "anchor": "Four numbers from the brief (two brands, a week, 400 orders, 3% drift) and the Lamp Week deadline absorbed in one line (anchor: 16–18 = numbers from the brief, one assumption flagged)."
+    },
+    "brevity_and_fluency": {
+      "score": 11,
+      "max": 15,
+      "anchor": "All five segments on target within ±5 s; one filler in 6.6 minutes; no tag questions (anchor: 11–13 = every segment on, fillers under 1/min)."
+    },
+    "recovery": {
+      "score": 7,
+      "max": 10,
+      "anchor": "Both objections followed acknowledge → boundary → evidence → offer; the \"how many orders\" interruption was answered with one number and the skeleton resumed (anchor: 7–8 = pattern held under interruption)."
+    },
+    "total": 86
+  },
+  "stems": [
+    "\"The risk I am carrying is… and here is how I bound it…\" — say the risk before the customer asks.",
+    "\"Specifically, you would see…\" — turn every claim into one observable.",
+    "\"That is fair. The boundary is…\" — keep the acknowledge → boundary pair under ten seconds."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 00; no previous run to compare with."
+}
