@@ -1,0 +1,219 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 0,
+    "slug": "sample",
+    "coach": "coach-00-sample"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T09:40:00Z",
+    "run_index": 1,
+    "transcript": "labs/00-sample/coaching/dryrun/off-track.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 112,
+      "delta_seconds": 52,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 16,
+      "delta_seconds": -29,
+      "verdict": "under"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Customer update",
+      "target_seconds": 120,
+      "actual_seconds": 75,
+      "delta_seconds": -45,
+      "verdict": "under",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "How do you know Devin will respect our no-schema-change rule?",
+      "target_seconds": 90,
+      "actual_seconds": 16,
+      "delta_seconds": -74,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "question": "Why pay for an agent to write a plan a senior engineer writes in ten minutes?",
+      "target_seconds": 90,
+      "actual_seconds": 130,
+      "delta_seconds": 40,
+      "verdict": "over"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "there are a lot of problems. Actually, the oversell one is bad, the rounding one is bad, and the leak is a security thing"
+    },
+    "approach": {
+      "status": "missing",
+      "quote": ""
+    },
+    "evidence": {
+      "status": "weak",
+      "quote": "I will know it worked when npm test is green and the report balances"
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "The next step is to start the session"
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 5.8,
+    "filler_count": 12,
+    "filler_rate_per_minute": 2.07,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 4
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "so yeah",
+        "count": 3
+      },
+      {
+        "word": "you know",
+        "count": 1
+      },
+      {
+        "word": "like",
+        "count": 1
+      },
+      {
+        "word": "um",
+        "count": 1
+      }
+    ],
+    "tag_questions": 2,
+    "tag_question_examples": [
+      "the report balances, isn't it?",
+      "a schema change for the inventory lock, no?"
+    ],
+    "long_pauses": [
+      {
+        "at": "01:05",
+        "seconds": 12,
+        "segment": "framing"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Both brands run on a single shared codebase and database",
+      "weight": 8,
+      "mentioned": false,
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "The cost of the chosen problem stated in orders, money or engineer-days",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "maybe forty orders, and the rounding is a few cents on three percent of orders",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm3",
+      "point": "One Devin capability for the first session with one reason it beats an alternative",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm4",
+      "point": "The proof of success described as an observable artefact rather than a command",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "One thing the plan refuses to do because of the schema freeze, main or budget",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "bad (×2)",
+      "so, yeah (×3)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"a few hundred maybe\" — give the number from the brief",
+      "\"the migrations\" — no migrations were specified"
+    ],
+    "sentences_to_rerecord": [
+      "So, basically, there are a lot of problems.",
+      "And I will know it worked when npm test is green and the report balances, isn't it?"
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 6,
+      "max": 30,
+      "anchor": "Only the cost was stated; no single problem, no capability, evidence given as commands, no refused action (anchor: 0–8 = one point or fewer)."
+    },
+    "structure": {
+      "score": 9,
+      "max": 25,
+      "anchor": "Approach missing; three problems chosen at once; the update skipped Outcome and Ask (anchor: 6–10 = two or more parts missing or order lost)."
+    },
+    "customer_relevance": {
+      "score": 8,
+      "max": 20,
+      "anchor": "Numbers partly recalled (\"a few hundred maybe\"); the schema freeze was contradicted by proposing a schema change (anchor: 6–9 = brief misread on a constraint)."
+    },
+    "brevity_and_fluency": {
+      "score": 6,
+      "max": 15,
+      "anchor": "Framing 52 s over, three segments well under; 12 fillers in 5.8 minutes, two tag questions, a 12-second pause (anchor: 4–6 = most segments off target, fillers over 2/min)."
+    },
+    "recovery": {
+      "score": 5,
+      "max": 10,
+      "anchor": "Neither objection followed the pattern; no evidence offered; the \"how many orders\" interruption was not recovered from (anchor: 3–5 = acknowledged only)."
+    },
+    "total": 34
+  },
+  "stems": [
+    "\"The first task is X — one task, one session.\" — choose before you speak.",
+    "\"I will use <capability> because…\" — name the Devin capability, not \"ask Devin to look at all of it\".",
+    "\"You would see…\" — replace every command with an observation."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 00; no previous run to compare with."
+}

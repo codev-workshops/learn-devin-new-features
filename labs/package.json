@@ -1,0 +1,24 @@
+{
+  "name": "@kade/labs",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Kadé Commerce practice labs: static page builder, coach report schema and dry-run harness",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node build.mjs --check",
+    "test": "vitest run",
+    "lint": "node build.mjs --check",
+    "coach:dryrun": "node coach-dryrun.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "marked": "^16.3.0"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.12"
+  }
+}
