@@ -1,0 +1,705 @@
+# Kadé Commerce seed-data specification (frozen in W0).
+# db/seed (W1-api) must generate exactly this dataset, deterministically, from `seed: 20261022`.
+# `npm run db:seed -- --reset` drops and re-creates it; it is the universal lab reset.
+version: 1
+seed: 20261022
+as_of: "2026-10-22T00:00:00Z" # every relative age below is measured from this instant
+
+brands:
+  lumen-home:
+    name: Lumen Home
+    currency: USD
+    pricing: tax_exclusive # 8.25% sales tax added at checkout
+    tax_rate: 0.0825
+    locale: en-US
+    warehouses: [US-NJ]
+    free_shipping_over: null
+    shipping_flat: "7.95"
+    order_number_prefix: LH
+    sku_count: 30
+    collections:
+      - {
+          slug: lamp-week,
+          name: Lamp Week,
+          promotion: lamp-week-2026,
+          description: Flash sale,
+          20% off lamps; three SKUs deliberately low on stock,
+        }
+      - { slug: living, name: Living }
+      - { slug: kitchen, name: Kitchen }
+      - { slug: bundles, name: Bundles }
+  trailhead-supply:
+    name: Trailhead Supply
+    currency: EUR
+    pricing: tax_inclusive # 19% VAT included in every list price
+    tax_rate: 0.19
+    locale: en-IE
+    warehouses: [DE-HAM, NL-RTM]
+    free_shipping_over: "80.00"
+    shipping_flat: "5.90"
+    order_number_prefix: TS
+    sku_count: 30
+    collections:
+      - { slug: shelter, name: Shelter }
+      - { slug: apparel, name: Apparel }
+      - { slug: trail, name: Trail }
+      - { slug: pre-order, name: Pre-order, description: Zero on-hand, ships next season }
+
+# Base price lists: id = <brand>-base. Promotions reference the same SKUs with a lower price.
+price_lists:
+  - { id: lumen-home-base, brand: lumen-home, name: Base USD }
+  - id: lamp-week-2026
+    brand: lumen-home
+    name: Lamp Week 2026
+    active_from: "2026-10-20T00:00:00Z"
+    active_to: "2026-10-27T00:00:00Z"
+    rule: 20% off every SKU in collection lamp-week, rounded half-up to the cent
+  - { id: trailhead-supply-base, brand: trailhead-supply, name: Base EUR (VAT inclusive) }
+
+# 30 SKUs per brand. on_hand is the sum over warehouses; safety_stock is the admin alert line.
+# Lumen Home: simple products, three low-stock Lamp Week SKUs and three bundles.
+skus:
+  lumen-home:
+    - {
+        sku: LH-LAMP-01,
+        name: Arc Floor Lamp,
+        collection: lamp-week,
+        price: "129.00",
+        on_hand: 40,
+        safety_stock: 5,
+      }
+    - {
+        sku: LH-LAMP-02,
+        name: Halo Pendant,
+        collection: lamp-week,
+        price: "89.00",
+        on_hand: 2,
+        safety_stock: 5,
+        low_stock: true,
+      }
+    - {
+        sku: LH-LAMP-03,
+        name: Ember Table Lamp,
+        collection: lamp-week,
+        price: "59.00",
+        on_hand: 3,
+        safety_stock: 5,
+        low_stock: true,
+        note: oversell target used by scenarios/oversell.sh and lab 12,
+      }
+    - {
+        sku: LH-LAMP-04,
+        name: Lumen Desk Lamp,
+        collection: lamp-week,
+        price: "49.00",
+        on_hand: 1,
+        safety_stock: 5,
+        low_stock: true,
+      }
+    - {
+        sku: LH-LAMP-05,
+        name: Studio Clamp Lamp,
+        collection: lamp-week,
+        price: "39.00",
+        on_hand: 60,
+        safety_stock: 5,
+      }
+    - {
+        sku: LH-LAMP-06,
+        name: Paper Moon Lantern,
+        collection: lamp-week,
+        price: "34.50",
+        on_hand: 75,
+        safety_stock: 10,
+      }
+    - {
+        sku: LH-BULB-01,
+        name: Warm Filament Bulb 2-pack,
+        collection: lamp-week,
+        price: "12.99",
+        on_hand: 500,
+        safety_stock: 50,
+      }
+    - {
+        sku: LH-BULB-02,
+        name: Smart Bulb E26,
+        collection: lamp-week,
+        price: "19.99",
+        on_hand: 320,
+        safety_stock: 50,
+      }
+    - {
+        sku: LH-SOFA-01,
+        name: Linen Loveseat,
+        collection: living,
+        price: "899.00",
+        on_hand: 6,
+        safety_stock: 2,
+      }
+    - {
+        sku: LH-CHAIR-01,
+        name: Oak Accent Chair,
+        collection: living,
+        price: "349.00",
+        on_hand: 14,
+        safety_stock: 3,
+      }
+    - {
+        sku: LH-RUG-01,
+        name: Wool Rug 5x8,
+        collection: living,
+        price: "279.00",
+        on_hand: 22,
+        safety_stock: 4,
+      }
+    - {
+        sku: LH-RUG-02,
+        name: Jute Runner,
+        collection: living,
+        price: "89.00",
+        on_hand: 30,
+        safety_stock: 4,
+      }
+    - {
+        sku: LH-SHELF-01,
+        name: Floating Shelf Set,
+        collection: living,
+        price: "64.00",
+        on_hand: 48,
+        safety_stock: 6,
+      }
+    - {
+        sku: LH-PILLOW-01,
+        name: Velvet Throw Pillow,
+        collection: living,
+        price: "29.00",
+        on_hand: 120,
+        safety_stock: 20,
+      }
+    - {
+        sku: LH-THROW-01,
+        name: Cotton Throw Blanket,
+        collection: living,
+        price: "45.00",
+        on_hand: 80,
+        safety_stock: 10,
+      }
+    - {
+        sku: LH-CANDLE-01,
+        name: Soy Candle Trio,
+        collection: living,
+        price: "24.00",
+        on_hand: 200,
+        safety_stock: 25,
+      }
+    - {
+        sku: LH-VASE-01,
+        name: Stoneware Vase,
+        collection: living,
+        price: "38.00",
+        on_hand: 55,
+        safety_stock: 8,
+      }
+    - {
+        sku: LH-FRAME-01,
+        name: Gallery Frame 3-pack,
+        collection: living,
+        price: "42.00",
+        on_hand: 70,
+        safety_stock: 10,
+      }
+    - {
+        sku: LH-POT-01,
+        name: Enamel Dutch Oven,
+        collection: kitchen,
+        price: "149.00",
+        on_hand: 25,
+        safety_stock: 4,
+      }
+    - {
+        sku: LH-PAN-01,
+        name: Carbon Steel Skillet,
+        collection: kitchen,
+        price: "69.00",
+        on_hand: 40,
+        safety_stock: 6,
+      }
+    - {
+        sku: LH-KNIFE-01,
+        name: Chef Knife 8in,
+        collection: kitchen,
+        price: "95.00",
+        on_hand: 35,
+        safety_stock: 5,
+      }
+    - {
+        sku: LH-BOARD-01,
+        name: Walnut Cutting Board,
+        collection: kitchen,
+        price: "54.00",
+        on_hand: 44,
+        safety_stock: 6,
+      }
+    - {
+        sku: LH-MUG-01,
+        name: Stoneware Mug 4-pack,
+        collection: kitchen,
+        price: "36.00",
+        on_hand: 150,
+        safety_stock: 20,
+      }
+    - {
+        sku: LH-PLATE-01,
+        name: Dinner Plate Set,
+        collection: kitchen,
+        price: "72.00",
+        on_hand: 60,
+        safety_stock: 8,
+      }
+    - {
+        sku: LH-KETTLE-01,
+        name: Gooseneck Kettle,
+        collection: kitchen,
+        price: "79.00",
+        on_hand: 28,
+        safety_stock: 5,
+      }
+    - {
+        sku: LH-TOWEL-01,
+        name: Linen Tea Towels,
+        collection: kitchen,
+        price: "22.00",
+        on_hand: 180,
+        safety_stock: 20,
+      }
+    - {
+        sku: LH-CANIST-01,
+        name: Glass Canister Set,
+        collection: kitchen,
+        price: "48.00",
+        on_hand: 52,
+        safety_stock: 6,
+      }
+    - {
+        sku: LH-BNDL-01,
+        name: Reading Nook Bundle,
+        collection: bundles,
+        price: "169.00",
+        on_hand: 0,
+        safety_stock: 0,
+        bundle: [LH-LAMP-03, LH-PILLOW-01, LH-THROW-01],
+        note: bundle stock derives from components,
+      }
+    - {
+        sku: LH-BNDL-02,
+        name: Weeknight Kitchen Bundle,
+        collection: bundles,
+        price: "289.00",
+        on_hand: 0,
+        safety_stock: 0,
+        bundle: [LH-POT-01, LH-PAN-01, LH-BOARD-01],
+      }
+    - {
+        sku: LH-BNDL-03,
+        name: Housewarming Bundle,
+        collection: bundles,
+        price: "99.00",
+        on_hand: 0,
+        safety_stock: 0,
+        bundle: [LH-CANDLE-01, LH-VASE-01, LH-MUG-01],
+      }
+  # Trailhead Supply: variant products (size/colour), two warehouses, pre-order SKUs with zero on-hand.
+  # variants are enumerated as `<sku>-<SIZE>-<COL>`; on_hand is split across warehouses by the seeder (60% DE-HAM, 40% NL-RTM).
+  trailhead-supply:
+    - {
+        sku: TS-TENT-01,
+        name: Ridge 2P Tent,
+        collection: shelter,
+        price: "349.00",
+        on_hand: 18,
+        safety_stock: 3,
+        variants: { colour: [GRN, ORG] },
+      }
+    - {
+        sku: TS-TENT-02,
+        name: Summit 3P Tent,
+        collection: shelter,
+        price: "479.00",
+        on_hand: 9,
+        safety_stock: 2,
+        variants: { colour: [GRN, GRY] },
+      }
+    - {
+        sku: TS-TARP-01,
+        name: Ultralight Tarp,
+        collection: shelter,
+        price: "119.00",
+        on_hand: 30,
+        safety_stock: 5,
+      }
+    - {
+        sku: TS-BAG-01,
+        name: Down Sleeping Bag -5C,
+        collection: shelter,
+        price: "289.00",
+        on_hand: 24,
+        safety_stock: 4,
+        variants: { size: [REG, LNG] },
+      }
+    - {
+        sku: TS-PAD-01,
+        name: Insulated Sleeping Pad,
+        collection: shelter,
+        price: "139.00",
+        on_hand: 36,
+        safety_stock: 5,
+        variants: { size: [REG, LNG] },
+      }
+    - {
+        sku: TS-HAMK-01,
+        name: Trail Hammock,
+        collection: shelter,
+        price: "69.00",
+        on_hand: 50,
+        safety_stock: 8,
+      }
+    - {
+        sku: TS-STAKE-01,
+        name: Titanium Stakes 6-pack,
+        collection: shelter,
+        price: "24.90",
+        on_hand: 200,
+        safety_stock: 20,
+      }
+    - {
+        sku: TS-JKT-01,
+        name: Alpine Shell Jacket,
+        collection: apparel,
+        price: "299.00",
+        on_hand: 48,
+        safety_stock: 6,
+        variants: { size: [S, M, L, XL], colour: [BLK, RED] },
+      }
+    - {
+        sku: TS-JKT-02,
+        name: Down Hoodie,
+        collection: apparel,
+        price: "219.00",
+        on_hand: 40,
+        safety_stock: 6,
+        variants: { size: [S, M, L, XL], colour: [NVY, GRN] },
+      }
+    - {
+        sku: TS-FLC-01,
+        name: Grid Fleece,
+        collection: apparel,
+        price: "89.00",
+        on_hand: 72,
+        safety_stock: 8,
+        variants: { size: [S, M, L, XL] },
+      }
+    - {
+        sku: TS-PANT-01,
+        name: Trek Pants,
+        collection: apparel,
+        price: "109.00",
+        on_hand: 60,
+        safety_stock: 8,
+        variants: { size: [S, M, L, XL], colour: [KHK, BLK] },
+      }
+    - {
+        sku: TS-SHRT-01,
+        name: Merino Tee,
+        collection: apparel,
+        price: "59.00",
+        on_hand: 96,
+        safety_stock: 12,
+        variants: { size: [S, M, L, XL], colour: [BLU, GRY] },
+      }
+    - {
+        sku: TS-SOCK-01,
+        name: Merino Hiking Socks,
+        collection: apparel,
+        price: "19.90",
+        on_hand: 300,
+        safety_stock: 30,
+        variants: { size: [S, M, L] },
+      }
+    - {
+        sku: TS-HAT-01,
+        name: Sun Hat,
+        collection: apparel,
+        price: "34.90",
+        on_hand: 80,
+        safety_stock: 10,
+        variants: { size: [M, L] },
+      }
+    - {
+        sku: TS-GLV-01,
+        name: Liner Gloves,
+        collection: apparel,
+        price: "29.90",
+        on_hand: 90,
+        safety_stock: 10,
+        variants: { size: [S, M, L] },
+      }
+    - {
+        sku: TS-BOOT-01,
+        name: Ridgeline Boot,
+        collection: trail,
+        price: "189.00",
+        on_hand: 54,
+        safety_stock: 6,
+        variants: { size: ["40", "41", "42", "43", "44", "45"] },
+      }
+    - {
+        sku: TS-SHOE-01,
+        name: Trail Runner,
+        collection: trail,
+        price: "139.00",
+        on_hand: 66,
+        safety_stock: 6,
+        variants: { size: ["40", "41", "42", "43", "44", "45"] },
+      }
+    - {
+        sku: TS-PACK-01,
+        name: 45L Backpack,
+        collection: trail,
+        price: "199.00",
+        on_hand: 28,
+        safety_stock: 4,
+        variants: { size: [S, M, L] },
+      }
+    - {
+        sku: TS-PACK-02,
+        name: 20L Daypack,
+        collection: trail,
+        price: "79.00",
+        on_hand: 70,
+        safety_stock: 8,
+        variants: { colour: [BLK, GRN, ORG] },
+      }
+    - {
+        sku: TS-POLE-01,
+        name: Carbon Trekking Poles,
+        collection: trail,
+        price: "129.00",
+        on_hand: 45,
+        safety_stock: 5,
+      }
+    - {
+        sku: TS-BTL-01,
+        name: Insulated Bottle 750ml,
+        collection: trail,
+        price: "32.00",
+        on_hand: 160,
+        safety_stock: 20,
+        variants: { colour: [BLK, BLU, GRN] },
+      }
+    - {
+        sku: TS-FLTR-01,
+        name: Squeeze Water Filter,
+        collection: trail,
+        price: "44.90",
+        on_hand: 110,
+        safety_stock: 12,
+      }
+    - {
+        sku: TS-STOVE-01,
+        name: Canister Stove,
+        collection: trail,
+        price: "64.90",
+        on_hand: 58,
+        safety_stock: 6,
+      }
+    - {
+        sku: TS-LAMP-01,
+        name: Headlamp 400lm,
+        collection: trail,
+        price: "49.90",
+        on_hand: 130,
+        safety_stock: 15,
+      }
+    - {
+        sku: TS-KNIFE-01,
+        name: Folding Knife,
+        collection: trail,
+        price: "39.90",
+        on_hand: 75,
+        safety_stock: 8,
+      }
+    - {
+        sku: TS-MAP-01,
+        name: Waterproof Map Case,
+        collection: trail,
+        price: "14.90",
+        on_hand: 240,
+        safety_stock: 20,
+      }
+    - {
+        sku: TS-FIRST-01,
+        name: Trail First-Aid Kit,
+        collection: trail,
+        price: "27.90",
+        on_hand: 140,
+        safety_stock: 15,
+      }
+    - {
+        sku: TS-TENT-03,
+        name: Ridge 2P Tent 2027,
+        collection: pre-order,
+        price: "369.00",
+        on_hand: 0,
+        safety_stock: 0,
+        preorder: true,
+        ships: "2027-03-01",
+      }
+    - {
+        sku: TS-JKT-03,
+        name: Alpine Shell 2027,
+        collection: pre-order,
+        price: "319.00",
+        on_hand: 0,
+        safety_stock: 0,
+        preorder: true,
+        ships: "2027-02-15",
+        variants: { size: [S, M, L, XL] },
+      }
+    - {
+        sku: TS-PACK-03,
+        name: 60L Expedition Pack,
+        collection: pre-order,
+        price: "259.00",
+        on_hand: 0,
+        safety_stock: 0,
+        preorder: true,
+        ships: "2027-04-01",
+      }
+
+users:
+  merchandisers:
+    - { email: maya@lumenhome.test, brand: lumen-home, role: merchandiser, name: Maya Perera }
+    - { email: dev@lumenhome.test, brand: lumen-home, role: merchandiser, name: Dev Okafor }
+    - {
+        email: lena@trailheadsupply.test,
+        brand: trailhead-supply,
+        role: merchandiser,
+        name: Lena Vogel,
+      }
+  admins:
+    - { email: ops@kade.test, brand: null, role: admin, name: Platform Ops }
+  customers:
+    rule: 120 deterministic customers per brand, `customer-<nnn>@<brand>.test`; no real names or addresses
+
+orders:
+  total: 400
+  split: { lumen-home: 220, trailhead-supply: 180 }
+  window: last 180 days before as_of
+  lines_per_order: 1-4, SKUs weighted towards the brand's two cheapest collections
+  status_mix:
+    delivered: 0.78
+    shipped: 0.06
+    packed: 0.03
+    confirmed: 0.03
+    paid: 0.01
+    pending_payment: 0.02
+    refunded: 0.05 # 5% refunded (payment.refunded webhook recorded)
+    chargeback: 0.02 # 2% chargebacks (chargeback.opened webhook recorded)
+  every_order_has:
+    [reservation_made event, payment_received or payment_failed event, email_queued outbox row]
+
+carts:
+  total: 30
+  split: { lumen-home: 16, trailhead-supply: 14 }
+  ages: 1 hour to 9 days, spread evenly on a log scale
+  with_pending_payment: 6 # a checkout opened a PayGate session that never resolved; 4 of them are older than 48 h
+  lines_per_cart: 1-3
+
+pending_webhooks: # rows in the webhook inbox awaiting the fulfilment worker
+  total: 12
+  mix:
+    - { count: 6, type: payment.succeeded, note: fresh, one per pending_payment order }
+    - {
+        count: 3,
+        type: payment.succeeded,
+        note: exact duplicates (same event_id) of three delivered orders,
+      }
+    - {
+        count: 2,
+        type: payment.succeeded,
+        note: late — their carts are among the >48 h pending carts the sweeper will delete,
+      }
+    - { count: 1, type: payment.failed, note: for a Trailhead pre-order }
+
+# Edge cases planted by W1 children. Never fixed on main; remediation happens on throwaway leaves.
+planted_edge_cases:
+  - {
+      id: oversell,
+      owner: W1-api,
+      where: "services/api reservation (read-then-write, no SELECT … FOR UPDATE)",
+      symptom: "scenarios/oversell.sh fires 20 concurrent checkouts on LH-LAMP-03 (3 units); ~7 succeed; on_hand goes negative",
+      labs: [5, 9, 12, 15],
+    }
+  - {
+      id: duplicate-webhook,
+      owner: W1-worker,
+      where: "fulfilment-worker ignores event_id",
+      symptom: "same payment.succeeded twice → order confirmed twice, stock decremented twice, two emails in the outbox",
+      labs: [7, 12, 15],
+    }
+  - {
+      id: currency-rounding,
+      owner: W1-api + W1-worker,
+      where: "API totals use JS floats and half-up; worker recomputes with Decimal and banker's rounding; VAT-inclusive EUR lines",
+      symptom: "1-cent drift on ≈3% of Trailhead orders; reconciliation never balances",
+      labs: [5, 6, 9],
+    }
+  - {
+      id: abandoned-cart-sweeper,
+      owner: W1-worker,
+      where: "sweeper deletes carts older than 48 h even with a pending payment",
+      symptom: "late webhook for a deleted cart → ghost order with no lines",
+      labs: [7, 12, 15],
+    }
+  - {
+      id: cross-brand-leak,
+      owner: W1-api,
+      where: "GET /orders/{orderId} checks existence but not the caller's brand",
+      symptom: "Lumen merchandiser can read Trailhead orders by id",
+      labs: [5, 9],
+    }
+  - {
+      id: unverified-signature,
+      owner: W1-api,
+      where: "POST /webhooks/payments reads X-PayGate-Signature but never compares it",
+      symptom: "anyone can POST a webhook",
+      labs: [5, 6],
+    }
+  - {
+      id: n-plus-one,
+      owner: W1-api,
+      where: "GET /catalog/collections/{slug} loads variants per product",
+      symptom: "≈60 queries per Lamp Week page view",
+      labs: [5],
+    }
+  - {
+      id: admin-a11y,
+      owner: W1-web,
+      where: "/admin icon buttons without labels; 3.1:1 contrast on price badges",
+      symptom: "accessibility scan findings",
+      labs: [5],
+    }
+  - {
+      id: price-drift,
+      owner: W1-api,
+      where: "checkout trusts CartLine.unitPrice captured hours earlier",
+      symptom: "flash-sale price change not reflected at checkout",
+      labs: [6, 15],
+    }
+  - {
+      id: bad-migration,
+      owner: W1-fixtures,
+      where: "scenarios/bad-migration.patch drops the NOT NULL default on orders.currency",
+      symptom: "worker crashes on new orders after deploy",
+      labs: [2, 12],
+    }

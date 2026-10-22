@@ -1,0 +1,806 @@
+openapi: 3.1.0
+info:
+  title: Kadé Commerce API
+  version: 1.0.0
+  summary: Storefront, cart, checkout, orders, admin and PayGate webhook contract for the Kadé Commerce lab fixture.
+  description: |
+    Frozen in W0 (see AGENTS.md). Changes go through the parent as a W1-api follow-up PR.
+
+    Authentication is a deliberate fake: every request carries `X-Kade-Brand` (which brand's data
+    the caller may see) and `X-Kade-User` (an email from the seed). Merchandiser and admin routes
+    additionally require `X-Kade-Role`. No tokens, no sessions, no real PII.
+
+    Money is a decimal string in major units (`"12.50"`) with an ISO 4217 currency. Lumen Home is
+    USD with tax added at checkout; Trailhead Supply is EUR with 19% VAT included in list prices.
+servers:
+  - url: http://localhost:3001
+    description: services/api (W1-api) via `npm run dev`
+tags:
+  - { name: system }
+  - { name: brands }
+  - { name: catalog }
+  - { name: cart }
+  - { name: checkout }
+  - { name: orders }
+  - { name: admin }
+  - { name: webhooks }
+security:
+  - brandHeader: []
+    userHeader: []
+paths:
+  /health:
+    get:
+      tags: [system]
+      operationId: getHealth
+      summary: Liveness and database connectivity.
+      security: []
+      responses:
+        "200":
+          description: Healthy.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Health" }
+  /brands:
+    get:
+      tags: [brands]
+      operationId: listBrands
+      summary: List the seeded brands (used by the brand picker).
+      security: []
+      responses:
+        "200":
+          description: Brands.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Brand" }
+  /catalog/collections:
+    get:
+      tags: [catalog]
+      operationId: listCollections
+      summary: Collections of the calling brand.
+      responses:
+        "200":
+          description: Collections.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Collection" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+  /catalog/collections/{slug}:
+    get:
+      tags: [catalog]
+      operationId: getCollection
+      summary: One collection with its products and variants (the Lamp Week page).
+      parameters:
+        - { name: slug, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: Collection page.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CollectionPage" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /catalog/products/{sku}:
+    get:
+      tags: [catalog]
+      operationId: getProduct
+      summary: One product by SKU (brand-scoped).
+      parameters:
+        - { $ref: "#/components/parameters/Sku" }
+      responses:
+        "200":
+          description: Product.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Product" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /carts:
+    post:
+      tags: [cart]
+      operationId: createCart
+      summary: Open a cart for the calling user and brand.
+      responses:
+        "201":
+          description: Cart created.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Cart" }
+  /carts/{cartId}:
+    get:
+      tags: [cart]
+      operationId: getCart
+      parameters: [{ $ref: "#/components/parameters/CartId" }]
+      responses:
+        "200":
+          description: Cart with recomputed totals.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Cart" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    delete:
+      tags: [cart]
+      operationId: abandonCart
+      parameters: [{ $ref: "#/components/parameters/CartId" }]
+      responses:
+        "204": { description: Cart deleted. }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /carts/{cartId}/lines:
+    post:
+      tags: [cart]
+      operationId: addCartLine
+      summary: Add a SKU; the list price at this moment is captured on the line.
+      parameters: [{ $ref: "#/components/parameters/CartId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CartLineInput" }
+      responses:
+        "200":
+          description: Updated cart.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Cart" }
+        "409": { $ref: "#/components/responses/Conflict" }
+  /carts/{cartId}/lines/{lineId}:
+    patch:
+      tags: [cart]
+      operationId: updateCartLine
+      parameters:
+        - { $ref: "#/components/parameters/CartId" }
+        - { name: lineId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quantity]
+              properties:
+                quantity: { type: integer, minimum: 0, maximum: 99 }
+      responses:
+        "200":
+          description: Updated cart (quantity 0 removes the line).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Cart" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /checkout:
+    post:
+      tags: [checkout]
+      operationId: checkout
+      summary: Reserve stock, create a `pending_payment` order and open a PayGate hosted-checkout session.
+      description: |
+        Totals are computed server-side from the cart lines. Stock is reserved per line before the
+        order is written. The response carries the PayGate redirect URL; payment outcome arrives
+        asynchronously on `POST /webhooks/payments`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CheckoutInput" }
+      responses:
+        "201":
+          description: Order created, awaiting payment.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CheckoutResult" }
+        "409":
+          description: Out of stock or cart already checked out.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "422": { $ref: "#/components/responses/Unprocessable" }
+  /orders:
+    get:
+      tags: [orders]
+      operationId: listOrders
+      summary: Orders of the calling customer (merchandisers see their brand).
+      parameters:
+        - { name: status, in: query, schema: { $ref: "#/components/schemas/OrderStatus" } }
+        - { $ref: "#/components/parameters/Limit" }
+        - { $ref: "#/components/parameters/Cursor" }
+      responses:
+        "200":
+          description: Orders page.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/OrderPage" }
+  /orders/{orderId}:
+    get:
+      tags: [orders]
+      operationId: getOrder
+      summary: One order. Must be scoped to the caller's brand.
+      parameters: [{ $ref: "#/components/parameters/OrderId" }]
+      responses:
+        "200":
+          description: Order.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Order" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /orders/{orderId}/events:
+    get:
+      tags: [orders]
+      operationId: listOrderEvents
+      summary: Status history and outbox messages for one order (the "packed / shipped" timeline).
+      parameters: [{ $ref: "#/components/parameters/OrderId" }]
+      responses:
+        "200":
+          description: Events, oldest first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/OrderEvent" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /orders/{orderId}/cancel:
+    post:
+      tags: [orders]
+      operationId: cancelOrder
+      summary: Cancel a `pending_payment` or `paid` order and release its reservations.
+      parameters: [{ $ref: "#/components/parameters/OrderId" }]
+      responses:
+        "200":
+          description: Cancelled order.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Order" }
+        "409": { $ref: "#/components/responses/Conflict" }
+  /admin/inventory:
+    get:
+      tags: [admin]
+      operationId: listInventory
+      summary: On-hand and reserved stock per SKU and warehouse for the brand.
+      security: [{ brandHeader: [], userHeader: [], roleHeader: [] }]
+      parameters:
+        - {
+            name: belowSafety,
+            in: query,
+            schema: { type: boolean },
+            description: Only SKUs at or below their safety stock.,
+          }
+      responses:
+        "200":
+          description: Inventory rows.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/InventoryRow" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /admin/inventory/{sku}:
+    patch:
+      tags: [admin]
+      operationId: adjustInventory
+      summary: Adjust on-hand stock (receipt, count correction, write-off).
+      security: [{ brandHeader: [], userHeader: [], roleHeader: [] }]
+      parameters: [{ $ref: "#/components/parameters/Sku" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/InventoryAdjustment" }
+      responses:
+        "200":
+          description: Updated row.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/InventoryRow" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /admin/price-lists:
+    get:
+      tags: [admin]
+      operationId: listPriceLists
+      security: [{ brandHeader: [], userHeader: [], roleHeader: [] }]
+      responses:
+        "200":
+          description: Price lists of the brand (base plus active promotions).
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/PriceList" }
+  /admin/price-lists/{priceListId}:
+    put:
+      tags: [admin]
+      operationId: replacePriceList
+      summary: Replace a price list (how a flash-sale price change happens).
+      security: [{ brandHeader: [], userHeader: [], roleHeader: [] }]
+      parameters:
+        - { name: priceListId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PriceList" }
+      responses:
+        "200":
+          description: Stored price list.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PriceList" }
+        "422": { $ref: "#/components/responses/Unprocessable" }
+  /admin/orders:
+    get:
+      tags: [admin]
+      operationId: listAdminOrders
+      summary: All orders of the brand with payment state, for the merchandiser console.
+      security: [{ brandHeader: [], userHeader: [], roleHeader: [] }]
+      parameters:
+        - { name: status, in: query, schema: { $ref: "#/components/schemas/OrderStatus" } }
+        - { name: from, in: query, schema: { type: string, format: date } }
+        - { name: to, in: query, schema: { type: string, format: date } }
+        - { $ref: "#/components/parameters/Limit" }
+        - { $ref: "#/components/parameters/Cursor" }
+      responses:
+        "200":
+          description: Orders page.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/OrderPage" }
+  /admin/carts/abandoned:
+    get:
+      tags: [admin]
+      operationId: listAbandonedCarts
+      summary: Open carts older than the given age, with any pending payment attached.
+      security: [{ brandHeader: [], userHeader: [], roleHeader: [] }]
+      parameters:
+        - { name: olderThanHours, in: query, schema: { type: integer, minimum: 1, default: 24 } }
+      responses:
+        "200":
+          description: Abandoned carts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/AbandonedCart" }
+  /webhooks/payments:
+    post:
+      tags: [webhooks]
+      operationId: receivePaymentWebhook
+      summary: PayGate webhook receiver (HMAC-SHA256 signed, at-least-once delivery).
+      description: |
+        PayGate signs the raw body with `PAYGATE_SECRET`: `X-PayGate-Signature: sha256=<hex>`.
+        Delivery is at-least-once and may be out of order or late; `event_id` is the idempotency key.
+        The receiver must respond 2xx quickly and hand the event to the fulfilment worker via the outbox.
+      security: [{ paygateSignature: [] }]
+      parameters:
+        - { name: X-PayGate-Event-Id, in: header, required: true, schema: { type: string } }
+        - {
+            name: X-PayGate-Signature,
+            in: header,
+            required: true,
+            schema: { type: string, pattern: "^sha256=[0-9a-f]{64}$" },
+          }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PaymentWebhookEvent" }
+      responses:
+        "202": { description: Accepted for processing. }
+        "401":
+          description: Signature missing or invalid.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+components:
+  securitySchemes:
+    brandHeader:
+      type: apiKey
+      in: header
+      name: X-Kade-Brand
+      description: Brand id (`lumen-home` or `trailhead-supply`). Scopes every read and write.
+    userHeader:
+      type: apiKey
+      in: header
+      name: X-Kade-User
+      description: Seeded user email. Fake login; no verification.
+    roleHeader:
+      type: apiKey
+      in: header
+      name: X-Kade-Role
+      description: "`customer` (default), `merchandiser` or `admin`. Required on /admin routes."
+    paygateSignature:
+      type: apiKey
+      in: header
+      name: X-PayGate-Signature
+      description: HMAC-SHA256 of the raw request body using PAYGATE_SECRET.
+  parameters:
+    Sku:
+      name: sku
+      in: path
+      required: true
+      schema: { $ref: "#/components/schemas/Sku" }
+    CartId:
+      name: cartId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    Limit:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
+    Cursor:
+      name: cursor
+      in: query
+      schema: { type: string }
+  responses:
+    BadRequest:
+      description: Malformed request or missing brand header.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Forbidden:
+      description: Caller's brand or role may not access this resource.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    NotFound:
+      description: Not found within the caller's brand.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Conflict:
+      description: State conflict (stock, status).
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Unprocessable:
+      description: Validation failed.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+  schemas:
+    Health:
+      type: object
+      required: [status, database]
+      properties:
+        status: { type: string, enum: [ok] }
+        database: { type: string, enum: [ok, unavailable] }
+        version: { type: string }
+    BrandId:
+      type: string
+      enum: [lumen-home, trailhead-supply]
+    Currency:
+      type: string
+      enum: [USD, EUR]
+    Money:
+      type: object
+      required: [amount, currency]
+      properties:
+        amount:
+          type: string
+          pattern: "^-?\\d+\\.\\d{2}$"
+          description: Decimal string in major units, two fractional digits.
+        currency: { $ref: "#/components/schemas/Currency" }
+    Sku:
+      type: string
+      pattern: "^(LH|TS)-[A-Z]{3,6}-\\d{2}(-[A-Z0-9]{1,4})*$"
+      description: "`LH-LAMP-03`, `TS-TENT-02-M-GRN`."
+    Brand:
+      type: object
+      required: [id, name, currency, pricing, locale]
+      properties:
+        id: { $ref: "#/components/schemas/BrandId" }
+        name: { type: string }
+        currency: { $ref: "#/components/schemas/Currency" }
+        pricing:
+          type: string
+          enum: [tax_exclusive, tax_inclusive]
+        taxRate: { type: number, description: "0.0825 or 0.19" }
+        freeShippingOver: { $ref: "#/components/schemas/Money" }
+        locale: { type: string, examples: [en-US, en-IE] }
+        warehouses:
+          type: array
+          items: { type: string }
+    Collection:
+      type: object
+      required: [slug, name, productCount]
+      properties:
+        slug: { type: string }
+        name: { type: string }
+        description: { type: string }
+        promotion:
+          { type: string, description: Price list id applied while the collection is active. }
+        productCount: { type: integer }
+    CollectionPage:
+      allOf:
+        - { $ref: "#/components/schemas/Collection" }
+        - type: object
+          required: [products]
+          properties:
+            products:
+              type: array
+              items: { $ref: "#/components/schemas/Product" }
+    Product:
+      type: object
+      required: [sku, name, brand, price, variants, availability]
+      properties:
+        sku: { $ref: "#/components/schemas/Sku" }
+        name: { type: string }
+        brand: { $ref: "#/components/schemas/BrandId" }
+        description: { type: string }
+        collection: { type: string }
+        price: { $ref: "#/components/schemas/Money" }
+        compareAtPrice: { $ref: "#/components/schemas/Money" }
+        bundle:
+          type: array
+          description: Component SKUs when the product is a bundle.
+          items: { $ref: "#/components/schemas/Sku" }
+        preorder: { type: boolean, default: false }
+        variants:
+          type: array
+          items: { $ref: "#/components/schemas/Variant" }
+        availability:
+          type: string
+          enum: [in_stock, low_stock, preorder, out_of_stock]
+    Variant:
+      type: object
+      required: [sku, attributes, onHand]
+      properties:
+        sku: { $ref: "#/components/schemas/Sku" }
+        attributes:
+          type: object
+          additionalProperties: { type: string }
+          examples: [{ size: M, colour: green }]
+        onHand: { type: integer }
+        price: { $ref: "#/components/schemas/Money" }
+    CartLineInput:
+      type: object
+      required: [sku, quantity]
+      properties:
+        sku: { $ref: "#/components/schemas/Sku" }
+        quantity: { type: integer, minimum: 1, maximum: 99 }
+    CartLine:
+      type: object
+      required: [id, sku, name, quantity, unitPrice, lineTotal]
+      properties:
+        id: { type: string, format: uuid }
+        sku: { $ref: "#/components/schemas/Sku" }
+        name: { type: string }
+        quantity: { type: integer }
+        unitPrice:
+          allOf: [{ $ref: "#/components/schemas/Money" }]
+          description: Price captured when the line was added.
+        lineTotal: { $ref: "#/components/schemas/Money" }
+    Totals:
+      type: object
+      required: [subtotal, tax, shipping, total, currency]
+      properties:
+        subtotal: { $ref: "#/components/schemas/Money" }
+        discount: { $ref: "#/components/schemas/Money" }
+        tax: { $ref: "#/components/schemas/Money" }
+        shipping: { $ref: "#/components/schemas/Money" }
+        total: { $ref: "#/components/schemas/Money" }
+        currency: { $ref: "#/components/schemas/Currency" }
+        taxIncluded: { type: boolean }
+    Cart:
+      type: object
+      required: [id, brand, user, status, lines, totals, createdAt, updatedAt]
+      properties:
+        id: { type: string, format: uuid }
+        brand: { $ref: "#/components/schemas/BrandId" }
+        user: { type: string, format: email }
+        status:
+          type: string
+          enum: [open, checked_out, abandoned]
+        lines:
+          type: array
+          items: { $ref: "#/components/schemas/CartLine" }
+        totals: { $ref: "#/components/schemas/Totals" }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    CheckoutInput:
+      type: object
+      required: [cartId, email, shippingAddress]
+      properties:
+        cartId: { type: string, format: uuid }
+        email: { type: string, format: email }
+        shippingAddress: { $ref: "#/components/schemas/Address" }
+        idempotencyKey: { type: string, maxLength: 64 }
+    Address:
+      type: object
+      required: [name, line1, city, postalCode, country]
+      properties:
+        name: { type: string }
+        line1: { type: string }
+        line2: { type: string }
+        city: { type: string }
+        region: { type: string }
+        postalCode: { type: string }
+        country: { type: string, pattern: "^[A-Z]{2}$" }
+    CheckoutResult:
+      type: object
+      required: [order, payment]
+      properties:
+        order: { $ref: "#/components/schemas/Order" }
+        payment:
+          type: object
+          required: [paymentId, provider, redirectUrl, expiresAt]
+          properties:
+            paymentId: { type: string }
+            provider: { type: string, enum: [paygate-fake] }
+            redirectUrl: { type: string, format: uri }
+            expiresAt: { type: string, format: date-time }
+    OrderStatus:
+      type: string
+      enum:
+        [
+          pending_payment,
+          paid,
+          confirmed,
+          packed,
+          shipped,
+          delivered,
+          cancelled,
+          refunded,
+          chargeback,
+        ]
+    OrderLine:
+      type: object
+      required: [sku, name, quantity, unitPrice, lineTotal, warehouse]
+      properties:
+        sku: { $ref: "#/components/schemas/Sku" }
+        name: { type: string }
+        quantity: { type: integer }
+        unitPrice: { $ref: "#/components/schemas/Money" }
+        lineTotal: { $ref: "#/components/schemas/Money" }
+        warehouse: { type: string }
+    Order:
+      type: object
+      required: [id, number, brand, user, status, lines, totals, placedAt, updatedAt]
+      properties:
+        id: { type: string, format: uuid }
+        number: { type: string, examples: [LH-100234, TS-100235] }
+        brand: { $ref: "#/components/schemas/BrandId" }
+        user: { type: string, format: email }
+        cartId: { type: string, format: uuid }
+        status: { $ref: "#/components/schemas/OrderStatus" }
+        lines:
+          type: array
+          items: { $ref: "#/components/schemas/OrderLine" }
+        totals: { $ref: "#/components/schemas/Totals" }
+        paymentId: { type: string }
+        shippingAddress: { $ref: "#/components/schemas/Address" }
+        placedAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    OrderEvent:
+      type: object
+      required: [id, orderId, type, at]
+      properties:
+        id: { type: string, format: uuid }
+        orderId: { type: string, format: uuid }
+        type:
+          type: string
+          enum:
+            [
+              status_changed,
+              payment_received,
+              payment_failed,
+              reservation_made,
+              reservation_released,
+              email_queued,
+              note,
+            ]
+        from: { $ref: "#/components/schemas/OrderStatus" }
+        to: { $ref: "#/components/schemas/OrderStatus" }
+        source: { type: string, enum: [api, worker, webhook, admin, seed] }
+        detail: { type: string }
+        at: { type: string, format: date-time }
+    OrderPage:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/Order" }
+        nextCursor: { type: string }
+    InventoryRow:
+      type: object
+      required: [sku, warehouse, onHand, reserved, available, safetyStock]
+      properties:
+        sku: { $ref: "#/components/schemas/Sku" }
+        warehouse: { type: string }
+        onHand:
+          {
+            type: integer,
+            description: May go negative when oversold; that is the alert condition.,
+          }
+        reserved: { type: integer }
+        available: { type: integer }
+        safetyStock: { type: integer }
+        updatedAt: { type: string, format: date-time }
+    InventoryAdjustment:
+      type: object
+      required: [warehouse, delta, reason]
+      properties:
+        warehouse: { type: string }
+        delta: { type: integer }
+        reason: { type: string, enum: [receipt, count_correction, write_off, return] }
+        note: { type: string }
+    PriceList:
+      type: object
+      required: [id, brand, name, currency, entries]
+      properties:
+        id: { type: string }
+        brand: { $ref: "#/components/schemas/BrandId" }
+        name: { type: string }
+        currency: { $ref: "#/components/schemas/Currency" }
+        activeFrom: { type: string, format: date-time }
+        activeTo: { type: string, format: date-time }
+        entries:
+          type: array
+          items:
+            type: object
+            required: [sku, price]
+            properties:
+              sku: { $ref: "#/components/schemas/Sku" }
+              price: { $ref: "#/components/schemas/Money" }
+              compareAtPrice: { $ref: "#/components/schemas/Money" }
+    AbandonedCart:
+      type: object
+      required: [cart, ageHours]
+      properties:
+        cart: { $ref: "#/components/schemas/Cart" }
+        ageHours: { type: number }
+        pendingPaymentId:
+          {
+            type: string,
+            description: Set when a checkout opened a PayGate session that has not resolved.,
+          }
+    PaymentWebhookEvent:
+      type: object
+      required: [event_id, type, occurred_at, data]
+      properties:
+        event_id: { type: string, description: Idempotency key; duplicates carry the same id. }
+        type:
+          type: string
+          enum: [payment.succeeded, payment.failed, payment.refunded, chargeback.opened]
+        occurred_at: { type: string, format: date-time }
+        attempt: { type: integer, minimum: 1, description: Delivery attempt number from PayGate. }
+        data:
+          type: object
+          required: [payment_id, order_id, amount, currency]
+          properties:
+            payment_id: { type: string }
+            order_id: { type: string, format: uuid }
+            cart_id: { type: string, format: uuid }
+            amount: { type: string, pattern: "^-?\\d+\\.\\d{2}$" }
+            currency: { $ref: "#/components/schemas/Currency" }
+            reason: { type: string }
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          enum:
+            [
+              bad_request,
+              forbidden,
+              not_found,
+              conflict,
+              out_of_stock,
+              invalid_signature,
+              validation_failed,
+              internal,
+            ]
+        message: { type: string }
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              path: { type: string }
+              message: { type: string }

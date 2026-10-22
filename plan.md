@@ -1,0 +1,7 @@
+# Kadé Commerce build plan — progress
+
+One row per child session. Append your row at the bottom when your PR merges; keep every row from both sides when resolving conflicts.
+
+| Child | Branch                        | PR       | Status | Delivered                                                                                                                                                                                                                                                         | Not exercised                                                                                              |
+| ----- | ----------------------------- | -------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| W0-A  | `devin/w0-skeleton-contracts` | (see PR) | merged | Root workspaces + gate scripts, Compose Postgres 16, `packages/contracts` (OpenAPI, seed-spec, types, tests), `.devin/` (config, rules, starter skill, empty hooks, articulation base + lab 00 sample coach + agent), `AGENTS.md`, `docs/blueprint.proposed.yaml` | No service implemented (by brief); `labs/` untouched (W0-B); blueprint not applied to environment settings |

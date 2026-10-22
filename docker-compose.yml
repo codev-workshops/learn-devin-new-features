@@ -1,0 +1,31 @@
+# Local infrastructure for Kadé Commerce.
+#
+# Owned by W0-A (this file) and W1-api (adds the `api` service). Every other
+# service lives in docker-compose.services.yml (overlay, owned by W1-worker):
+#   docker compose -f docker-compose.yml -f docker-compose.services.yml up -d
+#
+# The image is pulled from mirror.gcr.io because Docker Hub rate-limits
+# anonymous pulls from Devin VMs.
+name: kade
+
+services:
+  postgres:
+    image: mirror.gcr.io/library/postgres:16-alpine
+    container_name: kade-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-kade}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kade}
+      POSTGRES_DB: ${POSTGRES_DB:-kade}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - kade-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-kade} -d ${POSTGRES_DB:-kade}"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+volumes:
+  kade-pgdata:

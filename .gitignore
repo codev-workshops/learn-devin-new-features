@@ -1,28 +1,41 @@
-# Angular specific
-/dist/
-/out-tsc/
-/tmp/
-/coverage/
-/e2e/test-output/
-/.angular/
-.angular/
+# Dependencies
+node_modules/
+.npm/
 
-# Node modules and dependency files
-/node_modules/
-/package-lock.json
-/yarn.lock
-
-# Environment files
-/.env
-
-# Angular CLI and build artefacts
-/.angular-cli.json
-/.ng/
-
-# TypeScript cache
+# Build output
+dist/
+build/
+out/
+coverage/
 *.tsbuildinfo
+labs/index.html
+labs/**/*.html
+
+# Python (services/fulfilment-worker)
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Environment and local overrides
+.env
+.env.*.local
+AGENTS.local.md
+.devin/config.local.json
+.devin/mcp_config.local.json
+
+# Expo / React Native (apps/mobile)
+.expo/
+android/app/build/
+ios/Pods/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
 
 # Logs
+*.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
