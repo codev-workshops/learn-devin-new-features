@@ -28,7 +28,13 @@ This is the evidence from the run that built the lab. It is the fixture fallback
 
 ## iOS (macOS child session)
 
-See `ios/README.md` when present. If it is missing, the iOS half was not exercised in the reference run.
+Exercised by the macOS child session on 22 Oct 2026 — Xcode 26.6, iPhone 17 Simulator (iOS 26.5), Release build with the JS bundle embedded. Full commands, timings and fixes: [ios/README.md](ios/README.md).
+
+| Screenshot | What it shows |
+| --- | --- |
+| [01-brand-picker.png](ios/01-brand-picker.png) | Brand picker on iOS |
+| [02-cart-haptics-native.png](ios/02-cart-haptics-native.png) | Cart after one Add: `Haptics: native (kade-haptics)` |
+| [03-order-status.png](ios/03-order-status.png) | `LH-001003` — Shipped pill and timeline, the same order as `android/06-order-shipped.png` |
 
 ## Not exercised in the reference run
 

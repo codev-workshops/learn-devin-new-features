@@ -44,7 +44,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T11:00:00Z · timing:
 - [x] Expo SDK 54 with Continuous Native Generation: android/ and ios/ come from expo prebuild, are never committed, and drift is fixed by --clean (4) — “Expo SDK 54 prebuild: ios/ is generated, never committed, and prebuild --clean fixes any drift”
 - [x] Multi-document blueprint, one runs-on linux and one runs-on macos document with a snapshot each; a snapshot mismatch is fixed there (5) — “the blueprint now has two documents, runs-on linux and runs-on macos, each with its own snapshot”
 - [x] kade-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android (4) — “That module has a JS fallback, so Android gets a harmless no-op instead of a crash”
-- [x] Xcode version selected explicitly with DEVELOPER_DIR on the macOS machine (3) — “the child pins Xcode 16 with DEVELOPER_DIR”
+- [x] Xcode version selected explicitly with DEVELOPER_DIR on the macOS machine (3) — “the child pins the release Xcode with DEVELOPER_DIR”
 - [x] What was not exercised: haptic feel on a physical iPhone, store signing and EAS, live API mode (3) — “Not exercised: a physical iPhone, store signing and EAS builds, and live API mode”
 
 ## Clarity and pronunciation (transcript-based, approximate)

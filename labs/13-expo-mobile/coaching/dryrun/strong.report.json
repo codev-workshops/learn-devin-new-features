@@ -145,7 +145,7 @@
       "point": "Xcode version selected explicitly with DEVELOPER_DIR on the macOS machine",
       "weight": 3,
       "mentioned": true,
-      "evidence_quote": "the child pins Xcode 16 with DEVELOPER_DIR",
+      "evidence_quote": "the child pins the release Xcode with DEVELOPER_DIR",
       "belonged_in": "checkpoint-120"
     },
     {

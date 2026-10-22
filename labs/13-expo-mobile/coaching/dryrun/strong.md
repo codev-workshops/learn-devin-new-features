@@ -28,7 +28,7 @@ Planted: nothing. Every must-mention point lands in its segment, timings are wit
 
 --- segment: checkpoint-120 ---
 [02:05] COACH: T+120. You are on iOS now. What is different there? Go.
-[02:08] LEARNER: I see the Mac had two Xcodes, so the child pins Xcode 16 with DEVELOPER_DIR.
+[02:08] LEARNER: I see the Mac had two Xcodes, a release and a beta, so the child pins the release Xcode with DEVELOPER_DIR.
 [02:19] LEARNER: I think the carry-over from Android is Expo SDK 54 prebuild: ios/ is generated, never committed, and prebuild --clean fixes any drift.
 [02:36] LEARNER: I'll check that KadeHaptics is in Podfile.lock before I take the screenshot.
 [02:49] LEARNER: Done.
