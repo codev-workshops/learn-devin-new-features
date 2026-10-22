@@ -52,7 +52,9 @@ function inspectMcp(servers, source, problems) {
 }
 
 /** Inspect one plugin folder. `repoName` names a skills-only repo (it has no manifest to name it). */
-export function inspect(dir, { repoName = path.basename(dir) } = {}) {
+const KIT_SKILLS = ['flash-sale-incident', 'flash-sale-release'];
+
+export function inspect(dir, { repoName = path.basename(dir), kit = false } = {}) {
   const problems = [];
   const files = listFiles(dir);
   const manifestPath = path.join(dir, '.devin-plugin', 'plugin.json');
@@ -82,9 +84,11 @@ export function inspect(dir, { repoName = path.basename(dir) } = {}) {
   const rules = files.filter((f) => f === 'AGENTS.md' || /^rules\/[^/]+\.md$/.test(f));
   const agents = files.filter((f) => /^agents\/[^/]+\.md$/.test(f) || /^agents\/[^/]+\/AGENT\.md$/.test(f)).map((f) => f.split('/')[1].replace(/\.md$/, ''));
   let hooks = [];
+  let preToolHooks = 0;
   if (files.includes('hooks.json')) {
     const cfg = readJson(path.join(dir, 'hooks.json'), problems);
     hooks = cfg ? Object.keys(cfg) : [];
+    preToolHooks = (Array.isArray(cfg?.PreToolUse) ? cfg.PreToolUse : []).flatMap((m) => (Array.isArray(m?.hooks) ? m.hooks : [])).filter((h) => h?.type === 'command' && h.command).length;
   }
   const mcpServers = [];
   if (manifest?.mcpServers && typeof manifest.mcpServers === 'object' && !Array.isArray(manifest.mcpServers) && !manifest.mcpServers.paths) {
@@ -93,6 +97,14 @@ export function inspect(dir, { repoName = path.basename(dir) } = {}) {
   if (files.includes('.mcp.json')) {
     const cfg = readJson(path.join(dir, '.mcp.json'), problems);
     for (const s of inspectMcp(cfg?.mcpServers, '.mcp.json', problems)) if (!mcpServers.some((m) => m.name === s.name)) mcpServers.push(s);
+  }
+  if (kit) {
+    if (kind !== 'manifest') problems.push('kit: no .devin-plugin/plugin.json manifest');
+    for (const s of KIT_SKILLS) if (!skills.includes(s)) problems.push(`kit: missing skill skills/${s}/SKILL.md`);
+    if (!rules.length) problems.push('kit: no rule (AGENTS.md or rules/*.md)');
+    if (!agents.length) problems.push('kit: no subagent under agents/');
+    if (!preToolHooks) problems.push('kit: no PreToolUse hook command in hooks.json');
+    if (!mcpServers.length) problems.push('kit: no MCP server declared');
   }
   return { kind, name, commands: skills.map((s) => `/${name}:${s}`), skills, rules, agents, hooks, mcpServers, files, problems };
 }
@@ -143,9 +155,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (a === '--revise') out = reviseUpload(b, c);
   else if (a === '--propose') out = proposeEdit(JSON.parse(readFileSync(b, 'utf8')));
   else if (a === '--hook') out = runPreToolHook(b, c, { KADE_SALE_FREEZE: process.env.KADE_SALE_FREEZE ?? '' });
+  else if (a === '--kit') out = inspect(b, { kit: true });
   else if (a && a !== '--help') out = inspect(a, b === '--repo-name' ? { repoName: c } : {});
   else {
-    console.error('usage: node plugin-check.mjs <plugin-dir> [--repo-name <name>] | --revise <old> <new> | --propose <fixture.json> | --hook <plugin-dir> "<command>"');
+    console.error('usage: node plugin-check.mjs <plugin-dir> [--repo-name <name>] | --kit <plugin-dir> | --revise <old> <new> | --propose <fixture.json> | --hook <plugin-dir> "<command>"');
     process.exit(64);
   }
   console.log(JSON.stringify(out, null, 2));

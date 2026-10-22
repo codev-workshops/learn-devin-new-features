@@ -1,0 +1,100 @@
+{
+  "number": 6,
+  "slug": "review-remediation",
+  "title": "Review and remediation — the price-drift fix that touches totals and tax",
+  "feature": "Devin Review: effort levels, Bugs vs Flags, the always-on Security section, quoting a finding into chat, re-review on new commits (and the unchanged-diff skip), and review rules in the Review settings rules editor",
+  "duration_minutes": 90,
+  "difficulty": "core",
+  "prerequisites": [
+    "Lab 00 done (or you know the Kadé brands and planted-defect rule)",
+    "Repo connected to your Devin org; `npm install` done at the root; Postgres up (`npm run db:up`)",
+    "You can open pull requests on the repo and your Devin role can run Devin Review (see section 6)"
+  ],
+  "credentials": {
+    "badge": "full",
+    "matrix": [
+      {
+        "integration": "Devin Review — run a review, read Bugs / Flags / Security, chat on the PR",
+        "required": true,
+        "fixture": "Read the committed reference findings in labs/06-review-remediation/fixtures/review-findings.json and the PR diff in fixtures/price-drift-fix.patch",
+        "note": "Without the permission to run Devin Review you can still open the PR and read existing findings; the AI review actions are hidden"
+      },
+      {
+        "integration": "Review settings — rules editor (review rules and exclusions)",
+        "required": false,
+        "fixture": "Write the rule you would add (target glob plus rule text) in your evidence; the repo-level `services/api/REVIEW.md` on the exercise branch is the rule you are replacing",
+        "note": "Editing org review settings needs an admin; a REVIEW.md on your remediation branch works for everyone"
+      },
+      {
+        "integration": "GitHub write access (push a remediation branch, open a PR)",
+        "required": false,
+        "fixture": "Apply fixtures/price-drift-fix.patch on a local throwaway branch `lab06/<handle>` and work there without pushing",
+        "note": "Every PR in this lab targets main but is closed unmerged — never merge a plant fix into main"
+      },
+      {
+        "integration": "Local stack (Postgres, services/api tests)",
+        "required": true,
+        "fixture": "None — the rounding evidence is a test you run; there is no fixture substitute for it",
+        "note": "`npm run db:up` then `npm test -w services/api`"
+      }
+    ],
+    "fixture_only_story": "Without Devin Review access you review the committed patch yourself, using the reference findings export as the reviewer's output: decide which findings are Bugs to fix, which Flag you accept or dispute and why, write the review rule you would add, then fix every actionable finding on a local throwaway branch and prove the rounding with a test. Criteria 2, 4 and 6 become observer-only; every other criterion is still yours.",
+    "not_exercised": [
+      "Running Devin Review and choosing an effort level without the Review permission",
+      "Editing org review rules without admin rights"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "git checkout main && git pull --ff-only",
+      "npm run lab:reset -- 06",
+      "git branch --list 'lab06/*' | grep -v 'lab06/price-drift-fix' | xargs -r git branch -D",
+      "git fetch origin lab06/price-drift-fix"
+    ],
+    "clean_state": "`main` is at the latest commit with every planted defect intact (`price-drift` and `currency-rounding` in `services/api/PLANTED.md`). The exercise PR `fix(api): re-price cart lines from the current price list at checkout` (branch `lab06/price-drift-fix`, PR #26) is open and unmerged; if the facilitator closed it, recreate it from `fixtures/price-drift-fix.patch` on a branch of your own."
+  },
+  "injectors": [
+    {
+      "name": "unchanged-diff-re-review",
+      "when": "after the first review completes",
+      "behaviour": "Merge `main` into your copy of the PR branch when `main` has not moved, or push an empty commit, and ask for a re-review. Predict what Devin Review does before you look, then explain the result to the tech lead in one sentence."
+    },
+    {
+      "name": "bypassable-rule",
+      "when": "while reading the review rules",
+      "behaviour": "The PR ships `services/api/REVIEW.md`: money changes in `src/money.ts` need a pinned-amount test. The PR rounds money in `src/routes/checkout.ts` instead and never touches `money.ts`. Decide whether the rule fired, and replace it with one the next PR cannot walk around."
+    },
+    {
+      "name": "disputed-flag",
+      "when": "facilitator action, T+40",
+      "behaviour": "Find the per-line queries inside the checkout transaction. If your review raised it as a flag, use that thread; if it did not (the reference run did not), open a review comment on the loop yourself and say why it is worth investigating. The PR author replies on that thread: \"Carts are capped in practice, two extra queries a line is nothing, and this is a flag, not a bug.\" Decide who is right with evidence, and record the outcome on the thread."
+    },
+    {
+      "name": "rounding-proof",
+      "command": "npm test -w services/api -- -t rounding",
+      "when": "before you claim the totals are safe",
+      "behaviour": "With the regression test from your remediation branch in place, the run shows the subtotal the PR produces for two €19.90 Merino socks — the number the tech lead will ask for."
+    }
+  ],
+  "coach": {
+    "skill": "coach-06-review-remediation",
+    "skill_path": ".devin/skills/articulation-06-review-remediation/SKILL.md",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
+      { "id": "checkpoint-10", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+10)", "at_minute": 10, "target_seconds": 45 },
+      { "id": "checkpoint-50", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+50)", "at_minute": 50, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "Update to the tech lead", "target_seconds": 180 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 (technical)", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 (commercial)", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — Devin Review (Bugs, Flags, Security, chat, review rules)", "url": "https://docs.devin.ai/work-with-devin/devin-review", "date": "fetched 2026-10-22" },
+    { "title": "Devin release notes — Devin Review effort levels (5 Oct 2026)", "url": "https://docs.devin.ai/release-notes/2026#october-5-2026", "date": "fetched 2026-10-22" },
+    { "title": "Devin release notes — Rules editor for Devin Review (19 Oct 2026)", "url": "https://docs.devin.ai/release-notes/2026#october-19-2026", "date": "fetched 2026-10-22" },
+    { "title": "Devin release notes — re-review skipped when the diff is unchanged (14 Aug 2026)", "url": "https://docs.devin.ai/release-notes/overview#august-14-2026", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Voice mode", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Skills (cloud discovery and @skills: invocation)", "url": "https://docs.devin.ai/product-guides/skills", "date": "fetched 2026-10-22" }
+  ]
+}

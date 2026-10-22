@@ -1,0 +1,111 @@
+{
+  "number": 7,
+  "slug": "automation-preflight",
+  "title": "Automation with Preflight — investigate only real payment-webhook failures",
+  "feature": "Devin Automations: webhook trigger, conditions, Preflight (LLM filter vs script with STATE_FILE and item id/version), Run now, queueing and concurrent runs, structured questions",
+  "duration_minutes": 120,
+  "difficulty": "core",
+  "prerequisites": [
+    "Repo cloned, `npm install` done at the root, Node 22",
+    "Lab 00 warm-up done once (framing stems and the update skeleton)",
+    "Fixture path: nothing else — `labs/07-automation-preflight/tools/preflight-replay.mjs` replays the Preflight script contract offline",
+    "Optional live path: permission to create Automations in your Devin org (an Automation with a Webhook trigger), which you disable or delete at the end of the lab"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Offline Preflight replay (`tools/preflight-replay.mjs`) — default path",
+        "required": true,
+        "fixture": "Replays the 11 PayGate notifications in `fixtures/paygate-notifications.json` through your script with the documented EVENT_FILE / STATE_FILE / LAST_RUN_FILE / OUTPUT_FILE contract, a 1–300 s timeout, the item cap and id@version dedupe. Prints one line per event and a `RESULT:` line.",
+        "note": "Zero credentials and zero environment variables. Every acceptance criterion can be met on this path."
+      },
+      {
+        "integration": "Devin Automation with a Webhook trigger — optional",
+        "required": false,
+        "fixture": "The replay stands in for the Automation runtime; `tools/send-webhook.mjs --dry-run` prints the requests it would send.",
+        "note": "Live: create the Automation, paste the script into Preflight, copy the webhook URL and secret into `KADE_LAB07_WEBHOOK_URL` and `KADE_LAB07_WEBHOOK_SECRET` in your own shell, and run `node labs/07-automation-preflight/tools/send-webhook.mjs`. Disable or delete the Automation when you finish."
+      },
+      {
+        "integration": "PayGate (real payment provider) — not used",
+        "required": false,
+        "fixture": "`services/paygate-fake` and `scenarios/duplicate-webhook.sh` reproduce the delivery side on a local stack.",
+        "note": "There is no real PayGate account anywhere in this course."
+      },
+      {
+        "integration": "Datadog monitor 48213802 (webhook failure rate) — optional context",
+        "required": false,
+        "fixture": "`observability/datadog/monitor-webhook-failure-rate.json` and `observability/runbooks/RB-201-webhook-failure-rate.md`.",
+        "note": "Live Datadog is not needed; the monitor and runbook are read as files."
+      }
+    ],
+    "not_exercised": [
+      "A live Devin Automation receiving PayGate notifications through its webhook URL (fixture path replays the Preflight contract offline)",
+      "Real PayGate delivery retries (the fake and the notification fixture stand in)",
+      "Queueing limits and concurrent runs on a live Automation (discussed, not reproduced by the replay)"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "npm run lab:reset -- 07",
+      "rm -rf labs/07-automation-preflight/.state",
+      "node labs/07-automation-preflight/tools/preflight-replay.mjs --run-now"
+    ],
+    "clean_state": "`lab:reset` ends with the lab 07 starting state: 12 pending webhooks in the inbox (6 fresh, 3 duplicates, 2 late, 1 failed) and PayGate fake knobs all off. There is no `labs/07-automation-preflight/.state/` directory and no `labs/07-automation-preflight/preflight.mjs` of your own yet. The `--run-now` replay prints 11 dispatched events — that is the noise you are about to remove. Without Docker, skip the first command: the fixture path needs only Node."
+  },
+  "injectors": [
+    {
+      "name": "notification-redelivery",
+      "when": "built into the fixture (ntf_705 arrives twice, 3 s apart)",
+      "behaviour": "PayGate's notifier is itself at-least-once: the same notification id is delivered twice. Your script must not open a second investigation and must say why it skipped."
+    },
+    {
+      "name": "duplicate-event-new-version",
+      "when": "T+60 min",
+      "behaviour": "The payments lead replays evt_lab07_a from the PayGate dashboard the next morning (`ntf_710`, `replay_seq` 2, single attempt) and it fails again. Replay only that event against your saved state with `--only ntf_710 --state-dir labs/07-automation-preflight/.state`. Decide whether this is the same incident or a new one, and make the replay agree."
+    },
+    {
+      "name": "timeout",
+      "when": "T+75 min",
+      "behaviour": "`--script labs/07-automation-preflight/injectors/slow-preflight.mjs --timeout 1` simulates a Preflight waiting on a slow dependency. Values outside 1–300 s are refused. Say what happens to the event, and pick a timeout for your real script with a reason."
+    },
+    {
+      "name": "invalid-output",
+      "when": "T+80 min",
+      "behaviour": "`--script labs/07-automation-preflight/injectors/invalid-output.mjs` writes an output that is not one decision and scribbles on STATE_FILE. Check what the replay keeps and what it drops, then replay the same event with your script."
+    },
+    {
+      "name": "run-now-bypass",
+      "when": "any time",
+      "behaviour": "The payments lead clicks Run now to \"test the filter\". `--run-now` shows what the button does to the 11 notifications, the test.ping included."
+    },
+    {
+      "name": "naive-items",
+      "when": "optional, T+20 min",
+      "behaviour": "`--script labs/07-automation-preflight/injectors/naive-items.mjs` is a stateless script keyed on the notification id. Compare its session count with yours."
+    },
+    {
+      "name": "duplicate-webhook",
+      "when": "optional, local stack",
+      "behaviour": "`scenarios/duplicate-webhook.sh` redelivers an identical `payment.succeeded` to the local API; with the worker running the order is confirmed twice (a planted defect — do not fix it on main). It explains why an investigation is worth opening; it is not what the Preflight filters."
+    }
+  ],
+  "coach": {
+    "skill": "coach-07-automation-preflight",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
+      { "id": "checkpoint-15", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+15)", "at_minute": 15, "target_seconds": 45 },
+      { "id": "checkpoint-75", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+75)", "at_minute": 75, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "Update to the payments lead", "target_seconds": 180 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 (technical)", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 (commercial)", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — Automations (triggers, conditions, webhook triggers, Preflight checks, script contract, Run now, queueing)", "url": "https://docs.devin.ai/product-guides/automations", "date": "fetched 2026-10-22" },
+    { "title": "Devin release notes 2026 — Preflight Checks for Automations (Sep 30) and Structured Questions in Automation Sessions (Sep 25)", "url": "https://docs.devin.ai/release-notes/2026", "date": "Sep 25 and Sep 30, 2026" },
+    { "title": "Devin docs — Voice mode", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Skills (@skills: invocation)", "url": "https://docs.devin.ai/product-guides/skills", "date": "fetched 2026-10-22" }
+  ]
+}

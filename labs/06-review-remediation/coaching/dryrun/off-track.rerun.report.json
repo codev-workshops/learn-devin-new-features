@@ -1,0 +1,250 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 6,
+    "slug": "review-remediation",
+    "coach": "coach-06-review-remediation"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T13:02:00Z",
+    "run_index": 2,
+    "transcript": "labs/06-review-remediation/coaching/dryrun/off-track.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 100,
+      "delta_seconds": 40,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 24,
+      "delta_seconds": -21,
+      "verdict": "under"
+    },
+    {
+      "segment": "checkpoint-50",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+50)",
+      "target_seconds": 45,
+      "actual_seconds": 66,
+      "delta_seconds": 21,
+      "verdict": "over"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Update to the tech lead",
+      "target_seconds": 180,
+      "actual_seconds": 100,
+      "delta_seconds": -80,
+      "verdict": "under",
+      "interruptions": 0
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "That per-line query thing is a flag, not a bug. Carts are small. Why are you blocking my PR on it?",
+      "target_seconds": 90,
+      "actual_seconds": 26,
+      "delta_seconds": -64,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "question": "Every review round costs us a day before Black Friday. Why not ship and fix forward?",
+      "target_seconds": 90,
+      "actual_seconds": 21,
+      "delta_seconds": -69,
+      "verdict": "under"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "missing",
+      "quote": "so Devin Review is really good, like, it reads the whole diff"
+    },
+    "approach": {
+      "status": "weak",
+      "quote": "Basically the tests on the PR are green, so it should be fine, no?"
+    },
+    "evidence": {
+      "status": "missing",
+      "quote": "one cent is not much, actually"
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "Basically we can merge it and look again after Black Friday."
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 5.6,
+    "filler_count": 13,
+    "filler_rate_per_minute": 2.32,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 2
+      },
+      {
+        "word": "basically",
+        "count": 3
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      },
+      {
+        "word": "like",
+        "count": 2
+      },
+      {
+        "word": "um",
+        "count": 4
+      }
+    ],
+    "tag_questions": 2,
+    "tag_question_examples": [
+      "Basically the tests on the PR are green, so it should be fine, no? It is very fast, you know.",
+      "Actually the findings are mostly flags, right? Devin can fix them all, basically."
+    ],
+    "long_pauses": [
+      {
+        "at": "01:50",
+        "seconds": 14,
+        "segment": "checkpoint-10"
+      },
+      {
+        "at": "05:10",
+        "seconds": 16,
+        "segment": "update"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Effort level chosen on purpose: the highest for a change to totals and tax, the default for low-risk PRs",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "The PR truncates per-line totals: two €19.90 socks come to 39.79 instead of 39.80",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "So, the review ran. It said the PR truncates per-line totals, two socks come to 39.79 instead of 39.80, which is, like, one cent.",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm3",
+      "point": "Security is checked on every review: a self-declared staff role lets a shopper set a price",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm4",
+      "point": "A regression test that failed on the PR and passes on the fix is the evidence, not the green suite",
+      "weight": 4,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "One finding quoted into the review chat, and the answer checked against a test",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm6",
+      "point": "Re-review after the fix resolved the findings; an unchanged diff is skipped, not re-reviewed",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm7",
+      "point": "The review rule targeted only money.ts; replaced with one covering every money path",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm8",
+      "point": "Disputed flag settled with evidence on the thread, and nothing merged into main",
+      "weight": 2,
+      "mentioned": false,
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "basically (×3)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [
+      "Basically we can merge it and look again after Black Friday.",
+      "Um, one cent is not much, actually."
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 5,
+      "max": 30,
+      "anchor": "Only the rounding cent is stated, then dismissed; offering to merge breaks the lab rule (anchor: 3–7 = one point, one inaccuracy)."
+    },
+    "structure": {
+      "score": 5,
+      "max": 25,
+      "anchor": "Feature tour instead of a headline; no evidence anywhere (anchor: 3–6 = parts missing)."
+    },
+    "customer_relevance": {
+      "score": 4,
+      "max": 20,
+      "anchor": "No yes/no on rounding safety; \"one cent is not much\" to a tech lead whose finance team reconciles every cent (anchor: 2–4)."
+    },
+    "brevity_and_fluency": {
+      "score": 2,
+      "max": 15,
+      "anchor": "Thirteen fillers, two tag questions, two long pauses; framing 40 s over, update 80 s under (anchor: 1–3)."
+    },
+    "recovery": {
+      "score": 1,
+      "max": 10,
+      "anchor": "Both objections conceded without acknowledgement, boundary or evidence (anchor: 0–2)."
+    },
+    "total": 17
+  },
+  "stems": [
+    "\"Not safe to ship yet\" — answer the tech lead's question first.",
+    "\"One cent on every two-sock order\" — multiply the cent before you dismiss it.",
+    "\"Green tests did not cover a quantity of 2\" — say what the suite missed."
+  ],
+  "previous_run_comparison": "Second run on the same transcript (stability check): total 17 vs 16 in run 1; only customer_relevance by +1 point."
+}

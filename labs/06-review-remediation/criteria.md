@@ -1,0 +1,13 @@
+You are done when all of the following are observable by someone who was not in the room. Collect the evidence in `labs/06-review-remediation/EVIDENCE.md` (do not commit it).
+
+1. **Effort level chosen and justified.** Your evidence names the Devin Review effort level used on the exercise PR and one sentence on why that level fits a change to totals and tax before Black Friday (and what you would use for a docs-only PR).
+2. **Findings sorted.** Every finding on the PR is classified as a Bug to fix, a Flag you accept, a Flag you dispute, or noise. Security findings are listed separately, and you can explain why they appear even though you never asked for a security review.
+3. **The self-declared-role price override is fixed.** On your remediation branch a shopper who sends `X-Kade-Role: merchandiser` with `priceOverrides` cannot change a price, and a test proves it.
+4. **One finding quoted into chat.** You copied one finding (location and explanation) into the Devin Review chat and asked a question about it. The chat answer, and what you did with it, are in your evidence.
+5. **Rounding regression proven and fixed with a test.** A test on your remediation branch fails on the PR's code and passes on yours. It pins the subtotal for two €19.90 Merino socks (`TS-SOCK-01-M`) at 39.80 EUR. Your evidence shows the command and the failing output from before your fix.
+6. **Re-review after the fixes.** After you push the remediation, a re-review runs on the new commits. Your evidence shows which findings were resolved and whether anything new appeared.
+7. **Unchanged-diff re-review explained.** You ran the `unchanged-diff-re-review` injector and can say in one sentence what Devin Review did and why.
+8. **Disputed flag resolved on the thread.** The per-line query concern has a PR thread: the review's flag, or the comment you opened when the review did not raise it. The author's objection on that thread has a reply that states the decision and the evidence: either the change you made or the measurement that justifies leaving it.
+9. **Bypass-proof review rule.** The `services/api/REVIEW.md` rule is replaced by a rule whose target covers every file that computes or rounds money in `services/api/src/`. Use the Review settings rules editor if you have access; otherwise write it on your branch. You can explain why the original rule did not fire on this PR.
+10. **Nothing merged.** The exercise PR and your remediation PR (or local branch) are unmerged; `main` still has both plants (`npm test -w services/api` still skips `price-drift` and `currency-rounding` on `main`).
+11. **Articulation drill completed** with the voice coach (section 8) and the gap report saved as `labs/06-review-remediation/EVIDENCE.report.md`. Do not commit it.
