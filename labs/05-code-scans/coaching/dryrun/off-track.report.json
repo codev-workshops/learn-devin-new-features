@@ -1,0 +1,262 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 5,
+    "slug": "code-scans",
+    "coach": "coach-05-code-scans"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T11:10:00Z",
+    "run_index": 1,
+    "transcript": "labs/05-code-scans/coaching/dryrun/off-track.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 80,
+      "delta_seconds": 20,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-20",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+20)",
+      "target_seconds": 45,
+      "actual_seconds": 36,
+      "delta_seconds": -9,
+      "verdict": "under"
+    },
+    {
+      "segment": "checkpoint-90",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+90)",
+      "target_seconds": 45,
+      "actual_seconds": 66,
+      "delta_seconds": 21,
+      "verdict": "over"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Customer update to the CTO",
+      "target_seconds": 180,
+      "actual_seconds": 130,
+      "delta_seconds": -50,
+      "verdict": "under",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "Our SAST already does this. Why do we need a second scanner?",
+      "target_seconds": 90,
+      "actual_seconds": 26,
+      "delta_seconds": -64,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "question": "How many false positives will my platform team have to triage every week?",
+      "target_seconds": 90,
+      "actual_seconds": 16,
+      "delta_seconds": -74,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-3",
+      "kind": "objection",
+      "label": "Objection 3 (governance)",
+      "question": "Who approved Devin opening pull requests against our repository?",
+      "target_seconds": 90,
+      "actual_seconds": 26,
+      "delta_seconds": -64,
+      "verdict": "under"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "missing",
+      "quote": "so Devin has many scan types, like, twelve of them"
+    },
+    "approach": {
+      "status": "weak",
+      "quote": "Basically we run all of them and see what comes out, no?"
+    },
+    "evidence": {
+      "status": "missing",
+      "quote": "Basically it works"
+    },
+    "next_step": {
+      "status": "missing",
+      "quote": "You can just merge them"
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 6.3,
+    "filler_count": 12,
+    "filler_rate_per_minute": 1.9,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 2
+      },
+      {
+        "word": "basically",
+        "count": 3
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      },
+      {
+        "word": "like",
+        "count": 2
+      },
+      {
+        "word": "um",
+        "count": 3
+      }
+    ],
+    "tag_questions": 2,
+    "tag_question_examples": [
+      "Basically we run all of them and see what comes out, no? It is very powerful, you know.",
+      "Actually all of them could go to Devin, right? It can fix everything, basically."
+    ],
+    "long_pauses": [
+      {
+        "at": "01:50",
+        "seconds": 14,
+        "segment": "checkpoint-20"
+      },
+      {
+        "at": "05:10",
+        "seconds": 16,
+        "segment": "update"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Security Swarm for the brand leak and the webhook, a performance scan for the catalog, an accessibility scan for the admin console",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "Um, many. I didn't count. Security Swarm for the brand leak and the webhook, a performance scan for the catalog, an accessibility scan for the admin console — those are the ones I picked.",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "The order detail lookup ignores the caller's brand header, so Lumen staff can read Trailhead orders",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm3",
+      "point": "The PayGate webhook signature is computed but never compared",
+      "weight": 4,
+      "mentioned": false,
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm4",
+      "point": "The Lamp Week collection runs two queries per product plus one per variant",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "So, the scans ran. Performance said the Lamp Week collection runs two queries per product plus one per variant, which is, like, a lot.",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm5",
+      "point": "One finding assigned to Devin produced a pull request that was closed unmerged",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm6",
+      "point": "One false positive dismissed with a written reason",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm7",
+      "point": "Scan new commits on the unchanged branch found nothing new, as expected",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm8",
+      "point": "Findings exported as SARIF for the existing security dashboard",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "basically (×3)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"Nobody needs to approve, it is automatic\" — inaccurate: a person assigns each finding"
+    ],
+    "sentences_to_rerecord": [
+      "Nobody needs to approve, it is automatic. You can just merge them."
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 8,
+      "max": 30,
+      "anchor": "Scan-type choice and the N+1 shape appear only in passing; the leak, the webhook and the whole lifecycle are missing, and the governance answer is wrong (anchor: 6–10 = one or two points, one inaccuracy)."
+    },
+    "structure": {
+      "score": 6,
+      "max": 25,
+      "anchor": "Feature list instead of a headline; no evidence or next step anywhere (anchor: 5–8 = parts missing)."
+    },
+    "customer_relevance": {
+      "score": 4,
+      "max": 20,
+      "anchor": "No yes/no for the CTO and \"many, I didn't count\" (anchor: 3–5 = no numbers)."
+    },
+    "brevity_and_fluency": {
+      "score": 3,
+      "max": 15,
+      "anchor": "Twelve fillers, two tag questions, two long pauses; objections far under target (anchor: 2–4)."
+    },
+    "recovery": {
+      "score": 1,
+      "max": 10,
+      "anchor": "Objections dismissed without acknowledgement or evidence (anchor: 0–2)."
+    },
+    "total": 22
+  },
+  "stems": [
+    "\"The risk is… for both brands.\" — open with what the customer loses, not what the product has.",
+    "\"I will run three scans, not twelve, because…\" — choose and justify.",
+    "\"Nothing opens a pull request until a person assigns it\" — state the control before you are asked."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 05; no previous run to compare with."
+}

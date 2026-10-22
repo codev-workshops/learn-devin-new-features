@@ -45,6 +45,22 @@ function parseCsv(rel) {
   return lines.map((l) => Object.fromEntries(l.split(",").map((v, i) => [cols[i], v])));
 }
 
+// Clip a metrics query result to [from, to] (ISO or unix ms) when either bound is given.
+function windowed(result, a) {
+  const from = a.from
+    ? Number(new Date(isNaN(Number(a.from)) ? a.from : Number(a.from)))
+    : -Infinity;
+  const to = a.to ? Number(new Date(isNaN(Number(a.to)) ? a.to : Number(a.to))) : Infinity;
+  if (from === -Infinity && to === Infinity) return result;
+  return {
+    ...result,
+    series: result.series.map((s) => ({
+      ...s,
+      pointlist: s.pointlist.filter(([t]) => t >= from && t <= to),
+    })),
+  };
+}
+
 const incidents = () => json("fixtures/mcp/pagerduty/incidents.json").incidents;
 const findIncident = (id) =>
   incidents().find((i) => i.id === String(id) || String(i.incident_number) === String(id));
@@ -153,6 +169,31 @@ export function callTool(name, args = {}) {
   for (const req of tool.inputSchema.required ?? []) {
     if (args[req] === undefined)
       return { error: { code: -32602, message: `Missing required argument: ${req}` } };
+  }
+  // `match` in tools.json lists the ids a fixture answers for; any other id is a not-found tool error.
+  for (const [arg, allowed] of Object.entries(tool.match ?? {})) {
+    const given = args[arg];
+    if (given === undefined) continue;
+    const values = Array.isArray(given) ? given : [given];
+    // Accept the bare id or a fully-qualified Kadé id (GCP project kade-prod, AWS account 123456789012); never another tenant's.
+    const KADE_PREFIX =
+      /^(projects\/kade-prod\/(locations\/[a-z0-9-]+\/)?[a-z]+\/|arn:aws:[a-z0-9-]+:[a-z0-9-]*:123456789012:[a-z-]+\/(kade-prod\/)?|kade-prod\.)/;
+    const matches = (v, x) =>
+      String(v) === x || (KADE_PREFIX.test(String(v)) && String(v).replace(KADE_PREFIX, "") === x);
+    const ok = values.length > 0 && values.every((v) => allowed.some((x) => matches(v, x)));
+    if (!ok) {
+      return {
+        result: {
+          content: [
+            {
+              type: "text",
+              text: `${arg} ${JSON.stringify(given)} not found; fixture has ${allowed.join(", ")}`,
+            },
+          ],
+          isError: true,
+        },
+      };
+    }
   }
   try {
     const out = handlers[tool.handler](tool, args);

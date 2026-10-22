@@ -327,11 +327,37 @@ export class MockStore {
     return product;
   }
 
+  /**
+   * Bundles draw on the same inventory as the standalone SKUs they contain, so stock is checked on
+   * the combined component demand of every line in the cart (`lines`), not per line.
+   */
+  private assertComponentStock(brand: BrandId, lines: Pick<CartLine, "sku" | "quantity">[]): void {
+    const all = this.skus(brand);
+    const demand = new Map<string, number>();
+    for (const line of lines) {
+      const base = line.sku.split("-").slice(0, 3).join("-");
+      const s = all.find((x) => x.sku === line.sku || x.sku === base);
+      if (!s || s.preorder) continue;
+      const components = s.bundle?.length ? s.bundle : s.variants ? [] : [s.sku];
+      for (const c of components) demand.set(c, (demand.get(c) ?? 0) + line.quantity);
+    }
+    for (const [sku, wanted] of demand) {
+      const onHand = all.find((x) => x.sku === sku)?.onHand ?? 0;
+      if (wanted > onHand) {
+        throw new MockError(409, {
+          code: "out_of_stock",
+          message: `${sku}: only ${onHand} on hand across bundles and single items`,
+        });
+      }
+    }
+  }
+
   addCartLine(brand: BrandId, user: string, cartId: string, sku: string, quantity: number): Cart {
     const cart = this.openCart(brand, user, cartId);
     if (!Number.isInteger(quantity) || quantity < 1) throw badRequest("quantity must be >= 1");
     const existing = cart.lines.find((l) => l.sku === sku);
     const product = this.assertInStock(brand, sku, (existing?.quantity ?? 0) + quantity);
+    this.assertComponentStock(brand, [...cart.lines, { sku, quantity }]);
     const unit = toMinor(product.price.amount);
     if (existing) {
       existing.quantity += quantity;
@@ -367,6 +393,10 @@ export class MockStore {
       cart.lines = cart.lines.filter((l) => l.id !== lineId);
     } else {
       this.assertInStock(brand, line.sku, quantity);
+      this.assertComponentStock(
+        brand,
+        cart.lines.map((l) => (l.id === lineId ? { sku: l.sku, quantity } : l)),
+      );
       line.quantity = quantity;
       line.lineTotal = money(toMinor(line.unitPrice.amount) * quantity, line.unitPrice.currency);
     }
@@ -396,6 +426,7 @@ export class MockStore {
         message: "email and shippingAddress are required",
       });
     }
+    this.assertComponentStock(brand, cart.lines);
     const warehouse = seedBrand(brand).warehouses[0];
     const order = this.makeOrder(
       brand,

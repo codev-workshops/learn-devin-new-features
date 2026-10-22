@@ -100,6 +100,90 @@ describe("tools", () => {
     const res = await callTool("pagerduty_get_incident", { incident_id: "NOPE" });
     assert.equal(res.result.isError, true);
   });
+  it("file-backed tools honour their resource ids instead of answering for anything", async () => {
+    assert.equal(
+      (await callTool("datadog_get_dashboard", { dashboard_id: "other-dash" })).result.isError,
+      true,
+    );
+    assert.equal(
+      (await callTool("datadog_get_dashboard", { dashboard_id: "k4d-3-inv" })).result.isError,
+      false,
+    );
+    assert.equal(
+      (
+        await callTool("aws_ecs_describe_services", {
+          cluster: "kade-prod",
+          services: ["kade-web"],
+        })
+      ).result.isError,
+      true,
+    );
+    assert.equal(
+      (
+        await callTool("aws_ecs_describe_task_definition", {
+          task_definition: "arn:aws:ecs:us-east-1:123456789012:task-definition/kade-api:47",
+        })
+      ).result.isError,
+      false,
+    );
+    assert.equal(
+      (await callTool("gcp_cloudrun_get_service", { name: "kade-api" })).result.isError,
+      true,
+    );
+    assert.equal(
+      (
+        await callTool("gcp_pubsub_describe", {
+          subscription: "projects/kade-prod/subscriptions/paygate-webhooks-worker",
+        })
+      ).result.isError,
+      false,
+    );
+    assert.equal(
+      (await callTool("aws_s3_list_objects", { bucket: "someone-elses-bucket" })).result.isError,
+      true,
+    );
+    assert.equal(
+      (
+        await callTool("gcp_pubsub_describe", {
+          subscription: "projects/other-tenant/subscriptions/paygate-webhooks-worker",
+        })
+      ).result.isError,
+      true,
+    );
+    assert.equal(
+      (
+        await callTool("aws_ecs_describe_task_definition", {
+          task_definition: "arn:aws:ecs:us-east-1:999999999999:task-definition/kade-api:47",
+        })
+      ).result.isError,
+      true,
+    );
+    assert.equal(
+      (await callTool("aws_ecs_describe_services", { cluster: "kade-prod", services: [] })).result
+        .isError,
+      true,
+    );
+    assert.equal(
+      (await callTool("bigquery_list_tables", { dataset: "kade-prod.analytics" })).result.isError,
+      false,
+    );
+    assert.equal(
+      (
+        await callTool("gcp_cloudrun_get_service", {
+          name: "projects/kade-prod/locations/europe-west1/services/kade-fulfilment-worker",
+        })
+      ).result.isError,
+      false,
+    );
+    assert.equal(
+      (
+        await callTool("gcp_cloudrun_get_service", {
+          name: "projects/other-tenant/locations/europe-west1/services/kade-fulfilment-worker",
+        })
+      ).result.isError,
+      true,
+    );
+  });
 });
 
 describe("Lamp Week story is consistent across providers", () => {
