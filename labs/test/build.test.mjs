@@ -105,7 +105,7 @@ describe('rendered lab page', () => {
     for (const bad of ['java%09script:alert(1)', 'java\u0001script:alert(1)', '%6aavascript:alert(1)', ' \tjavascript:alert(1)', 'vbscript:x', 'data:text/html,x']) {
       expect(renderMarkdown(`[x](<${bad}>)`)).not.toMatch(/<a /);
     }
-    for (const ok of ['https://docs.devin.ai/', 'mailto:ops@example.com', '#frag', './rel', '%2Fpath']) {
+    for (const ok of ['https://docs.devin.ai/', 'mailto:ops@example.com', '#frag', './rel', '%2Fpath', 'api%3Av2/schema.md', 'notes%3A2026.md#top']) {
       expect(renderMarkdown(`[x](<${ok}>)`)).toMatch(/<a href=/);
     }
   });

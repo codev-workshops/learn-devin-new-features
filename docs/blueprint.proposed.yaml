@@ -1,42 +1,30 @@
-# Proposed repo blueprint for codev-workshops/learn-devin-new-features (Kadé Commerce).
-# Written by W0-A; the parent applies it via the Devin environment settings. Replaces the
-# stale payroll-worker blueprint. Every step is idempotent so re-running a snapshot build is safe.
-repos:
-  - repo: codev-workshops/learn-devin-new-features
-    exec_dir: /home/ubuntu/repos/learn-devin-new-features
-    initialize:
-      - name: Node 22 via nvm
-        run: |
-          export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
-          nvm install 22 >/dev/null && nvm alias default 22 >/dev/null
-      - name: Python 3.12 toolchain
-        run: python3.12 -m pip install --user --upgrade pip
-      - name: Pull PostgreSQL image from the GCR mirror
-        run: docker pull mirror.gcr.io/library/postgres:16-alpine
-    install_dependencies:
-      - name: npm workspaces
-        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
-      - name: Fulfilment worker dev deps (no-op until W1-worker lands)
-        run: |
-          if [ -f services/fulfilment-worker/pyproject.toml ]; then
-            python3.12 -m pip install --user -e "services/fulfilment-worker[dev]"
-          fi
-    maintain:
-      - name: Refresh npm workspaces
-        run: npm install --no-audit --no-fund
-      - name: Refresh worker dev deps
-        run: |
-          if [ -f services/fulfilment-worker/pyproject.toml ]; then
-            python3.12 -m pip install --user -e "services/fulfilment-worker[dev]"
-          fi
-    startup:
-      - name: PostgreSQL 16 (Compose)
-        run: docker compose up -d --wait postgres
-      - name: Migrate and seed (no-op until W1-api lands)
-        run: npm run db:migrate && npm run db:seed
-    test:
-      - run: npm test
-    lint:
-      - run: npm run lint
-    build:
-      - run: npm run build && npm run labs:build
+# Repo blueprint for codev-workshops/learn-devin-new-features (Kadé Commerce).
+# Mirrors what is applied in Devin's environment settings (schema: https://docs.devin.ai/onboard-devin/environment-yaml).
+# Keep this file and the settings in sync. No secrets here. Every step is idempotent.
+# History: W0-A drafted the first version; W0-B applied it (22 Oct 2026) after verifying each
+# command on a session VM, dropping the stale payroll-worker steps and unverified docker pulls.
+initialize: |
+  export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
+  nvm install 22 >/dev/null && nvm alias default 22 >/dev/null
+maintenance: |
+  export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"; nvm use 22 >/dev/null
+  npm install --no-audit --no-fund
+knowledge:
+  - name: test
+    contents: |
+      npm test   (labs Vitest suite + packages/contracts via scripts/ws.mjs)
+  - name: lint
+    contents: |
+      npm run lint   (prettier --check, eslint, per-workspace lint; labs lint = node labs/build.mjs --check)
+  - name: build
+    contents: |
+      npm run build && npm run labs:build
+  - name: gates
+    contents: |
+      npm run gates   (test, lint, build, labs:build) && npm run coach:dryrun -- 00
+  - name: startup
+    contents: |
+      npm run db:up (Compose Postgres 16 from mirror.gcr.io) && npm run db:migrate && npm run db:seed — both db scripts are no-ops until W1-api lands. Lab pages: npm run labs:build, then open labs/index.html from file://.
+  - name: notes
+    contents: |
+      Node 22 via nvm (root engines ">=22 <23"); gates also pass on Node 20/24. Python deps for services/fulfilment-worker are added by W1-worker (pip install -e "services/fulfilment-worker[dev]" once pyproject.toml exists).
