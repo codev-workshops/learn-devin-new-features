@@ -1,0 +1,12 @@
+You are done when someone who was not in the room can see each of the following on your throwaway branch, without re-running anything.
+
+1. **One shared checklist.** A Platform-owned rule under `.devin/rules/` holds the checkout-review checklist with a `glob` trigger covering the checkout code of both brands, and a repo skill under `.devin/skills/` holds the review procedure. The resolver output for `services/api/src/money.ts` lists both.
+2. **Brand rule in its own file.** A Trailhead-owned rule file under `.devin/rules/` states the VAT presentation, rounding and free-shipping threshold. The resolver loads it for `money.ts` and skips it for `services/api/src/routes/catalog.ts`, with the reason it was skipped.
+3. **No contradiction left to chance.** The resolver's `conflicts` list for `money.ts` contains no `unresolved` entry; for every shared topic, the evidence names which file owns it and which file explicitly yields.
+4. **Ownership is reviewable.** `.github/CODEOWNERS` on your branch sends the shared checklist and skill to Platform and the brand rule files to Trailhead, and your scope matrix (a table in your evidence) lists every layer — enterprise, organization, personal, repo root, nested directory, local file, global — with what lives there and who can change it.
+5. **Nested conflict handled.** After the `nested-conflict` injector, you show the resolver output with the unresolved conflict, then the output after your fix, and one sentence on why you kept the deeper file instead of deleting it.
+6. **Local override contained.** After the `local-override` injector, `git status --short` does not list `AGENTS.local.md`, `git check-ignore -v AGENTS.local.md` names the `.gitignore` line that hides it, and you state in one sentence who is affected by it and who is not.
+7. **Dead rule found.** After the `wrong-glob` injector, you show the resolver skipping the Trailhead rule for `money.ts`, the corrected globs, and the resolver loading it again.
+8. **Skill names unambiguous.** After the `global-skill` injector, the resolver reports the name collision; after your fix it reports none, and you state which copy you changed and why.
+9. **Articulation drill completed** with the voice coach (section 8), or against a timer if you work offline. Save the gap report next to your evidence; do not commit it.
+10. **Clean exit.** `main` is untouched, the throwaway branch is not merged, `/tmp/kade-home` is deleted and the reset commands in section 4 return the repository to the clean state.
