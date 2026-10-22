@@ -91,9 +91,9 @@
     "order_held": false
   },
   "fillers_and_pauses": {
-    "spoken_minutes": 8.9,
+    "spoken_minutes": 8.1,
     "filler_count": 6,
-    "filler_rate_per_minute": 0.67,
+    "filler_rate_per_minute": 0.74,
     "fillers": [
       {
         "word": "basically",
@@ -210,7 +210,7 @@
     "brevity_and_fluency": {
       "score": 7,
       "max": 15,
-      "anchor": "5 of 6 segments off target, 6 fillers (0.67/min), one 12 s pause, one tag question (anchor: 7–9 = several segments off)."
+      "anchor": "5 of 6 segments off target, 6 fillers (0.74/min), one 12 s pause, one tag question (anchor: 7–9 = several segments off)."
     },
     "recovery": {
       "score": 4,

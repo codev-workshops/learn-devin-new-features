@@ -9,7 +9,7 @@ Learner: **calibration** · mode: dry-run · run 1 · 2026-10-22T11:30:00Z · ti
 | Accuracy | 4/30 | None of the 5 must-mention points is stated; nothing is contradicted, the answer is simply content-free (anchor: 0–8 = one point or fewer). |
 | Structure | 12/25 | Problem, approach, evidence and next step are all findable but thin; the update has no risk and no ask (anchor: 14–17 = parts findable, order broken; 5–9 = parts missing). |
 | Customer relevance | 10/20 | Impact appears once ("some users were affected", "maybe a few customers") with no number, asked for and not given (anchor: 10–13 = impact mentioned once, hedged). |
-| Brevity and fluency | 7/15 | 5 of 6 segments off target, 6 fillers (0.67/min), one 12 s pause, one tag question (anchor: 7–9 = several segments off). |
+| Brevity and fluency | 7/15 | 5 of 6 segments off target, 6 fillers (0.74/min), one 12 s pause, one tag question (anchor: 7–9 = several segments off). |
 | Recovery | 4/10 | Objection 1 acknowledged ("fair question") with no boundary or evidence; objection 2 deflected to "next month" (anchor: 5–6 = answered defensively; 0–3 = concedes). |
 
 ## Timing vs target
@@ -33,7 +33,7 @@ Learner: **calibration** · mode: dry-run · run 1 · 2026-10-22T11:30:00Z · ti
 
 ## Fillers and pauses
 
-- Fillers: 6 in 8.9 spoken min (0.67/min) — basically ×2, actually ×1, um ×1, you know ×1, so yeah ×1
+- Fillers: 6 in 8.1 spoken min (0.74/min) — basically ×2, actually ×1, um ×1, you know ×1, so yeah ×1
 - Tag questions: 1 (“Then I will ask Devin to explain what it found and see if it makes sense, right?”)
 - Pauses over 8 s: 12 s at [02:10] in checkpoint-10
 
