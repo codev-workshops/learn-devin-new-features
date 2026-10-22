@@ -1,0 +1,210 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 7,
+    "slug": "automation-preflight",
+    "coach": "coach-07-automation-preflight"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:20:00Z",
+    "run_index": 2,
+    "transcript": "labs/07-automation-preflight/coaching/dryrun/strong.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 58,
+      "delta_seconds": -2,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-15",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+15)",
+      "target_seconds": 45,
+      "actual_seconds": 44,
+      "delta_seconds": -1,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-75",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+75)",
+      "target_seconds": 45,
+      "actual_seconds": 46,
+      "delta_seconds": 1,
+      "verdict": "on"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Update to the payments lead",
+      "target_seconds": 180,
+      "actual_seconds": 176,
+      "delta_seconds": -4,
+      "verdict": "on"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "target_seconds": 90,
+      "actual_seconds": 88,
+      "delta_seconds": -2,
+      "verdict": "on"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "target_seconds": 90,
+      "actual_seconds": 91,
+      "delta_seconds": 1,
+      "verdict": "on"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "present",
+      "quote": "Today, eleven PayGate notifications from one morning started eleven Devin sessions"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "I am adding a Preflight check that skips retries, recoveries and noise before Devin starts"
+    },
+    "evidence": {
+      "status": "present",
+      "quote": "the replay prints events 11, sessions 3, skipped 8, failed 0"
+    },
+    "next_step": {
+      "status": "present",
+      "quote": "Ask: can I turn on queueing with three concurrent runs?"
+    },
+    "order_held": true
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 8.4,
+    "filler_count": 1,
+    "filler_rate_per_minute": 0.12,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 1
+      }
+    ],
+    "tag_questions": 0,
+    "tag_question_examples": [],
+    "long_pauses": []
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Outcome in numbers: 11 PayGate notifications in, 3 investigations out (evt_lab07_a twice, evt_lab07_c once)",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "After this change they start three: evt_lab07_a twice, once for the morning and once for the next-day replay, and evt_lab07_c once",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "A Preflight script instead of the LLM filter, because deduplication needs memory across events",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "I'll try a Preflight script, because deduplication needs memory across events",
+      "belonged_in": "checkpoint-15"
+    },
+    {
+      "id": "mm3",
+      "point": "STATE_FILE plus item id paygate:event_id with version = replay_seq, so a manual replay counts as a new occurrence",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "emits an item with id paygate colon event id and version equal to replay_seq",
+      "belonged_in": "checkpoint-75"
+    },
+    {
+      "id": "mm4",
+      "point": "Transient retries and recoveries are skipped; the final attempt or a non-retryable signature failure goes through",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "transient retries that are not the last attempt are skipped, and so are recoveries",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "Timeout set within 1–300 s; a timeout, non-zero exit or invalid output stops the event with no automatic retry",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "the event stops before any action and there is no automatic retry. I set the timeout to 30 seconds, inside the 1 to 300 allowed",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm6",
+      "point": "Run now bypasses Preflight, so it does not test the filter",
+      "weight": 3,
+      "mentioned": true,
+      "evidence_quote": "Run now bypasses Preflight, so clicking it does not test the filter",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm7",
+      "point": "Which parts ran live and which ran on the offline fixture replay",
+      "weight": 3,
+      "mentioned": true,
+      "evidence_quote": "everything today ran on the offline fixture replay; no live Automation received a notification",
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [
+      "\"replay_seq\" may be transcribed as \"replay seek\"",
+      "\"evt_lab07_a\" may be transcribed as \"event lab oh seven A\""
+    ],
+    "repeated_words": [],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 27,
+      "max": 30,
+      "anchor": "All seven points stated with their numbers and ids; mm7 was brief (anchor: 26–30 = every point, one thin)."
+    },
+    "structure": {
+      "score": 22,
+      "max": 25,
+      "anchor": "Outcome → Evidence → Risk → Next action → Ask held in the update; both checkpoints used the four verbs (anchor: 21–25 = order held throughout)."
+    },
+    "customer_relevance": {
+      "score": 18,
+      "max": 20,
+      "anchor": "Before/after numbers in the first sentence; the cost question answered in sessions, not tooling words (anchor: 17–20 = numbers first, change absorbed)."
+    },
+    "brevity_and_fluency": {
+      "score": 13,
+      "max": 15,
+      "anchor": "Every segment within ±5 s; one filler in 8.4 minutes, no long pauses (anchor: 13–15 = all on target, fillers under 0.5/min)."
+    },
+    "recovery": {
+      "score": 9,
+      "max": 10,
+      "anchor": "Both objections acknowledged, bounded, evidenced and closed with an offer (anchor: 9–10 = pattern held twice)."
+    },
+    "total": 89
+  },
+  "stems": [
+    "\"Eleven notifications in, three investigations out.\" — you led with it; keep it as the first five words next time too.",
+    "\"Same event id and replay number means same investigation.\" — say it as one rule before you name STATE_FILE.",
+    "\"Integrations: live were … ; fixtures were …\" — give the fixture/live line its own sentence, not a tail."
+  ],
+  "previous_run_comparison": "Rerun of the same transcript (run 2): total 89 vs 90 in run 1; every dimension within 5 points."
+}
