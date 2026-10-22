@@ -3,28 +3,31 @@
 # Keep this file and the settings in sync. No secrets here. Every step is idempotent.
 # History: W0-A drafted the first version; W0-B applied it (22 Oct 2026) after verifying each
 # command on a session VM, dropping the stale payroll-worker steps and unverified docker pulls.
+# W2-02 re-applied it on 22 Oct 2026 (settings still held the payroll-worker version) and added
+# the fulfilment-worker pip step.
 initialize: |
   export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
   nvm install 22 >/dev/null && nvm alias default 22 >/dev/null
 maintenance: |
   export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"; nvm use 22 >/dev/null
   npm install --no-audit --no-fund
+  pip install -e "services/fulfilment-worker[dev]"
 knowledge:
   - name: test
     contents: |
-      npm test   (labs Vitest suite + packages/contracts via scripts/ws.mjs)
+      npm test   (all workspaces via scripts/ws.mjs; services/api tests need Postgres up and DATABASE_URL=postgres://kade:kade@localhost:5432/kade; fulfilment-worker runs pytest)
   - name: lint
     contents: |
-      npm run lint   (prettier --check, eslint, per-workspace lint; labs lint = node labs/build.mjs --check)
+      npm run lint   (prettier --check, eslint, per-workspace lint incl. ruff for services/fulfilment-worker; labs lint = node labs/build.mjs --check)
   - name: build
     contents: |
       npm run build && npm run labs:build
   - name: gates
     contents: |
-      npm run gates   (test, lint, build, labs:build) && npm run coach:dryrun -- 00
+      npm run gates   (test, lint, build, labs:build) && npm run coach:dryrun -- <nn>
   - name: startup
     contents: |
-      npm run db:up (Compose Postgres 16 from mirror.gcr.io) && npm run db:migrate && npm run db:seed — both db scripts are no-ops until W1-api lands. Lab pages: npm run labs:build, then open labs/index.html from file://.
+      npm run db:up (Compose Postgres 16 from mirror.gcr.io); export DATABASE_URL=postgres://kade:kade@localhost:5432/kade; npm run build (seed imports @kade/contracts dist); npm run db:migrate && npm run db:seed -- --reset. Lab pages: npm run labs:build, then open labs/index.html from file://.
   - name: notes
     contents: |
-      Node 22 via nvm (root engines ">=22 <23"); gates also pass on Node 20/24. Python deps for services/fulfilment-worker are added by W1-worker (pip install -e "services/fulfilment-worker[dev]" once pyproject.toml exists).
+      Node 22 via nvm (root engines ">=22 <23"). Python 3.12 deps for services/fulfilment-worker come from pip install -e "services/fulfilment-worker[dev]".
