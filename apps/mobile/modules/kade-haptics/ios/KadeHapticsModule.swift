@@ -1,16 +1,14 @@
 import ExpoModulesCore
 import UIKit
 
-// Skeleton prepared by W1-mobile on Linux; first compiled and verified on the W4-13 macOS child.
+// Skeleton prepared by W1-mobile on Linux; compiled and verified on the iOS Simulator by the W4-13 macOS child.
 public class KadeHapticsModule: Module {
   private var generators: [String: UIImpactFeedbackGenerator] = [:]
 
   public func definition() -> ModuleDefinition {
     Name("KadeHaptics")
 
-    Constants([
-      "isAvailable": true
-    ])
+    Constant("isAvailable") { true }
 
     // Fire one impact. `style` is "light" | "medium" | "heavy" | "soft" | "rigid".
     AsyncFunction("impact") { (style: String) -> Bool in

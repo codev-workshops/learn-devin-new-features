@@ -1,0 +1,99 @@
+{
+  "number": 13,
+  "slug": "expo-mobile",
+  "title": "Expo mobile on iOS and Android — order status on both phones",
+  "feature": "Devin on Linux with the Android emulator (KVM), a macOS child session with Xcode and the iOS Simulator, multi-document blueprints with runs-on, Continuous Native Generation (expo prebuild), an optional Swift Expo module with a JS fallback",
+  "duration_minutes": 180,
+  "difficulty": "advanced",
+  "prerequisites": [
+    "Repo cloned, Node 22, `npm install` done at the root",
+    "Lab 00 warm-up done once (framing stems and the update skeleton)",
+    "Linux path: a Devin session whose VM exposes `/dev/kvm` and the Android SDK (emulator, platform-tools, one x86_64 system image) — see `docs/blueprint.proposed.mobile.yaml`",
+    "Optional iOS path: permission to start a Devin session with platform `macos` (Xcode 16.1 or newer, iOS Simulator)"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Mock API (`EXPO_PUBLIC_API_MODE=mock`) — default path",
+        "required": true,
+        "fixture": "`MockStore` serves the seed in-process; the Orders tab lists the demo customer's orders including `packed` and `shipped` ones.",
+        "note": "Zero credentials, no backend. Every Android criterion can be met on this path."
+      },
+      {
+        "integration": "Android emulator on the Linux session VM",
+        "required": true,
+        "fixture": "`labs/13-expo-mobile/evidence/android/` holds reference screenshots from the course build.",
+        "note": "Needs `/dev/kvm`; without it the emulator is too slow to be useful and you stop at `npm run build` (expo export)."
+      },
+      {
+        "integration": "macOS Devin session (Xcode, iOS Simulator) — optional",
+        "required": false,
+        "fixture": "`labs/13-expo-mobile/evidence/ios/` holds the reference Simulator screenshots and build notes from the course build.",
+        "note": "Org must allow the `macos` platform. Without it, items 6–8 are 'not exercised' and the lab is still complete."
+      },
+      {
+        "integration": "Live `services/api` (`EXPO_PUBLIC_API_MODE=live`) — optional",
+        "required": false,
+        "fixture": "Mock mode stands in for it.",
+        "note": "Needs `npm run db:up`, migrate, seed and `npm run dev:api`; the emulator reaches the host at `http://10.0.2.2:3001`."
+      }
+    ],
+    "not_exercised": [
+      "Haptic feel on a physical iPhone (the Simulator cannot vibrate; it only proves the module is linked and called)",
+      "App Store / Play Store signing, TestFlight and EAS Build (cloud builds)",
+      "Live `services/api` mode on either platform in the reference run"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "npm run lab:reset -- 13",
+      "rm -rf apps/mobile/android apps/mobile/ios apps/mobile/dist",
+      "npm run build --workspace apps/mobile"
+    ],
+    "clean_state": "No `apps/mobile/android/` or `apps/mobile/ios/` folder exists, `git status` is clean, and `npm run build --workspace apps/mobile` ends with an Android `expo export` into `apps/mobile/dist`. No emulator is running yet (`adb devices` lists nothing). Without Docker, skip the first command: mock mode needs only Node."
+  },
+  "injectors": [
+    {
+      "name": "snapshot-mismatch",
+      "when": "T+10 min",
+      "behaviour": "Start the session from a snapshot built before the Android SDK step was added: `emulator -list-avds` is empty or the system image is missing. Decide whether to install by hand or fix the blueprint, and say which one the next engineer will thank you for."
+    },
+    {
+      "name": "prebuild-drift",
+      "when": "T+45 min",
+      "behaviour": "Change `android.package` or add a plugin in `apps/mobile/app.json` after `android/` was generated. The next `expo run:android` uses the stale native project. Detect it and recover without hand-editing `android/`."
+    },
+    {
+      "name": "ios-only-native-dependency",
+      "when": "T+60 min",
+      "behaviour": "The Cart tab must say `Haptics: JS fallback (no-op)` on Android. If the Android build fails on `kade-haptics`, the module's platform list or import path is wrong — explain why the JS fallback, not a platform `if`, keeps Android working."
+    },
+    {
+      "name": "xcode-version",
+      "when": "iOS path, T+120 min",
+      "behaviour": "The macOS machine has more than one Xcode, or the default one is too old for Expo SDK 54. Select the right one with `DEVELOPER_DIR` (or `xcode-select`) and record which one in the report."
+    }
+  ],
+  "coach": {
+    "skill": "coach-13-expo-mobile",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
+      { "id": "checkpoint-30", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+30, Android)", "at_minute": 30, "target_seconds": 45 },
+      { "id": "checkpoint-120", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+120, iOS)", "at_minute": 120, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "Update to the product owner", "target_seconds": 180 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 (commercial)", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 (technical)", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — Environment configuration (blueprints, multi-platform runs-on documents)", "url": "https://docs.devin.ai/onboard-devin/environment-yaml", "date": "fetched 2026-10-22" },
+    { "title": "Devin release notes 2026 — macOS machines and multi-platform blueprints", "url": "https://docs.devin.ai/release-notes/2026", "date": "fetched 2026-10-22" },
+    { "title": "Expo docs — Continuous Native Generation (prebuild)", "url": "https://docs.expo.dev/workflow/continuous-native-generation/", "date": "fetched 2026-10-22" },
+    { "title": "Expo docs — Expo Modules API (native modules)", "url": "https://docs.expo.dev/modules/overview/", "date": "fetched 2026-10-22" },
+    { "title": "Android developers — Configure hardware acceleration for the Android Emulator", "url": "https://developer.android.com/studio/run/emulator-acceleration", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Voice mode", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Skills (@skills: invocation)", "url": "https://docs.devin.ai/product-guides/skills", "date": "fetched 2026-10-22" }
+  ]
+}

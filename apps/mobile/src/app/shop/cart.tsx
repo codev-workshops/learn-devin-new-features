@@ -4,6 +4,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 
 import { formatMoney, type Cart, type CartLine } from "@/api";
 import { useKade } from "@/state/store";
+import { isNativeHapticsAvailable } from "../../../modules/kade-haptics";
 import { Button, Card, ErrorBanner, Muted, Screen, Title } from "@/ui/primitives";
 import { brandAccent, palette } from "@/ui/theme";
 
@@ -44,6 +45,9 @@ export function CartScreen() {
           Cart {cart.id.slice(0, 8)} · {cart.status}
         </Muted>
       ) : null}
+      <Muted testID="haptics-mode">
+        Haptics: {isNativeHapticsAvailable() ? "native (kade-haptics)" : "JS fallback (no-op)"}
+      </Muted>
       {error ? <ErrorBanner message={error} onDismiss={dismissError} /> : null}
       <FlatList
         data={lines}

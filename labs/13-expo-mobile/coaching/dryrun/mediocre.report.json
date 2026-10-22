@@ -1,0 +1,227 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 13,
+    "slug": "expo-mobile",
+    "coach": "coach-13-expo-mobile"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T11:00:00Z",
+    "run_index": 1,
+    "transcript": "labs/13-expo-mobile/coaching/dryrun/mediocre.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 72,
+      "delta_seconds": 12,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-30",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+30, Android)",
+      "target_seconds": 45,
+      "actual_seconds": 38,
+      "delta_seconds": -7,
+      "verdict": "under"
+    },
+    {
+      "segment": "checkpoint-120",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+120, iOS)",
+      "target_seconds": 45,
+      "actual_seconds": 53,
+      "delta_seconds": 8,
+      "verdict": "over"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Update to the product owner",
+      "target_seconds": 180,
+      "actual_seconds": 150,
+      "delta_seconds": -30,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (commercial)",
+      "target_seconds": 90,
+      "actual_seconds": 42,
+      "delta_seconds": -48,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (technical)",
+      "target_seconds": 90,
+      "actual_seconds": 67,
+      "delta_seconds": -23,
+      "verdict": "under"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "So I started with the Expo app and the Gradle build"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "I'll try iOS next on a macOS child session with Xcode and the Simulator"
+    },
+    "evidence": {
+      "status": "weak",
+      "quote": "The screenshots are in the evidence folder."
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "Next we can actually ship it if you are happy."
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 7,
+    "filler_count": 4,
+    "filler_rate_per_minute": 0.57,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 2
+      },
+      {
+        "word": "basically",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "so I set DEVELOPER_DIR to Xcode 16, right?"
+    ],
+    "long_pauses": [
+      {
+        "at": "02:30",
+        "seconds": 10,
+        "segment": "checkpoint-120"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Outcome on both platforms: packed and shipped on the order screen, proven by the same order on the Android emulator and the iOS Simulator",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "The goal is that customers see packed and shipped on the order screen on both phones",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "Android builds on the Linux session with a KVM-accelerated emulator; iOS needs a separate macOS child session with Xcode and the Simulator",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "the emulator is fast because it has KVM",
+      "belonged_in": "checkpoint-30"
+    },
+    {
+      "id": "mm3",
+      "point": "Expo SDK 54 with Continuous Native Generation: android/ and ios/ come from expo prebuild, are never committed, and drift is fixed by --clean",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "Expo SDK 54 generates ios/ with prebuild, we never commit it, and prebuild --clean fixes drift",
+      "belonged_in": "checkpoint-120"
+    },
+    {
+      "id": "mm4",
+      "point": "Multi-document blueprint, one runs-on linux and one runs-on macos document with a snapshot each; a snapshot mismatch is fixed there",
+      "weight": 5,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "kade-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "on Android it is actually the JS fallback, so nothing breaks there",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm6",
+      "point": "Xcode version selected explicitly with DEVELOPER_DIR on the macOS machine",
+      "weight": 3,
+      "mentioned": true,
+      "evidence_quote": "I set DEVELOPER_DIR to Xcode 16",
+      "belonged_in": "checkpoint-120"
+    },
+    {
+      "id": "mm7",
+      "point": "What was not exercised: haptic feel on a physical iPhone, store signing and EAS, live API mode",
+      "weight": 3,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [
+      "\"and then\" chained three times in the framing"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [
+      "So I started with the Expo app and the Gradle build, and then the emulator, and you know, it took a while to come up."
+    ],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 20,
+      "max": 30,
+      "anchor": "Five of seven points; the blueprint and snapshot (mm4) and the not-exercised list (mm7) missing (anchor: 16–21 = most points, two missing)."
+    },
+    "structure": {
+      "score": 15,
+      "max": 25,
+      "anchor": "Outcome came after the backstory in the framing; the update had no Risk sentence and a vague ask (anchor: 13–17 = order partly held)."
+    },
+    "customer_relevance": {
+      "score": 13,
+      "max": 20,
+      "anchor": "Both platforms named, but no order id and no Mac duration (anchor: 12–15 = outcome present, buried)."
+    },
+    "brevity_and_fluency": {
+      "score": 9,
+      "max": 15,
+      "anchor": "Framing 12 s long, update 30 s short, both objections short; four fillers, one tag question, a 10 s pause (anchor: 7–9 = several segments off)."
+    },
+    "recovery": {
+      "score": 7,
+      "max": 10,
+      "anchor": "Objection 2 held the pattern; objection 1 skipped the acknowledgement and the evidence (anchor: 5–7 = pattern held once)."
+    },
+    "total": 64
+  },
+  "stems": [
+    "\"Customers will see packed and shipped on both phones.\" — move it from the second sentence of the framing to the first.",
+    "\"Not exercised: a physical iPhone, store signing, live API mode.\" — your update had no such line; this is it.",
+    "\"I acknowledge … The boundary is … The evidence is … I can offer …\" — objection 1 had no acknowledgement and no figure."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 13; no previous run to compare with."
+}
