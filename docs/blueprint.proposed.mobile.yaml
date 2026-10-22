@@ -54,40 +54,52 @@ repos:
       - run: npm run build --workspace apps/mobile
 ---
 # macOS document: iOS toolchain for the optional modules/kade-haptics Swift module.
-# NOT EXERCISED by W1-mobile (Linux only). Owned by the W4-13 iOS child.
+# Exercised by the W4-13 macOS child on 2026-10-22 with Xcode 26.6 (17F113, iOS SDK 26.5) on
+# macOS 26.6.2, simulator iPhone 17 / iOS 26.5. Every command below ran unattended there.
+# The `brew install cocoapods` fallback was not taken (CocoaPods 1.17.0 was already present).
 runs-on: macos
 repos:
   - repo: codev-workshops/learn-devin-new-features
     exec_dir: /Users/devin/repos/learn-devin-new-features
     initialize:
-      - name: Node 22 via nvm
+      - name: Node 22 via Homebrew (the image default is Node 20; nvm is not installed)
         run: |
-          export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
-          nvm install 22 >/dev/null && nvm alias default 22 >/dev/null
-      - name: Xcode command-line tools, CocoaPods, iOS simulator runtime
-        run: |
-          xcode-select -p >/dev/null 2>&1 || xcode-select --install || true
-          sudo gem install cocoapods --no-document || brew install cocoapods
-          xcodebuild -downloadPlatform iOS || true
+          brew list node@22 >/dev/null 2>&1 || brew install node@22
+          grep -q 'opt/node@22/bin' "$HOME/.zprofile" 2>/dev/null ||
+            echo 'export PATH="/opt/homebrew/opt/node@22/bin:$PATH"' >> "$HOME/.zprofile"
+      - name: CocoaPods
+        run: command -v pod >/dev/null || brew install cocoapods
     install_dependencies:
       - name: npm workspaces
-        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+        run: |
+          export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
+          npm install --no-audit --no-fund
       - name: Prebuild iOS project (Continuous Native Generation) and install pods
         run: |
+          export PATH="/opt/homebrew/opt/node@22/bin:$PATH" LANG=en_US.UTF-8
           cd apps/mobile
           npx expo prebuild --platform ios --no-install
           cd ios && pod install
     maintain:
       - name: Refresh npm workspaces
-        run: npm install --no-audit --no-fund
-    test:
-      - run: npm test --workspace apps/mobile
-    lint:
-      - run: npm run lint --workspace apps/mobile
-    build:
-      - name: Compile the Swift haptics module into a simulator build
         run: |
+          export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
+          npm install --no-audit --no-fund
+    test:
+      - run: |
+          export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
+          npm test --workspace apps/mobile
+    lint:
+      - run: |
+          export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
+          npm run lint --workspace apps/mobile
+    build:
+      - name: Compile the Swift haptics module into a Release simulator build (JS bundle embedded)
+        run: |
+          export PATH="/opt/homebrew/opt/node@22/bin:$PATH" LANG=en_US.UTF-8
+          export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
           cd apps/mobile
-          npx expo run:ios --no-bundler --configuration Debug \
-            --device "iPhone 16" || xcodebuild -workspace ios/KadCommerce.xcworkspace \
-            -scheme KadCommerce -sdk iphonesimulator -configuration Debug build
+          xcodebuild -workspace ios/KadCommerce.xcworkspace -scheme KadCommerce \
+            -sdk iphonesimulator -configuration Release \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' \
+            -derivedDataPath ios/build build
