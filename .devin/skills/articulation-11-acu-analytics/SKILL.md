@@ -12,7 +12,7 @@ First read `.devin/skills/articulation-base/SKILL.md` and follow it for protocol
 - **lab**: `11` · **coach**: `coach-11-acu-analytics` · **agent**: `.devin/agents/acu-coach.md`
 - **answer**: `labs/11-acu-analytics/answer.md` (never quote it before the last objection ends)
 - **dry-run transcripts**: `labs/11-acu-analytics/coaching/dryrun/{strong,mediocre,off-track}.md`
-- **Persona**: the Kadé finance controller — polite, numerate, wants the source of every figure, dislikes product vocabulary.
+- **Persona**: the Harbourline finance controller — polite, numerate, wants the source of every figure, dislikes product vocabulary.
 
 ## Segments
 

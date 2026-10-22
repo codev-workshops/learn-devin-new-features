@@ -52,7 +52,7 @@ and the `db/` migrations exist. `scripts/demo-duplicate-webhook.sh` additionally
   *per line* (`totals.py::api_totals` models that side for the fixtures).
 - **Symptom:** one-cent drift that never reconciles: `$58.00 × 8.25% = 4.785` is 4.79 for the API and 4.78
   for the worker; a two-line VAT-inclusive Trailhead order splits VAT per line as 34.00 but 33.99 on the
-  subtotal. The reconciliation report (`kade-worker reconcile`) is never empty.
+  subtotal. The reconciliation report (`harbourline-worker reconcile`) is never empty.
 - **Reproduce:**
   ```sh
   python3 -m fulfilment_worker demo rounding-drift
@@ -66,4 +66,4 @@ and the `db/` migrations exist. `scripts/demo-duplicate-webhook.sh` additionally
 ## Not planted here
 
 The unverified webhook signature (`POST /webhooks/payments` in `services/api`) belongs to W1-api. The worker's
-own inbox (`kade-worker inbox`) verifies `X-PayGate-Signature` properly, and `paygate-fake` always signs.
+own inbox (`harbourline-worker inbox`) verifies `X-PayGate-Signature` properly, and `paygate-fake` always signs.

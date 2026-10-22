@@ -1,11 +1,11 @@
 {
-  "name": "Kade Flash Sale",
+  "name": "Harbourline Flash Sale",
   "mcpServers": {
-    "kade-incidents": {
+    "harbourline-incidents": {
       "command": "npx",
       "args": ["-y", "@pagerduty/mcp-server"],
       "env": { "PAGERDUTY_API_TOKEN": "u+FAKE-not-a-real-token-0000" },
-      "oauth": { "clientId": "kade-incidents", "clientSecret": "fake-client-secret-0000" }
+      "oauth": { "clientId": "harbourline-incidents", "clientSecret": "fake-client-secret-0000" }
     }
   }
 }

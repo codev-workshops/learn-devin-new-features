@@ -10,7 +10,7 @@ const contractsSrc = fileURLToPath(
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: { "@kade/contracts": contractsSrc },
+    alias: { "@harbourline/contracts": contractsSrc },
   },
   server: { port: 5173, strictPort: true },
   build: { sourcemap: true },

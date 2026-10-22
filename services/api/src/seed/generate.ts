@@ -1,4 +1,4 @@
-import { BRAND_IDS, type BrandId, type Currency, type OrderStatus } from "@kade/contracts";
+import { BRAND_IDS, type BrandId, type Currency, type OrderStatus } from "@harbourline/contracts";
 import { computeTotals, roundHalfUp, totalsToApi, type BrandPricing } from "../money.js";
 import { Rng, apportion, uuidFor } from "./random.js";
 import type { SeedSpec, SpecSku } from "./spec.js";

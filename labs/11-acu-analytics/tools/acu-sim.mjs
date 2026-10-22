@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Lab 11 offline ACU limit and analytics simulator. Reads fixtures/kade-consumption.json
+// Lab 11 offline ACU limit and analytics simulator. Reads fixtures/harbourline-consumption.json
 // and applies the documented rules (docs.devin.ai, fetched 2026-10-22):
 //   * organization limit: cloud sessions, Devin Review and local usage (Desktop, CLI,
 //     JetBrains) billed to the org, per monthly billing window;
@@ -26,7 +26,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-export const FIXTURE = path.join(HERE, '..', 'fixtures', 'kade-consumption.json');
+export const FIXTURE = path.join(HERE, '..', 'fixtures', 'harbourline-consumption.json');
 export const EMPTY_CYCLE = 'No billing cycle covers the selected period';
 
 export function loadFixture(file = FIXTURE) {
@@ -96,8 +96,8 @@ export function applyOptions(fixture, opts = {}) {
       fx.usage.push({ member: 'rest-trailhead', surface: 'cloud', org: fx.sale.org, period: 'sale', from: fx.sale.start, acu: fx.sale.forecast_cloud_acu });
       fx.applied.push(`injector sale-spike: +${fx.sale.forecast_cloud_acu} cloud ACU in ${fx.sale.org} from ${fx.sale.start}`);
     } else if (name === 'review-storm') {
-      fx.usage.push({ member: 'arjun', surface: 'review', org: 'kade-lumen', period: 'cycle', acu: 300 });
-      fx.applied.push('injector review-storm: +300 Devin Review ACU on arjun\'s PRs in kade-lumen');
+      fx.usage.push({ member: 'arjun', surface: 'review', org: 'harbourline-lumen', period: 'cycle', acu: 300 });
+      fx.applied.push('injector review-storm: +300 Devin Review ACU on arjun\'s PRs in harbourline-lumen');
     } else throw new Error(`unknown injector: ${name}`);
   }
   return fx;
@@ -240,8 +240,8 @@ export function views(fx, range = 'cycle') {
 
 export function scenario(fixture, name, opts = {}) {
   const fx = applyOptions(fixture, opts);
-  if (name === 'A') return check(fx, 'mira', 'kade-trailhead');
-  if (name === 'B') return check(fx, 'arjun', 'kade-lumen');
+  if (name === 'A') return check(fx, 'mira', 'harbourline-trailhead');
+  if (name === 'B') return check(fx, 'arjun', 'harbourline-lumen');
   throw new Error(`unknown scenario: ${name} (A or B)`);
 }
 

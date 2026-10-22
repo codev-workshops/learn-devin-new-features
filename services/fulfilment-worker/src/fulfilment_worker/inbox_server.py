@@ -18,12 +18,12 @@ from fulfilment_worker.clock import Clock, SystemClock
 from fulfilment_worker.models import WebhookInboxRow, iso, new_id
 from fulfilment_worker.store import Store
 
-log = logging.getLogger("kade.worker.inbox")
+log = logging.getLogger("harbourline.worker.inbox")
 
 
 def make_handler(store: Store, secret: str, clock: Clock, lock: threading.Lock):
     class Handler(BaseHTTPRequestHandler):
-        server_version = "kade-worker-inbox/0.1"
+        server_version = "harbourline-worker-inbox/0.1"
 
         def log_message(self, fmt, *args):  # quiet by default
             log.debug(fmt, *args)

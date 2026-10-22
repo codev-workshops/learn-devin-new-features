@@ -2,7 +2,7 @@ Start the coach yourself when you are ready (`@skills:coach-14-outposts <your-ha
 
 ### 60-second framing for the CISO
 
-One minute: what Outposts changes about where Kadé's code and keys live, what stays the same, and what you will show her by Friday. Lead with the boundary, not the product name.
+One minute: what Outposts changes about where Harbourline's code and keys live, what stays the same, and what you will show her by Friday. Lead with the boundary, not the product name.
 
 ### Think-aloud checkpoint (T+15)
 

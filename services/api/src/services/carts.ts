@@ -1,4 +1,4 @@
-import type { BrandId, Cart, CartLine } from "@kade/contracts";
+import type { BrandId, Cart, CartLine } from "@harbourline/contracts";
 import type { Queryable } from "../db.js";
 import { notFound } from "../errors.js";
 import { isStaff, type Caller } from "../middleware/auth.js";

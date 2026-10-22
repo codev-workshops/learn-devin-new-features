@@ -169,7 +169,7 @@
     },
     {
       "id": "mm5",
-      "point": "kade-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android",
+      "point": "harbourline-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android",
       "weight": 4,
       "mentioned": true,
       "evidence_quote": "The haptics module is native Swift on iOS, and on Android there is a JS fallback that does nothing",

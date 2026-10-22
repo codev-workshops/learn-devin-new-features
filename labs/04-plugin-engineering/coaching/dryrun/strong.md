@@ -14,7 +14,7 @@ Planted: one filler (actually ×1), no tag questions, no long pauses, no omitted
 --- segment: framing ---
 [00:00] COACH: I'm the security reviewer. In sixty seconds: what will every session get, and why should I allow it? Go.
 [00:04] LEARNER: Every brand team will run the same flash-sale release checklist and the same first-hour incident procedure, from one install.
-[00:18] LEARNER: The kade-flash-sale plugin ships both procedures as skills, together with the freeze rule, the push guard hook, the release-checker subagent and the incident MCP declaration.
+[00:18] LEARNER: The harbourline-flash-sale plugin ships both procedures as skills, together with the freeze rule, the push guard hook, the release-checker subagent and the incident MCP declaration.
 [00:40] LEARNER: What it does not contain is anyone's credential. The checker reports zero problems and it is installed for me only. I need your sign-off before Organization scope.
 [01:01] LEARNER: Done.
 --- segment: checkpoint-20 ---

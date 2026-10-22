@@ -1,4 +1,11 @@
-import type { Address, BrandId, Order, OrderEvent, OrderLine, OrderStatus } from "@kade/contracts";
+import type {
+  Address,
+  BrandId,
+  Order,
+  OrderEvent,
+  OrderLine,
+  OrderStatus,
+} from "@harbourline/contracts";
 import type { Queryable } from "../db.js";
 import { money } from "../money.js";
 

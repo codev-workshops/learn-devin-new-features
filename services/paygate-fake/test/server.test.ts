@@ -5,7 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { startServer, type PayGateServer } from "../src/server.js";
 import { verify } from "../src/signing.js";
 
-const SECRET = "kade-local-paygate-secret";
+const SECRET = "harbourline-local-paygate-secret";
 const received: Array<{ headers: Record<string, string | string[] | undefined>; body: string }> =
   [];
 

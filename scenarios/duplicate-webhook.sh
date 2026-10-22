@@ -39,7 +39,7 @@ if [ -z "$ORDER_ID" ]; then
   [ "$(last_status)" = "201" ] || die "checkout failed ($API_STATUS): $res"
   order="$(printf '%s' "$res" | jq -c .order)"
 else
-  order="$(KADE_BRAND="$BRAND" KADE_USER="$(merchandiser_for "$BRAND")" KADE_ROLE=merchandiser api GET "/orders/$ORDER_ID")"
+  order="$(HARBOURLINE_BRAND="$BRAND" HARBOURLINE_USER="$(merchandiser_for "$BRAND")" HARBOURLINE_ROLE=merchandiser api GET "/orders/$ORDER_ID")"
   [ "$(last_status)" = "200" ] || die "order $ORDER_ID not found in $BRAND ($API_STATUS)"
 fi
 ORDER_ID="$(printf '%s' "$order" | jq -r .id)"
@@ -76,7 +76,7 @@ while :; do
   sleep 1
 done
 after="$(inventory_on_hand "$BRAND" "$SKU")"
-status="$(KADE_BRAND="$BRAND" KADE_USER="$(merchandiser_for "$BRAND")" KADE_ROLE=merchandiser api GET "/orders/$ORDER_ID" | jq -r .status)"
+status="$(HARBOURLINE_BRAND="$BRAND" HARBOURLINE_USER="$(merchandiser_for "$BRAND")" HARBOURLINE_ROLE=merchandiser api GET "/orders/$ORDER_ID" | jq -r .status)"
 result="$(jq -nc --arg order "$ORDER_ID" --arg event "$event_id" --argjson received "$new_received" --argjson emails "$emails" \
   --argjson before "$before" --argjson after "$after" --arg status "$status" \
   '{injector:"duplicate-webhook",order:$order,eventId:$event,deliveries:2,paymentReceivedEvents:$received,emailQueuedEvents:$emails,onHandBefore:$before,onHandAfter:$after,status:$status}')"

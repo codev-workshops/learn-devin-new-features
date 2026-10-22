@@ -3,7 +3,7 @@
   "tools": [
     {
       "name": "pagerduty_list_incidents",
-      "description": "List PagerDuty incidents for the Kadé services (fixture). Optional status filter: triggered | acknowledged | resolved.",
+      "description": "List PagerDuty incidents for the Harbourline services (fixture). Optional status filter: triggered | acknowledged | resolved.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -23,7 +23,7 @@
     },
     {
       "name": "pagerduty_get_incident",
-      "description": "Get one PagerDuty incident by id (e.g. Q3KADE0210LAMP) or incident number (e.g. 2187).",
+      "description": "Get one PagerDuty incident by id (e.g. Q3HARBOURLINE0210LAMP) or incident number (e.g. 2187).",
       "inputSchema": {
         "type": "object",
         "required": ["incident_id"],
@@ -35,7 +35,7 @@
       },
       "handler": "pagerdutyGetIncident",
       "example": {
-        "incident_id": "Q3KADE0210LAMP"
+        "incident_id": "Q3HARBOURLINE0210LAMP"
       }
     },
     {
@@ -52,7 +52,7 @@
       },
       "handler": "pagerdutyLogEntries",
       "example": {
-        "incident_id": "Q3KADE0210LAMP"
+        "incident_id": "Q3HARBOURLINE0210LAMP"
       }
     },
     {
@@ -69,7 +69,7 @@
       },
       "handler": "pagerdutyAlerts",
       "example": {
-        "incident_id": "Q3KADE0210LAMP"
+        "incident_id": "Q3HARBOURLINE0210LAMP"
       }
     },
     {
@@ -96,7 +96,7 @@
     },
     {
       "name": "datadog_list_monitors",
-      "description": "Datadog monitors for Kadé (negative on-hand, webhook failure rate) with current state.",
+      "description": "Datadog monitors for Harbourline (negative on-hand, webhook failure rate) with current state.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -150,7 +150,7 @@
     },
     {
       "name": "datadog_query_metrics",
-      "description": "Query a metric time series (fixture window 2026-10-21T22:00Z → 2026-10-22T03:00Z). Supported: kade.inventory.on_hand{sku:LH-LAMP-03} and the webhook failure-rate expression.",
+      "description": "Query a metric time series (fixture window 2026-10-21T22:00Z → 2026-10-22T03:00Z). Supported: harbourline.inventory.on_hand{sku:LH-LAMP-03} and the webhook failure-rate expression.",
       "inputSchema": {
         "type": "object",
         "required": ["query"],
@@ -168,7 +168,7 @@
       },
       "handler": "datadogQueryMetrics",
       "example": {
-        "query": "min:kade.inventory.on_hand{sku:LH-LAMP-03}"
+        "query": "min:harbourline.inventory.on_hand{sku:LH-LAMP-03}"
       }
     },
     {
@@ -190,7 +190,7 @@
       },
       "handler": "datadogSearchLogs",
       "example": {
-        "query": "service:kade-fulfilment-worker evt_9f2a7c01"
+        "query": "service:harbourline-fulfilment-worker evt_9f2a7c01"
       }
     },
     {
@@ -212,7 +212,7 @@
     },
     {
       "name": "aws_ecs_describe_services",
-      "description": "ECS describe-services for kade-api (deployments and events).",
+      "description": "ECS describe-services for harbourline-api (deployments and events).",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -228,19 +228,19 @@
         }
       },
       "handler": "fileJson",
-      "source": "infra/aws/ecs-service-kade-api.json",
+      "source": "infra/aws/ecs-service-harbourline-api.json",
       "example": {
-        "cluster": "kade-prod",
-        "services": ["kade-api"]
+        "cluster": "harbourline-prod",
+        "services": ["harbourline-api"]
       },
       "match": {
-        "cluster": ["kade-prod"],
-        "services": ["kade-api"]
+        "cluster": ["harbourline-prod"],
+        "services": ["harbourline-api"]
       }
     },
     {
       "name": "aws_ecs_describe_task_definition",
-      "description": "ECS task definition for kade-api (image, env, secrets by ARN only).",
+      "description": "ECS task definition for harbourline-api (image, env, secrets by ARN only).",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -250,17 +250,17 @@
         }
       },
       "handler": "fileJson",
-      "source": "infra/aws/ecs-task-definition-kade-api.json",
+      "source": "infra/aws/ecs-task-definition-harbourline-api.json",
       "example": {
-        "task_definition": "kade-api:47"
+        "task_definition": "harbourline-api:47"
       },
       "match": {
-        "task_definition": ["kade-api", "kade-api:47", "task-definition/kade-api:47"]
+        "task_definition": ["harbourline-api", "harbourline-api:47", "task-definition/harbourline-api:47"]
       }
     },
     {
       "name": "aws_s3_list_objects",
-      "description": "Objects in the nightly export bucket kade-prod-exports.",
+      "description": "Objects in the nightly export bucket harbourline-prod-exports.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -274,11 +274,11 @@
       },
       "handler": "awsS3ListObjects",
       "example": {
-        "bucket": "kade-prod-exports",
+        "bucket": "harbourline-prod-exports",
         "prefix": "orders_daily/"
       },
       "match": {
-        "bucket": ["kade-prod-exports"]
+        "bucket": ["harbourline-prod-exports"]
       }
     },
     {
@@ -295,10 +295,10 @@
       "handler": "fileText",
       "source": "infra/gcp/cloud-run-fulfilment-worker.yaml",
       "example": {
-        "name": "kade-fulfilment-worker"
+        "name": "harbourline-fulfilment-worker"
       },
       "match": {
-        "name": ["kade-fulfilment-worker"]
+        "name": ["harbourline-fulfilment-worker"]
       }
     },
     {
@@ -323,7 +323,7 @@
     },
     {
       "name": "bigquery_list_tables",
-      "description": "Tables in kade-prod.analytics with schemas.",
+      "description": "Tables in harbourline-prod.analytics with schemas.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -338,7 +338,7 @@
         "dataset": "analytics"
       },
       "match": {
-        "dataset": ["analytics", "kade-prod.analytics"]
+        "dataset": ["analytics", "harbourline-prod.analytics"]
       }
     },
     {
@@ -386,7 +386,7 @@
       },
       "handler": "workspaceGetSheet",
       "example": {
-        "spreadsheet_id": "1KadeLampWeek2026PlanningSheetFixture"
+        "spreadsheet_id": "1HarbourlineLampWeek2026PlanningSheetFixture"
       }
     },
     {
@@ -402,7 +402,7 @@
       },
       "handler": "workspaceGetDoc",
       "example": {
-        "doc_id": "1KadeIncident2187DocFixture"
+        "doc_id": "1HarbourlineIncident2187DocFixture"
       }
     }
   ]

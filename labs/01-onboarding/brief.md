@@ -1,10 +1,10 @@
 ## Customer brief
 
-I run engineering for **Kadé Commerce** — the platform behind Lumen Home and Trailhead Supply. We hire two engineers a month, and every one of them loses their **first week** to getting the store running locally: the setup page points at a service we deleted months ago, the per-service notes disagree with each other, and nobody can say which instructions are current. That is roughly **40 engineer-days a year** spent before anyone ships anything.
+I run engineering for **Harbourline** — the platform behind Lumen Home and Trailhead Supply. We hire two engineers a month, and every one of them loses their **first week** to getting the store running locally: the setup page points at a service we deleted months ago, the per-service notes disagree with each other, and nobody can say which instructions are current. That is roughly **40 engineer-days a year** spent before anyone ships anything.
 
 Worse: on day two of her first week, our last hire followed a "reset the database" line from an old note and **wiped the shared development database** that three brand teams were demoing from. We lost an afternoon of merchandising work and a customer demo slipped a week.
 
-We have just connected Devin to the repository. Before Monday's new starter arrives, I want Devin to be the thing that makes Kadé safe and fast to set up — for Devin itself and for a human. Concretely: the machine Devin works on should come up ready to run every gate without anyone typing setup commands; the instructions Devin reads should be the right ones, in the right place, and short enough that it actually reads them; and nobody — human or Devin — should be able to reset a database that is not their own lab database by following our docs.
+We have just connected Devin to the repository. Before Monday's new starter arrives, I want Devin to be the thing that makes Harbourline safe and fast to set up — for Devin itself and for a human. Concretely: the machine Devin works on should come up ready to run every gate without anyone typing setup commands; the instructions Devin reads should be the right ones, in the right place, and short enough that it actually reads them; and nobody — human or Devin — should be able to reset a database that is not their own lab database by following our docs.
 
 I am not an engineer by background any more. When you report back, explain what you changed in words I can repeat to our hiring manager, and tell me what you would *not* hand to Devin.
 

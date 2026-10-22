@@ -41,7 +41,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T10:20:00Z · timing:
 
 - [ ] Only the first 16 KiB of each AGENTS.md is injected automatically; the cap is per file, so keep files short and front-loaded (6) — missed; belonged in checkpoint-40
 - [x] The blueprint prepares the machine (initialize, maintenance, knowledge); AGENTS.md tells Devin how to work in the repo (6) — “the blueprint, which is the machine setup, and AGENTS.md is the instructions it reads”
-- [x] Knowledge notes are migrating to Skills; repeated setup guidance becomes a skill rather than more AGENTS.md text (5) — “Our Knowledge notes are moving to Skills, so the setup steps are in the kade-dev skill”
+- [x] Knowledge notes are migrating to Skills; repeated setup guidance becomes a skill rather than more AGENTS.md text (5) — “Our Knowledge notes are moving to Skills, so the setup steps are in the harbourline-dev skill”
 - [ ] Ask Devin for read-only questions about the code, an Agent session for work that has to run, with a reason (4) — missed; belonged in update
 - [x] `lab:reset` is the one supported reset; it reseeds whatever `DATABASE_URL` names (local Compose by default, no host guard), so the docs keep that URL local (5) — “The reset is lab:reset now, it only touches the local database”
 - [x] The stale blueprint path (payroll-worker instead of fulfilment-worker) broke the snapshot build, and the fix was proven (4) — “the blueprint says payroll-worker but the folder is fulfilment-worker, so the build broke”

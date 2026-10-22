@@ -74,7 +74,7 @@
   "structure": {
     "problem": {
       "status": "present",
-      "quote": "Customers will see packed and shipped on the order screen of the Kadé app, on Android and on iOS"
+      "quote": "Customers will see packed and shipped on the order screen of the Harbourline app, on Android and on iOS"
     },
     "approach": {
       "status": "present",
@@ -134,7 +134,7 @@
     },
     {
       "id": "mm5",
-      "point": "kade-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android",
+      "point": "harbourline-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android",
       "weight": 4,
       "mentioned": true,
       "evidence_quote": "That module has a JS fallback, so Android gets a harmless no-op instead of a crash",

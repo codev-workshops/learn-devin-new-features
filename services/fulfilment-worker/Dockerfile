@@ -7,4 +7,4 @@ COPY db ./db
 RUN pip install --no-cache-dir ".[postgres]"
 ENV PYTHONUNBUFFERED=1
 EXPOSE 3003
-CMD ["kade-worker", "run"]
+CMD ["harbourline-worker", "run"]

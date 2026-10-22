@@ -20,8 +20,8 @@ import type {
   SeedSku,
   Totals,
   Variant,
-} from "@kade/contracts";
-import { BRAND_IDS } from "@kade/contracts";
+} from "@harbourline/contracts";
+import { BRAND_IDS } from "@harbourline/contracts";
 import seedJson from "./generated/seed.json";
 import { fromCents, roundHalfUp, toCents } from "../lib/money";
 

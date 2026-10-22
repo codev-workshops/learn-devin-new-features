@@ -2,12 +2,12 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 
-import { KadeProvider } from "@/state/store";
+import { HarbourlineProvider } from "@/state/store";
 import { palette } from "@/ui/theme";
 
 export default function RootLayout() {
   return (
-    <KadeProvider>
+    <HarbourlineProvider>
       <StatusBar style="light" />
       <Stack
         screenOptions={{
@@ -16,9 +16,9 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: palette.bg },
         }}
       >
-        <Stack.Screen name="index" options={{ title: "Kadé Commerce" }} />
+        <Stack.Screen name="index" options={{ title: "Harbourline" }} />
         <Stack.Screen name="shop" options={{ headerShown: false }} />
       </Stack>
-    </KadeProvider>
+    </HarbourlineProvider>
   );
 }

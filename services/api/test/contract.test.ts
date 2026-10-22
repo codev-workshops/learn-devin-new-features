@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { MONEY_PATTERN } from "@kade/contracts";
+import { MONEY_PATTERN } from "@harbourline/contracts";
 import { signPayload } from "../src/routes/webhooks.js";
 import {
   ADDRESS,

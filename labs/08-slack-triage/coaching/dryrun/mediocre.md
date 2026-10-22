@@ -30,7 +30,7 @@ Planted: six fillers (basically ×2, um ×1, you know ×1, actually ×1, so yeah
 [03:05] LEARNER: Done.
 --- segment: update ---
 [03:12] COACH: Read me the Slack update you wrote. Go.
-[03:15] LEARNER: Update: we have a triage responder on #kade-bugs now.
+[03:15] LEARNER: Update: we have a triage responder on #harbourline-bugs now.
 [03:30] LEARNER: Your team will see answers in the thread, with the team tagged.
 [03:45] COACH: And on our Teams side?
 [03:47] LEARNER: It can run on a Microsoft Teams channel through a Teams trigger too, without private channels.

@@ -2,28 +2,28 @@
   "events": [
     {
       "id": 7781,
-      "title": "Deployed kade-api 2026.10.21-lampweek",
-      "text": "ECS deployment ecs-svc/8821 (task-definition kade-api:47). Lamp Week price list activation + collection page changes.",
+      "title": "Deployed harbourline-api 2026.10.21-lampweek",
+      "text": "ECS deployment ecs-svc/8821 (task-definition harbourline-api:47). Lamp Week price list activation + collection page changes.",
       "date_happened": 1792622412,
-      "tags": ["service:kade-api", "deploy", "env:prod", "version:2026.10.21-lampweek"],
+      "tags": ["service:harbourline-api", "deploy", "env:prod", "version:2026.10.21-lampweek"],
       "source": "ecs",
       "alert_type": "info"
     },
     {
       "id": 7742,
-      "title": "Deployed kade-fulfilment-worker 2026.10.15",
-      "text": "Cloud Run revision kade-fulfilment-worker-00042-lam.",
+      "title": "Deployed harbourline-fulfilment-worker 2026.10.15",
+      "text": "Cloud Run revision harbourline-fulfilment-worker-00042-lam.",
       "date_happened": 1792055560,
-      "tags": ["service:kade-fulfilment-worker", "deploy", "env:prod", "version:2026.10.15"],
+      "tags": ["service:harbourline-fulfilment-worker", "deploy", "env:prod", "version:2026.10.15"],
       "source": "cloudrun",
       "alert_type": "info"
     },
     {
       "id": 7705,
-      "title": "Deployed kade-api 2026.10.14",
-      "text": "ECS deployment ecs-svc/8790 (task-definition kade-api:46).",
+      "title": "Deployed harbourline-api 2026.10.14",
+      "text": "ECS deployment ecs-svc/8790 (task-definition harbourline-api:46).",
       "date_happened": 1791969302,
-      "tags": ["service:kade-api", "deploy", "env:prod", "version:2026.10.14"],
+      "tags": ["service:harbourline-api", "deploy", "env:prod", "version:2026.10.14"],
       "source": "ecs",
       "alert_type": "info"
     }

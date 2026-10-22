@@ -40,7 +40,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T11:10:00Z · timing:
 
 ## Missing key points
 
-- [x] Commands, file edits and repo access run on Kadé's worker in the VPC while inference and planning stay in Devin Cloud (6) — “the worker runs in our VPC, so the code runs there and Devin Cloud only does the thinking”
+- [x] Commands, file edits and repo access run on Harbourline's worker in the VPC while inference and planning stay in Devin Cloud (6) — “the worker runs in our VPC, so the code runs there and Devin Cloud only does the thinking”
 - [ ] Worker started with devin worker start plus the outpost name and its token, the token shown once and kept in the secret manager (5) — missed; belonged in checkpoint-15
 - [ ] One session per worker so two containers serve two sessions and the third waits under a banner rather than failing (5) — missed; belonged in checkpoint-60
 - [x] Engineers reach the outpost through the organization default platform and the Slack bang command (4) — “People can use the default platform setting or Slack.”

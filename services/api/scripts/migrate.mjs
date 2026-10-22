@@ -22,7 +22,7 @@ if (!("DATABASE_URL" in process.env) && existsSync(envFile)) {
   }
 }
 if (!("DATABASE_URL" in process.env))
-  process.env.DATABASE_URL = "postgres://kade:kade@localhost:5432/kade";
+  process.env.DATABASE_URL = "postgres://harbourline:harbourline@localhost:5432/harbourline";
 
 const direction = process.argv[2] ?? "up";
 // Run the package's bin script through the current Node binary (no .bin shim, so it also works on Windows).

@@ -1,8 +1,8 @@
 {
-  "name": "kade-commerce",
+  "name": "harbourline",
   "version": "0.1.0",
   "private": true,
-  "description": "Kadé Commerce — a deliberately imperfect multi-brand e-commerce platform used as the fixture for the Applied Devin Lab course.",
+  "description": "Harbourline — a deliberately imperfect multi-brand e-commerce platform used as the fixture for the Applied Devin Lab course.",
   "license": "MIT",
   "type": "module",
   "engines": {

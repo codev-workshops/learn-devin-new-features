@@ -1,10 +1,10 @@
 {
   "id": 48213802,
-  "name": "[Kadé] PayGate webhook failure rate > 5%",
+  "name": "[Harbourline] PayGate webhook failure rate > 5%",
   "type": "query alert",
-  "query": "sum(last_15m):( sum:kade.webhooks.processed{env:prod,outcome:error}.as_count() / sum:kade.webhooks.processed{env:prod}.as_count() ) * 100 > 5",
-  "message": "{{value}}% of PayGate webhooks failed processing in the last 15 minutes (warning at 2%).\n\nA retry storm from PayGate (attempt > 1) usually means the worker is slow or crashing on a payload. Check kade.webhooks.processed by {attempt} and the worker logs for `currency` or `event_id` errors.\n\nRunbook: observability/runbooks/RB-201-webhook-failure-rate.md\n\n@pagerduty-kade-commerce-platform",
-  "tags": ["service:kade-fulfilment-worker", "team:platform", "runbook:RB-201", "lab:7", "lab:12"],
+  "query": "sum(last_15m):( sum:harbourline.webhooks.processed{env:prod,outcome:error}.as_count() / sum:harbourline.webhooks.processed{env:prod}.as_count() ) * 100 > 5",
+  "message": "{{value}}% of PayGate webhooks failed processing in the last 15 minutes (warning at 2%).\n\nA retry storm from PayGate (attempt > 1) usually means the worker is slow or crashing on a payload. Check harbourline.webhooks.processed by {attempt} and the worker logs for `currency` or `event_id` errors.\n\nRunbook: observability/runbooks/RB-201-webhook-failure-rate.md\n\n@pagerduty-harbourline-platform",
+  "tags": ["service:harbourline-fulfilment-worker", "team:platform", "runbook:RB-201", "lab:7", "lab:12"],
   "priority": 3,
   "options": {
     "thresholds": { "critical": 5, "warning": 2 },
@@ -16,7 +16,7 @@
   },
   "created": "2026-09-14T10:05:40Z",
   "modified": "2026-09-14T10:05:40Z",
-  "creator": { "name": "Platform Ops", "email": "ops@kade.test" },
+  "creator": { "name": "Platform Ops", "email": "ops@harbourline.test" },
   "overall_state": "Warn",
   "overall_state_modified": "2026-10-22T02:24:30Z"
 }

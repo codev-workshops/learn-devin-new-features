@@ -3,40 +3,40 @@
   "incidents": [
     { "$file": "observability/pagerduty/incident-lamp-week.json", "$pick": "incident" },
     {
-      "id": "Q2KADE1008WEBH",
+      "id": "Q2HARBOURLINE1008WEBH",
       "type": "incident",
       "incident_number": 2141,
-      "title": "[Kadé] PayGate webhook failure rate > 5%",
+      "title": "[Harbourline] PayGate webhook failure rate > 5%",
       "description": "Datadog monitor 48213802 triggered: 7.1% of webhooks failed over 15 minutes.",
       "created_at": "2026-10-08T19:02:10Z",
       "updated_at": "2026-10-08T20:15:44Z",
       "status": "resolved",
       "urgency": "low",
-      "priority": { "id": "P3KADE", "summary": "P3" },
-      "service": { "id": "PKADEAPI", "summary": "Kadé Commerce — Platform" },
+      "priority": { "id": "P3HARBOURLINE", "summary": "P3" },
+      "service": { "id": "PHARBOURLINEAPI", "summary": "Harbourline — Platform" },
       "resolve_reason": {
         "type": "note",
         "summary": "PAYGATE_SECRET rotated on PayGate side only; re-synced. RB-201 step 1 (signature errors)."
       },
-      "html_url": "https://kade.pagerduty.test/incidents/Q2KADE1008WEBH"
+      "html_url": "https://harbourline.pagerduty.test/incidents/Q2HARBOURLINE1008WEBH"
     },
     {
-      "id": "Q1KADE0930LAMP",
+      "id": "Q1HARBOURLINE0930LAMP",
       "type": "incident",
       "incident_number": 2098,
-      "title": "[Kadé] Negative on-hand inventory — LH-LAMP-02",
-      "description": "Datadog monitor 48213771 triggered: min:kade.inventory.on_hand{sku:LH-LAMP-02} = -1.",
+      "title": "[Harbourline] Negative on-hand inventory — LH-LAMP-02",
+      "description": "Datadog monitor 48213771 triggered: min:harbourline.inventory.on_hand{sku:LH-LAMP-02} = -1.",
       "created_at": "2026-09-30T13:40:00Z",
       "updated_at": "2026-09-30T14:02:12Z",
       "status": "resolved",
       "urgency": "high",
-      "priority": { "id": "P2KADE", "summary": "P2" },
-      "service": { "id": "PKADEAPI", "summary": "Kadé Commerce — Platform" },
+      "priority": { "id": "P2HARBOURLINE", "summary": "P2" },
+      "service": { "id": "PHARBOURLINEAPI", "summary": "Harbourline — Platform" },
       "resolve_reason": {
         "type": "note",
         "summary": "Followed RB-101: worker restart, count corrected to 10. Did not recur (low traffic)."
       },
-      "html_url": "https://kade.pagerduty.test/incidents/Q1KADE0930LAMP"
+      "html_url": "https://harbourline.pagerduty.test/incidents/Q1HARBOURLINE0930LAMP"
     }
   ],
   "limit": 25,

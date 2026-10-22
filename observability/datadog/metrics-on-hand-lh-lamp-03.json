@@ -1,15 +1,15 @@
 {
-  "$comment": "Datadog metrics query result (v1 /api/v1/query shape) for min:kade.inventory.on_hand{sku:LH-LAMP-03} from 2026-10-21T22:00Z to 2026-10-22T03:00Z, 10-minute points. The Lamp Week deploy lands at 22:40; stock goes from 3 to -37 between 00:50 and 02:10; RB-101's manual bump to 50 at 02:31 is eaten again by 02:50.",
+  "$comment": "Datadog metrics query result (v1 /api/v1/query shape) for min:harbourline.inventory.on_hand{sku:LH-LAMP-03} from 2026-10-21T22:00Z to 2026-10-22T03:00Z, 10-minute points. The Lamp Week deploy lands at 22:40; stock goes from 3 to -37 between 00:50 and 02:10; RB-101's manual bump to 50 at 02:31 is eaten again by 02:50.",
   "status": "ok",
   "res_type": "time_series",
   "from_date": 1792620000000,
   "to_date": 1792638000000,
-  "query": "min:kade.inventory.on_hand{sku:LH-LAMP-03}",
+  "query": "min:harbourline.inventory.on_hand{sku:LH-LAMP-03}",
   "series": [
     {
-      "metric": "kade.inventory.on_hand",
+      "metric": "harbourline.inventory.on_hand",
       "scope": "sku:LH-LAMP-03,brand:lumen-home,env:prod",
-      "expression": "min:kade.inventory.on_hand{sku:LH-LAMP-03}",
+      "expression": "min:harbourline.inventory.on_hand{sku:LH-LAMP-03}",
       "unit": [{ "family": "general", "name": "unit", "plural": "units" }],
       "interval": 600,
       "pointlist": [

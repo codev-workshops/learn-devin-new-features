@@ -17,7 +17,7 @@ import { parse as parseYaml } from "yaml";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const spec = parseYaml(readFileSync(join(root, "packages/contracts/seed-spec.yaml"), "utf8"));
-const SECRET = process.env.PAYGATE_SECRET ?? "kade-local-paygate-secret";
+const SECRET = process.env.PAYGATE_SECRET ?? "harbourline-local-paygate-secret";
 const AS_OF = Date.parse(spec.as_of);
 
 const brands = Object.fromEntries(
@@ -203,9 +203,9 @@ function processWebhook(evt) {
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, "http://localhost");
   const path = url.pathname;
-  const brand = req.headers["x-kade-brand"];
-  const role = req.headers["x-kade-role"] ?? "customer";
-  const user = req.headers["x-kade-user"];
+  const brand = req.headers["x-harbourline-brand"];
+  const role = req.headers["x-harbourline-role"] ?? "customer";
+  const user = req.headers["x-harbourline-user"];
   const raw = ["POST", "PATCH", "PUT"].includes(req.method) ? await readBody(req) : "";
   const body = raw ? JSON.parse(raw) : {};
   let m;
@@ -229,7 +229,7 @@ const server = createServer(async (req, res) => {
     return;
   }
 
-  if (!brand || !brands[brand]) return err(res, 400, "bad_request", "X-Kade-Brand required");
+  if (!brand || !brands[brand]) return err(res, 400, "bad_request", "X-Harbourline-Brand required");
   const b = brands[brand];
 
   if (req.method === "GET" && (m = path.match(/^\/catalog\/products\/([^/]+)$/))) {

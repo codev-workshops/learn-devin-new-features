@@ -13,7 +13,7 @@ Planted: five fillers (actually ×2, basically ×2, you know ×1), one tag quest
 
 --- segment: framing ---
 [00:00] COACH: Sixty seconds. Why were two people blocked, and what will you change? Go.
-[00:05] LEARNER: So Kadé has three organizations, and a contract that renews monthly, and there are tiers, and IdP groups, and you know, it is complicated.
+[00:05] LEARNER: So Harbourline has three organizations, and a contract that renews monthly, and there are tiers, and IdP groups, and you know, it is complicated.
 [00:35] LEARNER: Basically there are two limits, the organization one and the personal one, and they are enforced independently, so either one can block you.
 [01:10] LEARNER: One person hit each of them this morning, and I will fix both. Done.
 [01:14] COACH: Thank you.

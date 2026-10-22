@@ -12,7 +12,7 @@ Fixture for `@skills:coach-00-sample dryrun --dry-run labs/00-sample/coaching/dr
 Planted: twelve fillers (actually ×4, basically ×2, so yeah ×3, you know ×1, like ×1, um ×1), two tag questions, one 12-second pause at [01:05], and four omitted must-mention points (only the business cost, mm2, is stated). The learner picks three problems at once, names no capability and lists commands as evidence.
 
 --- segment: framing ---
-[00:00] COACH: Hi, I'm the Kadé platform lead. You have read the brief. In sixty seconds: what will you put in front of Devin first, and why? Go.
+[00:00] COACH: Hi, I'm the Harbourline platform lead. You have read the brief. In sixty seconds: what will you put in front of Devin first, and why? Go.
 [00:06] LEARNER: So, basically, there are a lot of problems. Actually, the oversell one is bad, the rounding one is bad, and the leak is a security thing, so I would do those three first, you know.
 [00:35] LEARNER: It costs you money — during Lamp Week you sold lamps you did not have, so maybe forty orders, and the rounding is a few cents on three percent of orders, so, yeah, that adds up.
 [01:05] (pause 12 s)

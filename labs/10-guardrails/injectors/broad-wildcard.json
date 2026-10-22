@@ -1,7 +1,7 @@
 {
   "description": "Injector broad-wildcard: a draft floor written in a hurry. Run with --validate and --check registry.npmjs.org.evil.example,evilpaygate.example.",
   "profiles": {
-    "kade-floor-draft": {
+    "harbourline-floor-draft": {
       "scope": "enterprise",
       "enforcement": "mandatory",
       "network": [
@@ -15,7 +15,7 @@
   },
   "bindings": {
     "enterprise_default": {
-      "profile": "kade-floor-draft"
+      "profile": "harbourline-floor-draft"
     }
   },
   "targets": {

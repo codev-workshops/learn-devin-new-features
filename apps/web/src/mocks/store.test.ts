@@ -121,7 +121,7 @@ describe("checkout and payment", () => {
     const store = createStore();
     const trailOrder = store.data.orders.find((o) => o.brand === "trailhead-supply")!;
     expect(() => store.getOrder(lumen, trailOrder.id)).toThrow(/another brand/);
-    expect(() => store.listInventory(lumen)).toThrow(/X-Kade-Role/);
+    expect(() => store.listInventory(lumen)).toThrow(/X-Harbourline-Role/);
     expect(store.listAdminOrders(maya, { limit: 10 }).items).toHaveLength(10);
     const lena = {
       brand: "trailhead-supply",

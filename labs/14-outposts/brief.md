@@ -1,10 +1,10 @@
 ## Customer brief
 
-> **From:** Oksana Brandt, CISO, Kadé Commerce
+> **From:** Oksana Brandt, CISO, Harbourline
 > **To:** Platform engineering
 > **Subject:** Devin can stay — if it works inside our VPC
 >
-> Legal signed off on Devin last quarter on one condition I am now enforcing: the PayGate sandbox keys and our repositories do not leave Kadé infrastructure. Today every Devin session clones the repo onto a Devin-hosted machine, and engineers paste sandbox keys into session secrets. That stops on Friday.
+> Legal signed off on Devin last quarter on one condition I am now enforcing: the PayGate sandbox keys and our repositories do not leave Harbourline infrastructure. Today every Devin session clones the repo onto a Devin-hosted machine, and engineers paste sandbox keys into session secrets. That stops on Friday.
 >
 > I am told Devin has something called Outposts. Show me, by Friday, a worker image we build and own, running in our VPC, that our engineers reach the same way they reach Devin today — web, Slack, and whatever the default is. Two of them, because the payments team and the storefront team will both be on it at 09:00. Tell me what happens when they are both busy, what happens when one dies overnight, and who keeps that image patched.
 >

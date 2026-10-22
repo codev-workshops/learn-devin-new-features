@@ -20,7 +20,7 @@ const sampleDir = path.join(labsDir, '00-sample');
 
 let tmpRoot;
 beforeAll(async () => {
-  tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'kade-labs-'));
+  tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'harbourline-labs-'));
 });
 afterAll(async () => {
   await fs.rm(tmpRoot, { recursive: true, force: true });

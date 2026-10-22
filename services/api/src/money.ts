@@ -1,4 +1,4 @@
-import type { Currency, Money } from "@kade/contracts";
+import type { Currency, Money } from "@harbourline/contracts";
 
 /**
  * Money helpers. Amounts cross the API boundary as decimal strings, but the arithmetic below

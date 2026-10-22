@@ -1,4 +1,4 @@
-The coach plays Kadé's security reviewer. She approves what runs in every session, reads files and approval cards, and asks who can change what.
+The coach plays Harbourline's security reviewer. She approves what runs in every session, reads files and approval cards, and asks who can change what.
 
 ### 60-second framing
 

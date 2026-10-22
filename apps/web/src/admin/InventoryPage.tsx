@@ -1,4 +1,4 @@
-import type { InventoryRow } from "@kade/contracts";
+import type { InventoryRow } from "@harbourline/contracts";
 import { useState } from "react";
 import { ErrorNote, Loading, Status } from "../components/ui";
 import { api } from "../lib/api";

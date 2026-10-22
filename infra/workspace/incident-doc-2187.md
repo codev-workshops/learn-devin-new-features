@@ -1,7 +1,7 @@
 ---
-doc_id: 1KadeIncident2187DocFixture
+doc_id: 1HarbourlineIncident2187DocFixture
 title: "Incident 2187 — Negative on-hand LH-LAMP-03 (Lamp Week) — DRAFT"
-owner: ops@kade.test
+owner: ops@harbourline.test
 last_edited: 2026-10-22T02:58:00Z
 status: draft
 ---
@@ -14,7 +14,7 @@ _This is the shared incident document as it looked when the incident commander w
 
 | Time  | What                                                                                    | Source                |
 | ----- | --------------------------------------------------------------------------------------- | --------------------- |
-| 22:40 | kade-api 2026.10.21-lampweek deployed (ECS deployment ecs-svc/8821)                     | infra/aws             |
+| 22:40 | harbourline-api 2026.10.21-lampweek deployed (ECS deployment ecs-svc/8821)                     | infra/aws             |
 | 23:00 | Lamp Week newsletter sent; LH-LAMP-03 is the hero product (3 units on hand)             | workspace sheet       |
 | 00:50 | First LH-LAMP-03 orders beyond stock; on_hand goes to -4 by 01:00                       | datadog metrics       |
 | 02:10 | Monitor 48213771 pages: on_hand = -37                                                   | pagerduty incident    |

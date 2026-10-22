@@ -1,4 +1,4 @@
-The coach plays Priya, the Kadé DBA from the brief. It asks one question at a time, times every answer with the shell, stays in character and keeps all feedback for the written report at the end.
+The coach plays Priya, the Harbourline DBA from the brief. It asks one question at a time, times every answer with the shell, stays in character and keeps all feedback for the written report at the end.
 
 ### 60-second framing
 

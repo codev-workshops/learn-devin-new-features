@@ -1,6 +1,6 @@
 ---
 name: coach-14-outposts
-description: Voice articulation coach for lab 14 (Devin Outposts, keeping PayGate sandbox keys and the repo inside Kadé's VPC). Use when the learner types `@skills:coach-14-outposts <handle>` or runs `npm run coach:dryrun -- 14`.
+description: Voice articulation coach for lab 14 (Devin Outposts, keeping PayGate sandbox keys and the repo inside Harbourline's VPC). Use when the learner types `@skills:coach-14-outposts <handle>` or runs `npm run coach:dryrun -- 14`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---
@@ -12,7 +12,7 @@ First read `.devin/skills/articulation-base/SKILL.md` and follow it for protocol
 - **lab**: `14` · **coach**: `coach-14-outposts` · **agent**: `.devin/agents/outposts-coach.md`
 - **answer**: `labs/14-outposts/answer.md` (never quote it before the last objection ends)
 - **dry-run transcripts**: `labs/14-outposts/coaching/dryrun/{strong,mediocre,off-track}.md`
-- **Persona**: Oksana Brandt, Kadé's CISO — calm, exact about data paths, distrusts the word "secure" without a boundary attached, raises three objections and does not move on until each is answered.
+- **Persona**: Oksana Brandt, Harbourline's CISO — calm, exact about data paths, distrusts the word "secure" without a boundary attached, raises three objections and does not move on until each is answered.
 
 ## Segments
 
@@ -30,7 +30,7 @@ First read `.devin/skills/articulation-base/SKILL.md` and follow it for protocol
 
 | id  | weight | point                                                                                                                           |
 | --- | ------ | ------------------------------------------------------------------------------------------------------------------------------- |
-| mm1 | 6      | Commands, file edits and repo access run on Kadé's worker in the VPC while inference and planning stay in Devin Cloud           |
+| mm1 | 6      | Commands, file edits and repo access run on Harbourline's worker in the VPC while inference and planning stay in Devin Cloud    |
 | mm2 | 5      | Worker started with devin worker start plus the outpost name and its token, the token shown once and kept in the secret manager |
 | mm3 | 5      | One session per worker so two containers serve two sessions and the third waits under a banner rather than failing              |
 | mm4 | 4      | Engineers reach the outpost through the organization default platform and the Slack bang command                                |

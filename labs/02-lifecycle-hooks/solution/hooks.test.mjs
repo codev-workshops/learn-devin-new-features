@@ -10,7 +10,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SOLUTION = path.join(HERE, 'hooks.v1.json');
 const INJECTORS = path.join(HERE, '..', 'injectors');
 const logDir = mkdtempSync(path.join(os.tmpdir(), 'lab02-log-'));
-const env = { KADE_HOOK_LOG: path.join(logDir, 'hook-audit.log'), DATABASE_URL: '', KADE_LAB_DATABASE_URL: '' };
+const env = { HARBOURLINE_HOOK_LOG: path.join(logDir, 'hook-audit.log'), DATABASE_URL: '', HARBOURLINE_LAB_DATABASE_URL: '' };
 const pre = (command, extraEnv = {}) =>
   simulate({ config: SOLUTION, event: 'PreToolUse', toolName: 'exec', toolInput: { command }, env: { ...env, ...extraEnv } });
 
@@ -29,14 +29,14 @@ describe('lab 02 reference hooks', () => {
   });
 
   it('blocks a reset against anything but the lab database with exit 2', async () => {
-    const r = await pre('DATABASE_URL=postgres://kade:kade@staging-db.kade.internal:5432/kade npm run db:seed -- --reset');
+    const r = await pre('DATABASE_URL=postgres://harbourline:harbourline@staging-db.harbourline.internal:5432/harbourline npm run db:seed -- --reset');
     expect(r.outcome).toBe('block');
     expect(r.hooks_run[0].exit).toBe(2);
     expect(r.reason).toMatch(/not the lab database/);
   });
 
   it('blocks a migration when the hook environment points at a shared database', async () => {
-    const r = await pre('npm run db:migrate', { DATABASE_URL: 'postgres://kade:kade@10.0.4.12:5432/kade' });
+    const r = await pre('npm run db:migrate', { DATABASE_URL: 'postgres://harbourline:harbourline@10.0.4.12:5432/harbourline' });
     expect(r.outcome).toBe('block');
   });
 
@@ -60,9 +60,9 @@ describe('lab 02 reference hooks', () => {
   });
 
   it('rewrites psql inside docker compose exec with a container-side read-only default', async () => {
-    const r = await pre('docker compose exec postgres psql -U kade kade -c "delete from carts"');
+    const r = await pre('docker compose exec postgres psql -U harbourline harbourline -c "delete from carts"');
     expect(r.outcome).toBe('rewrite');
-    expect(r.input.command).toBe(`docker compose exec -e PGOPTIONS='-c default_transaction_read_only=on' postgres psql -U kade kade -c "delete from carts"`);
+    expect(r.input.command).toBe(`docker compose exec -e PGOPTIONS='-c default_transaction_read_only=on' postgres psql -U harbourline harbourline -c "delete from carts"`);
   });
 
   it('does not let a mention of the wrapper exempt a second, raw psql', async () => {
@@ -77,17 +77,17 @@ describe('lab 02 reference hooks', () => {
   });
 
   it('checks every inline DATABASE_URL, not only the first', async () => {
-    const r = await pre('DATABASE_URL=postgres://kade:kade@localhost:5432/kade DATABASE_URL=postgres://kade:kade@staging-db:5432/kade npm run db:seed -- --reset');
+    const r = await pre('DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline DATABASE_URL=postgres://harbourline:harbourline@staging-db:5432/harbourline npm run db:seed -- --reset');
     expect(r.outcome).toBe('block');
   });
 
   it('rejects connection-string parameters that override the host', async () => {
-    const r = await pre('DATABASE_URL="postgres://kade:kade@localhost:5432/kade?host=staging-db" npm run db:migrate');
+    const r = await pre('DATABASE_URL="postgres://harbourline:harbourline@localhost:5432/harbourline?host=staging-db" npm run db:migrate');
     expect(r.outcome).toBe('block');
   });
 
   it('records every decision in the audit log', () => {
-    const lines = readFileSync(env.KADE_HOOK_LOG, 'utf8').trim().split('\n').map((l) => JSON.parse(l));
+    const lines = readFileSync(env.HARBOURLINE_HOOK_LOG, 'utf8').trim().split('\n').map((l) => JSON.parse(l));
     expect(lines.some((l) => l.decision === 'block')).toBe(true);
     expect(lines.some((l) => l.decision === 'rewrite')).toBe(true);
   });
@@ -111,7 +111,7 @@ describe('lab 02 reference hooks', () => {
 
 describe('lab 02 injectors', () => {
   it('malformed hook JSON loads no hooks, so the reset goes through (fail-open)', async () => {
-    const r = await simulate({ config: path.join(INJECTORS, 'malformed-hooks.v1.json'), event: 'PreToolUse', toolName: 'exec', toolInput: { command: 'DATABASE_URL=postgres://x@prod-db:5432/kade npm run db:seed -- --reset' }, env });
+    const r = await simulate({ config: path.join(INJECTORS, 'malformed-hooks.v1.json'), event: 'PreToolUse', toolName: 'exec', toolInput: { command: 'DATABASE_URL=postgres://x@prod-db:5432/harbourline npm run db:seed -- --reset' }, env });
     expect(r.malformed).toBe(true);
     expect(r.outcome).toBe('allow');
   });

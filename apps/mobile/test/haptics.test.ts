@@ -1,6 +1,6 @@
-import { impact, isNativeHapticsAvailable } from "../modules/kade-haptics";
+import { impact, isNativeHapticsAvailable } from "../modules/harbourline-haptics";
 
-describe("kade-haptics JS fallback", () => {
+describe("harbourline-haptics JS fallback", () => {
   it("reports the native module as unavailable on Android / Jest", () => {
     expect(isNativeHapticsAvailable()).toBe(false);
   });

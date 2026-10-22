@@ -1,6 +1,6 @@
-# @kade/paygate-fake
+# @harbourline/paygate-fake
 
-A fake payment service provider for Kadé Commerce. It stands in for "PayGate": a hosted-checkout page the
+A fake payment service provider for Harbourline. It stands in for "PayGate": a hosted-checkout page the
 shopper is redirected to, plus HMAC-SHA256 signed webhooks (`X-PayGate-Signature: sha256=<hex>`,
 `X-PayGate-Event-Id`) that follow `PaymentWebhookEvent` in `packages/contracts/openapi.yaml`.
 
@@ -24,7 +24,7 @@ node services/paygate-fake/dist/cli.js fire --duplicate --order-id <uuid> --amou
 node services/paygate-fake/dist/cli.js fire --out-of-order --then payment.refunded --order-id <uuid> --amount 189.00 --currency EUR
 ```
 
-Environment: `PAYGATE_PORT` (3002), `PAYGATE_SECRET` (`kade-local-paygate-secret`), `PAYGATE_WEBHOOK_URL`,
+Environment: `PAYGATE_PORT` (3002), `PAYGATE_SECRET` (`harbourline-local-paygate-secret`), `PAYGATE_WEBHOOK_URL`,
 `PAYGATE_PUBLIC_URL` (what `redirectUrl` is built from).
 
 ## HTTP surface
@@ -50,5 +50,5 @@ npm test -w services/paygate-fake        # vitest: signing, delivery plan/knobs,
 npm run build -w services/paygate-fake
 ```
 
-Docker: `docker build -f services/paygate-fake/Dockerfile -t kade-paygate-fake .` from the repo root (the build
+Docker: `docker build -f services/paygate-fake/Dockerfile -t harbourline-paygate-fake .` from the repo root (the build
 needs the shared workspace lockfile); `docker-compose.services.yml` wires it to Postgres-side services.

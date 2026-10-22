@@ -8,7 +8,7 @@
   "prerequisites": [
     "Repo cloned, `npm install` done at the root, Node 22",
     "Lab 00 warm-up done once (framing stems and the update skeleton)",
-    "Fixture path: nothing else — `labs/11-acu-analytics/tools/acu-sim.mjs` replays the documented limit rules over a fictional Kadé enterprise",
+    "Fixture path: nothing else — `labs/11-acu-analytics/tools/acu-sim.mjs` replays the documented limit rules over a fictional Harbourline enterprise",
     "Optional observer path: a Devin account whose role can open Settings → Analytics (organization), and, if your enterprise enabled it, Settings → Personal → My analytics"
   ],
   "credentials": {
@@ -17,7 +17,7 @@
       {
         "integration": "Offline limit and analytics simulator (`tools/acu-sim.mjs`) — default path",
         "required": true,
-        "fixture": "`fixtures/kade-consumption.json`: 3 organizations with limits, 3 usage tiers, 3 IdP mappings, 4 named members plus aggregate rows, cloud / local / Devin Review usage for the current billing window and the last week of the previous one.",
+        "fixture": "`fixtures/harbourline-consumption.json`: 3 organizations with limits, 3 usage tiers, 3 IdP mappings, 4 named members plus aggregate rows, cloud / local / Devin Review usage for the current billing window and the last week of the previous one.",
         "note": "Zero credentials. Both limit decisions and the dashboard-totals question can be answered on this path."
       },
       {
@@ -46,7 +46,7 @@
       "rm -rf labs/11-acu-analytics/figures/tenant labs/11-acu-analytics/ACU-DECISION.md",
       "node labs/11-acu-analytics/tools/acu-sim.mjs --views"
     ],
-    "clean_state": "The simulator is stateless: every run starts from `fixtures/kade-consumption.json` and only the flags you pass change it, so `lab:reset` (which reseeds the shop database) is optional here. Clean means no `ACU-DECISION.md` of your own and no `figures/tenant/` folder. `--views` prints an enterprise total of 8870 ACU for the current billing window (23 Oct → 14 Nov 2026) and three organization rows."
+    "clean_state": "The simulator is stateless: every run starts from `fixtures/harbourline-consumption.json` and only the flags you pass change it, so `lab:reset` (which reseeds the shop database) is optional here. Clean means no `ACU-DECISION.md` of your own and no `figures/tenant/` folder. `--views` prints an enterprise total of 8870 ACU for the current billing window (23 Oct → 14 Nov 2026) and three organization rows."
   },
   "injectors": [
     {
@@ -75,7 +75,7 @@
     },
     {
       "name": "billing-org-drift",
-      "command": "node labs/11-acu-analytics/tools/acu-sim.mjs --views --billing-org noor=kade-trailhead",
+      "command": "node labs/11-acu-analytics/tools/acu-sim.mjs --views --billing-org noor=harbourline-trailhead",
       "when": "built into the fixture",
       "behaviour": "One Trailhead engineer never had a billing organization assigned. Compare the Platform and Trailhead rows with and without the flag."
     }

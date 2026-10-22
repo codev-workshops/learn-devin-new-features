@@ -7,18 +7,18 @@ Finance's "cap per team" is therefore an organization limit (one organization pe
 ## Worked approach
 
 1. Baseline the views: `node labs/11-acu-analytics/tools/acu-sim.mjs --views` → enterprise 8870 ACU; Platform 1770, Lumen 4100, Trailhead 3000 for 23 Oct → 14 Nov.
-2. Decision A: `--scenario A` → `RESULT: member=mira org=kade-trailhead blocked by organization limit`. Her meter is 180 of 400; Trailhead is 3000 of 3000.
+2. Decision A: `--scenario A` → `RESULT: member=mira org=harbourline-trailhead blocked by organization limit`. Her meter is 180 of 400; Trailhead is 3000 of 3000.
 3. Prove the wrong fix: `--scenario A --override mira=600` → still blocked by organization limit. A per-member override changes only her own meter.
-4. Size the fix with the sale: `--scenario A --raise-org kade-trailhead=4000 --inject sale-spike --date 2026-11-20` → 3900 of 4000, allowed. 4000 leaves only 100 ACU of margin; propose 4200 for this window, set by an enterprise admin in Settings → Organizations, and lowered back to 3000 (or a re-sized number) after the 23rd.
+4. Size the fix with the sale: `--scenario A --raise-org harbourline-trailhead=4000 --inject sale-spike --date 2026-11-20` → 3900 of 4000, allowed. 4000 leaves only 100 ACU of margin; propose 4200 for this window, set by an enterprise admin in Settings → Organizations, and lowered back to 3000 (or a re-sized number) after the 23rd.
 5. Decision B: `--scenario B` → `blocked by per-user limit`, 410 of 400 (250 cloud + 160 local; 90 Review not counted). Lumen has 1900 ACU of headroom.
-6. Why 400 and not 800: he is in `kade-oncall` (mapped to the 800 On-call tier, priority 1), but an explicit assignment to Brand engineers beats every IdP mapping. Compare `--unassign arjun` (resolves to On-call, 800, permanent until someone reassigns him, and his approval policy becomes Always approve) with `--override arjun=520` (temporary, expires 22 Nov, stays in Brand engineers with manual approval). For a one-month on-call rota the temporary override is the narrow fix; if on-call people should always get 800, remove the stale explicit assignment instead.
+6. Why 400 and not 800: he is in `harbourline-oncall` (mapped to the 800 On-call tier, priority 1), but an explicit assignment to Brand engineers beats every IdP mapping. Compare `--unassign arjun` (resolves to On-call, 800, permanent until someone reassigns him, and his approval policy becomes Always approve) with `--override arjun=520` (temporary, expires 22 Nov, stays in Brand engineers with manual approval). For a one-month on-call rota the temporary override is the narrow fix; if on-call people should always get 800, remove the stale explicit assignment instead.
 7. Injectors: `review-storm` moves only the Lumen organization total (4100 → 4400); `reset-day` shows both meters at 0 and the override gone on 23 Nov; `billing-org-drift` moves Noor's 120 local ACU from Platform to Trailhead; `empty-cycle` prints the billing-cycle message.
 8. Write `ACU-DECISION.md` with the ledger, both decisions and the update, then run the drill.
 
 Worked prompts, if you used a Devin session to do the analysis:
 
 ```prompt
-Read labs/11-acu-analytics/fixtures/kade-consumption.json and the docs pages for organization ACU limits and usage policies. For mira in kade-trailhead and arjun in kade-lumen, tell me which limit blocks each of them today (2026-11-14), using tools/acu-sim.mjs, and quote every RESULT line you rely on. Do not change any real enterprise setting.
+Read labs/11-acu-analytics/fixtures/harbourline-consumption.json and the docs pages for organization ACU limits and usage policies. For mira in harbourline-trailhead and arjun in harbourline-lumen, tell me which limit blocks each of them today (2026-11-14), using tools/acu-sim.mjs, and quote every RESULT line you rely on. Do not change any real enterprise setting.
 ```
 
 ```prompt

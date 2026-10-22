@@ -11,7 +11,7 @@ from fulfilment_worker.clock import Clock
 from fulfilment_worker.models import EmailMessage, OutboxRow, iso
 from fulfilment_worker.store import Store
 
-log = logging.getLogger("kade.worker.outbox")
+log = logging.getLogger("harbourline.worker.outbox")
 
 Handler = Callable[[Store, OutboxRow, Clock], None]
 
@@ -26,7 +26,7 @@ def _send_email(store: Store, row: OutboxRow, clock: Clock) -> None:
     p = row.payload
     store.add_sent_email(
         EmailMessage(
-            to=p.get("to", "unknown@kade.test"),
+            to=p.get("to", "unknown@harbourline.test"),
             subject=p.get("subject", row.topic),
             body=p.get("body", f"{row.topic} for order {row.order_id}"),
             order_id=row.order_id,

@@ -2,7 +2,7 @@ import { Redirect, Tabs } from "expo-router";
 import React from "react";
 import { Text } from "react-native";
 
-import { useKade } from "@/state/store";
+import { useHarbourline } from "@/state/store";
 import { brandAccent, palette } from "@/ui/theme";
 
 function Icon({ glyph, color }: { glyph: string; color: string }) {
@@ -10,7 +10,7 @@ function Icon({ glyph, color }: { glyph: string; color: string }) {
 }
 
 export default function ShopLayout() {
-  const { session, brand, cart } = useKade();
+  const { session, brand, cart } = useHarbourline();
   if (!session) return <Redirect href="/" />;
   const accent = brandAccent[session.brand];
   const count = cart?.lines.reduce((n, l) => n + l.quantity, 0) ?? 0;

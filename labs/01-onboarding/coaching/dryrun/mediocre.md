@@ -36,7 +36,7 @@ Planted: six fillers (actually ×2, basically ×2, so yeah ×1, you know ×1), o
 [03:25] COACH: Three minutes. Tell me what's different for Monday's starter. Go.
 [03:29] LEARNER: Outcome: the blueprint is fixed and the gates are green on a fresh machine.
 [03:58] LEARNER: Actually, I also removed the conflicting AGENTS.md and the old setup page, and the PayGate key is only named, not stored.
-[04:40] LEARNER: Our Knowledge notes are moving to Skills, so the setup steps are in the kade-dev skill.
+[04:40] LEARNER: Our Knowledge notes are moving to Skills, so the setup steps are in the harbourline-dev skill.
 [05:20] LEARNER: Risk is somebody still has an old note. So yeah, that's it.
 [06:00] LEARNER: Ask: please tell Jonas to delete his note. Done.
 

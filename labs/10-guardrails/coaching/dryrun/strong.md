@@ -29,9 +29,9 @@ Fixture for `@skills:coach-10-guardrails dryrun --dry-run labs/10-guardrails/coa
 --- segment: update ---
 [03:05] COACH: Give me the update I can repeat to the committee. Go.
 [03:08] LEARNER: What is enforced: sessions reach registry.npmjs.org and the PayGate sandbox, and nothing else. No MCP servers.
-[03:30] LEARNER: Where it is set: kade-floor, an enterprise profile, mandatory, bound as the enterprise default.
+[03:30] LEARNER: Where it is set: harbourline-floor, an enterprise profile, mandatory, bound as the enterprise default.
 [03:50] COACH: Who can loosen it?
-[03:53] LEARNER: Only an enterprise admin, by editing kade-floor. A session that picks no profile still gets the floor; I resolved it.
+[03:53] LEARNER: Only an enterprise admin, by editing harbourline-floor. A session that picks no profile still gets the floor; I resolved it.
 [04:20] LEARNER: What runs stricter: the webhook-triage automation gets read-only git and read-only Devin MCP, and npm only.
 [04:45] LEARNER: Helpers: child sessions are governed by their parent's chain, so delegating work cannot step outside the floor.
 [05:10] LEARNER: When changes land: new sessions at once, running sessions on their next wake.
@@ -40,7 +40,7 @@ Fixture for `@skills:coach-10-guardrails dryrun --dry-run labs/10-guardrails/coa
 [06:07] LEARNER: Done.
 --- segment: objection-1 ---
 [06:20] COACH: A profile is config — what stops a developer turning it off?
-[06:24] LEARNER: It is a setting, you're right. The boundary is who can edit it: kade-floor is enterprise scope and mandatory, so only enterprise admins change it.
+[06:24] LEARNER: It is a setting, you're right. The boundary is who can edit it: harbourline-floor is enterprise scope and mandatory, so only enterprise admins change it.
 [06:52] LEARNER: Below it, an opt-out is ignored and a mid-session approval for a new host is clamped. And the write paths are closed in the profile itself: the GitHub CLI token is removed, git access is set per level, and automations get Devin MCP read-only.
 [07:30] LEARNER: I'll send you the resolver output after every change so you can see it held.
 [07:52] LEARNER: Done.

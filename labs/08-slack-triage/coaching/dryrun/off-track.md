@@ -29,7 +29,7 @@ Planted: eleven fillers (um/uh ×4, basically ×3, like ×2, you know ×1, actua
 [03:30] LEARNER: Done.
 --- segment: update ---
 [03:40] COACH: Read me the Slack update you wrote. Go.
-[03:43] LEARNER: Update: the bot is live in #kade-bugs and replies to every message so nothing is missed.
+[03:43] LEARNER: Update: the bot is live in #harbourline-bugs and replies to every message so nothing is missed.
 [04:05] COACH: And on our Teams side?
 [04:08] LEARNER: It runs on a Microsoft Teams channel through a Teams trigger as well, I think.
 [04:45] LEARNER: Done.

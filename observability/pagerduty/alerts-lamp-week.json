@@ -8,7 +8,7 @@
       "resolved_at": "2026-10-22T02:31:12Z",
       "alert_key": "datadog-48213771-sku:LH-LAMP-03",
       "severity": "critical",
-      "summary": "min:kade.inventory.on_hand{sku:LH-LAMP-03} = -37",
+      "summary": "min:harbourline.inventory.on_hand{sku:LH-LAMP-03} = -37",
       "integration": { "summary": "Datadog" }
     },
     {
@@ -30,7 +30,7 @@
       "resolved_at": "2026-10-22T02:31:12Z",
       "alert_key": "datadog-48213771-sku:LH-LAMP-04",
       "severity": "critical",
-      "summary": "min:kade.inventory.on_hand{sku:LH-LAMP-04} = -2",
+      "summary": "min:harbourline.inventory.on_hand{sku:LH-LAMP-04} = -2",
       "integration": { "summary": "Datadog" }
     },
     {
@@ -41,7 +41,7 @@
       "resolved_at": null,
       "alert_key": "datadog-48213771-sku:LH-LAMP-03",
       "severity": "critical",
-      "summary": "min:kade.inventory.on_hand{sku:LH-LAMP-03} = -3 (re-triggered after manual correction)",
+      "summary": "min:harbourline.inventory.on_hand{sku:LH-LAMP-03} = -3 (re-triggered after manual correction)",
       "integration": { "summary": "Datadog" }
     }
   ],

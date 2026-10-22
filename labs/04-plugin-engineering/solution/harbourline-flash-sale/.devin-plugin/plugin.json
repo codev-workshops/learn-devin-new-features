@@ -1,0 +1,7 @@
+{
+  "name": "harbourline-flash-sale",
+  "displayName": "Harbourline flash-sale release kit",
+  "version": "1.0.0",
+  "description": "One flash-sale release checklist and first-hour incident procedure for every Harbourline brand team: two skills, a freeze rule, a release-checker subagent, a push guard hook and the incident MCP declaration.",
+  "author": { "name": "Harbourline platform team" }
+}

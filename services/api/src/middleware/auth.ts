@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { BRAND_IDS, HEADERS, type BrandId, type Role } from "@kade/contracts";
+import { BRAND_IDS, HEADERS, type BrandId, type Role } from "@harbourline/contracts";
 import { badRequest, forbidden } from "../errors.js";
 
 export interface Caller {

@@ -3,20 +3,20 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: kade-fulfilment-worker
+  name: harbourline-fulfilment-worker
   namespace: "123456789012"
   labels:
     cloud.googleapis.com/location: europe-west1
-    service: kade-fulfilment-worker
+    service: harbourline-fulfilment-worker
     env: prod
   annotations:
     run.googleapis.com/ingress: internal
-    serving.knative.dev/creator: deploy@kade.test
-    serving.knative.dev/lastModifier: deploy@kade.test
+    serving.knative.dev/creator: deploy@harbourline.test
+    serving.knative.dev/lastModifier: deploy@harbourline.test
 spec:
   template:
     metadata:
-      name: kade-fulfilment-worker-00042-lam
+      name: harbourline-fulfilment-worker-00042-lam
       annotations:
         autoscaling.knative.dev/minScale: "1"
         autoscaling.knative.dev/maxScale: "4"
@@ -25,28 +25,28 @@ spec:
     spec:
       containerConcurrency: 8
       timeoutSeconds: 300
-      serviceAccountName: kade-worker@kade-prod.iam.gserviceaccount.com
+      serviceAccountName: harbourline-worker@harbourline-prod.iam.gserviceaccount.com
       containers:
-        - image: europe-west1-docker.pkg.dev/kade-prod/kade/fulfilment-worker:2026.10.15
+        - image: europe-west1-docker.pkg.dev/harbourline-prod/harbourline/fulfilment-worker:2026.10.15
           ports:
             - name: http1
               containerPort: 8080
           env:
             - name: PUBSUB_SUBSCRIPTION
-              value: projects/kade-prod/subscriptions/paygate-webhooks-worker
+              value: projects/harbourline-prod/subscriptions/paygate-webhooks-worker
             - name: SWEEPER_MAX_CART_AGE_HOURS
               value: "48"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: http://otel-collector.kade.internal:4318
+              value: http://otel-collector.harbourline.internal:4318
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: kade-prod-database-url
+                  name: harbourline-prod-database-url
                   key: latest
             - name: PAYGATE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: kade-prod-paygate-secret
+                  name: harbourline-prod-paygate-secret
                   key: latest
           resources:
             limits:
@@ -57,9 +57,9 @@ spec:
       latestRevision: true
 status:
   observedGeneration: 42
-  latestReadyRevisionName: kade-fulfilment-worker-00042-lam
-  latestCreatedRevisionName: kade-fulfilment-worker-00042-lam
-  url: https://kade-fulfilment-worker-abc123-ew.a.run.app
+  latestReadyRevisionName: harbourline-fulfilment-worker-00042-lam
+  latestCreatedRevisionName: harbourline-fulfilment-worker-00042-lam
+  url: https://harbourline-fulfilment-worker-abc123-ew.a.run.app
   conditions:
     - type: Ready
       status: "True"

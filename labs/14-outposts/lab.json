@@ -1,7 +1,7 @@
 {
   "number": 14,
   "slug": "outposts",
-  "title": "Outposts — keep PayGate sandbox keys and the repo inside Kadé's VPC",
+  "title": "Outposts — keep PayGate sandbox keys and the repo inside Harbourline's VPC",
   "feature": "Devin Outposts (Outpost queue, Docker worker image with the repo baked in, devin worker start, Slack !outpost, organization default platform, queueing across two containers) — or the offline queue model and Dockerfile check",
   "duration_minutes": 120,
   "difficulty": "advanced",
@@ -23,7 +23,7 @@
       {
         "integration": "Docker build of `outpost/Dockerfile`",
         "required": true,
-        "fixture": "If `public.ecr.aws` is unreachable, smoke-build the same layers on Ubuntu: `outpost/build.sh --build-arg BASE_IMAGE=mirror.gcr.io/library/ubuntu:24.04 -t kade-outpost-worker:smoke` then run `outpost/smoke.sh` inside it.",
+        "fixture": "If `public.ecr.aws` is unreachable, smoke-build the same layers on Ubuntu: `outpost/build.sh --build-arg BASE_IMAGE=mirror.gcr.io/library/ubuntu:24.04 -t harbourline-outpost-worker:smoke` then run `outpost/smoke.sh` inside it.",
         "note": "The smoke image has no Devin CLI, so it can prove the dependencies and the baked-in repo but cannot register as a worker."
       },
       {
@@ -58,7 +58,7 @@
       "docker compose -f outpost/compose.outpost.yml down -v (only if you started live workers)",
       "git checkout -- outpost/ labs/14-outposts/ && rm -f labs/14-outposts/OUTPOST-REPORT.md"
     ],
-    "clean_state": "`outpost/Dockerfile` matches `main` and passes `outpost-sim.mjs check-dockerfile` with nine `ok` lines, no `kade-outpost-worker` containers are running, and `labs/14-outposts/OUTPOST-REPORT.md` does not exist."
+    "clean_state": "`outpost/Dockerfile` matches `main` and passes `outpost-sim.mjs check-dockerfile` with nine `ok` lines, no `harbourline-outpost-worker` containers are running, and `labs/14-outposts/OUTPOST-REPORT.md` does not exist."
   },
   "injectors": [
     {
@@ -69,7 +69,7 @@
     {
       "name": "no-chrome",
       "when": "T+20 min",
-      "behaviour": "`node labs/14-outposts/tools/outpost-sim.mjs check-dockerfile labs/14-outposts/injectors/no-chrome.Dockerfile` — a colleague's \"slimmer\" image. Say what breaks for Kadé's checkout UI work and how you would prove it."
+      "behaviour": "`node labs/14-outposts/tools/outpost-sim.mjs check-dockerfile labs/14-outposts/injectors/no-chrome.Dockerfile` — a colleague's \"slimmer\" image. Say what breaks for Harbourline's checkout UI work and how you would prove it."
     },
     {
       "name": "third-session",

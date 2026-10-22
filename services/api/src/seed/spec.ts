@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
-import type { BrandId, Currency, OrderStatus } from "@kade/contracts";
+import type { BrandId, Currency, OrderStatus } from "@harbourline/contracts";
 import { repoRoot } from "../config.js";
 
 export interface SpecCollection {

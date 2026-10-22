@@ -1,7 +1,7 @@
 {
   "number": 1,
   "slug": "onboarding",
-  "title": "Onboarding — make Kadé safe and fast to set up before Monday's new starter",
+  "title": "Onboarding — make Harbourline safe and fast to set up before Monday's new starter",
   "feature": "Devin environment blueprints (initialize, maintenance, knowledge), the AGENTS.md hierarchy and its automatic-inclusion limit, Knowledge migrating to Skills, and choosing Ask Devin or an Agent session",
   "duration_minutes": 120,
   "difficulty": "intro",
@@ -29,7 +29,7 @@
       {
         "integration": "Organization Knowledge and Skills — optional",
         "required": false,
-        "fixture": "`.devin/skills/kade-dev/SKILL.md` is the repo skill a Knowledge note becomes; the blueprint `knowledge:` section in `docs/blueprint.proposed.yaml` shows environment-level context.",
+        "fixture": "`.devin/skills/harbourline-dev/SKILL.md` is the repo skill a Knowledge note becomes; the blueprint `knowledge:` section in `docs/blueprint.proposed.yaml` shows environment-level context.",
         "note": "Live: open Settings → Knowledge (or Skills) to see where migrated notes landed. Read-only is enough."
       },
       {

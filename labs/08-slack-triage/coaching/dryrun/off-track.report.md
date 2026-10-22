@@ -52,7 +52,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T10:00:00Z · timing:
 - Repeated words: basically (×3), um (×2)
 - Coach asked “did you say…?”: never
 - Article/plural slips: none
-- Re-record: “Update: the bot is live in #kade-bugs and replies to every message so nothing is missed.”; “Devin is accountable, it decides the refund, actually.”; “It answered the pasted ticket too, basically it did what it said.”
+- Re-record: “Update: the bot is live in #harbourline-bugs and replies to every message so nothing is missed.”; “Devin is accountable, it decides the refund, actually.”; “It answered the pasted ticket too, basically it did what it said.”
 
 ## Three stems for next time
 

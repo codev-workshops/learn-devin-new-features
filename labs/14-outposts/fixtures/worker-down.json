@@ -1,5 +1,5 @@
 {
-  "outpost": "kade-vpc",
+  "outpost": "harbourline-vpc",
   "description": "02:00 worker-b dies mid-session; its session waits, then resumes when the container restarts.",
   "events": [
     { "t": 0, "op": "worker_online", "worker": "worker-a" },

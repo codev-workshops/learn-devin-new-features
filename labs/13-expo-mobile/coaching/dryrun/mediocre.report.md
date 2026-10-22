@@ -43,7 +43,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T11:00:00Z · timing:
 - [x] Android builds on the Linux session with a KVM-accelerated emulator; iOS needs a separate macOS child session with Xcode and the Simulator (5) — “the emulator is fast because it has KVM”
 - [x] Expo SDK 54 with Continuous Native Generation: android/ and ios/ come from expo prebuild, are never committed, and drift is fixed by --clean (4) — “Expo SDK 54 generates ios/ with prebuild, we never commit it, and prebuild --clean fixes drift”
 - [ ] Multi-document blueprint, one runs-on linux and one runs-on macos document with a snapshot each; a snapshot mismatch is fixed there (5) — missed; belonged in update
-- [x] kade-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android (4) — “on Android it is actually the JS fallback, so nothing breaks there”
+- [x] harbourline-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android (4) — “on Android it is actually the JS fallback, so nothing breaks there”
 - [x] Xcode version selected explicitly with DEVELOPER_DIR on the macOS machine (3) — “I set DEVELOPER_DIR to Xcode 16”
 - [ ] What was not exercised: haptic feel on a physical iPhone, store signing and EAS, live API mode (3) — missed; belonged in update
 

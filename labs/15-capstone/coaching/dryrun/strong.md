@@ -13,11 +13,11 @@ Fixture for `@skills:coach-15-capstone dryrun --scenario ghost-orders-eu --dry-r
 Planted: one filler (actually ×1), no tag questions, no long pauses, no omitted must-mention points. The learner names the cost first, re-plans out loud after the T+60 call and keeps every session on the EU outpost when the queue blocks. The `change-60` block is the untimed T+60 requirement change, spoken verbatim from the scenario file.
 
 --- segment: framing ---
-[00:00] COACH: Good morning. I am Lena Vogt, I run Trailhead Supply. Three things, and I need all three handled by lunch. Incident: Since Monday, customers have been charged for orders that arrive in our admin console empty: a paid total, no lines, nothing to ship. Support counted fourteen complaints overnight. Every hour this runs, someone pays for nothing. Feature request: I promised our retail partners digital gift cards in euros for the winter campaign. I need a first version I can show them on Friday. Governance constraint: Our data-protection officer has ruled that no Devin session touching Trailhead code or data may execute outside our EU Outpost, `kade-eu`. Not one command on the default cloud machines. Ninety seconds. Go.
+[00:00] COACH: Good morning. I am Lena Vogt, I run Trailhead Supply. Three things, and I need all three handled by lunch. Incident: Since Monday, customers have been charged for orders that arrive in our admin console empty: a paid total, no lines, nothing to ship. Support counted fourteen complaints overnight. Every hour this runs, someone pays for nothing. Feature request: I promised our retail partners digital gift cards in euros for the winter campaign. I need a first version I can show them on Friday. Governance constraint: Our data-protection officer has ruled that no Devin session touching Trailhead code or data may execute outside our EU Outpost, `harbourline-eu`. Not one command on the default cloud machines. Ninety seconds. Go.
 [00:03] LEARNER: Paid orders are arriving empty because the cart sweeper deletes carts older than 48 hours even with a pending payment, so the late webhook creates a paid order with no lines.
 [00:24] LEARNER: That is fourteen customers paying for nothing, and it keeps happening every night until the sweeper changes.
 [00:46] LEARNER: So the incident goes first, the gift cards second, and the EU rule applies to both from the first command.
-[01:07] LEARNER: Before any session starts I make kade-eu the only platform for this work and check it took effect.
+[01:07] LEARNER: Before any session starts I make harbourline-eu the only platform for this work and check it took effect.
 [01:28] LEARNER: By lunch you get the cause, an open fix with proof, a gift-card plan and a list of every session and where it ran. Done.
 
 --- segment: checkpoint-30 ---
@@ -38,7 +38,7 @@ Planted: one filler (actually ×1), no tag questions, no long pauses, no omitted
 
 --- segment: update ---
 [04:04] COACH: Four minutes. Give me the update I forward to the board. Go.
-[04:07] LEARNER: Proven: every session ran on the kade-eu outpost and the second session waited in the queue instead of moving to the cloud.
+[04:07] LEARNER: Proven: every session ran on the harbourline-eu outpost and the second session waited in the queue instead of moving to the cloud.
 [04:28] LEARNER: That actually cost me twenty minutes of waiting, which I spent writing the report.
 [04:50] LEARNER: Still a claim: the gift-card tax rule until finance reads it.
 [05:11] LEARNER: Outcome: the ghost orders have a known cause and a fix waiting for review, and nothing left the EU outpost.
@@ -70,7 +70,7 @@ Planted: one filler (actually ×1), no tag questions, no long pauses, no omitted
 --- segment: objection-3 ---
 [11:34] COACH: Who stops an engineer from starting a Trailhead session on the default cloud tomorrow morning? Go.
 [11:37] LEARNER: Today nothing would, if it were left to good intentions.
-[11:59] LEARNER: The control is the organization default platform set to kade-eu, with the cloud override limited to admins.
+[11:59] LEARNER: The control is the organization default platform set to harbourline-eu, with the cloud override limited to admins.
 [12:21] COACH: And how would we find out if they did?
 [12:42] LEARNER: The session list shows the platform for every session; a weekly filter on it is our audit trail.
 [13:04] LEARNER: I will put both in the runbook and send you the filter today. Done.

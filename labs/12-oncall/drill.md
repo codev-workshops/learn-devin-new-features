@@ -1,4 +1,4 @@
-This lab uses the incident version of the four-part articulation drill. The coach plays the Kadé incident commander: tired, precise, short on patience for jargon. Incident voice means short sentences, the number first, and no speculation without a label ("likely", "confirmed").
+This lab uses the incident version of the four-part articulation drill. The coach plays the Harbourline incident commander: tired, precise, short on patience for jargon. Incident voice means short sentences, the number first, and no speculation without a label ("likely", "confirmed").
 
 ### 45-second incident framing
 

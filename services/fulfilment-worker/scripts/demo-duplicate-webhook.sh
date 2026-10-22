@@ -11,7 +11,7 @@ repo="$worker/../.."
 paygate="$repo/services/paygate-fake"
 PY="${PYTHON:-python3}"
 PORT="${WORKER_INBOX_PORT:-3103}"
-export PAYGATE_SECRET="${PAYGATE_SECRET:-kade-local-paygate-secret}"
+export PAYGATE_SECRET="${PAYGATE_SECRET:-harbourline-local-paygate-secret}"
 export WORKER_STORE_PATH="${WORKER_STORE_PATH:-$(mktemp -d)/store.json}"
 export PYTHONPATH="$worker/src${PYTHONPATH:+:$PYTHONPATH}"
 

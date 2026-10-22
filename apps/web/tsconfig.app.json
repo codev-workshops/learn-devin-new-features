@@ -22,7 +22,7 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom/vitest"],
     "paths": {
-      "@kade/contracts": ["../../packages/contracts/src/index.ts"]
+      "@harbourline/contracts": ["../../packages/contracts/src/index.ts"]
     }
   },
   "include": ["src", "../../packages/contracts/src"]

@@ -1,5 +1,5 @@
 {
-  "name": "@kade/mobile",
+  "name": "@harbourline/mobile",
   "version": "0.1.0",
   "private": true,
   "description": "Kad\u00e9 Commerce shopping app (Expo SDK 54, Expo Router): brand picker, catalog, cart and order status against the frozen OpenAPI contract.",

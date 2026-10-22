@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { formatMoney, type Collection, type Product } from "@/api";
-import { useAsync, useKade } from "@/state/store";
+import { useAsync, useHarbourline } from "@/state/store";
 import { Button, Card, ErrorBanner, Loading, Muted, Pill, Screen } from "@/ui/primitives";
 import { brandAccent, palette } from "@/ui/theme";
 
@@ -61,7 +61,7 @@ export function ProductRow({
 }
 
 export function CatalogScreen() {
-  const { api, session, addToCart, error, dismissError, clearBrand } = useKade();
+  const { api, session, addToCart, error, dismissError, clearBrand } = useHarbourline();
   const [slug, setSlug] = useState<string | null>(null);
   useEffect(() => setSlug(null), [session?.brand]);
   const collections = useAsync<Collection[]>(

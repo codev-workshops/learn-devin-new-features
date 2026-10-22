@@ -13,7 +13,7 @@ Planted: nothing. Every must-mention point lands in its segment, timings are wit
 
 --- segment: framing ---
 [00:00] COACH: Sixty seconds. What do customers get, and how will you prove it? Go.
-[00:03] LEARNER: Customers will see packed and shipped on the order screen of the Kadé app, on Android and on iOS.
+[00:03] LEARNER: Customers will see packed and shipped on the order screen of the Harbourline app, on Android and on iOS.
 [00:14] LEARNER: The proof is the same packed order, screenshotted on the Android emulator and on the iOS Simulator, side by side.
 [00:29] LEARNER: Devin builds Android on its Linux machine, and a macOS child session builds iOS in Xcode, so neither platform is a guess.
 [00:46] LEARNER: You will know it works when both screenshots show the same status pill and the same timeline.
@@ -30,14 +30,14 @@ Planted: nothing. Every must-mention point lands in its segment, timings are wit
 [02:05] COACH: T+120. You are on iOS now. What is different there? Go.
 [02:08] LEARNER: I see the Mac had two Xcodes, a release and a beta, so the child pins the release Xcode with DEVELOPER_DIR.
 [02:19] LEARNER: I think the carry-over from Android is Expo SDK 54 prebuild: ios/ is generated, never committed, and prebuild --clean fixes any drift.
-[02:36] LEARNER: I'll check that KadeHaptics is in Podfile.lock before I take the screenshot.
+[02:36] LEARNER: I'll check that HarbourlineHaptics is in Podfile.lock before I take the screenshot.
 [02:49] LEARNER: Done.
 
 --- segment: update ---
 [03:00] COACH: Three minutes. Give me the update with proof on both platforms. Go.
 [03:03] LEARNER: Outcome: the order screen shows packed and shipped on both phones.
 [03:12] LEARNER: Evidence on Android: the Linux emulator shows order LH-001004 as packed with its timeline, and the cart says the haptic uses the JS fallback.
-[03:38] LEARNER: Evidence on iOS: the Simulator shows the same order in the same state, and the cart says native kade-haptics, a small Swift module.
+[03:38] LEARNER: Evidence on iOS: the Simulator shows the same order in the same state, and the cart says native harbourline-haptics, a small Swift module.
 [04:02] LEARNER: That module has a JS fallback, so Android gets a harmless no-op instead of a crash.
 [04:20] LEARNER: Setup: the blueprint now has two documents, runs-on linux and runs-on macos, each with its own snapshot. When a snapshot was missing the Android SDK we fixed the blueprint, not the machine, so the next engineer boots straight in.
 [04:58] LEARNER: Risk: the Simulator proves the module is linked and called; it cannot prove how the tap feels.

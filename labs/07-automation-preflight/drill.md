@@ -1,4 +1,4 @@
-This lab uses the four-part articulation drill with two think-aloud checkpoints. The coach plays the Kadé payments lead: practical, worried about missing a real failure, impatient with tooling words that do not come with a number.
+This lab uses the four-part articulation drill with two think-aloud checkpoints. The coach plays the Harbourline payments lead: practical, worried about missing a real failure, impatient with tooling words that do not come with a number.
 
 ### 60-second framing
 

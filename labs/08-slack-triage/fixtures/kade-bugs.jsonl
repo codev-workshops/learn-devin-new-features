@@ -1,7 +1,0 @@
-{"channel":"C0KADEBUGS","ts":"1792663200.000100","user":"U0AMARA","user_name":"amara (support)","text":"Customer on Lumen order LH-100231 says she was charged twice for the Arc floor lamp and got two order-confirmed emails."}
-{"channel":"C0KADEBUGS","ts":"1792663500.000200","user":"U0LI","user_name":"li (support)","text":"A Lumen merchandiser can open Trailhead order TS-200118 by pasting its id into the admin order page."}
-{"channel":"C0KADEBUGS","ts":"1792664100.000300","user":"U0JOEL","user_name":"joel (support)","text":"another one charged twice: LH-100245, two order-confirmed emails, and stock shows one fewer than it should"}
-{"channel":"C0KADEBUGS","ts":"1792664700.000400","user":"U0LI","user_name":"li (support)","text":"Trailhead customer: basket said €49.99 incl. VAT, receipt says €50.00. Third one this week."}
-{"channel":"C0KADEBUGS","ts":"1792665300.000500","user":"U0JOEL","user_name":"joel (support)","text":"TS-200140 shows confirmed and paid but has no items in it at all"}
-{"channel":"C0KADEBUGS","ts":"1792665900.000600","thread_ts":"1792663200.000100","user":"U0PRIYA","user_name":"priya (engineering)","text":"Wrong owner: the web team does not own payment webhooks. Duplicate confirmations are the fulfilment worker, route these to @kade-fulfilment."}
-{"channel":"C0KADEBUGS","ts":"1792666500.000700","user":"U0AMARA","user_name":"amara (support)","text":"Charged twice again: LH-100260. Customer wants a refund today."}

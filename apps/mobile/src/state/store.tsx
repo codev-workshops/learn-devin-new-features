@@ -8,12 +8,19 @@ import React, {
   useState,
 } from "react";
 
-import { createApi, type Brand, type BrandId, type Cart, type KadeApi, type Session } from "../api";
+import {
+  createApi,
+  type Brand,
+  type BrandId,
+  type Cart,
+  type HarbourlineApi,
+  type Session,
+} from "../api";
 import { demoCustomer } from "../mocks/store";
-import { impact } from "../../modules/kade-haptics";
+import { impact } from "../../modules/harbourline-haptics";
 
-export interface KadeState {
-  api: KadeApi;
+export interface HarbourlineState {
+  api: HarbourlineApi;
   brands: Brand[];
   session: Session | null;
   brand: Brand | null;
@@ -31,16 +38,16 @@ export interface KadeState {
   notifyOrdersChanged(): void;
 }
 
-const Ctx = createContext<KadeState | null>(null);
+const Ctx = createContext<HarbourlineState | null>(null);
 
-export function KadeProvider({
+export function HarbourlineProvider({
   api: injected,
   children,
 }: {
-  api?: KadeApi;
+  api?: HarbourlineApi;
   children: React.ReactNode;
 }) {
-  const apiRef = useRef<KadeApi>(injected ?? createApi());
+  const apiRef = useRef<HarbourlineApi>(injected ?? createApi());
   const api = apiRef.current;
   const [brands, setBrands] = useState<Brand[]>([]);
   const [session, setSession] = useState<Session | null>(null);
@@ -88,7 +95,7 @@ export function KadeProvider({
     }
   }, []);
 
-  const value = useMemo<KadeState>(
+  const value = useMemo<HarbourlineState>(
     () => ({
       api,
       brands,
@@ -132,9 +139,9 @@ export function KadeProvider({
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
-export function useKade(): KadeState {
+export function useHarbourline(): HarbourlineState {
   const v = useContext(Ctx);
-  if (!v) throw new Error("useKade must be used inside <KadeProvider>");
+  if (!v) throw new Error("useHarbourline must be used inside <HarbourlineProvider>");
   return v;
 }
 

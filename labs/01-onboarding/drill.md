@@ -1,4 +1,4 @@
-This lab uses the standard four-part articulation drill. The coach plays Priya Nair, Kadé's hiring manager: friendly, not technical, and responsible for Monday's new starter. Everything you say must survive being repeated by someone who has never opened a terminal.
+This lab uses the standard four-part articulation drill. The coach plays Priya Nair, Harbourline's hiring manager: friendly, not technical, and responsible for Monday's new starter. Everything you say must survive being repeated by someone who has never opened a terminal.
 
 ### 60-second framing for a non-engineer
 

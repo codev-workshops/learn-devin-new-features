@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { formatMoney, type Product } from "@/api";
-import { useAsync, useKade } from "@/state/store";
+import { useAsync, useHarbourline } from "@/state/store";
 import { Button, Card, ErrorBanner, Loading, Muted, Pill, Screen, Title } from "@/ui/primitives";
 import { brandAccent, palette } from "@/ui/theme";
 
 export function ProductScreen() {
   const { sku } = useLocalSearchParams<{ sku: string }>();
-  const { api, session, addToCart, busy, error, dismissError } = useKade();
+  const { api, session, addToCart, busy, error, dismissError } = useHarbourline();
   const product = useAsync<Product>(
     () => (session && sku ? api.getProduct(session, sku) : null),
     [session?.brand, sku],

@@ -1,4 +1,4 @@
-This lab uses the four-part articulation drill with two think-aloud checkpoints, one per platform. The coach plays the Kadé product owner: not an engineer, wants to see the same screen on two phones, and counts every hour of machine time.
+This lab uses the four-part articulation drill with two think-aloud checkpoints, one per platform. The coach plays the Harbourline product owner: not an engineer, wants to see the same screen on two phones, and counts every hour of machine time.
 
 ### 60-second framing
 

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "harbourline-incidents": {
+      "command": "npx",
+      "args": ["-y", "@pagerduty/mcp-server"],
+      "env": {
+        "PAGERDUTY_API_TOKEN": "${PAGERDUTY_API_TOKEN}"
+      }
+    }
+  }
+}

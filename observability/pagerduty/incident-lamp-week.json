@@ -1,23 +1,23 @@
 {
   "incident": {
-    "id": "Q3KADE0210LAMP",
+    "id": "Q3HARBOURLINE0210LAMP",
     "type": "incident",
     "incident_number": 2187,
-    "title": "[Kadé] Negative on-hand inventory — LH-LAMP-03",
-    "description": "Datadog monitor 48213771 triggered: min:kade.inventory.on_hand{sku:LH-LAMP-03} = -37 (threshold 0).",
+    "title": "[Harbourline] Negative on-hand inventory — LH-LAMP-03",
+    "description": "Datadog monitor 48213771 triggered: min:harbourline.inventory.on_hand{sku:LH-LAMP-03} = -37 (threshold 0).",
     "created_at": "2026-10-22T02:10:14Z",
     "updated_at": "2026-10-22T02:52:40Z",
     "status": "acknowledged",
     "urgency": "high",
-    "priority": { "id": "P2KADE", "summary": "P2", "type": "priority_reference" },
+    "priority": { "id": "P2HARBOURLINE", "summary": "P2", "type": "priority_reference" },
     "service": {
-      "id": "PKADEAPI",
-      "summary": "Kadé Commerce — Platform",
+      "id": "PHARBOURLINEAPI",
+      "summary": "Harbourline — Platform",
       "type": "service_reference",
-      "html_url": "https://kade.pagerduty.test/service-directory/PKADEAPI"
+      "html_url": "https://harbourline.pagerduty.test/service-directory/PHARBOURLINEAPI"
     },
     "escalation_policy": {
-      "id": "PKADEEP1",
+      "id": "PHARBOURLINEEP1",
       "summary": "Platform on-call",
       "type": "escalation_policy_reference"
     },
@@ -43,10 +43,10 @@
     ],
     "alert_counts": { "all": 4, "triggered": 1, "resolved": 3 },
     "incident_key": "datadog-48213771-sku:LH-LAMP-03",
-    "html_url": "https://kade.pagerduty.test/incidents/Q3KADE0210LAMP",
+    "html_url": "https://harbourline.pagerduty.test/incidents/Q3HARBOURLINE0210LAMP",
     "body": {
       "type": "incident_body",
-      "details": "Monitor: [Kadé] Negative on-hand inventory — LH-LAMP-03\nValue: -37 units\nBrand: lumen-home\nWarehouse: US-NJ\nLast deploy: kade-api 2026.10.21-lampweek at 22:40 UTC\nRunbook: observability/runbooks/RB-102-negative-on-hand-oversell.md"
+      "details": "Monitor: [Harbourline] Negative on-hand inventory — LH-LAMP-03\nValue: -37 units\nBrand: lumen-home\nWarehouse: US-NJ\nLast deploy: harbourline-api 2026.10.21-lampweek at 22:40 UTC\nRunbook: observability/runbooks/RB-102-negative-on-hand-oversell.md"
     },
     "last_status_change_at": "2026-10-22T02:13:50Z",
     "conference_bridge": null

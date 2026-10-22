@@ -1,4 +1,4 @@
-import type { CheckoutInput } from "@kade/contracts";
+import type { CheckoutInput } from "@harbourline/contracts";
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { ErrorNote, Loading } from "../components/ui";

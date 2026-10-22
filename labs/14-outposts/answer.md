@@ -1,16 +1,16 @@
 ## Feature fit
 
-Outposts move session **execution** onto machines Kadé runs: commands, file edits and repository access happen on the worker inside the VPC, while planning and inference stay in Devin Cloud. That answers the CISO's two concrete asks — the repo is checked out only on Kadé hosts, and PayGate sandbox keys can live in the VPC's own secret store and environment rather than in Devin-hosted machines. It does not make Devin "air-gapped": the model still sees the code it reads and the commands it runs. Say that first; the first objection is built on it.
+Outposts move session **execution** onto machines Harbourline runs: commands, file edits and repository access happen on the worker inside the VPC, while planning and inference stay in Devin Cloud. That answers the CISO's two concrete asks — the repo is checked out only on Harbourline hosts, and PayGate sandbox keys can live in the VPC's own secret store and environment rather than in Devin-hosted machines. It does not make Devin "air-gapped": the model still sees the code it reads and the commands it runs. Say that first; the first objection is built on it.
 
 An Outpost is a named queue. Each worker process watches the queue and runs one session at a time, so two containers give two concurrent sessions and the third waits (with a wait banner, not an error) until a worker frees up.
 
 ## Worked approach
 
-1. **Create the Outpost** (org admin: Settings → Devin → Outposts → Create Outpost, e.g. `kade-vpc`). Copy the worker token immediately into the secret manager; it is shown once.
+1. **Create the Outpost** (org admin: Settings → Devin → Outposts → Create Outpost, e.g. `harbourline-vpc`). Copy the worker token immediately into the secret manager; it is shown once.
 2. **Build the image** with `outpost/build.sh`, which bundles the committed HEAD (`git bundle`) and runs `docker build -f outpost/Dockerfile .` from the repo root. The Dockerfile starts from `public.ecr.aws/e0h8a4b6/devin-cli:stable`, adds git, ffmpeg, Node 22, Python and Google Chrome (`DEVIN_CHROME_PATH=/usr/bin/google-chrome`, because Ubuntu's chromium package is a snap stub in containers), creates a non-root user, clones the bundle into `/workspace/repos/learn-devin-new-features` and runs `npm ci --ignore-scripts`, and defaults to `CMD ["worker", "start"]`. `outpost/Dockerfile.dockerignore` admits only the bundle and the smoke test, so `.env` files, untracked files and `node_modules` cannot be copied in.
-3. **Prove the image**: `check-dockerfile` (nine `ok`) and `kade-outpost-smoke` inside the image. If the official registry is unreachable, build the same layers on Ubuntu with `--build-arg BASE_IMAGE=mirror.gcr.io/library/ubuntu:24.04` and say that the CLI layer was not exercised.
+3. **Prove the image**: `check-dockerfile` (nine `ok`) and `harbourline-outpost-smoke` inside the image. If the official registry is unreachable, build the same layers on Ubuntu with `--build-arg BASE_IMAGE=mirror.gcr.io/library/ubuntu:24.04` and say that the CLI layer was not exercised.
 4. **Start two workers**: `export DEVIN_OUTPOSTS_TOKEN=…` from the secret manager, then `docker compose -f outpost/compose.outpost.yml up -d`. Each service has its own data volume, so each keeps its own acceptor id; `restart: unless-stopped` brings a dead container back.
-5. **Route engineers to it**: web (pick the Outpost when starting a session), Slack (`@Devin !outpost kade-vpc …`; `!outpost` alone lists the choices), and the organization default platform so nobody has to remember.
+5. **Route engineers to it**: web (pick the Outpost when starting a session), Slack (`@Devin !outpost harbourline-vpc …`; `!outpost` alone lists the choices), and the organization default platform so nobody has to remember.
 6. **Replay the queue and failures** with `outpost-sim.mjs` and paste the logs into `OUTPOST-REPORT.md`, then fill in the live-versus-rehearsed table.
 
 ## The injectors

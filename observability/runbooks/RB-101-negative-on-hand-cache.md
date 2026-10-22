@@ -1,10 +1,10 @@
 # RB-101 — Negative on-hand inventory (inventory cache)
 
-**Service:** kade-api / kade-fulfilment-worker · **Monitor:** 48213771 · **Owner:** Platform on-call · **Last reviewed:** 2026-06-03
+**Service:** harbourline-api / harbourline-fulfilment-worker · **Monitor:** 48213771 · **Owner:** Platform on-call · **Last reviewed:** 2026-06-03
 
 ## Symptom
 
-Datadog reports a negative `kade.inventory.on_hand` for one SKU. The storefront still shows the product as "low stock".
+Datadog reports a negative `harbourline.inventory.on_hand` for one SKU. The storefront still shows the product as "low stock".
 
 ## Cause
 

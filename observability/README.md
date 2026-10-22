@@ -1,10 +1,10 @@
 # observability/ — Datadog, PagerDuty, OpenTelemetry and runbook fixtures (W1-fixtures)
 
-Story: the Lamp Week deploy (`kade-api 2026.10.21-lampweek`, 22:40 UTC) is followed by concurrent checkouts on the 3-unit hero SKU `LH-LAMP-03`; on-hand reaches −37 and PagerDuty pages at 02:10 (incident 2187). Duplicate PayGate deliveries amplify the damage. The on-call follows the wrong runbook. Used by labs 7, 8 and 12 through the MCP shim in `fixtures/mcp/`.
+Story: the Lamp Week deploy (`harbourline-api 2026.10.21-lampweek`, 22:40 UTC) is followed by concurrent checkouts on the 3-unit hero SKU `LH-LAMP-03`; on-hand reaches −37 and PagerDuty pages at 02:10 (incident 2187). Duplicate PayGate deliveries amplify the damage. The on-call follows the wrong runbook. Used by labs 7, 8 and 12 through the MCP shim in `fixtures/mcp/`.
 
 | Path                                            | What                                                                                                        |
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `datadog/monitor-negative-on-hand.json`         | Monitor 48213771 (`min:kade.inventory.on_hand … < 0`), state Alert, links RB-102                            |
+| `datadog/monitor-negative-on-hand.json`         | Monitor 48213771 (`min:harbourline.inventory.on_hand … < 0`), state Alert, links RB-102                            |
 | `datadog/monitor-webhook-failure-rate.json`     | Monitor 48213802 (webhook failure rate > 5%), state Warn, links RB-201                                      |
 | `datadog/dashboard-inventory-and-payments.json` | Dashboard with on-hand, checkout outcomes, reservation latency, webhook attempts, duplicate event ids       |
 | `datadog/metrics-*.json`                        | Query results (v1 shape) for the on-hand series and the failure-rate series, 22:00 → 03:00                  |

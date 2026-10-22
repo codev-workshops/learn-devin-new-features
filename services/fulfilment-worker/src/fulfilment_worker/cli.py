@@ -1,12 +1,12 @@
-"""``kade-worker`` command line.
+"""``harbourline-worker`` command line.
 
-    kade-worker run                     poll outbox + webhook inbox, sweep carts on a timer
-    kade-worker once [--sweep]          one tick (what the Compose healthcheck and tests use)
-    kade-worker sweep                   run the abandoned-cart sweeper once
-    kade-worker reconcile               totals drift report (API half-up vs worker banker's)
-    kade-worker inbox [--port 3003]     HTTP webhook receiver for the fixture path
-    kade-worker seed-demo               write the demo fixture into the configured store
-    kade-worker demo <name>             duplicate-webhook | abandoned-cart | rounding-drift
+    harbourline-worker run                     poll outbox + webhook inbox, sweep carts on a timer
+    harbourline-worker once [--sweep]          one tick (what the Compose healthcheck and tests use)
+    harbourline-worker sweep                   run the abandoned-cart sweeper once
+    harbourline-worker reconcile               totals drift report (API half-up vs worker banker's)
+    harbourline-worker inbox [--port 3003]     HTTP webhook receiver for the fixture path
+    harbourline-worker seed-demo               write the demo fixture into the configured store
+    harbourline-worker demo <name>             duplicate-webhook | abandoned-cart | rounding-drift
 
 Store selection: DATABASE_URL → PostgreSQL; WORKER_STORE_PATH → JSON file; otherwise in-memory.
 """
@@ -158,7 +158,7 @@ def cmd_reconcile(store: Store) -> int:
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
-        prog="kade-worker",
+        prog="harbourline-worker",
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )

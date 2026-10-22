@@ -53,7 +53,7 @@ VERIFY_SCHEMA = {"type": "object", "properties": {
     "required": ["branch", "verdict", "endpoints_proven", "notes"]}
 
 COMMON = (f"Repository {REPO}, commit {BASE_SHA} (check it out exactly; never push to main, never open a PR, "
-          "never merge anything). Kade Commerce has two brands; the caller's brand is the X-Kade-Brand header "
+          "never merge anything). Harbourline has two brands; the caller's brand is the X-Harbourline-Brand header "
           "(services/api/src/middleware/auth.ts sets req.caller.brand). An endpoint LEAKS when a caller of one brand "
           "can read or change a row that belongs to the other brand. ")
 
@@ -130,7 +130,7 @@ async def main():
     await register_workflow({
         "name": "lab09-brand-isolation-audit",
         "description": "Audit services/api routes for cross-brand leaks, fix on throwaway branches, verify independently",
-        "product": "Kade Commerce services/api",
+        "product": "Harbourline services/api",
         "soft_time_limit_minutes": 25,
         "phases": [
             {"title": "audit", "detail": "one agent per route file, read-only", "labels": [f"audit-{f}" for f in SLICE]},

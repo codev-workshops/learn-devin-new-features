@@ -1,6 +1,6 @@
 ---
 name: coach-01-onboarding
-description: Voice articulation coach for lab 01 (onboarding — make Kadé safe and fast to set up before Monday's new starter). Use when the learner types `@skills:coach-01-onboarding <handle>` or runs `npm run coach:dryrun -- 01`.
+description: Voice articulation coach for lab 01 (onboarding — make Harbourline safe and fast to set up before Monday's new starter). Use when the learner types `@skills:coach-01-onboarding <handle>` or runs `npm run coach:dryrun -- 01`.
 triggers: ["user"]
 argument-hint: "<handle> [--dry-run <transcript>]"
 ---

@@ -55,10 +55,10 @@
     "reset": [
       "git switch main && git status --short",
       "git branch --list 'lab04/*' | xargs -r git branch -D",
-      "rm -rf ~/kade-flash-sale ~/kade-flash-sale.zip",
+      "rm -rf ~/harbourline-flash-sale ~/harbourline-flash-sale.zip",
       "npm run lab:reset -- 04"
     ],
-    "clean_state": "On `main` with `git status --short` empty, no local `lab04/*` branches, no `~/kade-flash-sale` working folder, and no plugin named `kade-flash-sale` installed at any scope you control (check Customize → Plugins at Personal and Organization). The seed-spec dataset is loaded for both brands."
+    "clean_state": "On `main` with `git status --short` empty, no local `lab04/*` branches, no `~/harbourline-flash-sale` working folder, and no plugin named `harbourline-flash-sale` installed at any scope you control (check Customize → Plugins at Personal and Organization). The seed-spec dataset is loaded for both brands."
   },
   "injectors": [
     {

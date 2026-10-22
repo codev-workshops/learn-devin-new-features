@@ -1,5 +1,5 @@
 {
-  "$comment": "Kadé Commerce scenario manifest (W1-fixtures). Lab authors copy `injectors[].lab` into labs/<nn>-*/lab.json#injectors and `briefs/<id>.json` into brief.md. Every injector talks only to the OpenAPI contract; exit 0 = symptom observed, 2 = precondition, 3 = plant fixed, 4 = worker-side symptom pending.",
+  "$comment": "Harbourline scenario manifest (W1-fixtures). Lab authors copy `injectors[].lab` into labs/<nn>-*/lab.json#injectors and `briefs/<id>.json` into brief.md. Every injector talks only to the OpenAPI contract; exit 0 = symptom observed, 2 = precondition, 3 = plant fixed, 4 = worker-side symptom pending.",
   "version": 1,
   "reset": {
     "command": "npm run lab:reset -- <nn>",
@@ -10,9 +10,9 @@
     "paygate_knobs_note": "services/paygate-fake knobs (--duplicate, --out-of-order, --delay) are reset with PUT /knobs when the service is reachable at PAYGATE_URL; otherwise restart it."
   },
   "environment": {
-    "KADE_API_URL": "http://localhost:3001",
-    "PAYGATE_SECRET": "kade-local-paygate-secret",
-    "KADE_SCENARIO_STATE_DIR": "scenarios/.state",
+    "HARBOURLINE_API_URL": "http://localhost:3001",
+    "PAYGATE_SECRET": "harbourline-local-paygate-secret",
+    "HARBOURLINE_SCENARIO_STATE_DIR": "scenarios/.state",
     "PAYGATE_URL": "http://localhost:3002"
   },
   "injectors": [

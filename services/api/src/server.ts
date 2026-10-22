@@ -5,7 +5,7 @@ import { createDb } from "./db.js";
 const db = createDb();
 const app = createApp(db);
 const server = app.listen(config.port, () => {
-  console.log(`kade-api listening on http://localhost:${config.port}`);
+  console.log(`harbourline-api listening on http://localhost:${config.port}`);
 });
 
 for (const signal of ["SIGINT", "SIGTERM"] as const) {

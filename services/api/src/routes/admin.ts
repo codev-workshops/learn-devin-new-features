@@ -4,7 +4,7 @@ import {
   type AbandonedCart,
   type InventoryRow,
   type PriceList,
-} from "@kade/contracts";
+} from "@harbourline/contracts";
 import type { Db } from "../db.js";
 import { now } from "../config.js";
 import { badRequest, notFound } from "../errors.js";

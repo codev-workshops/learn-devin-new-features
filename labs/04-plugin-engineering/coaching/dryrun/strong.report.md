@@ -26,7 +26,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T10:00:00Z · timing:
 ## Structure (problem → approach → evidence → next step)
 
 - **Problem** — present: “Every brand team will run the same flash-sale release checklist”
-- **Approach** — present: “The kade-flash-sale plugin ships both procedures as skills”
+- **Approach** — present: “The harbourline-flash-sale plugin ships both procedures as skills”
 - **Evidence** — present: “The checker reports zero problems and it is installed for me only”
 - **Next step** — present: “I need your sign-off before Organization scope”
 - Update order (Outcome → Evidence → Risk → Next action → Ask) held: yes
@@ -39,7 +39,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T10:00:00Z · timing:
 
 ## Missing key points
 
-- [x] One plugin ships both procedures as skills together with the freeze rule, the push guard hook, the reviewer subagent and the incident MCP (8) — “The kade-flash-sale plugin ships both procedures as skills, together with the freeze rule, the push guard hook, the release-checker subagent and the incident MCP declaration”
+- [x] One plugin ships both procedures as skills together with the freeze rule, the push guard hook, the reviewer subagent and the incident MCP (8) — “The harbourline-flash-sale plugin ships both procedures as skills, together with the freeze rule, the push guard hook, the release-checker subagent and the incident MCP declaration”
 - [x] Repository installs follow the branch unless pinned to a SHA, uploads stay pinned to what was uploaded, and a skills-only repo needs no manifest (6) — “the repository install follows the branch unless we pin it to a SHA, and the upload stays pinned to what we uploaded”
 - [x] A new uploaded revision replaces the whole bundle, so a partial zip removes every file it left out (6) — “the new revision replaces the whole bundle, so the partial zip removed six files”
 - [x] The MCP credential is connected after install through a secret reference and never written into the plugin files (5) — “the credential is connected after install from Connect MCP. It is never written into the plugin files”

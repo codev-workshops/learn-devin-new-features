@@ -1,6 +1,6 @@
 // Every injector is run for real (bash + curl + jq) against the contract stub, which carries
 // the planted defects; each test asserts the injector's visible symptom and exit code 0.
-// Set SCENARIOS_LIVE=1 KADE_API_URL=http://localhost:3001 to run the same suite against services/api.
+// Set SCENARIOS_LIVE=1 HARBOURLINE_API_URL=http://localhost:3001 to run the same suite against services/api.
 import { after, before, describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
@@ -13,7 +13,7 @@ before(async () => {
 });
 after(() => api.stop());
 
-const env = () => ({ KADE_API_URL: api.url });
+const env = () => ({ HARBOURLINE_API_URL: api.url });
 
 describe("oversell.sh", () => {
   it("lets more checkouts through than units on hand and drives onHand negative", () => {
@@ -117,7 +117,7 @@ describe("rounding-drift.sh", () => {
 
 describe("common exit codes", () => {
   it("exits 2 with a clear message when the API is down", () => {
-    const r = runInjector("oversell.sh", [], { KADE_API_URL: "http://127.0.0.1:9" });
+    const r = runInjector("oversell.sh", [], { HARBOURLINE_API_URL: "http://127.0.0.1:9" });
     assert.equal(r.status, 2);
     assert.match(r.stderr, /API not reachable/);
   });
@@ -125,12 +125,12 @@ describe("common exit codes", () => {
     const r = runInjector(
       "duplicate-webhook.sh",
       ["--order", "00000000-0000-0000-0000-000000000000"],
-      { KADE_API_URL: "http://kade-api.example.test:3001", PAYGATE_SECRET: "" },
+      { HARBOURLINE_API_URL: "http://harbourline-api.example.test:3001", PAYGATE_SECRET: "" },
     );
     assert.equal(r.status, 2);
     assert.match(r.stderr, /API not reachable|PAYGATE_SECRET is required/);
     const lib = readFileSync(join(process.cwd(), "scenarios/lib/common.sh"), "utf8");
-    assert.match(lib, /PAYGATE_SECRET is required when KADE_API_URL is not a loopback address/);
+    assert.match(lib, /PAYGATE_SECRET is required when HARBOURLINE_API_URL is not a loopback address/);
   });
   it("prints usage with --help", () => {
     for (const s of [

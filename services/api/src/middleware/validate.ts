@@ -1,5 +1,5 @@
-import type { ApiError } from "@kade/contracts";
-import { MONEY_PATTERN, SKU_PATTERN } from "@kade/contracts";
+import type { ApiError } from "@harbourline/contracts";
+import { MONEY_PATTERN, SKU_PATTERN } from "@harbourline/contracts";
 import { validationFailed } from "../errors.js";
 
 type Detail = NonNullable<ApiError["details"]>[number];

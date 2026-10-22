@@ -1,7 +1,7 @@
 {
-  "description": "Injector recommended-floor: the same matrix with kade-floor set to recommended. Compare opt-out-session and child-of-dev with the reference.",
+  "description": "Injector recommended-floor: the same matrix with harbourline-floor set to recommended. Compare opt-out-session and child-of-dev with the reference.",
   "profiles": {
-    "kade-floor": {
+    "harbourline-floor": {
       "scope": "enterprise",
       "enforcement": "recommended",
       "network": [
@@ -11,7 +11,7 @@
       "mcp": [],
       "gh_token": "remove"
     },
-    "kade-dev": {
+    "harbourline-dev": {
       "scope": "org",
       "enforcement": "recommended",
       "network": [
@@ -21,7 +21,7 @@
       "git": "full",
       "devin_mcp_read_only": false
     },
-    "kade-automation": {
+    "harbourline-automation": {
       "scope": "org",
       "enforcement": "recommended",
       "network": [
@@ -33,13 +33,13 @@
   },
   "bindings": {
     "enterprise_default": {
-      "profile": "kade-floor"
+      "profile": "harbourline-floor"
     },
     "org_default": {
-      "profile": "kade-dev"
+      "profile": "harbourline-dev"
     },
     "automations_default": {
-      "profile": "kade-automation"
+      "profile": "harbourline-automation"
     },
     "automations": {
       "webhook-triage": "inherit"

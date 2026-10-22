@@ -15,9 +15,9 @@
     "badge": "fixture",
     "matrix": [
       {
-        "integration": "Kadé stack (API, worker, PayGate fake, seed data, scenario injectors)",
+        "integration": "Harbourline stack (API, worker, PayGate fake, seed data, scenario injectors)",
         "required": true,
-        "fixture": "`npm run db:up && npm run lab:reset -- 15`, then `npm run dev -w services/api` (port 3001); the webhook and sweeper injectors also need the fulfilment worker: `(cd services/fulfilment-worker && DATABASE_URL=postgres://kade:kade@localhost:5432/kade python3 -m fulfilment_worker run)`.",
+        "fixture": "`npm run db:up && npm run lab:reset -- 15`, then `npm run dev -w services/api` (port 3001); the webhook and sweeper injectors also need the fulfilment worker: `(cd services/fulfilment-worker && DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline python3 -m fulfilment_worker run)`.",
         "note": "Zero credentials. This is the only part every envelope needs."
       },
       {

@@ -38,7 +38,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T09:00:00Z · timing:
 
 ## Missing key points
 
-- [x] Both brands run on a single shared codebase and database (8) — “Kadé runs two brands, Lumen Home and Trailhead Supply, on one shared codebase and one shared Postgres database”
+- [x] Both brands run on a single shared codebase and database (8) — “Harbourline runs two brands, Lumen Home and Trailhead Supply, on one shared codebase and one shared Postgres database”
 - [x] The cost of the chosen problem stated in orders, money or engineer-days (6) — “roughly five engineer-days per hire plus one outage”
 - [x] One Devin capability for the first session with one reason it beats an alternative (6) — “environment setup with a blueprint and a root AGENTS.md, because that is the only capability that removes the shared-database risk without touching a migration”
 - [x] The proof of success described as an observable artefact rather than a command (5) — “a fresh session, following only the instructions, brings up the storefront in under fifteen minutes on a recording”

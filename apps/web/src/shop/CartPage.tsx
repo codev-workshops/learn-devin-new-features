@@ -1,4 +1,4 @@
-import type { Cart } from "@kade/contracts";
+import type { Cart } from "@harbourline/contracts";
 import { useState } from "react";
 import { Link } from "react-router";
 import { ErrorNote, Loading, Price } from "../components/ui";

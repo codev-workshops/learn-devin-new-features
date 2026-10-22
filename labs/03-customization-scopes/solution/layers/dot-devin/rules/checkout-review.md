@@ -10,7 +10,7 @@ Owner: Platform team (`.github/CODEOWNERS`). Brand teams own their own rule file
 
 - [review.checklist] On every change to checkout, carts, orders or money, run the `checkout-review` skill and paste its checklist into the PR description.
 - [money.boundary] Money crosses every boundary as a decimal string with two fractional digits plus a currency code; never a float.
-- [brand.scope] Every read and write is scoped by `X-Kade-Brand`; check the caller's brand against the resource's brand.
+- [brand.scope] Every read and write is scoped by `X-Harbourline-Brand`; check the caller's brand against the resource's brand.
 - [tax.presentation:defer] Tax presentation follows the brand's own rule file; this checklist only asks that the brand rule was applied and cited.
 - [tax.rounding:defer] Rounding follows the brand's own rule file.
 - [planted.defects] Never fix a planted defect on `main`; demonstrate on a throwaway branch.

@@ -1,5 +1,5 @@
-import { HEADERS } from "@kade/contracts";
-import type { BrandId, Role } from "@kade/contracts";
+import { HEADERS } from "@harbourline/contracts";
+import type { BrandId, Role } from "@harbourline/contracts";
 import { http, HttpResponse, type HttpHandler } from "msw";
 import routes from "./generated/routes.json";
 import { createStore, StoreError, type Caller, type Store } from "./store";

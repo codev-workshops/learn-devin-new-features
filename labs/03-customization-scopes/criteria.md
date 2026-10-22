@@ -9,4 +9,4 @@ You are done when someone who was not in the room can see each of the following 
 7. **Dead rule found.** After the `wrong-glob` injector, you show the resolver skipping the Trailhead rule for `money.ts`, the corrected globs, and the resolver loading it again.
 8. **Skill names unambiguous.** After the `global-skill` injector, the resolver reports the name collision; after your fix it reports none, and you state which copy you changed and why.
 9. **Articulation drill completed** with the voice coach (section 8), or against a timer if you work offline. Save the gap report next to your evidence; do not commit it.
-10. **Clean exit.** `main` is untouched, the throwaway branch is not merged, `/tmp/kade-home` is deleted and the reset commands in section 4 return the repository to the clean state.
+10. **Clean exit.** `main` is untouched, the throwaway branch is not merged, `/tmp/harbourline-home` is deleted and the reset commands in section 4 return the repository to the clean state.

@@ -31,7 +31,7 @@ from fulfilment_worker.models import (
 )
 from fulfilment_worker.store import Store
 
-log = logging.getLogger("kade.worker.webhooks")
+log = logging.getLogger("harbourline.worker.webhooks")
 
 
 class WebhookError(ValueError):
@@ -105,7 +105,7 @@ def _ghost_order(event: dict[str, Any], clock: Clock) -> Order:
         id=data["order_id"],
         number=f"{rules_for(brand).order_number_prefix}-GHOST-{data['payment_id'][-6:]}",
         brand=brand,
-        user="unknown@kade.test",
+        user="unknown@harbourline.test",
         status="pending_payment",
         lines=[],
         totals=totals,

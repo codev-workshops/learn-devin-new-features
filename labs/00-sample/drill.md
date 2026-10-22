@@ -1,4 +1,4 @@
-This warm-up uses a shortened version of the four-part articulation drill. The coach plays the Kadé platform lead.
+This warm-up uses a shortened version of the four-part articulation drill. The coach plays the Harbourline platform lead.
 
 ### 60-second framing
 

@@ -1,4 +1,4 @@
-The coach plays Kadé's CISO. She is fluent in risk and audit, not in Devin settings, and she wants each sentence to be something she can repeat to her committee.
+The coach plays Harbourline's CISO. She is fluent in risk and audit, not in Devin settings, and she wants each sentence to be something she can repeat to her committee.
 
 ### 60-second framing
 

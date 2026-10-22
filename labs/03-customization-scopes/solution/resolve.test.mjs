@@ -29,7 +29,7 @@ beforeEach(() => {
   home = mkdtempSync(path.join(os.tmpdir(), 'lab03-home-'));
   put('package.json', '{}\n');
   put('.gitignore', 'node_modules/\nAGENTS.local.md\n');
-  put('AGENTS.md', '# Kadé Commerce\n');
+  put('AGENTS.md', '# Harbourline\n');
   put('services/api/AGENTS.md', '# services/api\n');
   put('services/api/src/money.ts', '');
   put('services/api/src/routes/catalog.ts', '');

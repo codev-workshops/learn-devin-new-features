@@ -22,12 +22,13 @@ function loadDotEnv(): void {
 loadDotEnv();
 
 export const config = {
-  databaseUrl: process.env.DATABASE_URL ?? "postgres://kade:kade@localhost:5432/kade",
+  databaseUrl:
+    process.env.DATABASE_URL ?? "postgres://harbourline:harbourline@localhost:5432/harbourline",
   port: Number(process.env.API_PORT ?? 3001),
   paygateUrl: process.env.PAYGATE_URL ?? `http://localhost:${process.env.PAYGATE_PORT ?? 3002}`,
-  paygateSecret: process.env.PAYGATE_SECRET ?? "kade-local-paygate-secret",
-  /** Fixed clock for labs and tests (`KADE_NOW=2026-10-22T12:00:00Z`); defaults to wall time. */
-  fixedNow: process.env.KADE_NOW ? new Date(process.env.KADE_NOW) : null,
+  paygateSecret: process.env.PAYGATE_SECRET ?? "harbourline-local-paygate-secret",
+  /** Fixed clock for labs and tests (`HARBOURLINE_NOW=2026-10-22T12:00:00Z`); defaults to wall time. */
+  fixedNow: process.env.HARBOURLINE_NOW ? new Date(process.env.HARBOURLINE_NOW) : null,
   version: "0.1.0",
 };
 

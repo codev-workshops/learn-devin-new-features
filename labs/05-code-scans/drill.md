@@ -1,4 +1,4 @@
-The coach plays Dana, the Kadé CTO, with the security lead joining for the objection round. It follows the base articulation protocol: framing, two think-aloud checkpoints, a three-minute update, then three objections.
+The coach plays Dana, the Harbourline CTO, with the security lead joining for the objection round. It follows the base articulation protocol: framing, two think-aloud checkpoints, a three-minute update, then three objections.
 
 ### 60-second framing
 

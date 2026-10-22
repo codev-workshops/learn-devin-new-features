@@ -1,0 +1,14 @@
+{
+  "PreToolUse": [
+    {
+      "matcher": "^exec$",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node -e \"let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{let c='';try{c=String(JSON.parse(s).tool_input.command||'')}catch{c=''}if(process.env.HARBOURLINE_SALE_FREEZE==='1'&&/\\bgit\\s+push\\b[^;&|]*(?:\\s|:|\\+|refs\\/heads\\/)main(?![\\w.\\/-])/.test(c)){console.error('harbourline-flash-sale: sale freeze is on, no push to main');process.exit(2)}})\"",
+          "timeout": 5
+        }
+      ]
+    }
+  ]
+}

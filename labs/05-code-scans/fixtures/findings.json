@@ -5,7 +5,7 @@
   "scans": [
     {
       "type": "security",
-      "profile": "Kadé Commerce — brand isolation and payment webhooks (lab 05)",
+      "profile": "Harbourline — brand isolation and payment webhooks (lab 05)",
       "totals": {
         "found": 12,
         "open": 11,
@@ -27,7 +27,7 @@
         {
           "severity": "high",
           "status": "open",
-          "title": "Client-chosen X-Kade-Role header grants admin/merchandiser and bypasses every owner check",
+          "title": "Client-chosen X-Harbourline-Role header grants admin/merchandiser and bypasses every owner check",
           "location": "services/api/src/middleware/auth.ts"
         },
         {
@@ -101,7 +101,7 @@
     },
     {
       "type": "performance",
-      "profile": "Kadé Commerce — catalog and checkout hot paths (lab 05)",
+      "profile": "Harbourline — catalog and checkout hot paths (lab 05)",
       "totals": {
         "found": 24,
         "open": 10,
@@ -173,7 +173,7 @@
     },
     {
       "type": "accessibility",
-      "profile": "Kadé Commerce — merchandiser console accessibility (lab 05)",
+      "profile": "Harbourline — merchandiser console accessibility (lab 05)",
       "totals": {
         "found": 5,
         "open": 5,
@@ -190,7 +190,7 @@
         {
           "severity": "high",
           "status": "open",
-          "title": "All SPA routes share the static document title \"Kadé Commerce\"",
+          "title": "All SPA routes share the static document title \"Harbourline\"",
           "location": "apps/web/src/App.tsx",
           "wcag": "2.4.2"
         },

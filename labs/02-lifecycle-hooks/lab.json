@@ -1,7 +1,7 @@
 {
   "number": 2,
   "slug": "lifecycle-hooks",
-  "title": "Guard the database — a lifecycle hook policy for Kadé",
+  "title": "Guard the database — a lifecycle hook policy for Harbourline",
   "feature": "Devin lifecycle hooks: .devin/hooks.v1.json with PreToolUse (exit 0 / exit 2, updatedInput), PostToolUse and Stop, matcher as regex or list",
   "duration_minutes": 120,
   "difficulty": "core",
@@ -30,7 +30,7 @@
         "integration": "PostgreSQL 16 (docker compose)",
         "required": false,
         "fixture": "Skip the live write test; the replay still shows the psql rewrite",
-        "note": "Only the lab database at localhost:5432/kade is ever touched"
+        "note": "Only the lab database at localhost:5432/harbourline is ever touched"
       }
     ],
     "fixture_only_story": "Everything except the agent's own reaction works offline: you write .devin/hooks.v1.json and the hook scripts, then replay each acceptance case through simulate.mjs and keep its JSON output and the audit log as evidence. The replay labels the two behaviours the docs do not state (timeout and malformed config) as assumptions; with the Devin CLI you confirm them yourself.",

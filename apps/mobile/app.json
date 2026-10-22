@@ -1,19 +1,19 @@
 {
   "expo": {
-    "name": "Kadé Commerce",
-    "slug": "kade-commerce",
+    "name": "Harbourline",
+    "slug": "harbourline",
     "version": "0.1.0",
-    "scheme": "kade",
+    "scheme": "harbourline",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "platforms": ["ios", "android"],
     "ios": {
-      "bundleIdentifier": "test.kade.commerce",
+      "bundleIdentifier": "test.harbourline.commerce",
       "supportsTablet": false
     },
     "android": {
-      "package": "test.kade.commerce",
+      "package": "test.harbourline.commerce",
       "edgeToEdgeEnabled": true
     },
     "plugins": ["expo-router"],

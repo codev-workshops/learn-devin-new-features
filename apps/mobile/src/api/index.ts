@@ -1,6 +1,6 @@
 import Constants from "expo-constants";
 
-import { createHttpApi, type KadeApi } from "./client";
+import { createHttpApi, type HarbourlineApi } from "./client";
 import { createMockFetch } from "../mocks/mockFetch";
 import { MockStore } from "../mocks/store";
 
@@ -20,7 +20,7 @@ export function readApiConfig(): ApiConfig {
 }
 
 /** `mock` (default) serves the seed fixture in-process; `live` talks to services/api. */
-export function createApi(config: ApiConfig = readApiConfig()): KadeApi {
+export function createApi(config: ApiConfig = readApiConfig()): HarbourlineApi {
   if (config.mode === "live") {
     return createHttpApi(config.baseUrl, (input, init) => fetch(input, init));
   }

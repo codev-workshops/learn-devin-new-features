@@ -4,7 +4,7 @@
 import { appendFileSync, mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
-export const LAB_DATABASE_URL_DEFAULT = 'postgres://kade:kade@localhost:5432/kade';
+export const LAB_DATABASE_URL_DEFAULT = 'postgres://harbourline:harbourline@localhost:5432/harbourline';
 export const LAB_DB_HOSTS = new Set(['localhost', '127.0.0.1', '::1', 'postgres']);
 
 export function projectDir() {
@@ -12,7 +12,7 @@ export function projectDir() {
 }
 
 export function logPath() {
-  return process.env.KADE_HOOK_LOG || path.join(projectDir(), '.devin', 'hook-audit.log');
+  return process.env.HARBOURLINE_HOOK_LOG || path.join(projectDir(), '.devin', 'hook-audit.log');
 }
 
 export function audit(entry) {
@@ -33,9 +33,9 @@ export function readStdin() {
   }
 }
 
-/** The lab database is whatever KADE_LAB_DATABASE_URL says, else the Compose default. */
+/** The lab database is whatever HARBOURLINE_LAB_DATABASE_URL says, else the Compose default. */
 export function labDatabase() {
-  return parseDbUrl(process.env.KADE_LAB_DATABASE_URL || LAB_DATABASE_URL_DEFAULT);
+  return parseDbUrl(process.env.HARBOURLINE_LAB_DATABASE_URL || LAB_DATABASE_URL_DEFAULT);
 }
 
 function unwrap(value, open, close) {
@@ -46,7 +46,7 @@ function unquote(value) {
   return unwrap(unwrap(value, '"', '"'), "'", "'");
 }
 
-// libpq lets query parameters override the authority part (postgres://localhost/kade?host=staging).
+// libpq lets query parameters override the authority part (postgres://localhost/harbourline?host=staging).
 const CONNECTION_OVERRIDES = ['host', 'hostaddr', 'port', 'dbname', 'service'];
 
 export function parseDbUrl(url) {

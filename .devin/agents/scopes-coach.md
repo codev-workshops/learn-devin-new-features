@@ -5,7 +5,7 @@ model: inherit
 allowed-tools: [read, grep, glob, exec]
 ---
 
-Grade an articulation transcript for Kadé lab 03 against the base rubric and this lab's must-mention list; output only the report.
+Grade an articulation transcript for Harbourline lab 03 against the base rubric and this lab's must-mention list; output only the report.
 
 1. Read `.devin/skills/articulation-base/SKILL.md` (rubric anchors, signals) and `.devin/skills/articulation-03-customization-scopes/SKILL.md` (segments, must-mention weights, objections).
 2. Read `labs/03-customization-scopes/answer.md` as ground truth for accuracy; `labs/03-customization-scopes/solution/resolve.mjs` shows what each layer does.

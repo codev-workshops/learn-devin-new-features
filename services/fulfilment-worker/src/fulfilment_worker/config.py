@@ -23,7 +23,7 @@ class Settings:
         return cls(
             database_url=e.get("DATABASE_URL") or None,
             store_path=e.get("WORKER_STORE_PATH") or None,
-            paygate_secret=e.get("PAYGATE_SECRET", "kade-local-paygate-secret"),
+            paygate_secret=e.get("PAYGATE_SECRET", "harbourline-local-paygate-secret"),
             poll_interval_seconds=float(e.get("WORKER_POLL_INTERVAL", "2")),
             sweeper_max_age_hours=int(e.get("SWEEPER_MAX_AGE_HOURS", "48")),
             sweeper_interval_seconds=float(e.get("SWEEPER_INTERVAL", "300")),

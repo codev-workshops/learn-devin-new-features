@@ -1,4 +1,4 @@
-import { ORDER_STATUSES, type OrderStatus } from "@kade/contracts";
+import { ORDER_STATUSES, type OrderStatus } from "@harbourline/contracts";
 import { useState } from "react";
 import { ErrorNote, Loading, Price, Status, label, statusTone } from "../components/ui";
 import { api } from "../lib/api";

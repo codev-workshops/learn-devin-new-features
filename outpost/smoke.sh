@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# In-container smoke test for the Kadé outpost worker image. Exit 0 = every machine
+# In-container smoke test for the Harbourline outpost worker image. Exit 0 = every machine
 # dependency the lab relies on is present and no outpost token is baked into the image.
-#   docker run --rm --entrypoint bash kade-outpost-worker /usr/local/bin/kade-outpost-smoke
+#   docker run --rm --entrypoint bash harbourline-outpost-worker /usr/local/bin/harbourline-outpost-smoke
 set -u
 fail=0
 check() { if eval "$2" >/dev/null 2>&1; then echo "ok   $1"; else echo "FAIL $1"; fail=1; fi; }

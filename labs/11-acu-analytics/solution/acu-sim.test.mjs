@@ -18,7 +18,7 @@ describe('decision A — Trailhead lead under her tier, organization capped', ()
   });
 
   it('raising the organization limit to 4000 survives the sale forecast', () => {
-    const r = run('A', ['--raise-org', 'kade-trailhead=4000', '--inject', 'sale-spike', '--date', '2026-11-20']);
+    const r = run('A', ['--raise-org', 'harbourline-trailhead=4000', '--inject', 'sale-spike', '--date', '2026-11-20']);
     expect(r.organization.total).toBe(3900);
     expect(r.allowed).toBe(true);
   });
@@ -50,7 +50,7 @@ describe('decision B — Lumen engineer over his tier, organization has headroom
   it('a temporary override unblocks until the cycle ends, then expires', () => {
     expect(run('B', ['--override', 'arjun=520']).allowed).toBe(true);
     const later = applyOptions(fx, parseArgs(['--override', 'arjun=520', '--date', '2026-11-23']));
-    expect(check(later, 'arjun', 'kade-lumen').user.limit).toBe(400);
+    expect(check(later, 'arjun', 'harbourline-lumen').user.limit).toBe(400);
   });
 });
 
@@ -58,21 +58,21 @@ describe('why the dashboards disagree', () => {
   it('enterprise total, org totals, cloud-only and local numbers differ by scope', () => {
     const v = views(applyOptions(fx, {}), 'cycle');
     expect(v.enterprise_consumption_total).toBe(8870);
-    const th = v.orgs.find((o) => o.org === 'kade-trailhead');
-    expect(th).toEqual({ org: 'kade-trailhead', overview_all_surfaces: 3000, cloud_tab: 2180, local_tab: 400, review: 420 });
+    const th = v.orgs.find((o) => o.org === 'harbourline-trailhead');
+    expect(th).toEqual({ org: 'harbourline-trailhead', overview_all_surfaces: 3000, cloud_tab: 2180, local_tab: 400, review: 420 });
   });
 
   it('a rolling 30-day range includes the previous cycle tail', () => {
     const v = views(applyOptions(fx, {}), 'last-30');
-    expect(v.orgs.find((o) => o.org === 'kade-trailhead').overview_all_surfaces).toBe(3210);
+    expect(v.orgs.find((o) => o.org === 'harbourline-trailhead').overview_all_surfaces).toBe(3210);
   });
 
   it('local usage follows the billing organization', () => {
-    const before = views(applyOptions(fx, {}), 'cycle').orgs.find((o) => o.org === 'kade-platform').local_tab;
-    const after = views(applyOptions(fx, parseArgs(['--billing-org', 'noor=kade-trailhead'])), 'cycle');
+    const before = views(applyOptions(fx, {}), 'cycle').orgs.find((o) => o.org === 'harbourline-platform').local_tab;
+    const after = views(applyOptions(fx, parseArgs(['--billing-org', 'noor=harbourline-trailhead'])), 'cycle');
     expect(before).toBe(420);
-    expect(after.orgs.find((o) => o.org === 'kade-platform').local_tab).toBe(300);
-    expect(after.orgs.find((o) => o.org === 'kade-trailhead').local_tab).toBe(520);
+    expect(after.orgs.find((o) => o.org === 'harbourline-platform').local_tab).toBe(300);
+    expect(after.orgs.find((o) => o.org === 'harbourline-trailhead').local_tab).toBe(520);
   });
 
   it('a range before the contract started has no billing cycle', () => {
@@ -81,12 +81,12 @@ describe('why the dashboards disagree', () => {
 
   it('includes the injected sale forecast once the sale has started', () => {
     const v = views(applyOptions(fx, parseArgs(['--inject', 'sale-spike', '--date', '2026-11-20'])), 'cycle');
-    expect(v.orgs.find((o) => o.org === 'kade-trailhead').overview_all_surfaces).toBe(3900);
+    expect(v.orgs.find((o) => o.org === 'harbourline-trailhead').overview_all_surfaces).toBe(3900);
   });
 
   it('leaves the sale forecast out of views dated before the sale starts', () => {
     const v = views(applyOptions(fx, parseArgs(['--inject', 'sale-spike'])), '2026-10-23..2026-11-20');
-    expect(v.orgs.find((o) => o.org === 'kade-trailhead').overview_all_surfaces).toBe(3000);
+    expect(v.orgs.find((o) => o.org === 'harbourline-trailhead').overview_all_surfaces).toBe(3000);
   });
 
   it('refuses a custom range that cuts through an aggregated period', () => {

@@ -14,7 +14,7 @@ describe('outpost queue model', () => {
   it('two workers serve two sessions; the third waits with a banner until one finishes', () => {
     const { snapshots } = runScenario(load('fixtures/two-workers.json'));
     expect(snapshots[0]).toMatchObject({ workers_online: 2, running: ['S1', 'S2'], pending: ['S3'] });
-    expect(snapshots[0].wait_banner).toMatch(/kade-vpc/);
+    expect(snapshots[0].wait_banner).toMatch(/harbourline-vpc/);
     expect(snapshots[1]).toMatchObject({ running: ['S2', 'S3'], pending: [], wait_banner: null });
   });
 

@@ -1,7 +1,7 @@
 {
   "number": 8,
   "slug": "slack-triage",
-  "title": "Stop the 'charged twice' pile-up — triage #kade-bugs and answer in the thread",
+  "title": "Stop the 'charged twice' pile-up — triage #harbourline-bugs and answer in the thread",
   "feature": "Slack triage and write-back: a channel-watching Devin (Oncall Support + Bugs responder, or the legacy Triage Bug Reports automation) that filters noise, deduplicates repeated reports, keeps a scratchpad with a routing table, takes routing corrections in the thread, writes the diagnosis back to the original thread, and runs under a network policy because the messages are untrusted input; Microsoft Teams channel variant",
   "duration_minutes": 90,
   "difficulty": "core",
@@ -15,13 +15,13 @@
     "badge": "fixture",
     "matrix": [
       {
-        "integration": "Offline #kade-bugs export (default)",
+        "integration": "Offline #harbourline-bugs export (default)",
         "required": true,
-        "fixture": "`node labs/08-slack-triage/solution/triage-sim.mjs --inject all` replays `fixtures/kade-bugs.jsonl` plus the injectors; `--check <your-scratchpad.json>` compares your scratchpad with the reference run",
+        "fixture": "`node labs/08-slack-triage/solution/triage-sim.mjs --inject all` replays `fixtures/harbourline-bugs.jsonl` plus the injectors; `--check <your-scratchpad.json>` compares your scratchpad with the reference run",
         "note": "Seven messages from support, a routing table with one wrong owner, and an outbound allowlist; no credentials"
       },
       {
-        "integration": "Slack — Devin app in your own test channel (e.g. #kade-bugs-<handle>)",
+        "integration": "Slack — Devin app in your own test channel (e.g. #harbourline-bugs-<handle>)",
         "required": false,
         "fixture": "Paste the fixture messages into the test channel yourself, or keep the whole lab offline",
         "note": "Your personal Slack account must be connected. Posts and previews go to that channel or to a DM to yourself only; never to a shared channel"
@@ -35,7 +35,7 @@
       {
         "integration": "Microsoft Teams — Devin AI app in a test channel",
         "required": false,
-        "fixture": "`--platform teams` replays `fixtures/kade-bugs.teams.json`",
+        "fixture": "`--platform teams` replays `fixtures/harbourline-bugs.teams.json`",
         "note": "Side note only; Teams private channels are not supported"
       }
     ],
@@ -49,7 +49,7 @@
     "reset": [
       "git switch main && git status --short",
       "git branch --list 'lab08/*' | xargs -r git branch -D",
-      "rm -f ~/kade-triage-scratchpad.json ~/kade-triage-notes.md",
+      "rm -f ~/harbourline-triage-scratchpad.json ~/harbourline-triage-notes.md",
       "npm run lab:reset -- 08"
     ],
     "clean_state": "On `main` with `git status --short` empty, no local `lab08/*` branches, no scratchpad or notes file in your home folder, and no responder or automation of yours watching a Slack or Teams channel (pause or delete it on the Oncall and Automations pages). The offline replay of the base export reports 7 messages, 6 reports and 4 issues."

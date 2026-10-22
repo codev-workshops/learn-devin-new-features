@@ -1,6 +1,6 @@
 {
   "$comment": "Google Sheets values (spreadsheets.values.get shape) for the Lamp Week planning sheet merchandising keeps by hand. Row 4 is the one that matters: LH-LAMP-03 had 3 units and a 60-unit 'expected demand'.",
-  "spreadsheetId": "1KadeLampWeek2026PlanningSheetFixture",
+  "spreadsheetId": "1HarbourlineLampWeek2026PlanningSheetFixture",
   "title": "Lamp Week 2026 — plan",
   "range": "Plan!A1:H9",
   "majorDimension": "ROWS",

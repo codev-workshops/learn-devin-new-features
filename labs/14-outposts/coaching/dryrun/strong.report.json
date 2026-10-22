@@ -119,11 +119,11 @@
   "must_mention": [
     {
       "id": "mm1",
-      "point": "Commands, file edits and repo access run on Kadé's worker in the VPC while inference and planning stay in Devin Cloud",
+      "point": "Commands, file edits and repo access run on Harbourline's worker in the VPC while inference and planning stay in Devin Cloud",
       "weight": 6,
       "mentioned": true,
       "belonged_in": "framing",
-      "evidence_quote": "every command, file edit and repo checkout runs on a Kadé worker inside the VPC … Devin Cloud keeps planning and inference"
+      "evidence_quote": "every command, file edit and repo checkout runs on a Harbourline worker inside the VPC … Devin Cloud keeps planning and inference"
     },
     {
       "id": "mm2",
@@ -131,7 +131,7 @@
       "weight": 5,
       "mentioned": true,
       "belonged_in": "checkpoint-15",
-      "evidence_quote": "devin worker start, the outpost name kade-vpc and its token; the token is shown once, so it went straight into the secret manager"
+      "evidence_quote": "devin worker start, the outpost name harbourline-vpc and its token; the token is shown once, so it went straight into the secret manager"
     },
     {
       "id": "mm3",

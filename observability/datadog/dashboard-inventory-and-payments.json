@@ -1,6 +1,6 @@
 {
   "id": "k4d-3-inv",
-  "title": "Kadé Commerce — Inventory & Payments",
+  "title": "Harbourline — Inventory & Payments",
   "description": "On-hand stock, checkout throughput and PayGate webhook health for both brands. Linked from monitors 48213771 and 48213802.",
   "layout_type": "ordered",
   "template_variables": [
@@ -19,7 +19,7 @@
         "type": "timeseries",
         "title": "On-hand by SKU (min) — negative means oversold",
         "requests": [
-          { "q": "min:kade.inventory.on_hand{$brand,$sku} by {sku}", "display_type": "line" }
+          { "q": "min:harbourline.inventory.on_hand{$brand,$sku} by {sku}", "display_type": "line" }
         ],
         "markers": [{ "value": "y = 0", "display_type": "error dashed", "label": "oversold" }]
       }
@@ -31,7 +31,7 @@
         "title": "Checkouts per minute by outcome",
         "requests": [
           {
-            "q": "sum:kade.checkout.completed{$brand} by {outcome}.as_count()",
+            "q": "sum:harbourline.checkout.completed{$brand} by {outcome}.as_count()",
             "display_type": "bars"
           }
         ]
@@ -42,7 +42,7 @@
       "definition": {
         "type": "timeseries",
         "title": "Reservation p95 latency (ms) — flat line + oversell = no row lock",
-        "requests": [{ "q": "p95:kade.reservation.duration{$brand}", "display_type": "line" }]
+        "requests": [{ "q": "p95:harbourline.reservation.duration{$brand}", "display_type": "line" }]
       }
     },
     {
@@ -52,7 +52,7 @@
         "title": "Webhook failure rate (15m)",
         "requests": [
           {
-            "q": "( sum:kade.webhooks.processed{outcome:error}.as_count() / sum:kade.webhooks.processed{*}.as_count() ) * 100",
+            "q": "( sum:harbourline.webhooks.processed{outcome:error}.as_count() / sum:harbourline.webhooks.processed{*}.as_count() ) * 100",
             "aggregator": "last"
           }
         ],
@@ -66,7 +66,7 @@
         "type": "timeseries",
         "title": "Webhooks processed by attempt — attempt>1 is a retry storm",
         "requests": [
-          { "q": "sum:kade.webhooks.processed{*} by {attempt}.as_count()", "display_type": "bars" }
+          { "q": "sum:harbourline.webhooks.processed{*} by {attempt}.as_count()", "display_type": "bars" }
         ]
       }
     },
@@ -77,7 +77,7 @@
         "title": "Duplicate event_id deliveries (24h)",
         "requests": [
           {
-            "q": "top(sum:kade.webhooks.duplicate_event_id{*} by {order_number}.as_count(), 10, 'sum', 'desc')"
+            "q": "top(sum:harbourline.webhooks.duplicate_event_id{*} by {order_number}.as_count(), 10, 'sum', 'desc')"
           }
         ]
       }
@@ -87,11 +87,11 @@
       "definition": {
         "type": "event_timeline",
         "title": "Deploys",
-        "query": "tags:service:kade-api,deploy"
+        "query": "tags:service:harbourline-api,deploy"
       }
     }
   ],
-  "notify_list": ["ops@kade.test"],
+  "notify_list": ["ops@harbourline.test"],
   "created_at": "2026-09-14T10:10:00Z",
   "modified_at": "2026-10-21T22:41:07Z"
 }

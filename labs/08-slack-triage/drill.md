@@ -1,4 +1,4 @@
-The coach plays Kadé's head of customer support. She reads Slack all day, not code, and judges every change by what her team will see in the channel.
+The coach plays Harbourline's head of customer support. She reads Slack all day, not code, and judges every change by what her team will see in the channel.
 
 ### 60-second framing
 

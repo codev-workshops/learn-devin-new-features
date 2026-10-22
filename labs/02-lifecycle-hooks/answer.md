@@ -39,7 +39,7 @@ The reference implementation lives in `labs/02-lifecycle-hooks/solution/` (outsi
 ## Worked prompt sequence
 
 ```prompt
-Read the hooks overview and lifecycle-hooks pages of the Devin docs. On a new branch lab/02-<handle>, write .devin/hooks.v1.json with a PreToolUse hook on the exec tool only (anchored matcher) that runs a committed Node script. The script must exit 2 with a readable reason for any db:seed --reset, lab:reset or migration whose DATABASE_URL is not postgres://kade:kade@localhost:5432/kade, and must exit 2 if its own stdin is not valid JSON. Do not touch main or .devin/config.json.
+Read the hooks overview and lifecycle-hooks pages of the Devin docs. On a new branch lab/02-<handle>, write .devin/hooks.v1.json with a PreToolUse hook on the exec tool only (anchored matcher) that runs a committed Node script. The script must exit 2 with a readable reason for any db:seed --reset, lab:reset or migration whose DATABASE_URL is not postgres://harbourline:harbourline@localhost:5432/harbourline, and must exit 2 if its own stdin is not valid JSON. Do not touch main or .devin/config.json.
 ```
 
 ```prompt

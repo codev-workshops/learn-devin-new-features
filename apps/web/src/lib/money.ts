@@ -1,4 +1,4 @@
-import type { Currency, Money } from "@kade/contracts";
+import type { Currency, Money } from "@harbourline/contracts";
 
 /** Money is carried as decimal strings; all arithmetic happens in integer cents. */
 export function toCents(amount: string): number {

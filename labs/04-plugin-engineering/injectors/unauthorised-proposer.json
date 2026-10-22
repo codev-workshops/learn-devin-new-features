@@ -1,6 +1,6 @@
 {
   "$comment": "Course fixture, not a Devin API payload. A Trailhead brand engineer (org member, not a plugin admin) asks their session to raise the low-stock threshold in the shared organization plugin.",
-  "plugin": "kade-flash-sale",
+  "plugin": "harbourline-flash-sale",
   "scope": "organization",
   "actor": { "handle": "trailhead-eng", "role": "member", "can_edit_org_plugins": false },
   "change": {

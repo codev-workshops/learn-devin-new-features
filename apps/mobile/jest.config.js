@@ -38,7 +38,7 @@ module.exports = {
   moduleNameMapper: {
     ...(preset.moduleNameMapper ?? {}),
     "^@/(.*)$": "<rootDir>/src/$1",
-    "^@kade/contracts$": "<rootDir>/../../packages/contracts/src/index.ts",
+    "^@harbourline/contracts$": "<rootDir>/../../packages/contracts/src/index.ts",
     "^react$": "<rootDir>/node_modules/react",
     "^react/(.*)$": "<rootDir>/node_modules/react/$1",
   },
