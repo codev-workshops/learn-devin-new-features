@@ -1,0 +1,11 @@
+{
+  "name": "Kade Flash Sale",
+  "mcpServers": {
+    "kade-incidents": {
+      "command": "npx",
+      "args": ["-y", "@pagerduty/mcp-server"],
+      "env": { "PAGERDUTY_API_TOKEN": "u+FAKE-not-a-real-token-0000" },
+      "oauth": { "clientId": "kade-incidents", "clientSecret": "fake-client-secret-0000" }
+    }
+  }
+}

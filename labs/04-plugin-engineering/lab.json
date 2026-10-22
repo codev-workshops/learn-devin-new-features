@@ -1,0 +1,110 @@
+{
+  "number": 4,
+  "slug": "plugin-engineering",
+  "title": "Ship the flash-sale release checklist once — a plugin every brand team installs",
+  "feature": "Plugin engineering: manifest, skills, rules, hooks, MCP and subagents in one bundle; repository vs uploaded vs skills-only installs; revisions; MCP connection after install; proposing edits to shared plugins",
+  "duration_minutes": 120,
+  "difficulty": "core",
+  "prerequisites": [
+    "Lab 03 done (rules and skills in this repo), so you know what a skill and a rule look like on their own",
+    "Repo cloned, `npm install` done at the root (the offline checker and its tests run under `labs/`)",
+    "A Devin account where you can open Customize → Plugins; organization-admin rights are needed only for the shared-scope steps",
+    "Optional: the Devin CLI installed locally, to load the plugin from a folder on your machine"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Devin web app — Customize → Plugins (Personal scope)",
+        "required": true,
+        "fixture": "Offline: `node labs/04-plugin-engineering/solution/plugin-check.mjs <your-plugin-dir>` reads your folder the way the criteria do",
+        "note": "Personal scope needs no admin; install there first, then move to Organization"
+      },
+      {
+        "integration": "Devin web app — Organization scope (org admin)",
+        "required": false,
+        "fixture": "Replay the shared-scope steps with `--revise` and `--propose` in the checker and the injector files",
+        "note": "Upload, revision and approval of a proposed edit all happen at this scope"
+      },
+      {
+        "integration": "Second Devin account without plugin edit rights",
+        "required": false,
+        "fixture": "`injectors/unauthorised-proposer.json` plays the brand engineer",
+        "note": "Needed only to watch a real proposal card arrive for the admin"
+      },
+      {
+        "integration": "PagerDuty MCP (OAuth or API token)",
+        "required": false,
+        "fixture": "Leave the declared server unconnected, or point a local copy at the `fixtures/mcp` shim (`node fixtures/mcp/shim.mjs --list`)",
+        "note": "The plugin declares the server; nobody's credential goes in the bundle"
+      },
+      {
+        "integration": "Devin CLI or Devin Desktop",
+        "required": false,
+        "fixture": "Run the hook through `--hook` in the checker",
+        "note": "Plugin hooks and plugin subagents load in local sessions only"
+      }
+    ],
+    "fixture_only_story": "Without admin rights or any credentials you still build the whole plugin in a folder, check it with the offline checker until it reports no problems, install it at Personal scope from that folder (zip or repository), and replay the shared-scope moments with the injectors: a skills-only brand repo, a partial revision upload, a plugin with inline secrets, and a brand engineer who is not allowed to edit the shared plugin.",
+    "not_exercised": [
+      "Connecting a live PagerDuty account to the plugin's MCP server; the reference answer leaves it declared and unconnected",
+      "Approving a proposed edit from a second, non-admin account; the reference answer replays it from the injector fixture"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "git switch main && git status --short",
+      "git branch --list 'lab04/*' | xargs -r git branch -D",
+      "rm -rf ~/kade-flash-sale ~/kade-flash-sale.zip",
+      "npm run lab:reset -- 04"
+    ],
+    "clean_state": "On `main` with `git status --short` empty, no local `lab04/*` branches, no `~/kade-flash-sale` working folder, and no plugin named `kade-flash-sale` installed at any scope you control (check Customize → Plugins at Personal and Organization). The seed-spec dataset is loaded for both brands."
+  },
+  "injectors": [
+    {
+      "name": "skills-only-brand-repo",
+      "when": "T+20 min",
+      "behaviour": "Lumen Home's team says they already have a checklist repo and asks you to install that instead. It has `skills/<name>/SKILL.md` and no manifest (`injectors/brand-checklists/`). Predict what name it installs under, what it can and cannot carry, and whether it replaces your plugin."
+    },
+    {
+      "name": "partial-revision",
+      "when": "After the first install",
+      "behaviour": "A brand lead raises the low-stock threshold and uploads a zip containing only the file they changed (`injectors/revision-2/`). Say what the installed plugin contains afterwards, before you look."
+    },
+    {
+      "name": "inline-secret",
+      "when": "During packaging",
+      "behaviour": "A teammate's draft (`injectors/inline-secret/`) pastes a PagerDuty token and an OAuth client secret straight into the manifest, under a display-style name. Find all three problems and say what Devin does with each."
+    },
+    {
+      "name": "unauthorised-proposer",
+      "when": "T+70 min",
+      "behaviour": "A Trailhead engineer who cannot edit organization plugins asks their session to change the shared plugin (`injectors/unauthorised-proposer.json`). Show what they get, who has to act, and what the installed plugin contains in the meantime."
+    },
+    {
+      "name": "hook-fails-open",
+      "when": "Any time",
+      "behaviour": "The security reviewer asks whether the freeze hook is your guarantee that nobody pushes to `main` during a sale. Answer from the documentation, not from your hope."
+    }
+  ],
+  "coach": {
+    "skill": "coach-04-plugin-engineering",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
+      { "id": "checkpoint-20", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+20)", "at_minute": 20, "target_seconds": 45 },
+      { "id": "checkpoint-70", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+70)", "at_minute": 70, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "Three-minute security-reviewer update", "target_seconds": 180 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 (technical)", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 (commercial)", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — Devin plugins and the Customize page", "url": "https://docs.devin.ai/product-guides/plugins", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Devin CLI plugins (layout and manifest)", "url": "https://docs.devin.ai/cli/extensibility/plugins/overview", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Plugins quickstart", "url": "https://docs.devin.ai/cli/extensibility/plugins/quickstart", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Set up your plugin ecosystem", "url": "https://docs.devin.ai/product-guides/plugin-ecosystem", "date": "fetched 2026-10-22" },
+    { "title": "Devin release notes 2026 — Propose Edits to Shared Plugins and Skills (October 19, 2026)", "url": "https://docs.devin.ai/release-notes/2026", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Voice mode", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" }
+  ]
+}
