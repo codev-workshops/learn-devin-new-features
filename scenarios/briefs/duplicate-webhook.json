@@ -1,0 +1,35 @@
+{
+  "id": "duplicate-webhook",
+  "title": "Charged once, confirmed twice",
+  "customer": {
+    "name": "Lena Vogel",
+    "role": "Merchandiser, Trailhead Supply",
+    "brand": "trailhead-supply"
+  },
+  "voice": [
+    "Support gets the same complaint five times a day: 'you sent me two confirmation emails, did you charge me twice?' We did not charge twice — PayGate shows one payment — but our order timeline shows the order confirmed twice and our stock numbers drop twice for one sale.",
+    "PayGate told us they retry a webhook up to three times when we are slow to answer. Our platform team says the receiver answers in under 50 ms, so the retries should not happen, and yet they do every evening around the batch job.",
+    "I want one confirmation per order, stock decremented once, and a list of the orders where this already happened so we can correct the counts."
+  ],
+  "impact": {
+    "orders_affected": 23,
+    "money": {
+      "amount": "0.00",
+      "currency": "EUR",
+      "note": "No double charge; the cost is ≈45 support tickets a week and wrong stock on 23 SKUs"
+    },
+    "trust": "Customers ask whether the shop is safe to pay in"
+  },
+  "stakeholders": [
+    "Lena Vogel (merchandising)",
+    "Support team lead",
+    "PayGate integration owner",
+    "Fulfilment worker maintainer"
+  ],
+  "constraints": [
+    "PayGate's retry behaviour cannot be changed",
+    "No manual stock corrections until the cause is known"
+  ],
+  "deadline": "Explanation to support by Friday; fix in the next worker release",
+  "labs": [7, 12, 15]
+}

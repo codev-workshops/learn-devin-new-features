@@ -1,0 +1,32 @@
+{
+  "oncalls": [
+    {
+      "escalation_policy": { "id": "PKADEEP1", "summary": "Platform on-call" },
+      "escalation_level": 1,
+      "schedule": { "id": "PSCHED01", "summary": "Platform primary" },
+      "user": {
+        "id": "PUSRONC1",
+        "summary": "Sam Ortiz (platform on-call)",
+        "email": "sam.ortiz@kade.test"
+      },
+      "start": "2026-10-20T08:00:00Z",
+      "end": "2026-10-27T08:00:00Z"
+    },
+    {
+      "escalation_policy": { "id": "PKADEEP1", "summary": "Platform on-call" },
+      "escalation_level": 2,
+      "schedule": { "id": "PSCHED02", "summary": "Incident commanders" },
+      "user": {
+        "id": "PUSRIC01",
+        "summary": "Platform Ops (incident commander)",
+        "email": "ops@kade.test"
+      },
+      "start": "2026-10-20T08:00:00Z",
+      "end": "2026-10-27T08:00:00Z"
+    }
+  ],
+  "limit": 25,
+  "offset": 0,
+  "more": false,
+  "total": 2
+}
