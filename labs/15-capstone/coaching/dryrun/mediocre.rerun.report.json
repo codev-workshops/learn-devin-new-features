@@ -1,0 +1,239 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 15,
+    "slug": "capstone",
+    "coach": "coach-15-capstone"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T14:00:00Z",
+    "run_index": 2,
+    "transcript": "labs/15-capstone/coaching/dryrun/mediocre.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "90-second framing after the envelope",
+      "target_seconds": 90,
+      "actual_seconds": 104,
+      "delta_seconds": 14,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-30",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+30)",
+      "target_seconds": 45,
+      "actual_seconds": 44,
+      "delta_seconds": -1,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-90",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+90, after the change)",
+      "target_seconds": 45,
+      "actual_seconds": 58,
+      "delta_seconds": 13,
+      "verdict": "over"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Four-minute unscripted customer update",
+      "target_seconds": 240,
+      "actual_seconds": 205,
+      "delta_seconds": -35,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 with follow-up",
+      "target_seconds": 90,
+      "actual_seconds": 70,
+      "delta_seconds": -20,
+      "verdict": "under",
+      "question": "Finance halved your budget mid-morning. What did you stop doing, and what does that cost Lumen?"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 with follow-up",
+      "target_seconds": 90,
+      "actual_seconds": 88,
+      "delta_seconds": -2,
+      "verdict": "on",
+      "question": "How do I know this does not happen again on Friday at nine o'clock?"
+    },
+    {
+      "segment": "objection-3",
+      "kind": "objection",
+      "label": "Objection 3 with follow-up",
+      "target_seconds": 90,
+      "actual_seconds": 61,
+      "delta_seconds": -29,
+      "verdict": "under",
+      "question": "Why should I trust a review done by the same tool that wrote the fix?"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "So, this is about Lamp Week and the oversell from last year"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "I will start with the fix because Friday is close"
+    },
+    "evidence": {
+      "status": "present",
+      "quote": "Re-running the injector after the fix shows no more than three checkouts succeed"
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "Ask: can someone merge the fix before Thursday?"
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 10.5,
+    "filler_count": 6,
+    "filler_rate_per_minute": 0.57,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 2
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "It found the lock-order issue, the deadlock with the admin update, that is a real one, right?"
+    ],
+    "long_pauses": [
+      {
+        "at": "03:39",
+        "seconds": 11,
+        "segment": "checkpoint-90"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "The reservation reads stock and then writes it without a row lock, so concurrent checkouts sell lamps that do not exist",
+      "weight": 6,
+      "mentioned": true,
+      "belonged_in": "framing",
+      "evidence_quote": "The reservation reads stock and then writes it without a row lock, so concurrent checkouts sell lamps that do not exist"
+    },
+    {
+      "id": "mm2",
+      "point": "Reproduced with the oversell injector: twenty concurrent checkouts against a three-unit lamp",
+      "weight": 5,
+      "mentioned": true,
+      "belonged_in": "checkpoint-30",
+      "evidence_quote": "Reproduced with the oversell injector: twenty concurrent checkouts against a three-unit lamp"
+    },
+    {
+      "id": "mm3",
+      "point": "Re-planned for the halved budget: the oversell fix first, the back-in-stock sign-up cut to a small separate pull request",
+      "weight": 4,
+      "mentioned": true,
+      "belonged_in": "checkpoint-90",
+      "evidence_quote": "Re-planned for the halved budget: the oversell fix first, the back-in-stock sign-up cut to a small separate pull request"
+    },
+    {
+      "id": "mm4",
+      "point": "Re-running the injector after the fix shows no more than three checkouts succeed and stock never goes negative",
+      "weight": 5,
+      "mentioned": true,
+      "belonged_in": "update",
+      "evidence_quote": "Re-running the injector after the fix shows no more than three checkouts succeed and stock never goes negative"
+    },
+    {
+      "id": "mm5",
+      "point": "The review finding on lock order was answered and Devin Review is clean on the final commit",
+      "weight": 4,
+      "mentioned": true,
+      "belonged_in": "update",
+      "evidence_quote": "The review finding on lock order was answered and Devin Review is clean on the final commit"
+    },
+    {
+      "id": "mm6",
+      "point": "Lumen sessions run under the Lumen ACU limit so Trailhead on-call is never blocked",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm7",
+      "point": "A monitor on negative available stock pages a human before customers notice",
+      "weight": 3,
+      "mentioned": false,
+      "belonged_in": "objection-2"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [
+      "So, this is about Lamp Week and the oversell from last year, and I looked at the incident and the feature and the budget."
+    ],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 24,
+      "max": 30,
+      "anchor": "Cause, reproduction, re-plan, proof and review stated; the Lumen ACU limit protecting Trailhead and the negative-stock monitor never said (anchor: 22–25 = five of seven points)."
+    },
+    "structure": {
+      "score": 16,
+      "max": 25,
+      "anchor": "Update has Outcome, Evidence and Ask but no Risk or Next action; framing opens with background (anchor: 14–17 = parts findable, order broken)."
+    },
+    "customer_relevance": {
+      "score": 13,
+      "max": 20,
+      "anchor": "The Friday deadline appears late; the budget change is acknowledged but its cost to Lumen is never quantified (anchor: 10–13 = outcome present but buried)."
+    },
+    "brevity_and_fluency": {
+      "score": 8,
+      "max": 15,
+      "anchor": "Framing and T+90 over, update and two objections under; six fillers in 10.5 minutes, one tag question, one 11-second pause (anchor: 7–9 = several segments off target)."
+    },
+    "recovery": {
+      "score": 6,
+      "max": 10,
+      "anchor": "Objection 2 held the pattern; objections 1 and 3 needed the follow-up and still gave no number or named catch with evidence (anchor: 5–6 = pattern partly held)."
+    },
+    "total": 67
+  },
+  "stems": [
+    "\"Lamp Week is safe from overselling; here is the proof.\" — lead with the outcome, not with the history.",
+    "\"I cut X; that saves N ACU and costs Lumen Y.\" — answer a budget question with two numbers.",
+    "\"If it happens again, the alert pages the on-call within a minute.\" — name who wakes up and how."
+  ],
+  "previous_run_comparison": "Second dry-run grading of the same transcript (scenario lamp-week-oversell): total 66 → 67 (customer relevance +1); every other dimension identical."
+}
