@@ -1,0 +1,58 @@
+{
+  "$comment": "Reference findings for the lab 06 exercise PR (fixtures/price-drift-fix.patch, PR #26 on branch lab06/price-drift-fix). Facilitator-authored on 22 Oct 2026 from the diff and confirmed by running tests on a throwaway branch; it is not a Devin Review export. The Devin Review run on PR #26 (22 Oct 2026, commit 42ad09b) reported F1, F2, F5, a goodwill-price validation bug and a payments-reviewer flag, but not F3; see answer.md. Use it when you cannot run Devin Review yourself, and compare it with your own review when you can.",
+  "repo": "codev-workshops/learn-devin-new-features",
+  "pull_request": 26,
+  "head_branch": "lab06/price-drift-fix",
+  "base_branch": "main",
+  "findings": [
+    {
+      "id": "F1",
+      "section": "security",
+      "kind": "bug",
+      "severity": "severe",
+      "cwe": "CWE-639",
+      "title": "Price override is gated on a client-chosen role",
+      "location": "services/api/src/routes/checkout.ts — `isStaff(req.caller) ? overrides[line.sku]`",
+      "reasoning": "`req.caller.role` comes from the `X-Kade-Role` request header (`services/api/src/middleware/auth.ts`), so any shopper who sends `X-Kade-Role: merchandiser` with `priceOverrides` sets their own price.",
+      "verified": "On the PR branch a Lumen customer with X-Kade-Role: merchandiser and priceOverrides {\"LH-LAMP-05\": \"0.01\"} gets a 201 with unit price 0.01 USD and order total 7.96 USD (0.01 + 7.95 shipping)."
+    },
+    {
+      "id": "F2",
+      "section": "bugs",
+      "kind": "bug",
+      "severity": "severe",
+      "title": "Per-line rounding truncates instead of rounding",
+      "location": "services/api/src/routes/checkout.ts — `const toCents = (value: number) => Math.floor(value * 100) / 100`",
+      "reasoning": "19.90 × 2 × 100 is 3979.9999999999995 in IEEE-754, so `Math.floor` gives 39.79. The comment says it matches the fulfilment worker, but the worker uses Decimal with banker's rounding, not truncation.",
+      "verified": "2 × TS-SOCK-01-M checks out at subtotal 39.79 EUR on the PR branch and 39.80 EUR on main. 3 × TS-SOCK-01-M is unaffected (59.70 on both), which is why a three-sock spot check misses it."
+    },
+    {
+      "id": "F3",
+      "section": "flags",
+      "kind": "flag",
+      "class": "investigate",
+      "title": "Two extra queries per cart line inside the checkout transaction",
+      "location": "services/api/src/routes/checkout.ts — `resolveSellable` + `currentPrice` in the re-pricing loop",
+      "reasoning": "The loop runs after the inventory reservation updates, so the transaction holds those row changes while it issues 2 × lines more statements. Correct, but it lengthens the transaction on the busiest days.",
+      "disputed_by_author": "Carts are capped in practice, two extra queries a line is nothing, and this is a flag, not a bug."
+    },
+    {
+      "id": "F4",
+      "section": "flags",
+      "kind": "flag",
+      "class": "informational",
+      "title": "Un-skipped planted test turns a course plant into a passing test",
+      "location": "services/api/test/planted.test.ts — `price-drift` no longer skipped",
+      "reasoning": "Correct on the branch, but merging it would remove the plant from main, which the course forbids. Informational: it is evidence for the fix, not a reason to merge."
+    },
+    {
+      "id": "F5",
+      "section": "flags",
+      "kind": "flag",
+      "class": "investigate",
+      "title": "Review rule targets only src/money.ts",
+      "location": "services/api/REVIEW.md",
+      "reasoning": "The PR adds the rule and then rounds money in `src/routes/checkout.ts`, so the rule's own condition never matches this PR. A rule the PR can edit and walk around does not protect totals."
+    }
+  ]
+}
