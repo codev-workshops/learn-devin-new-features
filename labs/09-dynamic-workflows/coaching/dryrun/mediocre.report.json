@@ -1,0 +1,221 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 9,
+    "slug": "dynamic-workflows",
+    "coach": "coach-09-dynamic-workflows"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:00:00Z",
+    "run_index": 1,
+    "transcript": "labs/09-dynamic-workflows/coaching/dryrun/mediocre.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 74,
+      "delta_seconds": 14,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-20",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+20)",
+      "target_seconds": 45,
+      "actual_seconds": 40,
+      "delta_seconds": -5,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-120",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+120)",
+      "target_seconds": 45,
+      "actual_seconds": 62,
+      "delta_seconds": 17,
+      "verdict": "over"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Three-minute auditor update",
+      "target_seconds": 180,
+      "actual_seconds": 150,
+      "delta_seconds": -30,
+      "verdict": "under",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "How do I know an agent didn't skip endpoints and call it clean?",
+      "target_seconds": 90,
+      "actual_seconds": 91,
+      "delta_seconds": 1,
+      "verdict": "on"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "question": "Why pay for a fan-out of agents when one engineer could read 22 endpoints in an afternoon?",
+      "target_seconds": 90,
+      "actual_seconds": 106,
+      "delta_seconds": 16,
+      "verdict": "over"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "So I started by looking at how the API is organised"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "The workflow audits, fixes and verifies"
+    },
+    "evidence": {
+      "status": "weak",
+      "quote": "It worked in the end anyway, the results came back"
+    },
+    "next_step": {
+      "status": "present",
+      "quote": "next step is to run the rest of the files"
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 8.7,
+    "filler_count": 6,
+    "filler_rate_per_minute": 0.69,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 2
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "um",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "It didn't cost that much overall, a few ACU, that's the cost, right?"
+    ],
+    "long_pauses": [
+      {
+        "at": "02:50",
+        "seconds": 12,
+        "segment": "checkpoint-120"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Every endpoint covered: the count comes from the code (22 in 7 route files) and a small slice ran first",
+      "weight": 8,
+      "mentioned": true,
+      "evidence_quote": "I counted twenty-two endpoints from the code and ran two files first as a slice",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "The confirmed leak: the single-order read filters on id alone, so staff of one brand can read the other brand's order",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "the single-order read filters on the id alone, so staff of one brand can actually read the other brand's order",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm3",
+      "point": "A failed or invalid agent was caught in code with a bounded retry, and resuming the same run ID replayed finished agents",
+      "weight": 6,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "checkpoint-120"
+    },
+    {
+      "id": "mm4",
+      "point": "The fix lives on a throwaway branch named by the script, a separate agent verified it, and main keeps the defect",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "it's on a throwaway branch, and a separate agent verified it, and we left main alone",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "Cost quoted per agent from the run (roughly 0.7–1.0 ACU each, about 3.5 for the slice) with a projection for the full run",
+      "weight": 5,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "objection-2"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "I think (×4)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"some agents had errors at the start\" — say how many: \"three agents failed\""
+    ],
+    "sentences_to_rerecord": [
+      "So I started by looking at how the API is organised, and there are route files…",
+      "It didn't cost that much overall, a few ACU, that's the cost, right?"
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 18,
+      "max": 30,
+      "anchor": "Three of five points; the failure was described without how the script handled it, and no per-agent cost (anchors: 27–30 every point with a number; 15–20 three of five; under 10 one point)."
+    },
+    "structure": {
+      "score": 15,
+      "max": 25,
+      "anchor": "Framing opened with method before the verdict; the update has no cost line (anchors: 22–25 all parts in order; 13–17 parts present but weak; under 8 problem only)."
+    },
+    "customer_relevance": {
+      "score": 12,
+      "max": 20,
+      "anchor": "Endpoint count and freeze mentioned; cost given as \"a few ACU\" (anchors: 16–20 auditor's numbers and constraints used; 10–13 some numbers; under 6 feature talk)."
+    },
+    "brevity_and_fluency": {
+      "score": 7,
+      "max": 15,
+      "anchor": "Framing, checkpoint-120 and objection-2 over, update under; six fillers and a 12 s pause (anchors: 11–15 segments on target, under 1 filler/min; 6–8 two or more segments off; under 4 most segments off)."
+    },
+    "recovery": {
+      "score": 5,
+      "max": 10,
+      "anchor": "Objection 1 had boundary and evidence but no offer; objection 2 had no per-agent number (capped at 5) (anchors: 7–10 acknowledge → boundary → evidence → offer held with numbers; 4–6 partial; under 3 no pattern)."
+    },
+    "total": 57
+  },
+  "stems": [
+    "\"The verdict is…\" — first sentence of the framing, before any method.",
+    "\"Three agents failed; the script…\" — name the count and the guard together.",
+    "\"Per agent that was…\" — read two ACU figures off the run before answering any cost question."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 09; no previous run to compare with."
+}

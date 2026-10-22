@@ -1,0 +1,95 @@
+{
+  "number": 9,
+  "slug": "dynamic-workflows",
+  "title": "Prove no endpoint leaks across brands — an audit → fix → verify workflow",
+  "feature": "Dynamic workflows (pilot): agent(), pipeline() and parallel() over child sessions, flat structured outputs, failure handling, resume by run ID and ACU per agent",
+  "duration_minutes": 180,
+  "difficulty": "advanced",
+  "prerequisites": [
+    "Labs 01–03 done (environment, rules and skills) so a child session can bring the API up from the repo alone",
+    "Repo cloned, `npm install` done at the root and `npm run db:up` working locally",
+    "Dynamic workflows enabled for your Devin organization and enough ACU allowance for roughly ten child sessions",
+    "Push access to a fork or sandbox copy of the repo, so fixer agents can push throwaway `audit/*` branches"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Devin web app with dynamic workflows",
+        "required": true,
+        "fixture": "Fixture-only: replay the reference run recorded in the hidden answer (run log, per-agent ACU table, fix diff) and do the audit by hand with the API tests",
+        "note": "Child sessions are billed per agent; the slice-first rule keeps the first run small"
+      },
+      {
+        "integration": "GitHub push to the course repo or a fork",
+        "required": true,
+        "fixture": "Shared-VM agents committing to local `audit/*` branches only; nothing is pushed",
+        "note": "Separate-VM fixers can only hand work back through pushed branches"
+      },
+      {
+        "integration": "PostgreSQL 16 (docker compose)",
+        "required": true,
+        "fixture": "Same container locally and inside each child session",
+        "note": "The API tests in services/api need it; `npm run lab:reset -- 09` reseeds"
+      }
+    ],
+    "fixture_only_story": "Without workflow access you still do the whole audit: enumerate the 22 endpoints from services/api/src/routes, decide per endpoint whether a caller of the other brand can read or change a row, un-skip the planted cross-brand test on a throwaway branch to prove the fix, then read the reference run in the hidden answer and price your own design with its per-agent ACU numbers.",
+    "not_exercised": [
+      "Running every route file through the full fan-out — the reference run deliberately stops after the slice; the full run is priced from the slice's per-agent numbers"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "git switch main && git status --short",
+      "git branch --list 'audit/*' | xargs -r git branch -D",
+      "npm run lab:reset -- 09"
+    ],
+    "clean_state": "On `main` with `git status --short` empty, no local `audit/*` branches, and the seed-spec dataset loaded for both brands. The planted `cross-brand-leak` (GET /orders/:orderId ignores the caller's brand) is still present and its test in services/api/test/planted.test.ts is still skipped."
+  },
+  "injectors": [
+    {
+      "name": "slice-first",
+      "when": "Before the first run",
+      "behaviour": "The auditor allows one small run before the full fan-out: at most two route files. Your workflow must accept the slice as data and widen without code changes once the slice is clean."
+    },
+    {
+      "name": "invalid-agent-output",
+      "when": "During the first run",
+      "behaviour": "At least one agent fails or returns output that does not match what you asked for (session creation refused, a skipped endpoint, a path where you expected a file name). The run must notice it in code and recover or stop loudly — never report it as clean."
+    },
+    {
+      "name": "branch-collision",
+      "when": "Fix stage",
+      "behaviour": "Two fixers are told to push the same branch name. Decide in the script, not in a prompt, how branch names are derived so separate-VM fixers can never overwrite each other."
+    },
+    {
+      "name": "date-in-prompt",
+      "when": "After the first run, before resuming",
+      "behaviour": "The facilitator adds today's date to the audit prompt and asks you to resume the same run ID. Predict which agents replay and which run again, then explain what that costs."
+    },
+    {
+      "name": "budget-cap",
+      "when": "T+120 min",
+      "behaviour": "The finance lead caps the auditor's proof at a fixed ACU figure. You must say whether the full fan-out fits, using per-agent numbers from your own run."
+    }
+  ],
+  "coach": {
+    "skill": "coach-09-dynamic-workflows",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
+      { "id": "checkpoint-20", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+20)", "at_minute": 20, "target_seconds": 45 },
+      { "id": "checkpoint-120", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+120)", "at_minute": 120, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "Three-minute auditor update", "target_seconds": 180 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 (technical)", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 (commercial)", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — Dynamic workflows", "url": "https://docs.devin.ai/product-guides/dynamic-workflows", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Structured output for sessions", "url": "https://docs.devin.ai/api-reference/sessions", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Billing and ACUs", "url": "https://docs.devin.ai/billing", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Voice mode", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" },
+    { "title": "OWASP API Security Top 10 2023 — API1 Broken Object Level Authorization", "url": "https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/", "date": "fetched 2026-10-22" }
+  ]
+}
