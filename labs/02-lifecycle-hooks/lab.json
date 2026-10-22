@@ -51,7 +51,7 @@
     {
       "name": "bad-migration",
       "when": "T+30 min, once your PreToolUse hook exists",
-      "behaviour": "Ask Devin to apply `scenarios/bad-migration.patch` and run the migrations. The patch drops the NOT NULL default on orders.currency; your policy must stop it before anything reaches the database and leave a reason Devin can read."
+      "behaviour": "The patch `scenarios/bad-migration.patch` lands on your branch and someone wants it applied and migrated. It drops the NOT NULL default on orders.currency; your policy must stop it before anything reaches the database and leave a reason Devin can read."
     },
     {
       "name": "malformed-hooks",
