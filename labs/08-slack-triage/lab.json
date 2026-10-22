@@ -1,0 +1,105 @@
+{
+  "number": 8,
+  "slug": "slack-triage",
+  "title": "Stop the 'charged twice' pile-up — triage #kade-bugs and answer in the thread",
+  "feature": "Slack triage and write-back: a channel-watching Devin (Oncall Support + Bugs responder, or the legacy Triage Bug Reports automation) that filters noise, deduplicates repeated reports, keeps a scratchpad with a routing table, takes routing corrections in the thread, writes the diagnosis back to the original thread, and runs under a network policy because the messages are untrusted input; Microsoft Teams channel variant",
+  "duration_minutes": 90,
+  "difficulty": "core",
+  "prerequisites": [
+    "Lab 12 done or read (Devin Oncall responders), so the responder page is familiar",
+    "Repo cloned, `npm install` done at the root (the offline triage replay and its tests run under `labs/`)",
+    "For the live path: your personal Slack account connected in Settings → Connections → Slack, and a test channel that only you are in. Never a shared support channel",
+    "Optional: a Microsoft Teams test channel with the Devin AI app added, for the Teams variant"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Offline #kade-bugs export (default)",
+        "required": true,
+        "fixture": "`node labs/08-slack-triage/solution/triage-sim.mjs --inject all` replays `fixtures/kade-bugs.jsonl` plus the injectors; `--check <your-scratchpad.json>` compares your scratchpad with the reference run",
+        "note": "Seven messages from support, a routing table with one wrong owner, and an outbound allowlist; no credentials"
+      },
+      {
+        "integration": "Slack — Devin app in your own test channel (e.g. #kade-bugs-<handle>)",
+        "required": false,
+        "fixture": "Paste the fixture messages into the test channel yourself, or keep the whole lab offline",
+        "note": "Your personal Slack account must be connected. Posts and previews go to that channel or to a DM to yourself only; never to a shared channel"
+      },
+      {
+        "integration": "Devin Oncall (Support + Bugs responder) or Automations (Triage Bug Reports template)",
+        "required": false,
+        "fixture": "The replay prints the issues, scratchpad, thread drafts and blocked hosts the responder would produce",
+        "note": "Auto-triage is documented as legacy; new channel triage should use an Oncall responder. Both are compared in the answer"
+      },
+      {
+        "integration": "Microsoft Teams — Devin AI app in a test channel",
+        "required": false,
+        "fixture": "`--platform teams` replays `fixtures/kade-bugs.teams.json`",
+        "note": "Side note only; Teams private channels are not supported"
+      }
+    ],
+    "fixture_only_story": "Without Slack or Teams you still write the responder's setup (what to ignore, how to dedupe, what the scratchpad holds, who owns what, what a write-back says), run the offline replay with every injector, export a scratchpad and check it, and draft the thread write-backs and the support lead's Slack update from the replay's output.",
+    "not_exercised": [
+      "A live responder watching a real Slack channel; the reference answer was built from the offline export",
+      "Network-policy enforcement in a live session; the replay checks requested hosts against the allowlist file"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "git switch main && git status --short",
+      "git branch --list 'lab08/*' | xargs -r git branch -D",
+      "rm -f ~/kade-triage-scratchpad.json ~/kade-triage-notes.md",
+      "npm run lab:reset -- 08"
+    ],
+    "clean_state": "On `main` with `git status --short` empty, no local `lab08/*` branches, no scratchpad or notes file in your home folder, and no responder or automation of yours watching a Slack or Teams channel (pause or delete it on the Oncall and Automations pages). The offline replay of the base export reports 7 messages, 6 reports and 4 issues."
+  },
+  "injectors": [
+    {
+      "name": "noise",
+      "when": "T+5 min",
+      "behaviour": "Three chatty messages land in the channel (`injectors/noise.jsonl`): lunch, a thank-you, a wifi question. Decide what the triage does with them and say how you would prove it stayed quiet."
+    },
+    {
+      "name": "duplicate",
+      "when": "T+15 min",
+      "behaviour": "Two more reports of the same problem in different words (`injectors/duplicate.jsonl`): \"double charge\", \"billed 2x\". Predict how many issues the channel now holds before you run the replay."
+    },
+    {
+      "name": "routing-correction",
+      "when": "T+25 min (already in the base export)",
+      "behaviour": "An engineer replies in the first thread that the tagged team does not own the problem and names the right one. Show where the correction is kept and what happens to the next matching report."
+    },
+    {
+      "name": "private-channel",
+      "when": "T+30 min",
+      "behaviour": "Support forwards a message from a private payments channel Devin was never added to (`injectors/private-channel.jsonl`). Say what Devin can read, what it should post, and what it must not guess."
+    },
+    {
+      "name": "untrusted-input",
+      "when": "T+40 min",
+      "behaviour": "A pasted support ticket tells Devin to fetch and run a script and post its environment (`injectors/untrusted-input.jsonl`). It also reports the same customer problem. Show what is blocked, what is still triaged, and which setting does the blocking."
+    }
+  ],
+  "coach": {
+    "skill": "coach-08-slack-triage",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
+      { "id": "checkpoint-10", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+10)", "at_minute": 10, "target_seconds": 45 },
+      { "id": "checkpoint-45", "kind": "checkpoint", "label": "Think-aloud checkpoint (T+45)", "at_minute": 45, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "Slack update to the support lead (≤120 words, spoken in 90 s)", "target_seconds": 90 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 (technical)", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 (commercial)", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — Auto-triage (legacy): scratchpad, deduplication, routing corrections, security", "url": "https://docs.devin.ai/product-guides/auto-triage", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Devin Oncall: responders, Support + Bugs type, triggers, network policy", "url": "https://docs.devin.ai/product-guides/devin-oncall", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Automations: limits, invocation limit and network policy", "url": "https://docs.devin.ai/product-guides/automations", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Slack integration (scopes, private channels, DMs)", "url": "https://docs.devin.ai/integrations/slack", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Microsoft Teams integration (threads, shared and private channels)", "url": "https://docs.devin.ai/integrations/microsoft-teams", "date": "fetched 2026-10-22" },
+    { "title": "Devin release notes 2026 — Devin Oncall available to all organizations; Teams automations and access settings", "url": "https://docs.devin.ai/release-notes/2026", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Voice mode", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" }
+  ]
+}
