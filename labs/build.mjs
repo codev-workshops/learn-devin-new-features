@@ -56,20 +56,28 @@ export class BuildError extends Error {
 // Markdown
 
 // Relative links and fragments are fine; absolute URLs must be http(s) or mailto.
-// Browsers strip tabs/newlines and leading controls before parsing the scheme, and a
-// percent-decoded prefix must not smuggle one past us either: judge the decoded,
-// control-stripped form and require any scheme to be http(s) or mailto.
-function canonicalHref(href) {
-  let decoded = href;
+// Browsers strip tabs/newlines and C0 controls before parsing the scheme, so the
+// scheme is judged on the control-stripped href: anything with a scheme must be
+// http(s) or mailto. Percent-escapes are NOT decoded for that test (browsers never
+// decode a scheme, so `api%3Av2/x.md` is a relative path), but a percent-encoded
+// spelling of a script/data scheme is still refused so nothing odd reaches the page.
+const stripControls = (href) => href.replace(/[\u0000-\u0020\u007f-\u009f]/g, '');
+const SCHEME_RE = /^([a-z][a-z0-9+.-]*):/i;
+const DANGEROUS_SCHEMES = new Set(['javascript', 'vbscript', 'data', 'file', 'blob']);
+function decodedScheme(href) {
   try {
-    decoded = decodeURIComponent(href);
+    const m = SCHEME_RE.exec(stripControls(decodeURIComponent(href)));
+    return m ? m[1].toLowerCase() : null;
   } catch {
-    /* keep the raw href; a malformed escape is not a scheme */
+    return null;
   }
-  return decoded.replace(/[\u0000-\u0020\u007f-\u009f]/g, '');
 }
-const hasScheme = (href) => /^[a-z][a-z0-9+.-]*:/i.test(canonicalHref(href));
-const isSafeHref = (href) => !hasScheme(href) || /^(https?|mailto):/i.test(canonicalHref(href));
+const hasScheme = (href) => SCHEME_RE.test(stripControls(href));
+const isSafeHref = (href) => {
+  const clean = stripControls(href);
+  if (hasScheme(clean) && !/^(https?|mailto):/i.test(clean)) return false;
+  return !DANGEROUS_SCHEMES.has(decodedScheme(href));
+};
 
 function makeMarked() {
   const marked = new Marked({ gfm: true, breaks: false });
