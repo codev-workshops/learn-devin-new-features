@@ -50,14 +50,14 @@ RUN echo "devin ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/devin
 ENV DEVIN_OUTPOSTS_TOKEN=dop_REDACTED_EXAMPLE
 
 # Root-owned and read-only for the worker user.
-COPY --chmod=0444 outpost/repo.bundle /opt/kade/repo.bundle
+COPY --chmod=0444 outpost/repo.bundle /opt/kade-repo.bundle
 COPY --chmod=0555 outpost/smoke.sh /usr/local/bin/kade-outpost-smoke
 
 USER devin
 
 # The worker runs in /workspace; sessions find their repos under /workspace/repos/<name>.
 WORKDIR /workspace
-RUN git clone --quiet /opt/kade/repo.bundle repos/${REPO_NAME} \
+RUN git clone --quiet /opt/kade-repo.bundle repos/${REPO_NAME} \
     && git -C repos/${REPO_NAME} remote set-url origin ${REPO_URL} \
     && cd repos/${REPO_NAME} \
     && npm ci --no-audit --no-fund --ignore-scripts
