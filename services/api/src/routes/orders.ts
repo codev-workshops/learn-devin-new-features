@@ -71,10 +71,10 @@ export function ordersRouter(db: Db): Router {
   });
 
   r.get("/:orderId", async (req, res) => {
-    // Looks the order up by id alone — the caller's brand header is not part of the predicate (PLANTED.md `cross-brand-order-read`).
-    const { rows } = await db.query<OrderRow>(`SELECT ${ORDER_COLUMNS} FROM orders WHERE id = $1`, [
-      req.params.orderId,
-    ]);
+    const { rows } = await db.query<OrderRow>(
+      `SELECT ${ORDER_COLUMNS} FROM orders WHERE id = $1 AND brand = $2`,
+      [req.params.orderId, req.caller.brand],
+    );
     const order = rows[0];
     if (!order) throw notFound(`order ${req.params.orderId} not found`);
     if (!isStaff(req.caller) && order.user_email !== req.caller.user) {

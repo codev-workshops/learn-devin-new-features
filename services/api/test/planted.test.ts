@@ -51,7 +51,7 @@ describe("planted defects (skipped: each one fails on main by design)", () => {
     expect(stock.rows[0]!.available).toBeGreaterThanOrEqual(0);
   });
 
-  it.skip("cross-brand-leak: GET /orders/:id returns 404 when the order belongs to another brand", async () => {
+  it("cross-brand-leak: GET /orders/:id returns 404 when the order belongs to another brand", async () => {
     const trailhead = await h.db.query<{ id: string }>(
       "SELECT id FROM orders WHERE brand = $1 LIMIT 1",
       [TRAILHEAD],
