@@ -4,8 +4,9 @@ Files for running Devin sessions on Kadé-owned machines (lab 14). Start with [`
 
 | File                      | What it is                                                                                     |
 | ------------------------- | ---------------------------------------------------------------------------------------------- |
+| `build.sh`                | Bundles the committed HEAD (`git bundle`) and runs `docker build`                              |
 | `Dockerfile`              | Worker image: official Devin CLI base, git, ffmpeg, Node 22, Chrome, the repo baked in, non-root |
-| `Dockerfile.dockerignore` | Keeps `.env` files, local config and `node_modules` out of the build context                    |
+| `Dockerfile.dockerignore` | Admits only the bundle and `smoke.sh` to the build context                                     |
 | `compose.outpost.yml`     | Two workers (`worker-a`, `worker-b`) on one host, each with its own data volume                 |
 | `smoke.sh`                | In-image checks (installed as `kade-outpost-smoke`)                                             |
 

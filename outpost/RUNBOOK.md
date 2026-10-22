@@ -16,10 +16,10 @@ Sources: [overview](https://docs.devin.ai/cloud/outposts/overview), [quickstart]
 
 ## 2. Build the worker image
 
-From the repo root (the repo is the build context and is baked into `/workspace/repos/learn-devin-new-features`):
+From a clean checkout. `outpost/build.sh` bundles the committed HEAD with `git bundle` and builds from the repo root; the Dockerfile clones that bundle into `/workspace/repos/learn-devin-new-features` (origin reset to GitHub) and runs `npm ci --ignore-scripts`. `outpost/Dockerfile.dockerignore` admits only the bundle and `smoke.sh`, so untracked files, `.env` files and uncommitted edits never enter the build context:
 
 ```bash
-docker build -f outpost/Dockerfile -t kade-outpost-worker:$(git rev-parse --short HEAD) -t kade-outpost-worker .
+outpost/build.sh   # tags kade-outpost-worker:<short-sha> and :latest
 docker run --rm --entrypoint bash kade-outpost-worker /usr/local/bin/kade-outpost-smoke
 node labs/14-outposts/tools/outpost-sim.mjs check-dockerfile outpost/Dockerfile
 ```
@@ -27,11 +27,11 @@ node labs/14-outposts/tools/outpost-sim.mjs check-dockerfile outpost/Dockerfile
 Offline smoke build (no Devin CLI, cannot register; proves the other layers):
 
 ```bash
-docker build -f outpost/Dockerfile --build-arg BASE_IMAGE=mirror.gcr.io/library/ubuntu:24.04 -t kade-outpost-worker:smoke .
+outpost/build.sh --build-arg BASE_IMAGE=mirror.gcr.io/library/ubuntu:24.04 -t kade-outpost-worker:smoke
 docker run --rm --entrypoint bash kade-outpost-worker:smoke /usr/local/bin/kade-outpost-smoke
 ```
 
-Image policy: official `devin-cli:stable` base; git (required), ffmpeg (screen recording), Chrome with `DEVIN_CHROME_PATH` (Ubuntu's chromium package is a snap stub in containers); non-root `devin` user and **no passwordless sudo** (these workers are long-lived; only grant sudo on machines recycled after each session); no token, key or `.env` in any layer.
+Image policy: official `devin-cli:stable` base; Node 22 copied from the official `node:22-bookworm-slim` image (no `curl | bash`); Chrome fetched over HTTPS only; git (required), ffmpeg (screen recording), Chrome with `DEVIN_CHROME_PATH` (Ubuntu's chromium package is a snap stub in containers); non-root `devin` user and **no passwordless sudo** (these workers are long-lived; only grant sudo on machines recycled after each session); no token, key or `.env` in any layer.
 
 ## 3. Start workers
 

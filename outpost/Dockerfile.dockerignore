@@ -1,17 +1,6 @@
 # Used by BuildKit for `docker build -f outpost/Dockerfile .` (context = repo root).
-# Keep .git so the baked-in checkout has a working remote; never ship local secrets.
-**/node_modules
-**/dist
-**/coverage
-**/.venv
-**/__pycache__
-**/.pytest_cache
-**/.ruff_cache
-.env
-.env.*
-**/.env
-AGENTS.local.md
-.devin/config.local.json
-.devin/mcp_config.local.json
-labs/**/index.html
-labs/index.html
+# Only the git bundle of the committed HEAD and the smoke test enter the context, so local
+# secrets, `.env` files, untracked files and node_modules can never be copied in.
+*
+!outpost/repo.bundle
+!outpost/smoke.sh

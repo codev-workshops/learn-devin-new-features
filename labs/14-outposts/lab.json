@@ -23,7 +23,7 @@
       {
         "integration": "Docker build of `outpost/Dockerfile`",
         "required": true,
-        "fixture": "If `public.ecr.aws` is unreachable, smoke-build the same layers on Ubuntu: `docker build -f outpost/Dockerfile --build-arg BASE_IMAGE=mirror.gcr.io/library/ubuntu:24.04 -t kade-outpost-worker:smoke .` then run `outpost/smoke.sh` inside it.",
+        "fixture": "If `public.ecr.aws` is unreachable, smoke-build the same layers on Ubuntu: `outpost/build.sh --build-arg BASE_IMAGE=mirror.gcr.io/library/ubuntu:24.04 -t kade-outpost-worker:smoke` then run `outpost/smoke.sh` inside it.",
         "note": "The smoke image has no Devin CLI, so it can prove the dependencies and the baked-in repo but cannot register as a worker."
       },
       {
