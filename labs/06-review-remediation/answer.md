@@ -12,10 +12,10 @@
 2. Run Devin Review at the effort level you chose; note the level in your evidence.
 3. Sort the findings (`fixtures/review-findings.json` is the reference). F1 and F2 are Bugs; F3 is an Investigate flag; F4 is informational; F5 is the rule problem.
 4. Copy F2 into the chat. Ask for a seeded SKU and quantity that break it, then confirm with the test below. Two €19.90 socks: `19.90 * 2 * 100` is `3979.9999999999995`, so `Math.floor` gives 39.79. Three socks happen to come out right (59.70), so a quick spot check misses it.
-5. Cut `lab06/<handle>` from the PR branch. Add the test first and run it: both cases fail on the PR's code.
+5. Cut `lab06/<handle>` from the PR branch. Add the test first and run it: both cases fail on the PR's code. Commit the test alone, push, and open your remediation PR against `main`, marked do-not-merge. Its first review sees PR #26's code plus your failing test, so it reports the same findings; this is the baseline that re-review will resolve.
 6. Fix: remove `priceOverrides` (no client-controlled field may change a price, and `X-Kade-Role` is self-declared), drop `toCents` and pass `unitPrice` and `quantity` to `computeTotals` unchanged, and move re-pricing before the transaction opens (this resolves F3). Do not touch `money.ts`: `currency-rounding` is a separate plant and stays as it is.
 7. Replace the review rule (F5): target every money computation under `services/api/src/**`, not one file. Ban rounding outside `money.ts` and client-controlled price inputs. If you have admin access, add it as a rule card in the rules editor too, so a PR cannot weaken it by editing `REVIEW.md`.
-8. Push and open your remediation PR against `main`, marked do-not-merge. Re-review: F1, F2, F3 and F5 should be gone. F4 remains as informational.
+8. Push the fix commits to the same remediation PR. The new commits trigger a re-review of that PR: F1, F2, F3 and F5 should be resolved, and F4 remains as informational. PR #26 itself is not re-reviewed, because its head never changes.
 9. Unchanged-diff injector: push an empty commit and request a review. Expect the skip, and say why.
 10. Reply on the F3 thread: "Moved re-pricing out of the transaction in <commit>; the transaction now issues the same statements as main." Close both PRs unmerged.
 
