@@ -177,7 +177,7 @@ export function callTool(name, args = {}) {
     const values = Array.isArray(given) ? given : [given];
     // Accept the bare id or a fully-qualified Kadé id (GCP project kade-prod, AWS account 123456789012); never another tenant's.
     const KADE_PREFIX =
-      /^(projects\/kade-prod\/[a-z]+\/|arn:aws:[a-z0-9-]+:[a-z0-9-]*:123456789012:[a-z-]+\/(kade-prod\/)?|kade-prod\.)/;
+      /^(projects\/kade-prod\/(locations\/[a-z0-9-]+\/)?[a-z]+\/|arn:aws:[a-z0-9-]+:[a-z0-9-]*:123456789012:[a-z-]+\/(kade-prod\/)?|kade-prod\.)/;
     const matches = (v, x) =>
       String(v) === x || (KADE_PREFIX.test(String(v)) && String(v).replace(KADE_PREFIX, "") === x);
     const ok = values.length > 0 && values.every((v) => allowed.some((x) => matches(v, x)));
