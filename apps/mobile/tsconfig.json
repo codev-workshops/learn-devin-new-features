@@ -1,0 +1,15 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "types": ["jest"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@kade/contracts": ["../../packages/contracts/src/index.ts"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", "scripts/**/*.mjs", ".expo/types/**/*.ts", "expo-env.d.ts"],
+  "exclude": ["node_modules", "dist", "android", "ios"]
+}

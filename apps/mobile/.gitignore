@@ -1,0 +1,7 @@
+# Continuous Native Generation: android/ and ios/ at the app root are produced by `npx expo prebuild`.
+# modules/kade-haptics/ios is hand-written source and is tracked.
+/android/
+/ios/
+.expo/
+dist/
+expo-env.d.ts
