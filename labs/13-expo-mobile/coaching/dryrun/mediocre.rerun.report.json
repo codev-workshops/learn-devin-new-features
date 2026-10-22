@@ -123,7 +123,7 @@
   "must_mention": [
     {
       "id": "mm1",
-      "point": "Outcome on both platforms: packed and shipped on the order screen, proven by the same order on the Android emulator and the iOS Simulator",
+      "point": "Outcome: packed and shipped on the order screen, proven by the same order on the Android emulator and on the iOS Simulator — or, without macOS, on Android with iOS named as not exercised",
       "weight": 6,
       "mentioned": true,
       "evidence_quote": "The goal is that customers see packed and shipped on the order screen on both phones",
