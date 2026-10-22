@@ -7,7 +7,7 @@ argument-hint: "<handle> [--dry-run <transcript>]"
 
 # Coach — lab 13 (Expo mobile: packed and shipped on Android and iOS)
 
-First read `.devin/skills/articulation-base/SKILL.md` and follow it for protocol, timing, rubric, report schema and progress log. This file only supplies the lab-specific material.
+First read `.devin/skills/articulation-base/SKILL.md` and follow it for protocol, timing, rubric and progress log. Override: the report shape comes from `labs/coach-report.schema.json` (`schema_version: "1.0"`, `lab`, `run`, `fillers_and_pauses`, `must_mention`, `scores.total`, `previous_run_comparison`, …), not from the base's older field list; `labs/13-expo-mobile/coaching/dryrun/strong.report.json` is a validating example. This file only supplies the lab-specific material.
 
 - **lab**: `13` · **coach**: `coach-13-expo-mobile` · **agent**: `.devin/agents/mobile-coach.md`
 - **answer**: `labs/13-expo-mobile/answer.md` (never quote it before the last objection ends)
@@ -27,17 +27,17 @@ First read `.devin/skills/articulation-base/SKILL.md` and follow it for protocol
 
 ## Must-mention (accuracy, 30 points)
 
-| id  | weight | point                                                                                                                                        |
-| --- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| mm1 | 6      | Outcome on both platforms: packed and shipped on the order screen, proven by the same order on the Android emulator and the iOS Simulator    |
-| mm2 | 5      | Android builds on the Linux session with a KVM-accelerated emulator; iOS needs a separate macOS child session with Xcode and the Simulator   |
-| mm3 | 4      | Expo SDK 54 with Continuous Native Generation: android/ and ios/ come from expo prebuild, are never committed, and drift is fixed by --clean |
-| mm4 | 5      | Multi-document blueprint, one runs-on linux and one runs-on macos document with a snapshot each; a snapshot mismatch is fixed there          |
-| mm5 | 4      | kade-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android                                           |
-| mm6 | 3      | Xcode version selected explicitly with DEVELOPER_DIR on the macOS machine                                                                    |
-| mm7 | 3      | What was not exercised: haptic feel on a physical iPhone, store signing and EAS, live API mode                                               |
+| id  | weight | point                                                                                                                                                                                      |
+| --- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| mm1 | 6      | Outcome: packed and shipped on the order screen, proven by the same order on the Android emulator and on the iOS Simulator — or, without macOS, on Android with iOS named as not exercised |
+| mm2 | 5      | Android builds on the Linux session with a KVM-accelerated emulator; iOS needs a separate macOS child session with Xcode and the Simulator                                                 |
+| mm3 | 4      | Expo SDK 54 with Continuous Native Generation: android/ and ios/ come from expo prebuild, are never committed, and drift is fixed by --clean                                               |
+| mm4 | 5      | Multi-document blueprint, one runs-on linux and one runs-on macos document with a snapshot each; a snapshot mismatch is fixed there                                                        |
+| mm5 | 4      | kade-haptics is a Swift Expo module with a JS fallback: native on iOS, a harmless no-op on Android                                                                                         |
+| mm6 | 3      | Xcode version selected explicitly with DEVELOPER_DIR on the macOS machine                                                                                                                  |
+| mm7 | 3      | What was not exercised: haptic feel on a physical iPhone, store signing and EAS, live API mode                                                                                             |
 
-Credit a point when the meaning is there with its key name; paraphrase is fine. mm1 belongs in framing; mm2 in checkpoint-30; mm3 and mm6 in checkpoint-120; mm4, mm5, mm7 in update.
+Credit a point when the meaning is there with its key name; paraphrase is fine. iOS is optional in this lab: a Linux-only learner earns full mm1 credit by showing the Android proof and saying plainly that iOS was not exercised — never for claiming iOS proof they do not have. mm1 belongs in framing; mm2 in checkpoint-30; mm3 and mm6 in checkpoint-120; mm4, mm5, mm7 in update.
 
 ## Objections (90 s each, in character)
 

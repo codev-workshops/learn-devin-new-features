@@ -39,7 +39,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T11:00:00Z · timing:
 
 ## Missing key points
 
-- [x] Outcome on both platforms: packed and shipped on the order screen, proven by the same order on the Android emulator and the iOS Simulator (6) — “The goal is that customers see packed and shipped on the order screen on both phones”
+- [x] Outcome: packed and shipped on the order screen, proven by the same order on the Android emulator and on the iOS Simulator — or, without macOS, on Android with iOS named as not exercised (6) — “The goal is that customers see packed and shipped on the order screen on both phones”
 - [x] Android builds on the Linux session with a KVM-accelerated emulator; iOS needs a separate macOS child session with Xcode and the Simulator (5) — “the emulator is fast because it has KVM”
 - [x] Expo SDK 54 with Continuous Native Generation: android/ and ios/ come from expo prebuild, are never committed, and drift is fixed by --clean (4) — “Expo SDK 54 generates ios/ with prebuild, we never commit it, and prebuild --clean fixes drift”
 - [ ] Multi-document blueprint, one runs-on linux and one runs-on macos document with a snapshot each; a snapshot mismatch is fixed there (5) — missed; belonged in update
