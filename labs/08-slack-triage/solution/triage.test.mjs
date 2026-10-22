@@ -42,6 +42,7 @@ describe('lab 08 base export', () => {
     expect(r.issues.map((i) => i.plant)).toEqual(['duplicate-webhook', 'cross-brand-leak', 'currency-rounding', 'abandoned-cart-sweeper']);
     for (const p of r.posts.filter((x) => x.kind === 'diagnosis')) expect(p.text).toMatch(/the owner confirms/);
     expect(r.posts[0].text).toMatch(/webhooks\.py/);
+    for (const p of r.posts.filter((x) => x.kind === 'diagnosis')) expect(p.text).toMatch(/\(services\/[^)]+\.(?:ts|py)\b/);
   });
 
   it('records channel, timestamp and reporter for every triaged report', () => {
@@ -88,6 +89,10 @@ describe('lab 08 injectors', () => {
     expect(r.scratchpad.needs_access).toHaveLength(1);
     expect(r.posts.map((p) => p.kind)).toEqual(['diagnosis', 're-route']);
   });
+
+  it('teams variant refuses Slack injectors instead of skipping them', () => {
+    expect(() => run({ platform: 'teams', inject: ['noise'] })).toThrow(/Slack export only/);
+  });
 });
 
 describe('lab 08 scratchpad check', () => {
@@ -108,6 +113,18 @@ describe('lab 08 scratchpad check', () => {
       `duplicate ${REFERENCE.duplicates['charged-twice'][0]} not linked to charged-twice`,
       'routing for payment-webhooks is @kade-web, expected @kade-fulfilment',
       'untrusted input 1792667700.000900 not recorded',
+    ]);
+  });
+
+  it('flags a report filed under the wrong channel, reporter or issue', () => {
+    const bad = structuredClone(REFERENCE);
+    const [first] = bad.triaged;
+    const want = { ...first };
+    Object.assign(first, { channel: 'C0OTHER', reporter: 'U0NOBODY', issue: 'ghost-order' });
+    expect(checkScratchpad(bad, reference)).toEqual([
+      `report ${want.ts} has channel C0OTHER, expected ${want.channel}`,
+      `report ${want.ts} has reporter U0NOBODY, expected ${want.reporter}`,
+      `report ${want.ts} has issue ghost-order, expected ${want.issue}`,
     ]);
   });
 });
