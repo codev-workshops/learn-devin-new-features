@@ -27,5 +27,23 @@ services:
       timeout: 3s
       retries: 12
 
+  # Order API (W1-api). Local development usually runs `npm run dev -w services/api` against the
+  # postgres service instead; this service exists for the deploy/rollback and incident labs.
+  api:
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
+    environment:
+      DATABASE_URL: postgres://kade:kade@postgres:5432/kade
+      API_PORT: "3001"
+      PAYGATE_SECRET: ${PAYGATE_SECRET:-kade-local-paygate-secret}
+      PAYGATE_URL: ${PAYGATE_URL:-http://localhost:3002}
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: ["api"]
+
 volumes:
   kade-pgdata:
