@@ -1,0 +1,12 @@
+{
+  "$comment": "Course fixture, not a Devin API payload. A Trailhead brand engineer (org member, not a plugin admin) asks their session to raise the low-stock threshold in the shared organization plugin.",
+  "plugin": "kade-flash-sale",
+  "scope": "organization",
+  "actor": { "handle": "trailhead-eng", "role": "member", "can_edit_org_plugins": false },
+  "change": {
+    "file": "skills/flash-sale-release/SKILL.md",
+    "from": "fewer than 10 units",
+    "to": "fewer than 25 units"
+  },
+  "approver": { "handle": "platform-admin", "role": "admin", "can_edit_org_plugins": true }
+}
