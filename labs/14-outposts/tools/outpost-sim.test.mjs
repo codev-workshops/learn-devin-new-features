@@ -39,6 +39,10 @@ describe('outpost queue model', () => {
 });
 
 describe('worker image policy', () => {
+  it('comments do not satisfy a rule', () => {
+    const src = readFileSync(join(repo, 'outpost', 'Dockerfile'), 'utf8').replace(/git ffmpeg /, 'git ');
+    expect(checkDockerfile(src).filter((r) => !r.ok).map((r) => r.id)).toEqual(['ffmpeg']);
+  });
   it('outpost/Dockerfile passes every rule', () => {
     expect(failing(join(repo, 'outpost', 'Dockerfile'))).toEqual([]);
   });

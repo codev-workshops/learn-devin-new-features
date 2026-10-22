@@ -44,7 +44,8 @@ RUN ln -sf ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
 # No passwordless sudo: these workers are long-lived, so sessions get no root. Rebuild the
 # image to add tools instead (see outpost/RUNBOOK.md, "Who patches the worker image").
 RUN useradd --create-home --shell /bin/bash devin \
-    && mkdir -p /workspace/repos && chown -R devin:devin /workspace
+    && mkdir -p /workspace/repos /home/devin/.devin/worker \
+    && chown -R devin:devin /workspace /home/devin/.devin
 RUN echo "devin ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/devin
 ENV DEVIN_OUTPOSTS_TOKEN=dop_REDACTED_EXAMPLE
 

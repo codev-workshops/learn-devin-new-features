@@ -41,10 +41,12 @@ COPY --from=node /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
 RUN ln -sf ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
     && ln -sf ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 
+# /home/devin/.devin/worker is created here so fresh named volumes inherit devin ownership.
 # No passwordless sudo: these workers are long-lived, so sessions get no root. Rebuild the
 # image to add tools instead (see outpost/RUNBOOK.md, "Who patches the worker image").
 RUN useradd --create-home --shell /bin/bash devin \
-    && mkdir -p /workspace/repos && chown -R devin:devin /workspace
+    && mkdir -p /workspace/repos /home/devin/.devin/worker \
+    && chown -R devin:devin /workspace /home/devin/.devin
 
 # Root-owned and read-only for the worker user.
 COPY --chmod=0444 outpost/repo.bundle /opt/kade/repo.bundle

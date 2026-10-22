@@ -48,7 +48,8 @@ The equivalent without the env var is `devin worker start --outpost=kade-vpc --t
 Two workers (payments + storefront at 09:00):
 
 ```bash
-OUTPOST_NAME=kade-vpc docker compose -f outpost/compose.outpost.yml up -d --build
+outpost/build.sh
+OUTPOST_NAME=kade-vpc docker compose -f outpost/compose.outpost.yml up -d
 docker compose -f outpost/compose.outpost.yml ps
 ```
 

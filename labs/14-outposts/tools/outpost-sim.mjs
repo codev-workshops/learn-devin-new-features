@@ -156,7 +156,8 @@ export const DOCKERFILE_RULES = [
 ];
 
 export function checkDockerfile(text) {
-  return DOCKERFILE_RULES.map((r) => ({ id: r.id, why: r.why, ok: r.test(text) }));
+  const code = text.replace(/^\s*#.*$/gm, '');
+  return DOCKERFILE_RULES.map((r) => ({ id: r.id, why: r.why, ok: r.test(code) }));
 }
 
 function main(argv) {
