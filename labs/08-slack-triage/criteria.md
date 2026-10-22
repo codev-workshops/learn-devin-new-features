@@ -1,0 +1,13 @@
+You are done when someone who was not in the room can see each of the following.
+
+1. **Right tool, stated.** Your notes say which product surface watches the channel (an Oncall **Support + Bugs** responder, or the **Triage Bug Reports** automation template) and why, including what the documentation says about the older one.
+2. **Noise stays quiet.** With the `noise` injector, the replay (`node labs/08-slack-triage/solution/triage-sim.mjs --inject noise`) lists the three chatty messages as ignored, and your setup text says what the responder must ignore.
+3. **Duplicates grouped.** With every injector applied, the channel holds exactly four issues. Every repeat of the double-charge complaint, including the paraphrased ones, is linked to the first report's thread, and you predicted the count before running the replay.
+4. **Scratchpad checked.** Your scratchpad export passes `triage-sim.mjs --inject all --check <file>` with no problems: each triaged report has channel, timestamp and reporter; duplicates are linked; the routing table is current.
+5. **Routing corrected once.** After the engineer's reply in the first thread, the routing table names the new owner, the replay shows one re-route reply in that same thread, and later matching reports go to the new owner without another correction.
+6. **Answers in the thread.** You have one write-back draft per issue, posted to the first report's thread, that names the cause in plain words, points to the file, tags the owner and says who confirms before anyone acts. Repeats get a reaction, not a new message.
+7. **Fewer messages than reports.** Your notes give the replay's post count against its report count, and you can say what a reader in the channel sees for each kind of message.
+8. **Private channel handled honestly.** For the forward from a private channel, your write-back asks for the details or for Devin to be added, and does not guess at the content.
+9. **Untrusted input contained.** For the pasted ticket, the replay shows the requested host blocked and the report still grouped; your setup turns on the responder's network policy with an allowlist, and your notes say why messages in this channel count as untrusted.
+10. **Teams variant answered.** Your notes say how the same setup runs on a Microsoft Teams channel (`--platform teams`), and one thing that is different there.
+11. **Slack update written.** A Slack message of at most 120 words to the support lead: what changed, what her team will see, what you still need. Then the articulation drill with the voice coach (section 8), or against a timer offline. The gap report (or self-score) is saved next to your notes and not committed.

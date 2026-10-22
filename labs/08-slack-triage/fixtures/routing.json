@@ -1,0 +1,10 @@
+{
+  "note": "Starting routing table for the triage scratchpad. One entry is deliberately wrong; the correction arrives in a thread.",
+  "areas": [
+    { "area": "payment-webhooks", "paths": ["services/fulfilment-worker/src/fulfilment_worker/webhooks.py"], "owner": "@kade-web" },
+    { "area": "order-access", "paths": ["services/api/src/routes/orders.ts"], "owner": "@kade-api" },
+    { "area": "totals-and-vat", "paths": ["services/api/src/routes/checkout.ts", "services/fulfilment-worker/src/fulfilment_worker/totals.py"], "owner": "@kade-api" },
+    { "area": "cart-sweeper", "paths": ["services/fulfilment-worker/src/fulfilment_worker/sweeper.py"], "owner": "@kade-fulfilment" },
+    { "area": "storefront", "paths": ["apps/web/src"], "owner": "@kade-web" }
+  ]
+}
