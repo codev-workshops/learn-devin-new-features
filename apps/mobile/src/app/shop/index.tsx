@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { formatMoney, type Collection, type Product } from "@/api";
@@ -63,6 +63,7 @@ export function ProductRow({
 export function CatalogScreen() {
   const { api, session, addToCart, error, dismissError, clearBrand } = useKade();
   const [slug, setSlug] = useState<string | null>(null);
+  useEffect(() => setSlug(null), [session?.brand]);
   const collections = useAsync<Collection[]>(
     () => (session ? api.listCollections(session) : null),
     [session?.brand],
@@ -115,7 +116,11 @@ export function CatalogScreen() {
             <ProductRow
               product={item}
               accent={accent}
-              onAdd={() => addToCart(item.sku).catch(() => undefined)}
+              onAdd={() =>
+                item.variants.length > 1
+                  ? router.push(`/shop/product/${item.sku}`)
+                  : addToCart(item.sku).catch(() => undefined)
+              }
             />
           )}
           ListEmptyComponent={<Muted>No products in this collection.</Muted>}

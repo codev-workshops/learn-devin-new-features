@@ -79,7 +79,7 @@ describe("catalog + cart", () => {
     expect(screen.getByTestId("cart-totals")).toHaveTextContent(/\$119\.66/);
   });
 
-  it("switches collection and surfaces an out_of_stock error from the contract", async () => {
+  it("switches collection and keeps component-backed bundles orderable", async () => {
     const { api } = makeApi();
     render(
       <KadeProvider api={api}>
@@ -90,7 +90,7 @@ describe("catalog + cart", () => {
     await screen.findByTestId("catalog");
     fireEvent.press(screen.getByTestId("collection-bundles"));
     expect(await screen.findByTestId("product-LH-BNDL-01")).toBeOnTheScreen();
-    expect(screen.getByTestId("add-LH-BNDL-01")).toBeDisabled();
+    expect(screen.getByTestId("add-LH-BNDL-01")).not.toBeDisabled();
   });
 });
 

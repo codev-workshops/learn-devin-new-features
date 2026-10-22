@@ -36,7 +36,7 @@ export function EventTimeline({ events }: { events: OrderEvent[] }) {
 
 export function OrderScreen() {
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
-  const { api, session } = useKade();
+  const { api, session, notifyOrdersChanged } = useKade();
   const order = useAsync<Order>(
     () => (session && orderId ? api.getOrder(session, orderId) : null),
     [session?.brand, orderId],
@@ -60,6 +60,7 @@ export function OrderScreen() {
       .then(() => {
         order.reload();
         events.reload();
+        notifyOrdersChanged();
       })
       .catch((e: Error) => setCancelError(e.message));
 

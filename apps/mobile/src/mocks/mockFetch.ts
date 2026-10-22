@@ -48,23 +48,26 @@ export function buildRoutes(store: MockStore): Route[] {
       status: 201,
       body: store.createCart(brand, user),
     })),
-    def("GET", "/carts/{cartId}", ({ brand, params }) => ({
-      body: store.getCart(brand, params.cartId),
+    def("GET", "/carts/{cartId}", ({ brand, user, params }) => ({
+      body: store.getCart(brand, user, params.cartId),
     })),
-    def("POST", "/carts/{cartId}/lines", ({ brand, params, body }) => {
+    def("POST", "/carts/{cartId}/lines", ({ brand, user, params, body }) => {
       const b = asBody(body);
-      return { body: store.addCartLine(brand, params.cartId, String(b.sku), Number(b.quantity)) };
+      return {
+        body: store.addCartLine(brand, user, params.cartId, String(b.sku), Number(b.quantity)),
+      };
     }),
-    def("PATCH", "/carts/{cartId}/lines/{lineId}", ({ brand, params, body }) => ({
+    def("PATCH", "/carts/{cartId}/lines/{lineId}", ({ brand, user, params, body }) => ({
       body: store.updateCartLine(
         brand,
+        user,
         params.cartId,
         params.lineId,
         Number(asBody(body).quantity),
       ),
     })),
-    def("DELETE", "/carts/{cartId}", ({ brand, params }) => {
-      store.abandonCart(brand, params.cartId);
+    def("DELETE", "/carts/{cartId}", ({ brand, user, params }) => {
+      store.abandonCart(brand, user, params.cartId);
       return { status: 204 };
     }),
     def("POST", "/checkout", ({ brand, user, body }) => ({
@@ -78,14 +81,14 @@ export function buildRoutes(store: MockStore): Route[] {
         cursor: query.get("cursor") ?? undefined,
       }),
     })),
-    def("GET", "/orders/{orderId}", ({ brand, params }) => ({
-      body: store.getOrder(brand, params.orderId),
+    def("GET", "/orders/{orderId}", ({ brand, user, params }) => ({
+      body: store.getOrder(brand, user, params.orderId),
     })),
-    def("GET", "/orders/{orderId}/events", ({ brand, params }) => ({
-      body: store.listOrderEvents(brand, params.orderId),
+    def("GET", "/orders/{orderId}/events", ({ brand, user, params }) => ({
+      body: store.listOrderEvents(brand, user, params.orderId),
     })),
-    def("POST", "/orders/{orderId}/cancel", ({ brand, params }) => ({
-      body: store.cancelOrder(brand, params.orderId),
+    def("POST", "/orders/{orderId}/cancel", ({ brand, user, params }) => ({
+      body: store.cancelOrder(brand, user, params.orderId),
     })),
   ];
 }

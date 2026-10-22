@@ -26,6 +26,9 @@ export interface KadeState {
   setLineQuantity(lineId: string, quantity: number): Promise<Cart>;
   resetCart(): Promise<void>;
   dismissError(): void;
+  /** Bumped whenever an order changes outside the list screen so it refetches. */
+  ordersVersion: number;
+  notifyOrdersChanged(): void;
 }
 
 const Ctx = createContext<KadeState | null>(null);
@@ -44,6 +47,7 @@ export function KadeProvider({
   const [cart, setCart] = useState<Cart | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [ordersVersion, setOrdersVersion] = useState(0);
 
   useEffect(() => {
     let alive = true;
@@ -119,8 +123,10 @@ export function KadeProvider({
         }),
       resetCart: async () => setCart(null),
       dismissError: () => setError(null),
+      ordersVersion,
+      notifyOrdersChanged: () => setOrdersVersion((v) => v + 1),
     }),
-    [api, brands, session, brand, cart, busy, error, run, ensureCart],
+    [api, brands, session, brand, cart, busy, error, run, ensureCart, ordersVersion],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

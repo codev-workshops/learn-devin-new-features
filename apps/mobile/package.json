@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "prettier --check . && eslint . && npm run typecheck",
     "format": "prettier --write .",
-    "build": "node scripts/build-fixtures.mjs && expo export --platform android --output-dir dist",
+    "build": "node scripts/build-fixtures.mjs --check && expo export --platform android --output-dir dist",
     "fixtures": "node scripts/build-fixtures.mjs"
   },
   "dependencies": {

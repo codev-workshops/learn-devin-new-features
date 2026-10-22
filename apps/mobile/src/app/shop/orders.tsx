@@ -8,10 +8,10 @@ import { Card, ErrorBanner, Loading, Muted, Pill, Screen, Title } from "@/ui/pri
 import { palette, statusColor, statusLabel } from "@/ui/theme";
 
 export function OrdersScreen() {
-  const { api, session } = useKade();
+  const { api, session, ordersVersion } = useKade();
   const orders = useAsync<OrderPage>(
     () => (session ? api.listOrders(session, { limit: 50 }) : null),
-    [session?.brand],
+    [session?.brand, ordersVersion],
   );
   if (!session) return null;
   if (orders.loading) return <Loading label="Loading orders…" />;

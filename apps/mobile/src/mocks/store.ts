@@ -137,17 +137,32 @@ function expandVariants(s: SeedSku, perVariantOnHand: number): Variant[] {
   }));
 }
 
+function seedSkus(brand: BrandId): SeedSku[] {
+  return (seed.skus as unknown as Record<string, SeedSku[]>)[brand] ?? [];
+}
+
+/** A bundle has no stock of its own: it can be assembled as often as its scarcest component allows. */
+function effectiveOnHand(brand: BrandId, s: SeedSku): number {
+  if (!s.bundle?.length) return s.onHand;
+  const all = seedSkus(brand);
+  return s.bundle.reduce((min, component) => {
+    const c = all.find((x) => x.sku === component);
+    return Math.min(min, c ? c.onHand : 0);
+  }, Number.MAX_SAFE_INTEGER);
+}
+
 export function toProduct(brand: BrandId, s: SeedSku, now: Date): Product {
   const currency = seedBrand(brand).currency as Currency;
   const listMinor = toMinor(s.price);
   const onSale = promotionActive(brand, s.collection, now);
   const priceMinor = onSale ? mulRoundHalfUp(listMinor, 80, 100) : listMinor;
   const variantCount = Object.values(s.variants ?? {}).reduce((n, v) => n * v.length, 1);
+  const onHand = effectiveOnHand(brand, s);
   const availability: Product["availability"] = s.preorder
     ? "preorder"
-    : s.onHand <= 0
+    : onHand <= 0
       ? "out_of_stock"
-      : s.lowStock || s.onHand <= s.safetyStock
+      : s.lowStock || onHand <= s.safetyStock
         ? "low_stock"
         : "in_stock";
   return {
@@ -159,7 +174,7 @@ export function toProduct(brand: BrandId, s: SeedSku, now: Date): Product {
     compareAtPrice: onSale ? money(listMinor, currency) : undefined,
     bundle: s.bundle,
     preorder: s.preorder ? true : undefined,
-    variants: expandVariants(s, Math.floor(s.onHand / variantCount)),
+    variants: expandVariants({ ...s, onHand }, Math.floor(onHand / variantCount)),
     availability,
   };
 }
@@ -260,7 +275,11 @@ export class MockStore {
     const base = sku.split("-").slice(0, 3).join("-");
     const s = this.skus(brand).find((x) => x.sku === sku || x.sku === base);
     if (!s) throw notFound(`product ${sku}`);
-    return toProduct(brand, s, this.now);
+    const product = toProduct(brand, s, this.now);
+    if (sku !== s.sku && !product.variants.some((v) => v.sku === sku)) {
+      throw notFound(`product ${sku}`);
+    }
+    return product;
   }
 
   createCart(brand: BrandId, user: string): Cart {
@@ -280,26 +299,39 @@ export class MockStore {
     return cart;
   }
 
-  getCart(brand: BrandId, cartId: string): Cart {
+  /** Carts are private to the customer who opened them; a foreign cart looks like it does not exist. */
+  getCart(brand: BrandId, user: string, cartId: string): Cart {
     const cart = this.carts.get(cartId);
-    if (!cart || cart.brand !== brand) throw notFound(`cart ${cartId}`);
+    if (!cart || cart.brand !== brand || cart.user !== user) throw notFound(`cart ${cartId}`);
     return cart;
   }
 
-  addCartLine(brand: BrandId, cartId: string, sku: string, quantity: number): Cart {
-    const cart = this.getCart(brand, cartId);
+  private openCart(brand: BrandId, user: string, cartId: string): Cart {
+    const cart = this.getCart(brand, user, cartId);
     if (cart.status !== "open")
       throw new MockError(409, { code: "conflict", message: "cart is not open" });
-    if (!Number.isInteger(quantity) || quantity < 1) throw badRequest("quantity must be >= 1");
+    return cart;
+  }
+
+  /** Stock check for `sku` at a total cart quantity of `wanted`; pre-orders are never limited. */
+  private assertInStock(brand: BrandId, sku: string, wanted: number): Product {
     const product = this.getProduct(brand, sku);
-    const variant = product.variants.find((v) => v.sku === sku) ?? product.variants[0];
-    if (variant.onHand < quantity && !product.preorder) {
+    const variant = product.variants.find((v) => v.sku === sku);
+    if (!variant) throw badRequest(`${sku} has variants; add a variant SKU`);
+    if (variant.onHand < wanted && !product.preorder) {
       throw new MockError(409, {
         code: "out_of_stock",
         message: `${sku}: only ${variant.onHand} on hand`,
       });
     }
+    return product;
+  }
+
+  addCartLine(brand: BrandId, user: string, cartId: string, sku: string, quantity: number): Cart {
+    const cart = this.openCart(brand, user, cartId);
+    if (!Number.isInteger(quantity) || quantity < 1) throw badRequest("quantity must be >= 1");
     const existing = cart.lines.find((l) => l.sku === sku);
+    const product = this.assertInStock(brand, sku, (existing?.quantity ?? 0) + quantity);
     const unit = toMinor(product.price.amount);
     if (existing) {
       existing.quantity += quantity;
@@ -319,8 +351,14 @@ export class MockStore {
     return this.touch(cart);
   }
 
-  updateCartLine(brand: BrandId, cartId: string, lineId: string, quantity: number): Cart {
-    const cart = this.getCart(brand, cartId);
+  updateCartLine(
+    brand: BrandId,
+    user: string,
+    cartId: string,
+    lineId: string,
+    quantity: number,
+  ): Cart {
+    const cart = this.openCart(brand, user, cartId);
     const line = cart.lines.find((l) => l.id === lineId);
     if (!line) throw notFound(`line ${lineId}`);
     if (!Number.isInteger(quantity) || quantity < 0 || quantity > 99)
@@ -328,14 +366,15 @@ export class MockStore {
     if (quantity === 0) {
       cart.lines = cart.lines.filter((l) => l.id !== lineId);
     } else {
+      this.assertInStock(brand, line.sku, quantity);
       line.quantity = quantity;
       line.lineTotal = money(toMinor(line.unitPrice.amount) * quantity, line.unitPrice.currency);
     }
     return this.touch(cart);
   }
 
-  abandonCart(brand: BrandId, cartId: string): void {
-    this.getCart(brand, cartId);
+  abandonCart(brand: BrandId, user: string, cartId: string): void {
+    this.getCart(brand, user, cartId);
     this.carts.delete(cartId);
   }
 
@@ -346,7 +385,7 @@ export class MockStore {
   }
 
   checkout(brand: BrandId, user: string, input: CheckoutInput): CheckoutResult {
-    const cart = this.getCart(brand, input.cartId);
+    const cart = this.getCart(brand, user, input.cartId);
     if (cart.status !== "open")
       throw new MockError(409, { code: "conflict", message: "cart already checked out" });
     if (cart.lines.length === 0)
@@ -403,21 +442,23 @@ export class MockStore {
     return { items, nextCursor: next?.id };
   }
 
-  getOrder(brand: BrandId, orderId: string): Order {
+  /** Orders are private to their customer; another customer's order is reported as not found. */
+  getOrder(brand: BrandId, user: string, orderId: string): Order {
     const order = this.orders.get(orderId);
     if (!order) throw notFound(`order ${orderId}`);
     if (order.brand !== brand)
       throw new MockError(403, { code: "forbidden", message: "order belongs to another brand" });
+    if (order.user !== user) throw notFound(`order ${orderId}`);
     return order;
   }
 
-  listOrderEvents(brand: BrandId, orderId: string): OrderEvent[] {
-    this.getOrder(brand, orderId);
+  listOrderEvents(brand: BrandId, user: string, orderId: string): OrderEvent[] {
+    this.getOrder(brand, user, orderId);
     return this.events.get(orderId) ?? [];
   }
 
-  cancelOrder(brand: BrandId, orderId: string): Order {
-    const order = this.getOrder(brand, orderId);
+  cancelOrder(brand: BrandId, user: string, orderId: string): Order {
+    const order = this.getOrder(brand, user, orderId);
     if (order.status !== "pending_payment" && order.status !== "paid") {
       throw new MockError(409, {
         code: "conflict",
