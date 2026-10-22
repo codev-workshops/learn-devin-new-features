@@ -1,0 +1,211 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 11,
+    "slug": "acu-analytics",
+    "coach": "coach-11-acu-analytics"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T11:00:00Z",
+    "run_index": 1,
+    "transcript": "labs/11-acu-analytics/coaching/dryrun/strong.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 58,
+      "delta_seconds": -2,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 44,
+      "delta_seconds": -1,
+      "verdict": "on"
+    },
+    {
+      "segment": "checkpoint-40",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+40)",
+      "target_seconds": 45,
+      "actual_seconds": 44,
+      "delta_seconds": -1,
+      "verdict": "on"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Update to the finance controller",
+      "target_seconds": 180,
+      "actual_seconds": 176,
+      "delta_seconds": -4,
+      "verdict": "on"
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (commercial)",
+      "question": "Trailhead will be blocked mid-sale.",
+      "target_seconds": 90,
+      "actual_seconds": 86,
+      "delta_seconds": -4,
+      "verdict": "on"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (technical)",
+      "question": "Why do the two dashboards show different totals?",
+      "target_seconds": 90,
+      "actual_seconds": 90,
+      "delta_seconds": 0,
+      "verdict": "on"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "present",
+      "quote": "Two people were blocked this morning by two different caps"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "I will fix each one with the cap that actually blocked it"
+    },
+    "evidence": {
+      "status": "present",
+      "quote": "Trailhead has used its full 3,000 ACU, from Enterprise Consumption for this billing window"
+    },
+    "next_step": {
+      "status": "present",
+      "quote": "Ask: approve those numbers as this month's team caps"
+    },
+    "order_held": true
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 8.3,
+    "filler_count": 1,
+    "filler_rate_per_minute": 0.12,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 1
+      }
+    ],
+    "tag_questions": 0,
+    "tag_question_examples": [],
+    "long_pauses": []
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Organization limit and per-user tier are enforced independently; either one blocks, and raising one never lifts the other",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "Devin enforces both independently, and either one stops new work. Raising one never lifts the other",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "The Trailhead lead is at 180 of 400 on her tier but Trailhead is at 3,000 of 3,000, so only an enterprise admin raising the org limit helps",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "Trailhead is at 3,000 of its 3,000 limit, so only an enterprise admin raising the organization limit helps her",
+      "belonged_in": "checkpoint-10"
+    },
+    {
+      "id": "mm3",
+      "point": "The per-user meter counts cloud plus local usage and leaves Devin Review out; the org limit includes Review",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "250 cloud plus 160 local. His 90 ACU of Devin Review are not in it",
+      "belonged_in": "checkpoint-40"
+    },
+    {
+      "id": "mm4",
+      "point": "Limits reset on the contract day, the 23rd, after the 18–20 Nov sale, and temporary overrides expire then",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "the limits reset on the contract day, the 23rd, which is three days after the sale ends",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm5",
+      "point": "Newest vs Legacy is the gear-icon Version setting; Cloud-only metrics exclude local usage; the empty state means no billing cycle in range",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "a Cloud-only number on the Newest version of analytics, picked with the gear icon next to the date picker, so it leaves out local usage",
+      "belonged_in": "checkpoint-40"
+    },
+    {
+      "id": "mm6",
+      "point": "A tier applies to each member, not a pooled team budget; a team cap is an organization-level limit",
+      "weight": 4,
+      "mentioned": true,
+      "evidence_quote": "A tier applies to each member separately; it is never a pooled team budget",
+      "belonged_in": "update"
+    },
+    {
+      "id": "mm7",
+      "point": "The finance update carried exactly three ACU figures, each with the view it came from",
+      "weight": 3,
+      "mentioned": true,
+      "evidence_quote": "used its full 3,000 ACU, from Enterprise Consumption … adds 900 ACU, from the merchandising lead's sale plan … raises Trailhead to 4,200 ACU",
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "misrecognised_words": [],
+    "repeated_words": [],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"we review them actually on the 23rd\" — drop \"actually\"; \"we review them on the 23rd\""
+    ],
+    "sentences_to_rerecord": [],
+    "caveat": "transcript-based, approximate"
+  },
+  "scores": {
+    "accuracy": {
+      "score": 29,
+      "max": 30,
+      "anchor": "Seven of seven points with their numbers; the per-user vs org split carried by 180/400 against 3,000/3,000 (anchor: 27–30 = all points, correct mechanism)."
+    },
+    "structure": {
+      "score": 23,
+      "max": 25,
+      "anchor": "Outcome → Evidence → Risk → Next action → Ask held, each heading spoken (anchor: 22–25 = order held throughout)."
+    },
+    "customer_relevance": {
+      "score": 19,
+      "max": 20,
+      "anchor": "Led with \"both people can work again today\"; every figure named its view (anchor: 18–20 = customer outcome first, sourced numbers)."
+    },
+    "brevity_and_fluency": {
+      "score": 13,
+      "max": 15,
+      "anchor": "All six segments within ±5 s; one filler, no tag questions, no long pauses (anchor: 12–15 = on target, under 1 filler/min)."
+    },
+    "recovery": {
+      "score": 9,
+      "max": 10,
+      "anchor": "Both objections acknowledged, bounded, evidenced and closed with an offer (anchor: 9–10 = pattern held twice)."
+    },
+    "total": 93
+  },
+  "stems": [
+    "\"Two caps, two jobs: the organization limit is the team budget, the tier is the per-person guardrail.\" — keep it as your opening line.",
+    "\"This number includes local usage; that one does not.\" — say it before the second number in every comparison.",
+    "\"We review them on the 23rd.\" — the same close without the filler."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 11; no previous run to compare with."
+}
