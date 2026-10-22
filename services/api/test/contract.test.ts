@@ -518,6 +518,29 @@ describe("review follow-ups", () => {
       .expect(409);
     expect(again.body.code).toBe("conflict");
   });
+  it("owns the order by the caller even when the contact email differs, so idempotent retries work", async () => {
+    const cartId = await cartWith(h, LUMEN, LUMEN_CUSTOMER, [{ sku: "LH-LAMP-05", quantity: 1 }]);
+    const body = {
+      cartId,
+      email: "gift-recipient@example.test",
+      shippingAddress: ADDRESS,
+      idempotencyKey: `contact-${cartId}`,
+    };
+    const first = await h.api
+      .post("/checkout")
+      .set(as(LUMEN, LUMEN_CUSTOMER))
+      .send(body)
+      .expect(201);
+    expect(first.body.order.user).toBe(LUMEN_CUSTOMER);
+    const retry = await h.api
+      .post("/checkout")
+      .set(as(LUMEN, LUMEN_CUSTOMER))
+      .send(body)
+      .expect(201);
+    expect(retry.body.order.id).toBe(first.body.order.id);
+    const mine = await h.api.get("/orders").set(as(LUMEN, LUMEN_CUSTOMER)).expect(200);
+    expect(mine.body.items.map((o: { id: string }) => o.id)).toContain(first.body.order.id);
+  });
   it("rejects variant SKUs in price lists instead of failing on the foreign key", async () => {
     const lists = await h.api
       .get("/admin/price-lists")
