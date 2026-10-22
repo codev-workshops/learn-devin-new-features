@@ -7,7 +7,7 @@ argument-hint: "<handle> [--dry-run <transcript>]"
 
 # Coach — lab 04 (ship the flash-sale checklist once, as a plugin)
 
-Read `.devin/skills/articulation-base/SKILL.md` first and follow it for protocol, timing, rubric, report and progress log. This file only supplies the lab-specific material.
+Read `.devin/skills/articulation-base/SKILL.md` first and follow it for protocol, rubric and progress log. Override: the report shape and segment ids come from `labs/coach-report.schema.json` (`schema_version: "1.0"`) and `labs/04-plugin-engineering/lab.json`, not from the base's older field list; dry-run timings come from the `[mm:ss]` markers. This file only supplies the lab-specific material.
 
 - **lab**: `04` · **slug**: `plugin-engineering` · **coach**: `coach-04-plugin-engineering` · **grader agent**: `.devin/agents/plugins-coach.md`
 - **answer**: `labs/04-plugin-engineering/answer.md` · **dry-run transcripts**: `labs/04-plugin-engineering/coaching/dryrun/`

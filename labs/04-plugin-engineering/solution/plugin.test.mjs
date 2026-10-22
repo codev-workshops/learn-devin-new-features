@@ -16,6 +16,12 @@ describe('lab 04 reference plugin', () => {
     expect(r.kind).toBe('manifest');
     expect(r.name).toBe('kade-flash-sale');
     expect(r.problems).toEqual([]);
+    expect(inspect(PLUGIN, { kit: true }).problems).toEqual([]);
+  });
+
+  it('kit check flags a manifest-only bundle', () => {
+    const k = inspect(path.join(INJECTORS, 'revision-2', 'kade-flash-sale'), { kit: true });
+    expect(k.problems).toHaveLength(5);
   });
 
   it('bundles both procedures as skills, plus rules, a subagent, a hook and an MCP', () => {
@@ -37,6 +43,10 @@ describe('lab 04 reference plugin', () => {
     expect(runPreToolHook(PLUGIN, 'git push origin main').exit).toBe(0);
     expect(runPreToolHook(PLUGIN, 'git push origin devin/sale-banner', { KADE_SALE_FREEZE: '1' }).exit).toBe(0);
     expect(runPreToolHook(PLUGIN, 'npm run gates', { KADE_SALE_FREEZE: '1' }).exit).toBe(0);
+    for (const c of ['git push origin HEAD:main', 'git push -f origin +main', 'git push origin refs/heads/main', 'git push origin main && echo ok'])
+      expect(runPreToolHook(PLUGIN, c, { KADE_SALE_FREEZE: '1' }).exit, c).toBe(2);
+    for (const c of ['git push origin main-fix', 'git push origin feature/main', 'git push origin main.v2'])
+      expect(runPreToolHook(PLUGIN, c, { KADE_SALE_FREEZE: '1' }).exit, c).toBe(0);
   });
 });
 

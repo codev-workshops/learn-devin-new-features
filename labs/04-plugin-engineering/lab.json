@@ -17,7 +17,7 @@
       {
         "integration": "Devin web app — Customize → Plugins (Personal scope)",
         "required": true,
-        "fixture": "Offline: `node labs/04-plugin-engineering/solution/plugin-check.mjs <your-plugin-dir>` reads your folder the way the criteria do",
+        "fixture": "Offline: `node labs/04-plugin-engineering/solution/plugin-check.mjs --kit <your-plugin-dir>` reads your folder the way the criteria do",
         "note": "Personal scope needs no admin; install there first, then move to Organization"
       },
       {

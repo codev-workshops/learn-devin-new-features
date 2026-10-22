@@ -1,6 +1,6 @@
 You are done when someone who was not in the room can see each of the following.
 
-1. **One manifest, one name.** The plugin folder has `.devin-plugin/plugin.json` with a lowercase name, and the offline checker (`node labs/04-plugin-engineering/solution/plugin-check.mjs <dir>`) reports no problems for it.
+1. **One manifest, one name.** The plugin folder has `.devin-plugin/plugin.json` with a lowercase name, and the offline checker (`node labs/04-plugin-engineering/solution/plugin-check.mjs --kit <dir>`) reports no problems for it.
 2. **Both procedures are skills.** The release checklist and the incident procedure are separate `skills/<name>/SKILL.md` files, and after install they appear as two `/<plugin>:<skill>` commands.
 3. **More than text.** The same bundle carries at least one always-on or triggered rule, one `hooks.json` entry, one subagent and one MCP server declaration, and the install preview or details panel lists them.
 4. **The guard behaves.** With the sale freeze set, the hook refuses a push to `main` and allows everything else; with the freeze unset it allows the push. Your note says where plugin hooks run and what happens when one fails.
