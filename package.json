@@ -11,7 +11,7 @@
     "pnpm": ">=10"
   },
   "scripts": {
-    "dev": "pnpm -r --if-present --parallel run dev",
+    "dev": "pnpm -r --if-present --parallel --no-bail run dev",
     "test": "pnpm -r --if-present run test",
     "lint": "prettier --check . && eslint . && pnpm -r --if-present run lint",
     "format": "prettier --write .",
