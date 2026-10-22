@@ -1,0 +1,57 @@
+{
+  "number": 0,
+  "slug": "sample",
+  "title": "Read the brief, write the plan — a Kadé warm-up",
+  "feature": "Framing a Devin task (no Devin execution): choosing a capability and the evidence that proves it worked",
+  "duration_minutes": 20,
+  "difficulty": "intro",
+  "prerequisites": [
+    "Repo cloned locally and `npm install` done at the root",
+    "Read the root README.md once"
+  ],
+  "credentials": {
+    "badge": "fixture",
+    "matrix": [
+      {
+        "integration": "Devin web app (Agent mode)",
+        "required": false,
+        "fixture": "Write the plan in a local Markdown file instead",
+        "note": "Only the voice coach in section 8 needs Devin"
+      }
+    ],
+    "fixture_only_story": "Everything in this lab works offline. Without the voice coach you run the drill against a timer and self-score with the rubric in the answer.",
+    "not_exercised": [
+      "A live Devin session — this warm-up deliberately asks for a plan, not an execution"
+    ]
+  },
+  "scenarios": {
+    "reset": [
+      "git status --short",
+      "rm -f labs/00-sample/PLAN.md labs/00-sample/PLAN.report.md"
+    ],
+    "clean_state": "`git status --short` prints nothing and there is no `labs/00-sample/PLAN.md`. This lab touches no database, no service and no Devin settings."
+  },
+  "injectors": [
+    {
+      "name": "deadline-moved",
+      "when": "T+10 min",
+      "behaviour": "The facilitator (or the coach, in character) announces that the Lamp Week flash sale moved forward by one week. Your plan must say what changes and what does not."
+    }
+  ],
+  "coach": {
+    "skill": "coach-00-sample",
+    "handle_hint": "<your-handle>",
+    "segments": [
+      { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
+      { "id": "checkpoint-10", "kind": "checkpoint", "label": "Think-aloud checkpoint", "at_minute": 10, "target_seconds": 45 },
+      { "id": "update", "kind": "update", "label": "Customer update", "target_seconds": 120 },
+      { "id": "objection-1", "kind": "objection", "label": "Objection 1 (technical)", "target_seconds": 90 },
+      { "id": "objection-2", "kind": "objection", "label": "Objection 2 (commercial)", "target_seconds": 90 }
+    ]
+  },
+  "references": [
+    { "title": "Devin docs — Working with Devin: Agent vs Ask", "url": "https://docs.devin.ai/", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Voice mode", "url": "https://docs.devin.ai/work-with-devin/voice-mode", "date": "fetched 2026-10-22" },
+    { "title": "Devin docs — Skills (cloud discovery and @skills: invocation)", "url": "https://docs.devin.ai/product-guides/skills", "date": "fetched 2026-10-22" }
+  ]
+}
