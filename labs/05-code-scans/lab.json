@@ -16,7 +16,7 @@
       {
         "integration": "Devin Code Scans (Security page) — run, read and act on findings",
         "required": true,
-        "fixture": "Read the committed reference findings in labs/05-code-scans/fixtures/findings.json and the screenshots in labs/05-code-scans/screenshots/",
+        "fixture": "Read the committed reference findings in labs/05-code-scans/fixtures/findings.json",
         "note": "Needs the org permission Use code scans; code scanning must be enabled for the org"
       },
       {
@@ -38,7 +38,7 @@
         "note": "Optional: proves a finding is real before you assign it"
       }
     ],
-    "fixture_only_story": "Without scan permissions you work from the committed findings export and screenshots: classify every finding (real, duplicate, false positive), choose which one you would assign and which you would dismiss and with what note, then run the drill. You still answer every acceptance criterion in writing; criteria 5–8 are marked observer-only.",
+    "fixture_only_story": "Without scan permissions you work from the committed findings export (titles, severities, statuses, locations and triage notes); open each cited file to judge its reasoning yourself: classify every finding (real, duplicate, false positive), choose which one you would assign and which you would dismiss and with what note, then run the drill. You still answer every acceptance criterion in writing; criteria 5–8 are marked observer-only.",
     "not_exercised": [
       "Creating scans and profiles without the Manage code scans permission",
       "Opening the remediation PR without GitHub write access for the Devin app"

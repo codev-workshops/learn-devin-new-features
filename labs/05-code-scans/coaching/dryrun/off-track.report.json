@@ -176,10 +176,10 @@
     },
     {
       "id": "mm4",
-      "point": "The Lamp Week collection runs one query plus three per product",
+      "point": "The Lamp Week collection runs two queries per product plus one per variant",
       "weight": 4,
       "mentioned": true,
-      "evidence_quote": "So, the scans ran. Performance said the Lamp Week collection runs one query plus three per product, which is, like, a lot.",
+      "evidence_quote": "So, the scans ran. Performance said the Lamp Week collection runs two queries per product plus one per variant, which is, like, a lot.",
       "belonged_in": "framing"
     },
     {

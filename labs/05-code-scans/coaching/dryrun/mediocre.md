@@ -29,7 +29,7 @@ Planted: six fillers (actually ×2, basically ×2, so yeah ×1, you know ×1), o
 [03:30] LEARNER: Done.
 --- segment: update ---
 [03:40] COACH: Give me the update as if I were paying for it. Go.
-[03:43] LEARNER: So we found the leak and the webhook problem, and the catalog. The Lamp Week collection runs one query plus three per product, so it is slow when there are many products.
+[03:43] LEARNER: So we found the leak and the webhook problem, and the catalog. The Lamp Week collection runs two queries per product plus one per variant, so it is slow when there are many products.
 [04:15] COACH: How many findings in total?
 [04:18] LEARNER: Around seven, I think, maybe more in performance.
 [04:30] LEARNER: One finding assigned to Devin produced a pull request that was closed unmerged, because we can't merge into main. Then I ran Scan new commits on the unchanged branch and it found nothing new, as expected, actually.

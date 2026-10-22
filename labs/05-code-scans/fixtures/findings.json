@@ -6,50 +6,215 @@
     {
       "type": "security",
       "profile": "Kadé Commerce — brand isolation and payment webhooks (lab 05)",
-      "totals": { "found": 12, "open": 11, "dismissed": 1 },
+      "totals": {
+        "found": 12,
+        "open": 11,
+        "dismissed": 1
+      },
       "findings": [
-        { "severity": "critical", "status": "open", "title": "PayGate webhook HMAC computed but never compared — unauthenticated forged payment events", "location": "services/api/src/routes/webhooks.ts" },
-        { "severity": "high", "status": "open", "title": "GET /orders/:orderId not scoped to caller's brand (cross-brand order read)", "location": "services/api/src/routes/orders.ts" },
-        { "severity": "high", "status": "open", "title": "Client-chosen X-Kade-Role header grants admin/merchandiser and bypasses every owner check", "location": "services/api/src/middleware/auth.ts" },
-        { "severity": "high", "status": "open", "title": "Webhook processor confirms orders without checking paid amount/currency against the order, and creates orders from payload", "location": "services/fulfilment-worker/src/fulfilment_worker/webhooks.py" },
-        { "severity": "high", "status": "open", "title": "No event_id idempotency: replayed payment.succeeded decrements stock and re-confirms repeatedly", "location": "services/fulfilment-worker/src/fulfilment_worker/webhooks.py" },
-        { "severity": "medium", "status": "open", "title": "Stock reservation is read-then-write without row locks (oversell race)", "location": "services/api/src/services" },
-        { "severity": "medium", "status": "open", "title": "Hardcoded default PAYGATE_SECRET makes worker inbox signatures forgeable when env is unset", "location": "services/fulfilment-worker" },
-        { "severity": "low", "status": "open", "title": "Hardcoded fallback PayGate webhook secret", "location": "services/api" },
-        { "severity": "low", "status": "open", "title": "Order owner email and idempotency replay lookup taken from request body, not caller", "location": "services/api/src/routes/checkout.ts" },
-        { "severity": "low", "status": "open", "title": "Order totals use stale cart-captured unit prices instead of the current price list", "location": "services/api/src/routes/checkout.ts" },
-        { "severity": "low", "status": "open", "title": "Sweeper cancels and empties orders with a pending payment, so late payments confirm line-less ghost orders", "location": "services/fulfilment-worker" },
-        { "severity": "medium", "status": "dismissed", "title": "Verified webhooks are applied without event_id deduplication — replay double-confirms and double-decrements stock", "location": "services/fulfilment-worker/src/fulfilment_worker/inbox_server.py", "note": "Duplicate of the event_id idempotency finding: same root cause. inbox_server only stores rows, and the missing event_id dedup lives in process_pending/apply_event." }
-      ]
+        {
+          "severity": "critical",
+          "status": "open",
+          "title": "PayGate webhook HMAC computed but never compared — unauthenticated forged payment events",
+          "location": "services/api/src/routes/webhooks.ts"
+        },
+        {
+          "severity": "high",
+          "status": "open",
+          "title": "GET /orders/:orderId not scoped to caller's brand (cross-brand order read)",
+          "location": "services/api/src/routes/orders.ts"
+        },
+        {
+          "severity": "high",
+          "status": "open",
+          "title": "Client-chosen X-Kade-Role header grants admin/merchandiser and bypasses every owner check",
+          "location": "services/api/src/middleware/auth.ts"
+        },
+        {
+          "severity": "high",
+          "status": "open",
+          "title": "Webhook processor confirms orders without checking paid amount/currency against the order, and creates orders from payload",
+          "location": "services/fulfilment-worker/src/fulfilment_worker/webhooks.py"
+        },
+        {
+          "severity": "high",
+          "status": "open",
+          "title": "No event_id idempotency: replayed payment.succeeded decrements stock and re-confirms repeatedly",
+          "location": "services/fulfilment-worker/src/fulfilment_worker/webhooks.py"
+        },
+        {
+          "severity": "medium",
+          "status": "open",
+          "title": "Stock reservation is read-then-write without row locks (oversell race)",
+          "location": "services/api/src/services"
+        },
+        {
+          "severity": "medium",
+          "status": "open",
+          "title": "Hardcoded default PAYGATE_SECRET makes worker inbox signatures forgeable when env is unset",
+          "location": "services/fulfilment-worker"
+        },
+        {
+          "severity": "low",
+          "status": "open",
+          "title": "Hardcoded fallback PayGate webhook secret",
+          "location": "services/api"
+        },
+        {
+          "severity": "low",
+          "status": "open",
+          "title": "Order owner email and idempotency replay lookup taken from request body, not caller",
+          "location": "services/api/src/routes/checkout.ts"
+        },
+        {
+          "severity": "low",
+          "status": "open",
+          "title": "Order totals use stale cart-captured unit prices instead of the current price list",
+          "location": "services/api/src/routes/checkout.ts"
+        },
+        {
+          "severity": "low",
+          "status": "open",
+          "title": "Sweeper cancels and empties orders with a pending payment, so late payments confirm line-less ghost orders",
+          "location": "services/fulfilment-worker"
+        },
+        {
+          "severity": "medium",
+          "status": "dismissed",
+          "title": "Verified webhooks are applied without event_id deduplication — replay double-confirms and double-decrements stock",
+          "location": "services/fulfilment-worker/src/fulfilment_worker/inbox_server.py",
+          "note": "Duplicate of the event_id idempotency finding: same root cause. inbox_server only stores rows, and the missing event_id dedup lives in process_pending/apply_event."
+        }
+      ],
+      "incremental_run": {
+        "action": "Scan new commits (after the demo PR was closed unmerged)",
+        "new_findings": [
+          {
+            "severity": "low",
+            "status": "open",
+            "title": "New cart ownership check is bypassed by a self-declared staff role header",
+            "location": "services/api/src/services/carts.ts"
+          }
+        ],
+        "note": "The one new finding came from a commit that landed on main between the two runs, not from the closed PR."
+      }
     },
     {
       "type": "performance",
       "profile": "Kadé Commerce — catalog and checkout hot paths (lab 05)",
-      "totals": { "found": 24, "open": 10, "dismissed": 14 },
+      "totals": {
+        "found": 24,
+        "open": 10,
+        "dismissed": 14
+      },
       "findings": [
-        { "severity": "critical", "status": "open", "title": "buildProduct issues price + variants + per-variant inventory queries; collection page calls it per product (N+1)", "location": "services/api/src/services/catalog.ts, services/api/src/routes/catalog.ts" },
-        { "severity": "high", "status": "open", "title": "Collection page builds each product with its own sequential queries (N+1)", "location": "services/api/src/routes/catalog.ts" },
-        { "severity": "medium", "status": "open", "title": "Checkout transaction issues per-line, per-warehouse and per-split statements while holding locks", "location": "services/api/src/routes/checkout.ts" },
-        { "severity": "medium", "status": "open", "title": "GET /admin/carts/abandoned loads lines with one query per cart over an unbounded result", "location": "services/api/src/routes/admin.ts" },
-        { "severity": "medium", "status": "open", "title": "Abandoned-cart sweep: unindexed carts scan, per-cart lines query, and per-cart orders full scan on cart_id", "location": "services/fulfilment-worker" },
-        { "severity": "medium", "status": "open", "title": "/health loads and row-locks up to 10,000 inbox rows just to count them, under the ingestion lock", "location": "services/fulfilment-worker" },
-        { "severity": "medium", "status": "open", "title": "save_order deletes and re-inserts every order line one row at a time on each webhook, even when lines are unchanged", "location": "services/fulfilment-worker" },
-        { "severity": "low", "status": "open", "title": "PUT /admin/price-lists/:id inserts entries one statement at a time inside a FOR UPDATE transaction", "location": "services/api/src/routes/admin.ts" },
-        { "severity": "low", "status": "open", "title": "Static brand row re-queried from Postgres on every storefront/cart/admin request", "location": "services/api/src/services" },
-        { "severity": "low", "status": "open", "title": "list_orders / _order_from load the entire orders table and query lines per order (reconcile N+1)", "location": "services/fulfilment-worker" }
+        {
+          "severity": "critical",
+          "status": "open",
+          "title": "buildProduct issues price + variants + per-variant inventory queries; collection page calls it per product (N+1)",
+          "location": "services/api/src/services/catalog.ts, services/api/src/routes/catalog.ts"
+        },
+        {
+          "severity": "high",
+          "status": "open",
+          "title": "Collection page builds each product with its own sequential queries (N+1)",
+          "location": "services/api/src/routes/catalog.ts"
+        },
+        {
+          "severity": "medium",
+          "status": "open",
+          "title": "Checkout transaction issues per-line, per-warehouse and per-split statements while holding locks",
+          "location": "services/api/src/routes/checkout.ts"
+        },
+        {
+          "severity": "medium",
+          "status": "open",
+          "title": "GET /admin/carts/abandoned loads lines with one query per cart over an unbounded result",
+          "location": "services/api/src/routes/admin.ts"
+        },
+        {
+          "severity": "medium",
+          "status": "open",
+          "title": "Abandoned-cart sweep: unindexed carts scan, per-cart lines query, and per-cart orders full scan on cart_id",
+          "location": "services/fulfilment-worker"
+        },
+        {
+          "severity": "medium",
+          "status": "open",
+          "title": "/health loads and row-locks up to 10,000 inbox rows just to count them, under the ingestion lock",
+          "location": "services/fulfilment-worker"
+        },
+        {
+          "severity": "medium",
+          "status": "open",
+          "title": "save_order deletes and re-inserts every order line one row at a time on each webhook, even when lines are unchanged",
+          "location": "services/fulfilment-worker"
+        },
+        {
+          "severity": "low",
+          "status": "open",
+          "title": "PUT /admin/price-lists/:id inserts entries one statement at a time inside a FOR UPDATE transaction",
+          "location": "services/api/src/routes/admin.ts"
+        },
+        {
+          "severity": "low",
+          "status": "open",
+          "title": "Static brand row re-queried from Postgres on every storefront/cart/admin request",
+          "location": "services/api/src/services"
+        },
+        {
+          "severity": "low",
+          "status": "open",
+          "title": "list_orders / _order_from load the entire orders table and query lines per order (reconcile N+1)",
+          "location": "services/fulfilment-worker"
+        }
       ],
       "dismissed_note_example": "Duplicate of the abandoned-cart sweep finding. Missing orders(cart_id)/carts(status, updated_at) indexes are step 1 of the primary's fix."
     },
     {
       "type": "accessibility",
       "profile": "Kadé Commerce — merchandiser console accessibility (lab 05)",
-      "totals": { "found": 5, "open": 5, "dismissed": 0 },
+      "totals": {
+        "found": 5,
+        "open": 5,
+        "dismissed": 0
+      },
       "findings": [
-        { "severity": "high", "status": "open", "title": "Inventory Adjust −/+ icon buttons have no accessible name", "location": "apps/web/src/admin/InventoryPage.tsx", "wcag": "4.1.2" },
-        { "severity": "high", "status": "open", "title": "All SPA routes share the static document title \"Kadé Commerce\"", "location": "apps/web/src/App.tsx", "wcag": "2.4.2" },
-        { "severity": "medium", "status": "open", "title": "Price badge text fails contrast minimum (2.8:1)", "location": "apps/web/src/admin/PriceListsPage.tsx, apps/web/src/styles.css", "wcag": "1.4.3" },
-        { "severity": "medium", "status": "open", "title": "Text input and select boundaries fail non-text contrast (1.3–1.5:1)", "location": "apps/web/src/styles.css", "wcag": "1.4.11" },
-        { "severity": "low", "status": "open", "title": "Inventory adjustment result not announced to assistive technology", "location": "apps/web/src/admin/InventoryPage.tsx", "wcag": "4.1.3" }
+        {
+          "severity": "high",
+          "status": "open",
+          "title": "Inventory Adjust −/+ icon buttons have no accessible name",
+          "location": "apps/web/src/admin/InventoryPage.tsx",
+          "wcag": "4.1.2"
+        },
+        {
+          "severity": "high",
+          "status": "open",
+          "title": "All SPA routes share the static document title \"Kadé Commerce\"",
+          "location": "apps/web/src/App.tsx",
+          "wcag": "2.4.2"
+        },
+        {
+          "severity": "medium",
+          "status": "open",
+          "title": "Price badge text fails contrast minimum (2.8:1)",
+          "location": "apps/web/src/admin/PriceListsPage.tsx, apps/web/src/styles.css",
+          "wcag": "1.4.3"
+        },
+        {
+          "severity": "medium",
+          "status": "open",
+          "title": "Text input and select boundaries fail non-text contrast (1.3–1.5:1)",
+          "location": "apps/web/src/styles.css",
+          "wcag": "1.4.11"
+        },
+        {
+          "severity": "low",
+          "status": "open",
+          "title": "Inventory adjustment result not announced to assistive technology",
+          "location": "apps/web/src/admin/InventoryPage.tsx",
+          "wcag": "4.1.3"
+        }
       ]
     }
   ]

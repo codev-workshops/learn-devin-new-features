@@ -139,15 +139,15 @@
       "point": "The PayGate webhook signature is computed but never compared",
       "weight": 4,
       "mentioned": true,
-      "evidence_quote": "Evidence: the PayGate webhook signature is computed but never compared, so anyone who can reach the endpoint can mark an order paid — the second high finding. And the Lamp Week collection runs one query plus three per…",
+      "evidence_quote": "Evidence: the PayGate webhook signature is computed but never compared, so anyone who can reach the endpoint can mark an order paid — the second high finding. And the Lamp Week collection runs two queries per product …",
       "belonged_in": "framing"
     },
     {
       "id": "mm4",
-      "point": "The Lamp Week collection runs one query plus three per product",
+      "point": "The Lamp Week collection runs two queries per product plus one per variant",
       "weight": 4,
       "mentioned": true,
-      "evidence_quote": "Evidence: the PayGate webhook signature is computed but never compared, so anyone who can reach the endpoint can mark an order paid — the second high finding. And the Lamp Week collection runs one query plus three per…",
+      "evidence_quote": "Evidence: the PayGate webhook signature is computed but never compared, so anyone who can reach the endpoint can mark an order paid — the second high finding. And the Lamp Week collection runs two queries per product …",
       "belonged_in": "framing"
     },
     {

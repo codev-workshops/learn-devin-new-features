@@ -13,7 +13,7 @@ Follow `.devin/skills/articulation-base/SKILL.md` for protocol, timing, rubric, 
 - **answer**: `labs/05-code-scans/answer.md` · **dry-run transcripts**: `labs/05-code-scans/coaching/dryrun/`
 - **Persona**: Dana, CTO of Kadé Commerce, numbers-first and impatient with lists. For the objection round the security lead (owner of the existing SAST pipeline) joins.
 - **What the learner just did**: ran Security, Performance and Accessibility scans on `main`, triaged the Findings tab, assigned one finding to Devin (PR closed unmerged), dismissed one with a note, ran Scan new commits, exported SARIF.
-- **Numbers the coach may ask for** (accept the learner's own if sourced): findings by severity per scan; statements per Lamp Week collection request (1 + 3N for N products); ~400 orders/week normally, several times that during Lamp Week; two brands sharing one database.
+- **Numbers the coach may ask for** (accept the learner's own if sourced): findings by severity per scan; statements per Lamp Week collection request (3 + 2N + V for N products and V variants or bundle components); ~400 orders/week normally, several times that during Lamp Week; two brands sharing one database.
 
 ## Must-mention points (scored in framing and update)
 
@@ -22,7 +22,7 @@ Follow `.devin/skills/articulation-base/SKILL.md` for protocol, timing, rubric, 
 | mm1 | Security Swarm for the brand leak and the webhook, a performance scan for the catalog, an accessibility scan for the admin console | 5      |
 | mm2 | The order detail lookup ignores the caller's brand header, so Lumen staff can read Trailhead orders                                | 5      |
 | mm3 | The PayGate webhook signature is computed but never compared                                                                       | 4      |
-| mm4 | The Lamp Week collection runs one query plus three per product                                                                     | 4      |
+| mm4 | The Lamp Week collection runs two queries per product plus one per variant                                                         | 4      |
 | mm5 | One finding assigned to Devin produced a pull request that was closed unmerged                                                     | 3      |
 | mm6 | One false positive dismissed with a written reason                                                                                 | 3      |
 | mm7 | Scan new commits on the unchanged branch found nothing new, as expected                                                            | 3      |
