@@ -127,7 +127,7 @@
   "must_mention": [
     {
       "id": "mm1",
-      "point": "Impact in numbers: 40 paid orders for LH-LAMP-03 against 3 units, about $2,360",
+      "point": "Impact in numbers: 40 paid orders for LH-LAMP-03 against 3 units, $1,888 charged (≈ $2,360 at list)",
       "weight": 6,
       "mentioned": true,
       "evidence_quote": "40 customers paid for LH-LAMP-03 and we had 3 units, so around 2,360 dollars",

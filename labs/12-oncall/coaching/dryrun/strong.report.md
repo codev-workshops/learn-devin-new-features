@@ -39,7 +39,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T10:00:00Z · timing:
 
 ## Missing key points
 
-- [x] Impact in numbers: 40 paid orders for LH-LAMP-03 against 3 units, about $2,360 (6) — “40 customers have paid for the Ember Table Lamp, LH-LAMP-03, and we only had 3 units. That is about 2,360 dollars”
+- [x] Impact in numbers: 40 paid orders for LH-LAMP-03 against 3 units, $1,888 charged (≈ $2,360 at list) (6) — “40 customers have paid for the Ember Table Lamp, LH-LAMP-03, and we only had 3 units. That is about 2,360 dollars”
 - [x] Evidence chain from monitor 48213771 to incident 2187 to a checkout.reserve trace to the reservation code (5) — “monitor 48213771 fired at 02:10 and opened PagerDuty incident 2187. The trace shows three checkout.reserve spans in the same second”
 - [x] Primary cause is the unlocked read-then-write reservation, amplified by duplicate payment webhooks (5) — “the primary cause is the unlocked read-then-write reservation, and duplicate webhooks amplify it”
 - [x] Mitigation until 08:00 that stops new sales of the SKU without a deploy or a manual stock edit (4) — “the SKU is unavailable on the Lamp Week price list and safety stock is above on-hand. No deploy and no manual stock edit”

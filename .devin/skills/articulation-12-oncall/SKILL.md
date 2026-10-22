@@ -29,7 +29,7 @@ First read `.devin/skills/articulation-base/SKILL.md` and follow it for protocol
 
 | id  | weight | point                                                                                                     |
 | --- | ------ | --------------------------------------------------------------------------------------------------------- |
-| mm1 | 6      | Impact in numbers: 40 paid orders for LH-LAMP-03 against 3 units, about $2,360                            |
+| mm1 | 6      | Impact in numbers: 40 paid orders for LH-LAMP-03 against 3 units, $1,888 charged (≈ $2,360 at list)       |
 | mm2 | 5      | Evidence chain from monitor 48213771 to incident 2187 to a checkout.reserve trace to the reservation code |
 | mm3 | 5      | Primary cause is the unlocked read-then-write reservation, amplified by duplicate payment webhooks        |
 | mm4 | 4      | Mitigation until 08:00 that stops new sales of the SKU without a deploy or a manual stock edit            |

@@ -39,7 +39,7 @@ Learner: **dryrun** · mode: dry-run · run 1 · 2026-10-22T10:40:00Z · timing:
 
 ## Missing key points
 
-- [x] Impact in numbers: 40 paid orders for LH-LAMP-03 against 3 units, about $2,360 (6) — “40 customers paid for LH-LAMP-03 and we had 3 units, so around 2,360 dollars”
+- [x] Impact in numbers: 40 paid orders for LH-LAMP-03 against 3 units, $1,888 charged (≈ $2,360 at list) (6) — “40 customers paid for LH-LAMP-03 and we had 3 units, so around 2,360 dollars”
 - [x] Evidence chain from monitor 48213771 to incident 2187 to a checkout.reserve trace to the reservation code (5) — “the monitor 48213771 opened incident 2187, and in the traces there are three checkout.reserve spans reading 3 at the same time, so it goes to the reservation code”
 - [x] Primary cause is the unlocked read-then-write reservation, amplified by duplicate payment webhooks (5) — “it is the reservation race and the webhooks double it”
 - [x] Mitigation until 08:00 that stops new sales of the SKU without a deploy or a manual stock edit (4) — “the SKU is unavailable on the price list, we did not deploy and nobody edits the stock by hand”
