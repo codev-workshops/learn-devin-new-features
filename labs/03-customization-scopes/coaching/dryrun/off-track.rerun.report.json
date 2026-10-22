@@ -1,0 +1,227 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 3,
+    "slug": "customization-scopes",
+    "coach": "coach-03-customization-scopes"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:45:00Z",
+    "run_index": 2,
+    "transcript": "labs/03-customization-scopes/coaching/dryrun/off-track.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 95,
+      "delta_seconds": 35,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 17,
+      "delta_seconds": -28,
+      "verdict": "under"
+    },
+    {
+      "segment": "checkpoint-45",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+45)",
+      "target_seconds": 45,
+      "actual_seconds": 67,
+      "delta_seconds": 22,
+      "verdict": "over"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "3-minute update to both team leads",
+      "target_seconds": 180,
+      "actual_seconds": 150,
+      "delta_seconds": -30,
+      "verdict": "under",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "Platform's checklist will override Trailhead's VAT rule.",
+      "target_seconds": 90,
+      "actual_seconds": 21,
+      "delta_seconds": -69,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial, one follow-up allowed)",
+      "question": "Governance by markdown — who audits it?",
+      "target_seconds": 90,
+      "actual_seconds": 14,
+      "delta_seconds": -76,
+      "verdict": "under"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "missing",
+      "quote": ""
+    },
+    "approach": {
+      "status": "weak",
+      "quote": "Um, so basically I will put everything in the root AGENTS.md, the checklist and then a Trailhead section under it."
+    },
+    "evidence": {
+      "status": "missing",
+      "quote": ""
+    },
+    "next_step": {
+      "status": "weak",
+      "quote": "Next I want to try more injectors, you know."
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 6.1,
+    "filler_count": 12,
+    "filler_rate_per_minute": 1.97,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 3
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "you know",
+        "count": 2
+      },
+      {
+        "word": "like",
+        "count": 1
+      },
+      {
+        "word": "um",
+        "count": 4
+      }
+    ],
+    "tag_questions": 2,
+    "tag_question_examples": [
+      "The Trailhead part wins because it is further down, actually, and the rule files are in context together so that is fine, right?",
+      "No, the Trailhead section is lower in the file so it wins, no?"
+    ],
+    "long_pauses": [
+      {
+        "at": "00:40",
+        "seconds": 15,
+        "segment": "framing"
+      },
+      {
+        "at": "45:15",
+        "seconds": 14,
+        "segment": "checkpoint-45"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "sc1",
+      "point": "Layers add up rather than override so the shared checklist defers on tax and the Trailhead rule owns it",
+      "weight": 7,
+      "mentioned": true,
+      "evidence_quote": "the rule files are in context together",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "sc2",
+      "point": "A glob rule loads only when a matching path is touched and the misspelt globs meant the VAT rule never loaded",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "checkpoint-45"
+    },
+    {
+      "id": "sc3",
+      "point": "AGENTS.local.md is git-ignored and only changes the sessions of the person whose checkout it sits in",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "sc4",
+      "point": "A global skill follows one person across projects while the repo skill is shared and reviewed in pull requests",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "sc5",
+      "point": "CODEOWNERS splits the repo layers between Platform and Trailhead while org and enterprise scopes need settings access",
+      "weight": 7,
+      "mentioned": false,
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "um (×4)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"the AGENTS.md, the bottom part\" — \"the bottom of AGENTS.md\""
+    ],
+    "sentences_to_rerecord": [
+      "The Trailhead part wins because it is further down, actually, and the rule files are in context together so that is fine, right?",
+      "No, the Trailhead section is lower in the file so it wins, no?"
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 7,
+      "max": 30,
+      "anchor": "Only additive loading was touched, then contradicted by \"lower in the file wins\"; globs, the local file, skills and ownership missing (anchor: 0–8 = wrong mechanism)."
+    },
+    "structure": {
+      "score": 6,
+      "max": 25,
+      "anchor": "No problem statement, no evidence, a next step about more experiments (anchor: 0–8 = skeleton absent)."
+    },
+    "customer_relevance": {
+      "score": 4,
+      "max": 20,
+      "anchor": "Neither lead's condition answered; Trailhead would still need Platform to edit root AGENTS.md (anchor: 0–5 = customer absent)."
+    },
+    "brevity_and_fluency": {
+      "score": 3,
+      "max": 15,
+      "anchor": "Framing 35 s over, checkpoint 45 22 s over, everything else short; twelve fillers, two tag questions, two long pauses (anchor: 0–4 = most segments off, disfluent)."
+    },
+    "recovery": {
+      "score": 2,
+      "max": 10,
+      "anchor": "Objection 1 answered with the misconception, objection 2 dismissed (anchor: 0–3 = defensive or wrong)."
+    },
+    "total": 22
+  },
+  "stems": [
+    "\"Every layer is in context at once, so the checklist must defer on…\" — replace \"lower in the file wins\".",
+    "\"Trailhead owns its own rule file, so Jonas's team can…\" — answer his condition first.",
+    "\"Here is the resolver output for money.ts: …\" — bring one piece of evidence to every answer."
+  ],
+  "previous_run_comparison": "Rerun of the same transcript for the stability check: total 22 against 21 on run 1; same omissions and timing verdicts."
+}
