@@ -1,0 +1,219 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 3,
+    "slug": "customization-scopes",
+    "coach": "coach-03-customization-scopes"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:30:00Z",
+    "run_index": 1,
+    "transcript": "labs/03-customization-scopes/coaching/dryrun/mediocre.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 74,
+      "delta_seconds": 14,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 52,
+      "delta_seconds": 7,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-45",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+45)",
+      "target_seconds": 45,
+      "actual_seconds": 39,
+      "delta_seconds": -6,
+      "verdict": "under"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "3-minute update to both team leads",
+      "target_seconds": 180,
+      "actual_seconds": 201,
+      "delta_seconds": 21,
+      "verdict": "over",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "Platform's checklist will override Trailhead's VAT rule.",
+      "target_seconds": 90,
+      "actual_seconds": 58,
+      "delta_seconds": -32,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial, one follow-up allowed)",
+      "question": "Governance by markdown — who audits it?",
+      "target_seconds": 90,
+      "actual_seconds": 102,
+      "delta_seconds": 12,
+      "verdict": "over",
+      "interruptions": 1
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "weak",
+      "quote": "So, because the staging basket was wrong, and because both teams review checkout"
+    },
+    "approach": {
+      "status": "present",
+      "quote": "The checklist goes in .devin/rules and the Trailhead VAT goes in its own rule"
+    },
+    "evidence": {
+      "status": "weak",
+      "quote": "You will know it works when Devin follows it."
+    },
+    "next_step": {
+      "status": "present",
+      "quote": "Ask: can you both review it this week?"
+    },
+    "order_held": true
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 8.8,
+    "filler_count": 6,
+    "filler_rate_per_minute": 0.68,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 2
+      },
+      {
+        "word": "basically",
+        "count": 2
+      },
+      {
+        "word": "so yeah",
+        "count": 1
+      },
+      {
+        "word": "you know",
+        "count": 1
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "That's the plan, right?"
+    ],
+    "long_pauses": [
+      {
+        "at": "10:20",
+        "seconds": 12,
+        "segment": "checkpoint-10"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "sc1",
+      "point": "Layers add up rather than override so the shared checklist defers on tax and the Trailhead rule owns it",
+      "weight": 7,
+      "mentioned": true,
+      "evidence_quote": "all the layers are loaded together, so the checklist defers on tax.",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "sc2",
+      "point": "A glob rule loads only when a matching path is touched and the misspelt globs meant the VAT rule never loaded",
+      "weight": 6,
+      "mentioned": false,
+      "belonged_in": "checkpoint-45"
+    },
+    {
+      "id": "sc3",
+      "point": "AGENTS.local.md is git-ignored and only changes the sessions of the person whose checkout it sits in",
+      "weight": 5,
+      "mentioned": true,
+      "evidence_quote": "The local file is git-ignored, so it only changes the sessions of the person who has it.",
+      "belonged_in": "update"
+    },
+    {
+      "id": "sc4",
+      "point": "A global skill follows one person across projects while the repo skill is shared and reviewed in pull requests",
+      "weight": 5,
+      "mentioned": false,
+      "belonged_in": "update"
+    },
+    {
+      "id": "sc5",
+      "point": "CODEOWNERS splits the repo layers between Platform and Trailhead while org and enterprise scopes need settings access",
+      "weight": 7,
+      "mentioned": true,
+      "evidence_quote": "CODEOWNERS gives Platform the checklist and Trailhead the VAT file, and org settings need admin access.",
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "because (×3 in the opening sentence)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [
+      "\"the skill one\" — \"the skill injector\""
+    ],
+    "sentences_to_rerecord": [
+      "So, because the staging basket was wrong, and because both teams review checkout…"
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 18,
+      "max": 30,
+      "anchor": "Additive layers, the local file and the CODEOWNERS split right; the dead glob and global versus repo skills never stated (anchor: 17–21 = right conclusion, shaky mechanism)."
+    },
+    "structure": {
+      "score": 15,
+      "max": 25,
+      "anchor": "All parts findable but the framing front-loaded three \"because\" clauses and the evidence was a hope, not an observation (anchor: 14–17 = order broken once)."
+    },
+    "customer_relevance": {
+      "score": 11,
+      "max": 20,
+      "anchor": "Neither lead's loss quantified; the VAT-owner interruption produced a hedge (anchor: 10–13 = impact mentioned once, hedged)."
+    },
+    "brevity_and_fluency": {
+      "score": 8,
+      "max": 15,
+      "anchor": "Framing, update, checkpoint 10 and objection 2 over target, objection 1 and checkpoint 45 under; six fillers, one tag question, one 12-second pause (anchor: 7–9 = several segments off target)."
+    },
+    "recovery": {
+      "score": 5,
+      "max": 10,
+      "anchor": "Objections answered without evidence; the follow-up on private overrides was deferred (anchor: 5–6 = answers but defensively)."
+    },
+    "total": 57
+  },
+  "stems": [
+    "\"The VAT rule was dead because its globs… and the resolver showed…\" — explain what the injector taught you.",
+    "\"A global skill is yours; the repo skill is ours, so…\" — name the collision and the fix.",
+    "\"Dana, the 19% overcharge cost two days; this stops it by…\" — put the customer's number first."
+  ],
+  "previous_run_comparison": "First recorded run for dryrun on lab 03; no previous run to compare with."
+}

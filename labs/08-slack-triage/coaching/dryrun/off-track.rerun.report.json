@@ -1,0 +1,238 @@
+{
+  "schema_version": "1.0",
+  "lab": {
+    "number": 8,
+    "slug": "slack-triage",
+    "coach": "coach-08-slack-triage"
+  },
+  "learner": "dryrun",
+  "mode": "dry-run",
+  "run": {
+    "started_at": "2026-10-22T10:15:00Z",
+    "run_index": 2,
+    "transcript": "labs/08-slack-triage/coaching/dryrun/off-track.md",
+    "timing_method": "markers",
+    "timing_tolerance_seconds": 5,
+    "graded_by": "inline"
+  },
+  "timing": [
+    {
+      "segment": "framing",
+      "kind": "framing",
+      "label": "60-second framing",
+      "target_seconds": 60,
+      "actual_seconds": 90,
+      "delta_seconds": 30,
+      "verdict": "over"
+    },
+    {
+      "segment": "checkpoint-10",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+10)",
+      "target_seconds": 45,
+      "actual_seconds": 35,
+      "delta_seconds": -10,
+      "verdict": "under"
+    },
+    {
+      "segment": "checkpoint-45",
+      "kind": "checkpoint",
+      "label": "Think-aloud checkpoint (T+45)",
+      "target_seconds": 45,
+      "actual_seconds": 65,
+      "delta_seconds": 20,
+      "verdict": "over"
+    },
+    {
+      "segment": "update",
+      "kind": "update",
+      "label": "Slack update to the support lead (≤120 words, spoken in 90 s)",
+      "target_seconds": 90,
+      "actual_seconds": 65,
+      "delta_seconds": -25,
+      "verdict": "under",
+      "interruptions": 1
+    },
+    {
+      "segment": "objection-1",
+      "kind": "objection",
+      "label": "Objection 1 (technical)",
+      "question": "Who is accountable when the bot posts a wrong diagnosis?",
+      "target_seconds": 90,
+      "actual_seconds": 42,
+      "delta_seconds": -48,
+      "verdict": "under"
+    },
+    {
+      "segment": "objection-2",
+      "kind": "objection",
+      "label": "Objection 2 (commercial)",
+      "question": "My team will stop reading the channel if the bot posts every time.",
+      "target_seconds": 90,
+      "actual_seconds": 76,
+      "delta_seconds": -14,
+      "verdict": "under"
+    }
+  ],
+  "structure": {
+    "problem": {
+      "status": "missing",
+      "quote": ""
+    },
+    "approach": {
+      "status": "weak",
+      "quote": "I picked the Triage Bug Reports one and, uh, pointed it at the channel"
+    },
+    "evidence": {
+      "status": "missing",
+      "quote": ""
+    },
+    "next_step": {
+      "status": "missing",
+      "quote": ""
+    },
+    "order_held": false
+  },
+  "fillers_and_pauses": {
+    "spoken_minutes": 6.2,
+    "filler_count": 11,
+    "filler_rate_per_minute": 1.77,
+    "fillers": [
+      {
+        "word": "actually",
+        "count": 1
+      },
+      {
+        "word": "basically",
+        "count": 3
+      },
+      {
+        "word": "you know",
+        "count": 1
+      },
+      {
+        "word": "like",
+        "count": 2
+      },
+      {
+        "word": "um",
+        "count": 4
+      }
+    ],
+    "tag_questions": 1,
+    "tag_question_examples": [
+      "They'll get used to it, right?"
+    ],
+    "long_pauses": [
+      {
+        "at": "02:45",
+        "seconds": 15,
+        "segment": "checkpoint-45"
+      },
+      {
+        "at": "06:40",
+        "seconds": 14,
+        "segment": "objection-2"
+      }
+    ]
+  },
+  "must_mention": [
+    {
+      "id": "mm1",
+      "point": "Repeated double-charge reports are grouped into one issue linked to the first report's thread, not answered each time",
+      "weight": 7,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "framing"
+    },
+    {
+      "id": "mm2",
+      "point": "A shared scratchpad keeps triaged reports with channel, timestamp and reporter, the duplicates and the routing table",
+      "weight": 6,
+      "mentioned": true,
+      "evidence_quote": "it keeps the triaged reports, the duplicates and the routing table",
+      "belonged_in": "checkpoint-10"
+    },
+    {
+      "id": "mm3",
+      "point": "A routing correction replied in the thread updates the routing table so later reports go to the right owner",
+      "weight": 6,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "objection-1"
+    },
+    {
+      "id": "mm4",
+      "point": "The diagnosis is written back once in the original thread with the owner tagged, and repeats only get a reaction",
+      "weight": 5,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "objection-2"
+    },
+    {
+      "id": "mm5",
+      "point": "Channel messages are untrusted input, so the responder runs under a network policy allowlist that blocks other hosts",
+      "weight": 4,
+      "mentioned": false,
+      "evidence_quote": "",
+      "belonged_in": "checkpoint-45"
+    },
+    {
+      "id": "mm6",
+      "point": "The same setup runs on a Microsoft Teams channel through a Teams trigger, without private channels",
+      "weight": 2,
+      "mentioned": true,
+      "evidence_quote": "It runs on a Microsoft Teams channel through a Teams trigger as well",
+      "belonged_in": "update"
+    }
+  ],
+  "clarity": {
+    "caveat": "transcript-based, approximate",
+    "misrecognised_words": [],
+    "repeated_words": [
+      "basically (×3)",
+      "um (×2)"
+    ],
+    "clarification_requests": [],
+    "article_plural_slips": [],
+    "sentences_to_rerecord": [
+      "Update: the bot is live in #kade-bugs and replies to every message so nothing is missed.",
+      "Devin is accountable, it decides the refund, actually.",
+      "It answered the pasted ticket too, basically it did what it said."
+    ]
+  },
+  "scores": {
+    "accuracy": {
+      "score": 7,
+      "max": 30,
+      "anchor": "Two of six points, both hedged; claims the bot replies to every message and followed the pasted ticket. (anchors: 27–30 every point tied to a count, setting or file; 15–20 four of six; under 10 two or fewer)"
+    },
+    "structure": {
+      "score": 4,
+      "max": 25,
+      "anchor": "A tour of the Automations page; no outcome, no evidence, no ask. (anchors: 22–25 all parts in order; 13–17 parts present but weak; under 8 problem only)"
+    },
+    "customer_relevance": {
+      "score": 4,
+      "max": 20,
+      "anchor": "Nothing about what the support team will see; \"they can mute it\" works against the brief. (anchors: 16–20 answered in terms of what the support team sees, with counts; 10–13 some; under 6 feature talk)"
+    },
+    "brevity_and_fluency": {
+      "score": 3,
+      "max": 15,
+      "anchor": "Every segment off target, two long silences and eleven fillers. (anchors: 11–15 segments on target, under 1 filler/min; 6–8 two or more segments off; under 4 most segments off)"
+    },
+    "recovery": {
+      "score": 1,
+      "max": 10,
+      "anchor": "Objection 1 handed the refund decision to Devin (capped); objection 2 had no count and no pattern. (anchors: 7–10 acknowledge → boundary → evidence → offer held with numbers; 4–6 partial; under 3 no pattern)"
+    },
+    "total": 19
+  },
+  "stems": [
+    "\"Your team will see one answer per problem…\" — start from the support lead's channel, not the template list.",
+    "\"Repeats get…\" — say what a duplicate report gets instead of a reply.",
+    "\"The owner confirms before…\" — keep refunds and fixes with the tagged team."
+  ],
+  "previous_run_comparison": "Second grading of the same transcript; total moved by +1 point(s) from run 1."
+}

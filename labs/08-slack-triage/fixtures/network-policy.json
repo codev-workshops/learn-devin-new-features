@@ -1,0 +1,4 @@
+{
+  "note": "Outbound allowlist for the triage automation's sessions. Everything else is blocked.",
+  "allow": ["github.com", "api.github.com", "docs.devin.ai"]
+}
