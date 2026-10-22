@@ -61,8 +61,8 @@ CREATE INDEX variants_product_idx ON variants (product_sku, position);
 CREATE TABLE inventory (
   sku          text NOT NULL,
   warehouse    text NOT NULL,
-  brand        text NOT NULL REFERENCES brands (id),
-  product_sku  text NOT NULL REFERENCES products (sku) ON DELETE CASCADE,
+  brand        text REFERENCES brands (id),
+  product_sku  text REFERENCES products (sku) ON DELETE CASCADE,
   on_hand      integer NOT NULL DEFAULT 0,
   reserved     integer NOT NULL DEFAULT 0,
   safety_stock integer NOT NULL DEFAULT 0,
@@ -106,7 +106,7 @@ CREATE TABLE cart_lines (
   name       text NOT NULL,
   quantity   integer NOT NULL CHECK (quantity > 0),
   unit_price numeric(12, 2) NOT NULL,
-  currency   text NOT NULL,
+  currency   text,
   created_at timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX cart_lines_cart_idx ON cart_lines (cart_id, created_at);
@@ -127,6 +127,7 @@ CREATE TABLE orders (
   total            numeric(12, 2) NOT NULL,
   currency         text NOT NULL DEFAULT 'USD' CHECK (currency IN ('USD', 'EUR')),
   tax_included     boolean NOT NULL DEFAULT false,
+  totals           jsonb,
   payment_id       text,
   idempotency_key  text,
   shipping_address jsonb,
@@ -139,25 +140,24 @@ CREATE INDEX orders_status_idx ON orders (brand, status);
 CREATE UNIQUE INDEX orders_idempotency_idx ON orders (brand, idempotency_key) WHERE idempotency_key IS NOT NULL;
 
 CREATE TABLE order_lines (
-  id         uuid PRIMARY KEY,
   order_id   uuid NOT NULL REFERENCES orders (id) ON DELETE CASCADE,
+  position   integer NOT NULL DEFAULT 0,
   sku        text NOT NULL,
   name       text NOT NULL,
   quantity   integer NOT NULL CHECK (quantity > 0),
   unit_price numeric(12, 2) NOT NULL,
   line_total numeric(12, 2) NOT NULL,
   warehouse  text NOT NULL,
-  position   integer NOT NULL DEFAULT 0
+  PRIMARY KEY (order_id, position)
 );
-CREATE INDEX order_lines_order_idx ON order_lines (order_id, position);
 
 CREATE TABLE order_events (
   id          uuid PRIMARY KEY,
   order_id    uuid NOT NULL REFERENCES orders (id) ON DELETE CASCADE,
-  type        text NOT NULL CHECK (type IN ('status_changed', 'payment_received', 'payment_failed', 'reservation_made', 'reservation_released', 'email_queued', 'note')),
+  type        text NOT NULL,
   from_status text,
   to_status   text,
-  source      text NOT NULL CHECK (source IN ('api', 'worker', 'webhook', 'admin', 'seed')),
+  source      text,
   detail      text,
   at          timestamptz NOT NULL DEFAULT now()
 );
@@ -165,13 +165,13 @@ CREATE INDEX order_events_order_idx ON order_events (order_id, at);
 
 -- Transactional outbox: written in the same transaction as the business change, drained by the worker.
 CREATE TABLE outbox (
-  id             uuid PRIMARY KEY,
-  aggregate_type text NOT NULL,
-  aggregate_id   text NOT NULL,
-  type           text NOT NULL,
-  payload        jsonb NOT NULL,
-  created_at     timestamptz NOT NULL DEFAULT now(),
-  processed_at   timestamptz
+  id           uuid PRIMARY KEY,
+  topic        text NOT NULL,
+  payload      jsonb NOT NULL,
+  order_id     uuid,
+  created_at   timestamptz NOT NULL DEFAULT now(),
+  processed_at timestamptz,
+  attempts     integer NOT NULL DEFAULT 0
 );
 CREATE INDEX outbox_unprocessed_idx ON outbox (created_at) WHERE processed_at IS NULL;
 
@@ -181,17 +181,29 @@ CREATE TABLE webhook_inbox (
   id           uuid PRIMARY KEY,
   event_id     text NOT NULL,
   type         text NOT NULL,
-  occurred_at  timestamptz NOT NULL,
+  occurred_at  timestamptz,
   attempt      integer NOT NULL DEFAULT 1,
   signature    text,
   payload      jsonb NOT NULL,
   received_at  timestamptz NOT NULL DEFAULT now(),
-  processed_at timestamptz
+  processed_at timestamptz,
+  result       text
+);
+-- Emails the fulfilment worker "sent" (fixture outbox, read by labs).
+CREATE TABLE sent_emails (
+  id       bigserial PRIMARY KEY,
+  to_email text NOT NULL,
+  subject  text NOT NULL,
+  body     text NOT NULL,
+  order_id uuid,
+  sent_at  timestamptz,
+  meta     jsonb NOT NULL DEFAULT '{}'::jsonb
 );
 CREATE INDEX webhook_inbox_pending_idx ON webhook_inbox (received_at) WHERE processed_at IS NULL;
 CREATE INDEX webhook_inbox_event_idx ON webhook_inbox (event_id);
 
 -- Down Migration
+DROP TABLE IF EXISTS sent_emails;
 DROP TABLE IF EXISTS webhook_inbox;
 DROP TABLE IF EXISTS outbox;
 DROP TABLE IF EXISTS order_events;

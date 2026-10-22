@@ -130,7 +130,7 @@ export function ordersRouter(db: Db): Router {
         [randomUUID(), order.id, isStaff(req.caller) ? "admin" : "api", t],
       );
       await tx.query(
-        "INSERT INTO outbox (id, aggregate_type, aggregate_id, type, payload, created_at) VALUES ($1,'order',$2,'order.cancelled',$3,$4)",
+        "INSERT INTO outbox (id, topic, order_id, payload, created_at) VALUES ($1,'order.cancelled',$2,$3,$4)",
         [
           randomUUID(),
           order.id,

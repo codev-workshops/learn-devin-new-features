@@ -233,10 +233,10 @@ describe("checkout and orders", () => {
       "reservation_made",
       "status_changed",
     ]);
-    const outbox = await h.db.query("SELECT type FROM outbox WHERE aggregate_id = $1", [
+    const outbox = await h.db.query("SELECT topic FROM outbox WHERE order_id = $1", [
       first.body.order.id,
     ]);
-    expect(outbox.rows).toEqual([{ type: "order.placed" }]);
+    expect(outbox.rows).toEqual([{ topic: "order.placed" }]);
   });
   it("returns out_of_stock when the cart exceeds available units", async () => {
     const cartId = await cartWith(h, LUMEN, LUMEN_CUSTOMER, [{ sku: "LH-LAMP-04", quantity: 2 }]);

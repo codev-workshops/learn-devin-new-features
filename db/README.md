@@ -24,3 +24,7 @@ choice comes from a PRNG seeded with `seed: 20261022` and every clock reading is
 Planted schema facts (see `services/api/PLANTED.md`): `webhook_inbox.event_id` is not unique on
 purpose, and `orders.currency` carries the `NOT NULL DEFAULT` that `scenarios/bad-migration.patch`
 removes.
+
+## Worker compatibility
+
+`services/fulfilment-worker/db/expected-schema.sql` documents what the worker reads and writes. The initial migration keeps the two in step: `orders.totals` (jsonb mirror of the API totals), `order_lines` keyed by `(order_id, position)`, `outbox(topic, order_id, attempts)`, `webhook_inbox.result`, nullable `webhook_inbox.occurred_at`, nullable `inventory.brand/product_sku` and `cart_lines.currency`, and the `sent_emails` table. The API always fills the richer columns; the worker may leave them null.

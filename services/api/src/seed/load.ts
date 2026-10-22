@@ -2,6 +2,7 @@ import type pg from "pg";
 import type { Dataset } from "./generate.js";
 
 const TABLES = [
+  "sent_emails",
   "webhook_inbox",
   "outbox",
   "order_events",
@@ -69,7 +70,7 @@ export async function loadDataset(client: pg.PoolClient, ds: Dataset): Promise<v
   await insertMany(client, "price_list_entries", rows(ds.priceEntries));
   await insertMany(client, "carts", rows(ds.carts));
   await insertMany(client, "cart_lines", rows(ds.cartLines));
-  await insertMany(client, "orders", rows(ds.orders), ["shipping_address"]);
+  await insertMany(client, "orders", rows(ds.orders), ["shipping_address", "totals"]);
   await insertMany(client, "order_lines", rows(ds.orderLines));
   await insertMany(client, "order_events", rows(ds.orderEvents));
   await insertMany(client, "outbox", rows(ds.outbox), ["payload"]);

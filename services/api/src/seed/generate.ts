@@ -1,5 +1,5 @@
 import { BRAND_IDS, type BrandId, type Currency, type OrderStatus } from "@kade/contracts";
-import { computeTotals, roundHalfUp, type BrandPricing } from "../money.js";
+import { computeTotals, roundHalfUp, totalsToApi, type BrandPricing } from "../money.js";
 import { Rng, apportion, uuidFor } from "./random.js";
 import type { SeedSpec, SpecSku } from "./spec.js";
 
@@ -118,6 +118,7 @@ export interface OrderRecord {
   total: string;
   currency: Currency;
   tax_included: boolean;
+  totals: unknown;
   payment_id: string;
   idempotency_key: string;
   shipping_address: Record<string, string>;
@@ -125,7 +126,6 @@ export interface OrderRecord {
   updated_at: Date;
 }
 export interface OrderLineRecord {
-  id: string;
   order_id: string;
   sku: string;
   name: string;
@@ -147,12 +147,12 @@ export interface OrderEventRecord {
 }
 export interface OutboxRecord {
   id: string;
-  aggregate_type: string;
-  aggregate_id: string;
-  type: string;
+  topic: string;
   payload: unknown;
+  order_id: string | null;
   created_at: Date;
   processed_at: Date | null;
+  attempts: number;
 }
 export interface InboxRecord {
   id: string;
@@ -527,6 +527,7 @@ export function generateDataset(spec: SeedSpec): Dataset {
       total: money(totals.total),
       currency: brand.currency,
       tax_included: totals.taxIncluded,
+      totals: totalsToApi(totals),
       payment_id: paymentId,
       idempotency_key: `seed-${seq}`,
       shipping_address: addresses[d.brand],
@@ -535,7 +536,6 @@ export function generateDataset(spec: SeedSpec): Dataset {
     });
     lines.forEach((l) =>
       ds.orderLines.push({
-        id: uuidFor(`${key}:line:${l.position}`),
         order_id: id,
         sku: l.s.sku,
         name: l.s.name,
@@ -660,12 +660,12 @@ export function generateDataset(spec: SeedSpec): Dataset {
     event("email_queued", { source: "worker", detail: "order_confirmation" }, emailAt);
     ds.outbox.push({
       id: uuidFor(`${key}:outbox:email`),
-      aggregate_type: "order",
-      aggregate_id: id,
-      type: "email.order_confirmation",
+      topic: "email.order_confirmation",
+      order_id: id,
       payload: { orderId: id, number: `${prefix}-${seq}`, to: customer, brand: d.brand },
       created_at: emailAt,
       processed_at: d.status === "pending_payment" ? null : new Date(emailAt.getTime() + 30_000),
+      attempts: d.status === "pending_payment" ? 0 : 1,
     });
   });
   ds.nextOrderNumber = ORDER_NUMBER_START + drafts.length;

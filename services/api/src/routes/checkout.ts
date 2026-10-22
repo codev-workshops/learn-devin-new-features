@@ -8,7 +8,7 @@ import { requireCaller } from "../middleware/auth.js";
 import { Validator } from "../middleware/validate.js";
 import { brandPricing, getBrandRow } from "../services/brands.js";
 import { getCartLines, getCartRow } from "../services/carts.js";
-import { computeTotals } from "../money.js";
+import { computeTotals, totalsToApi } from "../money.js";
 import { ORDER_COLUMNS, ordersToApi, type OrderRow } from "../services/orders.js";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -123,8 +123,8 @@ export function checkoutRouter(db: Db): Router {
       const paymentId = `pay_${id.replace(/-/g, "").slice(0, 20)}`;
       await tx.query(
         `INSERT INTO orders (id, number, brand, user_email, cart_id, status, subtotal, discount, tax, shipping, total, currency, tax_included,
-                             payment_id, idempotency_key, shipping_address, placed_at, updated_at)
-         VALUES ($1,$2,$3,$4,$5,'pending_payment',$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$16)`,
+                             totals, payment_id, idempotency_key, shipping_address, placed_at, updated_at)
+         VALUES ($1,$2,$3,$4,$5,'pending_payment',$6,$7,$8,$9,$10,$11,$12,$17,$13,$14,$15,$16,$16)`,
         [
           id,
           number,
@@ -142,6 +142,7 @@ export function checkoutRouter(db: Db): Router {
           idempotencyKey ?? null,
           JSON.stringify(shippingAddress),
           t,
+          JSON.stringify(totalsToApi(totals)),
         ],
       );
       let position = 0;
@@ -149,9 +150,8 @@ export function checkoutRouter(db: Db): Router {
         const warehouse =
           reservations.find((rsv) => rsv.sku === line.sku)?.warehouse ?? brandRow.warehouses[0]!;
         await tx.query(
-          "INSERT INTO order_lines (id, order_id, position, sku, name, quantity, unit_price, line_total, warehouse) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",
+          "INSERT INTO order_lines (order_id, position, sku, name, quantity, unit_price, line_total, warehouse) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)",
           [
-            randomUUID(),
             id,
             position++,
             line.sku,
@@ -181,7 +181,7 @@ export function checkoutRouter(db: Db): Router {
         [cart.id, paymentId, t],
       );
       await tx.query(
-        "INSERT INTO outbox (id, aggregate_type, aggregate_id, type, payload, created_at) VALUES ($1,'order',$2,'order.placed',$3,$4)",
+        "INSERT INTO outbox (id, topic, order_id, payload, created_at) VALUES ($1,'order.placed',$2,$3,$4)",
         [
           randomUUID(),
           id,
