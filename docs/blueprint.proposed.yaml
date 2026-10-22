@@ -9,6 +9,8 @@
 # W1-fixtures (22 Oct 2026) added shellcheck/jq (scenarios/ injectors) and the fixtures-gates knowledge entry.
 # W1-mobile (22 Oct 2026) added the Android SDK/emulator step for apps/mobile; details in blueprint.proposed.mobile.yaml.
 # W1-web (22 Oct 2026) added the Playwright Chromium install for the apps/web smoke tests (`npm run test:e2e -w apps/web`).
+# W4-13 (22 Oct 2026) applied the Linux block plus a second `runs-on: macos` block (iOS Simulator + kade-haptics),
+# every macOS command verified by the W4-13 macOS child (Xcode 26.6, iPhone 17 / iOS 26.5).
 initialize: |
   export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
   nvm install 22 >/dev/null && nvm alias default 22 >/dev/null
@@ -57,3 +59,20 @@ knowledge:
   - name: mobile
     contents: |
       apps/mobile gates: npm test/lint/build --workspace @kade/mobile (build = fixture --check + expo export android). Emulator: $ANDROID_HOME/emulator/emulator -avd kade_android -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -accel on & then (cd apps/mobile && npx expo run:android). Default API mode is in-process mock; EXPO_PUBLIC_API_MODE=live talks to services/api at http://10.0.2.2:3001 from the emulator.
+---
+# macOS block (W4-13): Node 22, CocoaPods, expo prebuild for iOS and pod install. Xcode comes with the image.
+runs-on: macos
+initialize: |
+  brew list node@22 >/dev/null 2>&1 || brew install node@22
+  echo "PATH=/opt/homebrew/opt/node@22/bin:$PATH" >> $ENVRC
+  echo "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer" >> $ENVRC
+  echo "LANG=en_US.UTF-8" >> $ENVRC
+  command -v pod >/dev/null || brew install cocoapods
+maintenance: |
+  export PATH="/opt/homebrew/opt/node@22/bin:$PATH" LANG=en_US.UTF-8
+  npm install --no-audit --no-fund
+  (cd apps/mobile && npx expo prebuild --platform ios --no-install && cd ios && pod install)
+knowledge:
+  - name: ios
+    contents: |
+      iOS Simulator build (macOS only): (cd apps/mobile && xcodebuild -workspace ios/KadCommerce.xcworkspace -scheme KadCommerce -sdk iphonesimulator -configuration Release -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' -derivedDataPath ios/build build) then xcrun simctl install booted ios/build/Build/Products/Release-iphonesimulator/KadCommerce.app && xcrun simctl launch booted test.kade.commerce. grep KadeHaptics apps/mobile/ios/Podfile.lock proves the Swift module is linked. Gates: npm test/lint/build --workspace apps/mobile.
