@@ -1,0 +1,6 @@
+# Used by BuildKit for `docker build -f outpost/Dockerfile .` (context = repo root).
+# Only the git bundle of the committed HEAD and the smoke test enter the context, so local
+# secrets, `.env` files, untracked files and node_modules can never be copied in.
+*
+!outpost/repo.bundle
+!outpost/smoke.sh

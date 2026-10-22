@@ -1,0 +1,12 @@
+{
+  "outpost": "kade-vpc",
+  "description": "Two containers (worker-a, worker-b) serve two sessions; the third waits with a banner until one finishes.",
+  "events": [
+    { "t": 0, "op": "worker_online", "worker": "worker-a" },
+    { "t": 0, "op": "worker_online", "worker": "worker-b" },
+    { "t": 10, "op": "session", "id": "S1", "via": "slack !outpost kade-vpc" },
+    { "t": 12, "op": "session", "id": "S2", "via": "web" },
+    { "t": 15, "op": "session", "id": "S3", "via": "default platform", "snapshot": "three sessions, two workers" },
+    { "t": 600, "op": "finish", "id": "S1", "snapshot": "S1 done, S3 picked up" }
+  ]
+}
