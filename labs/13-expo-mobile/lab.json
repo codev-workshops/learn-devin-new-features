@@ -36,7 +36,7 @@
         "integration": "Live `services/api` (`EXPO_PUBLIC_API_MODE=live`) — optional",
         "required": false,
         "fixture": "Mock mode stands in for it.",
-        "note": "Needs `npm run db:up`, migrate, seed and `npm run dev:api`; the emulator reaches the host at `http://10.0.2.2:3001`."
+        "note": "Needs `npm run db:up`, migrate, seed and `npm run dev -w services/api` (port 3001); the emulator reaches the host at `http://10.0.2.2:3001`."
       }
     ],
     "not_exercised": [
