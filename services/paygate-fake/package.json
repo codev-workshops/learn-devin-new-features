@@ -1,0 +1,23 @@
+{
+  "name": "@kade/paygate-fake",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Fake PayGate PSP for Kad\u00e9 Commerce: hosted-checkout stub and HMAC-signed webhooks with --duplicate, --out-of-order and --delay delivery knobs.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "paygate-fake": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint . && prettier --check . && tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "dev": "node --experimental-strip-types src/cli.ts serve",
+    "start": "node dist/cli.js serve",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0"
+  }
+}

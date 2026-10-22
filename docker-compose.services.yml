@@ -1,0 +1,61 @@
+# Overlay owned by W1-worker: the fulfilment worker and the fake PayGate PSP.
+# Root docker-compose.yml (Postgres; W1-api adds `api`) stays untouched.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.services.yml up -d --build
+#   docker compose -f docker-compose.yml -f docker-compose.services.yml --profile standalone up -d
+#
+# `standalone` adds the worker's own HMAC-verifying webhook inbox on :3003 and points
+# PayGate at it, so the duplicate-webhook plant can be driven before services/api exists.
+services:
+  fulfilment-worker:
+    build:
+      context: ./services/fulfilment-worker
+    container_name: kade-fulfilment-worker
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-kade}:${POSTGRES_PASSWORD:-kade}@postgres:5432/${POSTGRES_DB:-kade}
+      PAYGATE_SECRET: ${PAYGATE_SECRET:-kade-local-paygate-secret}
+      WORKER_POLL_INTERVAL: ${WORKER_POLL_INTERVAL:-2}
+      SWEEPER_MAX_AGE_HOURS: ${SWEEPER_MAX_AGE_HOURS:-48}
+      SWEEPER_INTERVAL: ${SWEEPER_INTERVAL:-300}
+      WORKER_BATCH_SIZE: ${WORKER_BATCH_SIZE:-50}
+
+  paygate-fake:
+    build:
+      context: .
+      dockerfile: services/paygate-fake/Dockerfile
+    container_name: kade-paygate-fake
+    restart: unless-stopped
+    environment:
+      PAYGATE_PORT: "3002"
+      PAYGATE_SECRET: ${PAYGATE_SECRET:-kade-local-paygate-secret}
+      PAYGATE_PUBLIC_URL: ${PAYGATE_PUBLIC_URL:-http://localhost:${PAYGATE_PORT:-3002}}
+      # services/api receives webhooks once W1-api lands; the standalone profile overrides this.
+      PAYGATE_WEBHOOK_URL: ${PAYGATE_WEBHOOK_URL:-http://api:3001/webhooks/payments}
+    command:
+      - node
+      - dist/cli.js
+      - serve
+      - ${PAYGATE_KNOBS:---gap=0}
+    ports:
+      - "${PAYGATE_PORT:-3002}:3002"
+
+  worker-inbox:
+    profiles: [standalone]
+    build:
+      context: ./services/fulfilment-worker
+    container_name: kade-worker-inbox
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-kade}:${POSTGRES_PASSWORD:-kade}@postgres:5432/${POSTGRES_DB:-kade}
+      PAYGATE_SECRET: ${PAYGATE_SECRET:-kade-local-paygate-secret}
+      WORKER_INBOX_PORT: "3003"
+    command: ["kade-worker", "inbox"]
+    ports:
+      - "${WORKER_INBOX_PORT:-3003}:3003"
