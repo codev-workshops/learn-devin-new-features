@@ -169,7 +169,7 @@ export function extractCoachPhrases(skillMarkdown) {
     const h = /^#{1,6}\s+(.+?)\s*$/.exec(raw);
     if (h) {
       const t = h[1].toLowerCase();
-      active = /must[- ]mention/.test(t) ? 'must-mention' : /objection/.test(t) ? 'objection' : null;
+      active = /must[-_ ](mention|say)/.test(t) ? 'must-mention' : /objection/.test(t) ? 'objection' : null;
       continue;
     }
     if (!active) continue;
@@ -354,6 +354,8 @@ export async function collectCoachPhrases(repoDir, labsDir, dirName, lab) {
     path.join(repoDir, '.devin', 'skills', 'articulation', `${nn}-${slug}`, 'SKILL.md'),
     path.join(repoDir, '.devin', 'skills', 'articulation', slug, 'SKILL.md'),
     path.join(repoDir, '.devin', 'skills', `coach-${nn}-${slug}`, 'SKILL.md'),
+    path.join(repoDir, '.devin', 'skills', `articulation-${slug}`, 'SKILL.md'),
+    path.join(repoDir, '.devin', 'skills', `articulation-${nn}-${slug}`, 'SKILL.md'),
   ];
   if (lab?.coach?.skill_path) skillCandidates.unshift(path.resolve(repoDir, lab.coach.skill_path));
   for (const candidate of skillCandidates) {
