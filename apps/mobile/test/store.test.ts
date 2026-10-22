@@ -209,4 +209,22 @@ describe("MockStore (seed-spec fixture)", () => {
       store.updateCartLine("lumen-home", "me@test", cart.id, filled.lines[0].id, 2),
     ).toThrow(/not open/);
   });
+
+  it("counts bundle components against standalone lines of the same SKU", () => {
+    const store = new MockStore({ now });
+    const bundle = store.getProduct("lumen-home", "LH-BNDL-01");
+    expect(bundle.bundle).toContain("LH-LAMP-03");
+    const lampStock = store.getProduct("lumen-home", "LH-LAMP-03").variants[0].onHand;
+    const cart = store.createCart("lumen-home", "me@test");
+    store.addCartLine("lumen-home", "me@test", cart.id, "LH-BNDL-01", lampStock);
+    expect(() => store.addCartLine("lumen-home", "me@test", cart.id, "LH-LAMP-03", 1)).toThrow(
+      /on hand across/,
+    );
+    const other = store.createCart("lumen-home", "me@test");
+    const filled = store.addCartLine("lumen-home", "me@test", other.id, "LH-LAMP-03", 1);
+    store.addCartLine("lumen-home", "me@test", other.id, "LH-BNDL-01", lampStock - 1);
+    expect(() =>
+      store.updateCartLine("lumen-home", "me@test", other.id, filled.lines[0].id, 2),
+    ).toThrow(/on hand across/);
+  });
 });
