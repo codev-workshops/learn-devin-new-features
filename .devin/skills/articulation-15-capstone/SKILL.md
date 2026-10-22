@@ -16,7 +16,7 @@ Follow `.devin/skills/articulation-base/SKILL.md` for protocol, timing, rubric, 
 ## 1. Draw and load the envelope (runtime, before T+0)
 
 1. `node labs/15-capstone/tools/scenario-check.mjs --list` — the available ids.
-2. If the learner passed `--scenario <id>`, use it. Otherwise read the learner's progress log on `coaching/<learner-slug>` and take the first listed id they have not drawn; if they have drawn all three, say so and stop.
+2. If the learner passed `--scenario <id>`, use it. Otherwise read the learner's progress log on the long-lived `coaching` branch (`git fetch origin coaching`, then `git show origin/coaching:coaching/<learner-slug>/index.md`; Decision 13a — a `coaching/<learner-slug>` branch cannot coexist with `coaching`, see `labs/COACH-CALIBRATION.md`) and take the first listed id they have not drawn; if they have drawn all three, say so and stop.
 3. `node labs/15-capstone/tools/scenario-check.mjs --scenario <id> --json` and keep the result in memory. Use **only** its fields: `customer`, `role`, `envelope`, `requirement_change`, `injected_blocker`, `must_mention` (ids, weights, `belonged_in`, points — copy them into the report verbatim) and `objections` (question plus follow-up). Never paraphrase a point into an easier one, never add one.
 4. Never show, quote or link the scenario file to the learner, and never read `must_mention`, `injected_blocker` or the facilitator key aloud. Only the envelope and the requirement change are spoken.
 
