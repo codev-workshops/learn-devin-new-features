@@ -124,11 +124,18 @@ check_docker() {
 }
 check_database_url() {
   # lab:reset / db:seed truncate and reseed whatever DATABASE_URL names; only ever run them locally.
-  local u="${DATABASE_URL:-}"
-  [ -n "$u" ] || return 0
-  local host; host=$(printf '%s' "$u" | sed -E 's#^[a-z]+://([^@/]*@)?([^:/?]+).*#\2#')
-  case "$host" in localhost|127.0.0.1|::1|postgres|db) return 0 ;; esac
-  fail "DATABASE_URL points at '$host' — refusing to reset a non-local database. Unset it or point it at localhost."
+  # The value can come from the environment or from the dotenv files services/api loads.
+  local src u host f
+  for src in env .env services/api/.env; do
+    if [ "$src" = env ]; then u="${DATABASE_URL:-}"; else
+      [ -f "$src" ] || continue
+      u=$(sed -n 's/^[[:space:]]*\(export[[:space:]]\{1,\}\)\{0,1\}DATABASE_URL=//p' "$src" | tail -n 1 | tr -d '"'"'"' ')
+    fi
+    [ -n "$u" ] || continue
+    host=$(printf '%s' "$u" | sed -E 's#^[a-z]+://([^@/]*@)?([^:/?]+).*#\2#')
+    case "$host" in localhost|127.0.0.1|::1|postgres|db) continue ;; esac
+    fail "DATABASE_URL ($src) points at '$host' — refusing to reset a non-local database. Point it at localhost first."
+  done
 }
 preflight() {
   head_ "Preflight"
@@ -174,10 +181,17 @@ do_cleanup() {
     printf '%s' "$OUT" | grep -q '^reverted$' || warn "inject.sh did not print 'reverted' (see log)"
   fi
   local kept; kept=$(git status --porcelain | grep -E ' labs/[0-9]{2}-[^/]+/[A-Z0-9.-]*NOTES' | sed 's/^...//' | tr '\n' ' ' || true)
+  # A notes file the learner has `git add`ed would be deleted by reset --hard: unstage it first so it survives as untracked.
+  local staged_notes; staged_notes=$(git diff --cached --name-only --diff-filter=A -- "$NOTES_GLOB" 2>/dev/null || true)
+  if [ -n "$staged_notes" ]; then
+    # shellcheck disable=SC2086
+    git reset -q -- $staged_notes >>"$LOG" 2>&1 || true
+    info "unstaged notes file(s) so they are kept: $(printf '%s' "$staged_notes" | tr '\n' ' ')"
+  fi
   if [ -n "$(dirty_paths)" ]; then
     # Nothing is thrown away: staged, unstaged and untracked changes go to a stash (notes files stay in place).
     local msg="lab.sh cleanup $NN $(date +%Y-%m-%d-%H%M%S)"
-    step "stash working-tree changes${kept:+ (kept: $kept)}" git stash push -u -q -m "$msg" -- . ":(exclude)$NOTES_GLOB" ":(exclude).lab"
+    step "stash working-tree changes${kept:+ (kept: $kept)}" git stash push -u -q -m "$msg" -- . ":(exclude)$NOTES_GLOB"
     info "restore later with: git stash list  →  git stash pop   ($msg)"
   fi
   step "reset working tree" sh -c "git reset -q --hard && git clean -fdq -e '$NOTES_GLOB' -e '.lab/'"
