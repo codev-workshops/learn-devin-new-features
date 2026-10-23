@@ -10,13 +10,14 @@ A production-shaped but deliberately imperfect multi-brand e-commerce fixture us
 
 Node 22 + pnpm 10 workspaces (`apps/*`, `services/*`, `packages/*`, `labs`), Python 3.12 for `services/fulfilment-worker`, PostgreSQL 16 via `docker compose` (`mirror.gcr.io/library/postgres:16-alpine`).
 
-| Command                                                   | Does                                                                             |
-| --------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `pnpm db:up` / `db:down`                                  | Start (and wait for) / stop Postgres                                             |
-| `pnpm db:migrate`, `pnpm db:seed`                         | Delegated to `services/api`; `db:seed -- --reset` rebuilds the seed-spec dataset |
-| `pnpm lab:reset -- <nn>`                                  | Reseed, then `scenarios/lab-reset.sh <nn>` when present                          |
-| `pnpm test`, `pnpm lint`, `pnpm build`, `pnpm labs:build` | The four gates; `pnpm gates` runs all four                                       |
-| `pnpm coach:dryrun -- <nn>`                               | Transcript-driven articulation coach dry run                                     |
+| Command                                                   | Does                                                                                                                                                              |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm db:up` / `db:down`                                  | Start (and wait for) / stop Postgres                                                                                                                              |
+| `pnpm db:migrate`, `pnpm db:seed`                         | Delegated to `services/api`; `db:seed -- --reset` rebuilds the seed-spec dataset                                                                                  |
+| `pnpm lab:reset -- <nn>`                                  | Reseed, then `scenarios/lab-reset.sh <nn>` when present                                                                                                           |
+| `pnpm lab:start -- <nn>`, `pnpm lab:cleanup -- <nn>`      | `scripts/lab.sh`: one-command lab start (install, db, build, seed, labs:build, reset, throwaway branch, injectors) and cleanup; auto-cleans an unclean tree first |
+| `pnpm test`, `pnpm lint`, `pnpm build`, `pnpm labs:build` | The four gates; `pnpm gates` runs all four                                                                                                                        |
+| `pnpm coach:dryrun -- <nn>`                               | Transcript-driven articulation coach dry run                                                                                                                      |
 
 Root scripts are native pnpm: `pnpm -r --if-present run <script>` runs a script in every workspace that defines it and treats a workspace without it as "nothing to do", while `db:*`, `labs:build` and `coach:dryrun` use `pnpm --filter <pkg>`. Each workspace owns its real `test`, `lint` and `build` scripts. Python services must also pass `pytest -q` and `ruff check` locally; they are invoked from the workspace `test`/`lint` scripts, not from the root.
 

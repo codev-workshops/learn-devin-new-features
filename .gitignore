@@ -34,6 +34,9 @@ ios/Pods/
 .idea/
 .DS_Store
 
+# Lab runner logs (scripts/lab.sh)
+.lab/
+
 # Logs
 *.log
 pnpm-debug.log*
