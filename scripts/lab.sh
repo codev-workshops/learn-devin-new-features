@@ -122,9 +122,18 @@ check_docker() {
     NO_DB=1
   fi
 }
+check_database_url() {
+  # lab:reset / db:seed truncate and reseed whatever DATABASE_URL names; only ever run them locally.
+  local u="${DATABASE_URL:-}"
+  [ -n "$u" ] || return 0
+  local host; host=$(printf '%s' "$u" | sed -E 's#^[a-z]+://([^@/]*@)?([^:/?]+).*#\2#')
+  case "$host" in localhost|127.0.0.1|::1|postgres|db) return 0 ;; esac
+  fail "DATABASE_URL points at '$host' — refusing to reset a non-local database. Unset it or point it at localhost."
+}
 preflight() {
   head_ "Preflight"
   ensure_node; ensure_pnpm; check_docker
+  [ "$NO_DB" = 1 ] || check_database_url
   local d="Docker not used"; [ "$DOCKER" = 1 ] && d="Docker running"
   ok "Node $(node -v) · pnpm $(pnpm --version) · $d"
 }
@@ -165,14 +174,21 @@ do_cleanup() {
     printf '%s' "$OUT" | grep -q '^reverted$' || warn "inject.sh did not print 'reverted' (see log)"
   fi
   local kept; kept=$(git status --porcelain | grep -E ' labs/[0-9]{2}-[^/]+/[A-Z0-9.-]*NOTES' | sed 's/^...//' | tr '\n' ' ' || true)
-  step "discard working-tree changes${kept:+ (kept: $kept)}" sh -c "git checkout -q -- . && git clean -fdq -e '$NOTES_GLOB' -e '.lab/'"
+  if [ -n "$(dirty_paths)" ]; then
+    # Nothing is thrown away: staged, unstaged and untracked changes go to a stash (notes files stay in place).
+    local msg="lab.sh cleanup $NN $(date +%Y-%m-%d-%H%M%S)"
+    step "stash working-tree changes${kept:+ (kept: $kept)}" git stash push -u -q -m "$msg" -- . ":(exclude)$NOTES_GLOB" ":(exclude).lab"
+    info "restore later with: git stash list  →  git stash pop   ($msg)"
+  fi
+  step "reset working tree" sh -c "git reset -q --hard && git clean -fdq -e '$NOTES_GLOB' -e '.lab/'"
   local def; def=$(default_branch)
   local cur; cur=$(git branch --show-current 2>/dev/null || true)
   [ "$cur" = "$def" ] || step "git checkout $def" git checkout -q "$def"
-  local b
-  for b in $(git for-each-ref --format='%(refname:short)' "refs/heads/lab$NN/"); do
-    step "delete throwaway branch $b" git branch -D "$b"
-  done
+  case "$cur" in
+    lab$NN/*) step "delete throwaway branch $cur" git branch -D "$cur" ;;
+  esac
+  local others; others=$(git for-each-ref --format='%(refname:short)' "refs/heads/lab$NN/" | tr '\n' ' ')
+  [ -z "$others" ] || warn "other lab$NN/* branches left in place (delete by hand if unwanted): $others"
   if [ "$NO_DB" = 0 ]; then
     step "pnpm lab:reset -- $NN" pnpm lab:reset -- "$NN"
     [ "$DB_DOWN" = 1 ] && step "pnpm db:down" pnpm db:down
