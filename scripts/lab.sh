@@ -124,18 +124,17 @@ check_docker() {
 }
 check_database_url() {
   # lab:reset / db:seed truncate and reseed whatever DATABASE_URL names; only ever run them locally.
-  # The value can come from the environment or from the dotenv files services/api loads.
-  local src u host f
-  for src in env .env services/api/.env; do
-    if [ "$src" = env ]; then u="${DATABASE_URL:-}"; else
-      [ -f "$src" ] || continue
-      u=$(sed -n 's/^[[:space:]]*\(export[[:space:]]\{1,\}\)\{0,1\}DATABASE_URL=//p' "$src" | tail -n 1 | tr -d '"'"'"' ')
-    fi
-    [ -n "$u" ] || continue
-    host=$(printf '%s' "$u" | sed -E 's#^[a-z]+://([^@/]*@)?([^:/?]+).*#\2#')
-    case "$host" in localhost|127.0.0.1|::1|postgres|db) continue ;; esac
-    fail "DATABASE_URL ($src) points at '$host' — refusing to reset a non-local database. Point it at localhost first."
-  done
+  # Effective value, same precedence as services/api/src/config.ts: the environment wins, otherwise
+  # the repo-root .env (the API never overrides variables that are already set).
+  local src=environment u="${DATABASE_URL:-}" host
+  if [ -z "$u" ] && [ -f .env ]; then
+    src=.env
+    u=$(sed -n 's/^[[:space:]]*\(export[[:space:]]\{1,\}\)\{0,1\}DATABASE_URL=//p' .env | tail -n 1 | tr -d '"'"'"' ')
+  fi
+  [ -n "$u" ] || return 0
+  host=$(printf '%s' "$u" | sed -E 's#^[a-z]+://([^@/]*@)?([^:/?]+).*#\2#')
+  case "$host" in localhost|127.0.0.1|::1|postgres|db) return 0 ;; esac
+  fail "DATABASE_URL ($src) points at '$host' — refusing to reset a non-local database. Point it at localhost first."
 }
 preflight() {
   head_ "Preflight"
