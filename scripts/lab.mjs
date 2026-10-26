@@ -49,7 +49,7 @@ const needsDb = steps.some((s) => /\b(lab:reset|db:seed|db:migrate|db:up)\b/.tes
 const e = process.env;
 const env = {
   ...e,
-  DATABASE_URL: `postgres://${encodeURIComponent(e.POSTGRES_USER ?? "harbourline")}:${encodeURIComponent(e.POSTGRES_PASSWORD ?? "harbourline")}@localhost:${Number.parseInt(e.POSTGRES_PORT ?? "5432", 10)}/${encodeURIComponent(e.POSTGRES_DB ?? "harbourline")}`,
+  DATABASE_URL: `postgres://${encodeURIComponent(e.POSTGRES_USER || "harbourline")}:${encodeURIComponent(e.POSTGRES_PASSWORD || "harbourline")}@localhost:${Number.parseInt(e.POSTGRES_PORT || "5432", 10)}/${encodeURIComponent(e.POSTGRES_DB || "harbourline")}`,
 };
 const plan = [];
 if (mode === "start" && !existsSync(join(root, "node_modules")))
