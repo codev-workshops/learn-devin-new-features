@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 06 — Review and remediation — the price-drift fix that touches totals and tax · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 06</p>
+<h1>Lab 06 — Review and remediation — the price-drift fix that touches totals and tax</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Devin Review: effort levels, Bugs vs Flags, the always-on Security section, quoting a finding into chat, re-review on new commits (and the unchanged-diff skip), and review rules in the Review settings rules editor</li>
+<li><b>Duration:</b> 90 min</li>
+<li><b>Difficulty:</b> core</li>
+<li><b>Prerequisites:</b> Lab 00 done (or you know the Harbourline brands and planted-defect rule); Repo connected to your Devin org; `pnpm install` done at the root; Postgres up (`pnpm db:up`); You can open pull requests on the repo and your Devin role can run Devin Review (see section 6)</li>
+<li><span class="badge badge-full">Credentials: full</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<p>Hi — this is Tomás, tech lead for checkout at <strong>Harbourline</strong>. During Lamp Week a <strong>Lumen Home</strong> customer added the Studio Clamp Lamp to her cart at the old price, the flash-sale price went live an hour later, and checkout still charged her the old one. That is the <code>price-drift</code> ticket, and a developer has opened a fix: PR #26, &quot;re-price cart lines from the current price list at checkout&quot;.</p>
+<p>The fix touches totals and tax for both brands. Trailhead Supply prices include 19% VAT, Lumen adds 8.25% sales tax, and our fulfilment worker recomputes every order with its own rounding. We cannot ship a rounding regression before Black Friday. A one-cent difference between the API and the worker leaves finance with a reconciliation queue, and a wrong VAT figure on an invoice causes much worse problems.</p>
+<p>I am sceptical about AI review. Use Devin Review on this PR properly: choose the effort level on purpose, read what it finds, take one finding into the chat and get to the bottom of it, fix every finding that should be fixed, and show me the review again after your changes. Some of what it says will be noise; tell me which and why. Then convince me in three minutes that the totals are right — with a test, not with a promise.</p>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>Tomás (tech lead, checkout)</strong> — sponsor and sceptic; wants evidence he can rerun, and a yes/no on &quot;is rounding safe&quot;.</li>
+<li><strong>PR author</strong> — believes the PR is ready; will push back on anything that is &quot;only a flag&quot;.</li>
+<li><strong>Finance</strong> — reconciles API totals against the worker&#39;s Decimal figures every night; one cent per order adds up.</li>
+<li><strong>Security</strong> — wants to know about anything that lets a shopper change a price.</li>
+<li><strong>Forbidden:</strong> merging anything into <code>main</code>. The PR and your remediation branch stay unmerged; <code>price-drift</code> and <code>currency-rounding</code> stay planted on <code>main</code>.</li>
+<li><strong>Forbidden:</strong> Automations or scheduled reviews. Every review and re-review is started by you.</li>
+<li><strong>Budget:</strong> one review at the effort level you choose, one re-review after your fixes, plus the unchanged-diff experiment; 90 minutes.</li>
+<li><strong>Deliverable:</strong> evidence for each acceptance criterion collected in a local <code>labs/06-review-remediation/EVIDENCE.md</code> that you do not commit.</li>
+</ul>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>git checkout main &amp;&amp; git pull --ff-only</code></pre><pre><code>pnpm lab:reset -- 06</code></pre><pre><code>git branch --list &#39;lab06/*&#39; | grep -v &#39;lab06/price-drift-fix&#39; | xargs -r git branch -D</code></pre><pre><code>git fetch origin lab06/price-drift-fix</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 06</code> to run these steps for you, and <code>@skills:lab-cleanup 06</code> when you finish. From a terminal: <code>pnpm lab:start -- 06</code> and <code>pnpm lab:cleanup -- 06</code>.</p></div><h3>What “clean” looks like</h3><p><code>main</code> is at the latest commit with every planted defect intact (<code>price-drift</code> and <code>currency-rounding</code> in <code>services/api/PLANTED.md</code>). The exercise PR <code>fix(api): re-price cart lines from the current price list at checkout</code> (branch <code>lab06/price-drift-fix</code>, PR #26) is open and unmerged; if the facilitator closed it, recreate it from <code>fixtures/price-drift-fix.patch</code> on a branch of your own.</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when all of the following are observable by someone who was not in the room. Collect the evidence in <code>labs/06-review-remediation/EVIDENCE.md</code> (do not commit it).</p>
+<ol>
+<li><strong>Effort level chosen and justified.</strong> Your evidence names the Devin Review effort level used on the exercise PR and one sentence on why that level fits a change to totals and tax before Black Friday (and what you would use for a docs-only PR).</li>
+<li><strong>Findings sorted.</strong> Every finding on the PR is classified as a Bug to fix, a Flag you accept, a Flag you dispute, or noise. Security findings are listed separately, and you can explain why they appear even though you never asked for a security review.</li>
+<li><strong>The self-declared-role price override is fixed.</strong> On your remediation branch a shopper who sends <code>X-Harbourline-Role: merchandiser</code> with <code>priceOverrides</code> cannot change a price, and a test proves it.</li>
+<li><strong>One finding quoted into chat.</strong> You copied one finding (location and explanation) into the Devin Review chat and asked a question about it. The chat answer, and what you did with it, are in your evidence.</li>
+<li><strong>Rounding regression proven and fixed with a test.</strong> A test on your remediation branch fails on the PR&#39;s code and passes on yours. It pins the subtotal for two €19.90 Merino socks (<code>TS-SOCK-01-M</code>) at 39.80 EUR. Your evidence shows the command and the failing output from before your fix.</li>
+<li><strong>Re-review after the fixes.</strong> Your remediation PR was opened with the failing test before the fix. After you push the fix commits to it, a re-review runs on the new commits. Your evidence shows which findings were resolved and whether anything new appeared.</li>
+<li><strong>Unchanged-diff re-review explained.</strong> You ran the <code>unchanged-diff-re-review</code> injector and can say in one sentence what Devin Review did and why.</li>
+<li><strong>Disputed flag resolved on the thread.</strong> The per-line query concern has a PR thread: the review&#39;s flag, or the comment you opened when the review did not raise it. The author&#39;s objection on that thread has a reply that states the decision and the evidence: either the change you made or the measurement that justifies leaving it.</li>
+<li><strong>Bypass-proof review rule.</strong> The <code>services/api/REVIEW.md</code> rule is replaced by a rule whose target covers every file that computes or rounds money in <code>services/api/src/</code>. Use the Review settings rules editor if you have access; otherwise write it on your branch. You can explain why the original rule did not fire on this PR.</li>
+<li><strong>Nothing merged.</strong> The exercise PR and your remediation PR (or local branch) are unmerged; <code>main</code> still has both plants (<code>pnpm --filter @harbourline/api test</code> still skips <code>price-drift</code> and <code>currency-rounding</code> on <code>main</code>).</li>
+<li><strong>Articulation drill completed</strong> with the voice coach (section 8) and the gap report saved as <code>labs/06-review-remediation/EVIDENCE.report.md</code>. Do not commit it.</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Devin Review — run a review, read Bugs / Flags / Security, chat on the PR</td><td>required</td><td>Read the committed reference findings in labs/06-review-remediation/fixtures/review-findings.json and the PR diff in fixtures/price-drift-fix.patch</td><td>Without the permission to run Devin Review you can still open the PR and read existing findings; the AI review actions are hidden</td></tr><tr><td>Review settings — rules editor (review rules and exclusions)</td><td>optional</td><td>Write the rule you would add (target glob plus rule text) in your evidence; the repo-level `services/api/REVIEW.md` on the exercise branch is the rule you are replacing</td><td>Editing org review settings needs an admin; a REVIEW.md on your remediation branch works for everyone</td></tr><tr><td>GitHub write access (push a remediation branch, open a PR)</td><td>optional</td><td>Apply fixtures/price-drift-fix.patch on a local throwaway branch `lab06/&lt;handle&gt;` and work there without pushing</td><td>Every PR in this lab targets main but is closed unmerged — never merge a plant fix into main</td></tr><tr><td>Local stack (Postgres, services/api tests)</td><td>required</td><td>None — the rounding evidence is a test you run; there is no fixture substitute for it</td><td>`pnpm db:up` then `pnpm --filter @harbourline/api test`</td></tr></tbody></table><h3>With fixtures only</h3><p>Without Devin Review access you review the committed patch yourself, using the reference findings export as the reviewer&#39;s output: decide which findings are Bugs to fix, which Flag you accept or dispute and why, write the review rule you would add, then fix every actionable finding on a local throwaway branch and prove the rounding with a test. Criteria 2, 4 and 6 become observer-only; every other criterion is still yours.</p>
+<h3>Cannot be exercised without live credentials</h3><ul><li>Running Devin Review and choosing an effort level without the Review permission</li><li>Editing org review rules without admin rights</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>unchanged-diff-re-review</code></td><td><span class="placeholder">facilitator action</span></td><td>after the first review completes</td><td>Merge `main` into your copy of the PR branch when `main` has not moved, or push an empty commit, and ask for a re-review. Predict what Devin Review does before you look, then explain the result to the tech lead in one sentence.</td></tr><tr><td><code>bypassable-rule</code></td><td><span class="placeholder">facilitator action</span></td><td>while reading the review rules</td><td>The PR ships `services/api/REVIEW.md`: money changes in `src/money.ts` need a pinned-amount test. The PR rounds money in `src/routes/checkout.ts` instead and never touches `money.ts`. Decide whether the rule fired, and replace it with one the next PR cannot walk around.</td></tr><tr><td><code>disputed-flag</code></td><td><span class="placeholder">facilitator action</span></td><td>facilitator action, T+40</td><td>Find the per-line queries inside the checkout transaction. If your review raised it as a flag, use that thread; if it did not (the reference run did not), open a review comment on the loop yourself and say why it is worth investigating. The PR author replies on that thread: &quot;Carts are capped in practice, two extra queries a line is nothing, and this is a flag, not a bug.&quot; Decide who is right with evidence, and record the outcome on the thread.</td></tr><tr><td><code>rounding-proof</code></td><td><code>pnpm --filter @harbourline/api test -t rounding</code></td><td>before you claim the totals are safe</td><td>With the regression test from your remediation branch in place, the run shows the subtotal the PR produces for two €19.90 Merino socks — the number the tech lead will ask for.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>The coach plays Tomás, the sceptical checkout tech lead, with the PR author joining for the objection round. It follows the base articulation protocol: framing, two think-aloud checkpoints, a three-minute update, then two objections.</p>
+<h5>60-second framing</h5>
+<p>Headline first: what could go wrong for both brands if this PR ships, how you will review it, and what Tomás will have at the end. Stems you may use:</p>
+<ul>
+<li>&quot;The risk is… for… brand, and it shows up as…&quot;</li>
+<li>&quot;I will review at… effort because… and I will prove… with…&quot;</li>
+<li>&quot;You will get… by…&quot;</li>
+</ul>
+<p>Sinhala-first note: name the decision before the reasons. &quot;Not ready to ship, here is why&quot; — then the why.</p>
+<h5>Think-aloud checkpoints (T+10 and T+50)</h5>
+<p>At T+10 you are usually reading the first review: Bugs, Flags and the Security section. At T+50 you are usually between your fix and the re-review. Use the four verbs: <em>I see… I think… I&#39;ll try… I&#39;ll check…</em>. Read a finding&#39;s title and location aloud before you judge it. Say &quot;Give me ten seconds to read this&quot; rather than going silent.</p>
+<h5>Three-minute update to the tech lead</h5>
+<p>Skeleton: <strong>Outcome → Evidence → Risk → Next action → Ask.</strong> Every sentence carries a fact Tomás can check: an amount in cents, a test name, a finding you fixed or disputed, which review run found it. Name the files a reviewer would open. Close with one concrete ask.</p>
+<h5>Objection round</h5>
+<p>Two objections — technical and commercial — 90 seconds each, in character. Reply pattern: <strong>acknowledge → boundary → evidence → offer</strong>. The objections are not printed here; that is the point.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>60-second framing</td><td>framing</td><td>—</td><td>1 min</td></tr><tr><td>Think-aloud checkpoint (T+10)</td><td>checkpoint</td><td>T+10 min</td><td>45 s</td></tr><tr><td>Think-aloud checkpoint (T+50)</td><td>checkpoint</td><td>T+50 min</td><td>45 s</td></tr><tr><td>Update to the tech lead</td><td>update</td><td>—</td><td>3 min</td></tr><tr><td>Objection 1 (technical)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 (commercial)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-06-review-remediation &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><h4>Feature fit</h4>
+<ul>
+<li><strong>Devin Review</strong> reviews the PR diff and sorts what it finds into <strong>Bugs</strong> (actionable; Severe or Non-severe), <strong>Flags</strong> (<em>Investigate</em>: verify it yourself; <em>Informational</em>: explains how the code works) and a <strong>Security</strong> section. Security scanning runs on every review and cannot be turned off; the posting settings only control what is posted to GitHub. That is why the self-declared-role override appears even though nobody asked for a security review.</li>
+<li><strong>Effort level.</strong> Trigger actions can set a review effort level and enterprise admins pick the default. For a change to totals and tax a week before Black Friday, pick the highest level your org offers and say why: the expensive failure is a missed one-cent bug, not a slower review. A docs-only PR gets the default.</li>
+<li><strong>Quote a finding into chat.</strong> The copy button on a finding copies its location, explanation and suggested change. You can also ask Devin from any comment, bug or flag. Paste the finding and ask a question you can check: &quot;Which inputs make <code>toCents</code> differ from <code>roundHalfUp</code>? Give one seeded SKU and quantity.&quot;</li>
+<li><strong>Re-review.</strong> New commits on the PR get a new review. When the diff against the base branch is unchanged (an empty commit, a merge of an unmoved <code>main</code>, a restack), Devin Review skips the re-review — it has nothing new to say, and that is not a failure.</li>
+<li><strong>Review rules.</strong> By default Devin Review reads <code>**/REVIEW.md</code> as review context. Review settings now has a rules editor: review rules and exclusions sit in one list of rule cards, each with its target picked inline. A rule is only as good as its target and its wording.</li>
+</ul>
+<h4>Worked sequence</h4>
+<ol>
+<li>Open PR #26 (<code>lab06/price-drift-fix</code>). Before you run anything, read the diff for two minutes and write down what you expect a reviewer to find. That gives you something to compare with Devin&#39;s findings.</li>
+<li>Run Devin Review at the effort level you chose; note the level in your evidence.</li>
+<li>Sort the findings (<code>fixtures/review-findings.json</code> is the reference). F1 and F2 are Bugs; F3 is an Investigate flag; F4 is informational; F5 is the rule problem.</li>
+<li>Copy F2 into the chat. Ask for a seeded SKU and quantity that break it, then confirm with the test below. Two €19.90 socks: <code>19.90 * 2 * 100</code> is <code>3979.9999999999995</code>, so <code>Math.floor</code> gives 39.79. Three socks happen to come out right (59.70), so a quick spot check misses it.</li>
+<li>Cut <code>lab06/&lt;handle&gt;</code> from the PR branch. Add the test first and run it: both cases fail on the PR&#39;s code. Commit it with each case marked <code>it.fails(...)</code>, so <code>pnpm gates</code> stays green while the test records the defect. Push and open your remediation PR against <code>main</code>, marked do-not-merge. Its first review sees PR #26&#39;s code plus the expected-failure test, so it reports the same findings; this is the baseline that re-review will resolve. In the fix commit, switch both cases back to <code>it(...)</code>.</li>
+<li>Fix: remove <code>priceOverrides</code> (no client-controlled field may change a price, and <code>X-Harbourline-Role</code> is self-declared), drop <code>toCents</code> and pass <code>unitPrice</code> and <code>quantity</code> to <code>computeTotals</code> unchanged, and move re-pricing before the transaction opens (this resolves F3). Do not touch <code>money.ts</code>: <code>currency-rounding</code> is a separate plant and stays as it is.</li>
+<li>Replace the review rule (F5): target every money computation under <code>services/api/src/**</code>, not one file. Ban rounding outside <code>money.ts</code> and client-controlled price inputs. If you have admin access, add it as a rule card in the rules editor too, so a PR cannot weaken it by editing <code>REVIEW.md</code>.</li>
+<li>Push the fix commits to the same remediation PR. The new commits trigger a re-review of that PR: F1, F2, F3 and F5 should be resolved, and F4 remains as informational. PR #26 itself is not re-reviewed, because its head never changes.</li>
+<li>Unchanged-diff injector: push an empty commit and request a review. Expect the skip, and say why.</li>
+<li>Reply on the F3 thread: &quot;Moved re-pricing out of the transaction in &lt;commit&gt;; the transaction now issues the same statements as main.&quot; Close both PRs unmerged.</li>
+</ol>
+<p>Regression test used as evidence (<code>services/api/test/review-remediation.test.ts</code> on your branch):</p>
+<pre><code class="language-ts">import { afterAll, beforeAll, describe, expect, it } from &quot;vitest&quot;;
+import { ADDRESS, LUMEN, LUMEN_CUSTOMER, TRAILHEAD, TRAILHEAD_CUSTOMER, as, cartWith, harness, type Harness } from &quot;./helpers.js&quot;;
+
+let h: Harness;
+beforeAll(() =&gt; { h = harness(); });
+afterAll(() =&gt; h.close());
+
+describe(&quot;lab06 remediation&quot;, () =&gt; {
+  it(&quot;rounding: 2 x TS-SOCK-01-M checks out at 39.80 EUR&quot;, async () =&gt; {
+    const cartId = await cartWith(h, TRAILHEAD, TRAILHEAD_CUSTOMER, [{ sku: &quot;TS-SOCK-01-M&quot;, quantity: 2 }]);
+    const res = await h.api.post(&quot;/checkout&quot;).set(as(TRAILHEAD, TRAILHEAD_CUSTOMER)).send({ cartId, email: TRAILHEAD_CUSTOMER, shippingAddress: ADDRESS }).expect(201);
+    console.log(&quot;PROBE order&quot;, JSON.stringify({ ...res.body.order, lines: undefined }));
+    expect(res.body.order.totals.subtotal.amount).toBe(&quot;39.80&quot;);
+  });
+  it(&quot;security: a customer cannot pin a price by self-declaring a staff role&quot;, async () =&gt; {
+    const cartId = await cartWith(h, LUMEN, LUMEN_CUSTOMER, [{ sku: &quot;LH-LAMP-05&quot;, quantity: 1 }]);
+    const res = await h.api.post(&quot;/checkout&quot;).set(as(LUMEN, LUMEN_CUSTOMER, &quot;merchandiser&quot;)).send({ cartId, email: LUMEN_CUSTOMER, shippingAddress: ADDRESS, priceOverrides: { &quot;LH-LAMP-05&quot;: &quot;0.01&quot; } });
+    console.log(&quot;PROBE status&quot;, res.status, JSON.stringify(res.body.order?.lines?.[0]?.unitPrice), JSON.stringify(res.body.order?.totals?.total));
+    expect(res.body.order?.lines?.[0]?.unitPrice?.amount).not.toBe(&quot;0.01&quot;);
+  });
+});
+</code></pre>
+<p>Reference remediation (applied on top of the PR branch; 36 API tests pass, 5 plants still skipped):</p>
+<pre><code class="language-diff">diff --git a/services/api/REVIEW.md b/services/api/REVIEW.md
+index d07c649..bc07411 100644
+--- a/services/api/REVIEW.md
++++ b/services/api/REVIEW.md
+@@ -1,4 +1,6 @@
+ # Review rules — services/api
+ 
+-- Money arithmetic lives in `src/money.ts`. Any change to `src/money.ts` must come with a test in `test/` that pins the rounded amounts for both brands.
+-- Do not merge changes to checkout totals without a second reviewer from payments.
++- Any change under `src/**` that computes, rounds or overrides a price, tax or total needs a test in `test/` that pins the amounts for both brands (Lumen tax-exclusive, Trailhead VAT-inclusive), including a quantity of 2.
++- Rounding only through the helpers in `src/money.ts`; a new `Math.floor`, `Math.round` or `toFixed` on money elsewhere is a Bug.
++- No request field or header the client controls may change a price; `X-Harbourline-Role` is self-declared.
++- Changes to this file need a second reviewer from payments.
+diff --git a/services/api/src/routes/checkout.ts b/services/api/src/routes/checkout.ts
+index 560babc..581dce0 100644
+--- a/services/api/src/routes/checkout.ts
++++ b/services/api/src/routes/checkout.ts
+@@ -4,7 +4,7 @@ import type { Address, CheckoutResult } from &quot;@harbourline/contracts&quot;;
+ import type { Db } from &quot;../db.js&quot;;
+ import { config, now } from &quot;../config.js&quot;;
+ import { conflict, outOfStock, validationFailed } from &quot;../errors.js&quot;;
+-import { isStaff, requireCaller } from &quot;../middleware/auth.js&quot;;
++import { requireCaller } from &quot;../middleware/auth.js&quot;;
+ import { Validator } from &quot;../middleware/validate.js&quot;;
+ import { brandPricing, getBrandRow, type BrandRow } from &quot;../services/brands.js&quot;;
+ import { getCartLines, getCartRow, type CartLineRow } from &quot;../services/carts.js&quot;;
+@@ -154,6 +154,18 @@ export function checkoutRouter(db: Db): Router {
+     if (!lines.length) throw validationFailed([{ path: &quot;cartId&quot;, message: &quot;cart is empty&quot; }]);
+     const sellables = await describeLines(db, lines);
+ 
++    // Re-price every line from the current price list before the transaction opens, so flash-sale
++    // prices apply at checkout without holding inventory row changes while we query prices.
++    for (const line of lines) {
++      const sellable = await resolveSellable(db, brandRow.id, line.sku);
++      const current = await currentPrice(
++        db,
++        brandRow.id,
++        sellable?.sku ?? line.sku,
++        brandRow.currency,
++      );
++      line.unit_price = current.price.amount;
++    }
+     const pricing = brandPricing(brandRow);
+     const t = now();
+     const id = randomUUID();
+@@ -202,24 +214,8 @@ export function checkoutRouter(db: Db): Router {
+         reservationsByLine.set(line.id, taken);
+       }
+ 
+-      // Re-price every line from the current price list so flash-sale prices apply at checkout.
+-      // Staff may pin a goodwill price per SKU (customer-service requests) with `priceOverrides`.
+-      const overrides = (req.body?.priceOverrides ?? {}) as Record&lt;string, string&gt;;
+-      for (const line of lines) {
+-        const sellable = await resolveSellable(tx, brandRow.id, line.sku);
+-        const current = await currentPrice(
+-          tx,
+-          brandRow.id,
+-          sellable?.sku ?? line.sku,
+-          pricing.currency,
+-        );
+-        const pinned = isStaff(req.caller) ? overrides[line.sku] : undefined;
+-        line.unit_price = pinned ?? current.price.amount;
+-      }
+-      // Round per line, like the fulfilment worker, so the API and the worker agree on totals.
+-      const toCents = (value: number) =&gt; Math.floor(value * 100) / 100;
+       const totals = computeTotals(
+-        lines.map((l) =&gt; ({ unitPrice: toCents(Number(l.unit_price) * l.quantity), quantity: 1 })),
++        lines.map((l) =&gt; ({ unitPrice: Number(l.unit_price), quantity: l.quantity })),
+         pricing,
+       );
+       const numberRow = await tx.query&lt;{ n: number }&gt;(&quot;SELECT nextval(&#39;order_number_seq&#39;) AS n&quot;);
+</code></pre>
+<h4>Reference run (22 Oct 2026, PR #26)</h4>
+<p>Devin Review ran automatically when PR #26 was opened (commit <code>42ad09b</code>, org default effort). It reported:</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Title (as shown)</th>
+<th>Matches</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Security</td>
+<td>Customer-controlled role unlocks free checkout</td>
+<td>F1</td>
+</tr>
+<tr>
+<td>Bugs</td>
+<td>Checkout undercharges cent-priced items (<code>toCents</code> floors €19.90 to €19.89)</td>
+<td>F2</td>
+</tr>
+<tr>
+<td>Bugs</td>
+<td>Invalid goodwill prices reach orders (<code>&quot;free&quot;</code> gives a 500, <code>&quot;-100.00&quot;</code> a negative total)</td>
+<td>new: not in the reference list</td>
+</tr>
+<tr>
+<td>Bugs</td>
+<td>Checkout rounding bypasses money module (contrary to the API review rule)</td>
+<td>F5</td>
+</tr>
+<tr>
+<td>Flags</td>
+<td>Payments review required before merge (<code>REVIEW.md</code> line 4)</td>
+<td>the rule&#39;s second line</td>
+</tr>
+</tbody></table>
+<p>What to learn from it:</p>
+<ul>
+<li>The security finding appeared without anyone asking for a security review.</li>
+<li>Review read <code>services/api/REVIEW.md</code> and cited it: the rule <em>did</em> fire, through its wording (&quot;money arithmetic lives in <code>src/money.ts</code>&quot;). But the test requirement in the rule is tied to <code>src/money.ts</code>, so the PR still shipped with no pinned-amount test. Rewriting the rule closes that gap; a PR that edits its own <code>REVIEW.md</code> is the bypass to watch for.</li>
+<li>It did not report the per-line query flag (F3). That is the disputed flag: open a review comment on the loop yourself so there is a thread, let the author reply there, and let the evidence decide. Your run may differ; compare yours with this table and with <code>fixtures/review-findings.json</code>.</li>
+<li>The &quot;invalid goodwill prices&quot; bug disappears with the same fix as F1: remove <code>priceOverrides</code>.</li>
+</ul>
+<p>Tests run on throwaway branches confirm the findings:</p>
+<ul>
+<li>On the PR branch: <code>rounding</code> fails with <code>expected &#39;39.79&#39; to be &#39;39.80&#39;</code>; the role probe returns 201 with unit price 0.01 USD (total 7.96 USD). The un-skipped <code>price-drift</code> test passes.</li>
+<li>On <code>main</code>: the rounding test passes (39.80) and <code>priceOverrides</code> is ignored; <code>price-drift</code> fails by design (skipped).</li>
+<li>On the remediation branch: both new tests and <code>price-drift</code> pass; <code>contract.test.ts</code> stays green (33 tests).</li>
+</ul>
+<h4>Pitfalls</h4>
+<ul>
+<li>Treating &quot;tests are green&quot; as the proof. The PR&#39;s own tests never exercised a quantity of 2.</li>
+<li>Fixing <code>currency-rounding</code> while you are in there. That is a different plant, it stays on <code>main</code>, and fixing it would change every Trailhead total in this PR.</li>
+<li>Arguing about the flag instead of measuring it. &quot;Only a flag&quot; and &quot;it is slow&quot; are both claims.</li>
+<li>Strengthening the rule in <code>REVIEW.md</code> alone, in a file the next PR can edit.</li>
+<li>Reading the unchanged-diff skip as &quot;Review is broken&quot;.</li>
+<li>Merging either PR because the re-review is clean.</li>
+</ul>
+<h4>Recovery moves</h4>
+<ul>
+<li>No Review permission: you can still open the PR and read existing findings; use the reference findings and say so in your update.</li>
+<li>The review does not report F2: quote the <code>toCents</code> line into chat yourself and ask; then the test decides, not the chat.</li>
+<li>The author will not accept your reply on F3: offer the statement count from <code>src/db.ts</code> statement counting, or keep the change and let the evidence decide.</li>
+<li>Running out of time at T+50: ship the test first. A failing test is evidence; an unfinished fix is not.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<ul>
+<li><strong>Technical (the author disputes the flag — who wins?):</strong> Acknowledge that a flag is not a bug and the author knows the code. Boundary: neither of you wins by rank — the evidence does. Evidence: the loop ran inside the transaction after the inventory updates, so every extra statement kept reserved rows locked longer. Moving it out of the transaction costs nothing and keeps the statement count inside the transaction equal to main. Offer: if he still disagrees, measure checkout latency with the statement counter before and after, and decide on the number.</li>
+<li><strong>Commercial (review slows us down before Black Friday):</strong> Acknowledge that the calendar is real. Boundary: the review took minutes; a one-cent error on every two-sock Trailhead order would take finance weeks to reconcile, and the price override is a free-discount hole. Evidence: two Severe findings, one test that failed before and passes now, and a re-review with nothing new. Offer: keep the highest effort level for money and tax paths only, and use the default for everything else.</li>
+</ul>
+</div><div data-slot="debrief"><ul>
+<li>Which finding would you have missed if you had trusted the PR&#39;s green tests?</li>
+<li>What did the chat answer get right, and what did you still have to check with a test?</li>
+<li>Where should a rule live so that the PR it governs cannot change it?</li>
+</ul>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/work-with-devin/devin-review" rel="noopener">Devin docs — Devin Review (Bugs, Flags, Security, chat, review rules)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/release-notes/2026#october-5-2026" rel="noopener">Devin release notes — Devin Review effort levels (5 Oct 2026)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/release-notes/2026#october-19-2026" rel="noopener">Devin release notes — Rules editor for Devin Review (19 Oct 2026)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/release-notes/overview#august-14-2026" rel="noopener">Devin release notes — re-review skipped when the diff is unchanged (14 Aug 2026)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — Voice mode</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/skills" rel="noopener">Devin docs — Skills (cloud discovery and @skills: invocation)</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/06-review-remediation/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>

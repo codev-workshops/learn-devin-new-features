@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 13 — Expo mobile on iOS and Android — order status on both phones · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 13</p>
+<h1>Lab 13 — Expo mobile on iOS and Android — order status on both phones</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Devin on Linux with the Android emulator (KVM), a macOS child session with Xcode and the iOS Simulator, multi-document blueprints with runs-on, Continuous Native Generation (expo prebuild), an optional Swift Expo module with a JS fallback</li>
+<li><b>Duration:</b> 180 min</li>
+<li><b>Difficulty:</b> advanced</li>
+<li><b>Prerequisites:</b> Repo cloned, Node 22, `pnpm install` done at the root; Lab 00 warm-up done once (framing stems and the update skeleton); Linux path: a Devin session whose VM exposes `/dev/kvm` and the Android SDK (emulator, platform-tools, one x86_64 system image) — see `docs/blueprint.proposed.mobile.yaml`; Optional iOS path: permission to start a Devin session with platform `macos` (Xcode 16.1 or newer, iOS Simulator)</li>
+<li><span class="badge badge-fixture">Credentials: fixture</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<blockquote>
+<p>&quot;Customers keep emailing to ask whether their order has left the warehouse. Put &#39;packed&#39; and &#39;shipped&#39; on their phone, and show me it works on both phones before we tell anyone.&quot;
+— Harbourline product owner, mobile roadmap review</p>
+</blockquote>
+<p>Harbourline&#39;s support inbox gets roughly 140 &quot;where is my order?&quot; emails a week across Lumen Home and Trailhead Supply, and about two thirds of them are for orders that are already packed or shipped. The product owner wants the order-status screen in the Harbourline mobile app (<code>apps/mobile</code>, Expo SDK 54) to be the place customers look first: the status pill and the event timeline for <code>packed</code> and <code>shipped</code> orders, on Android and on iOS.</p>
+<p>The product owner has been burned before: last quarter a &quot;works on my machine&quot; demo turned out to be an Android-only build, and iOS customers got a crash on launch. This time they want proof from both platforms — screenshots of the same order in the same state — and a plain list of what was not tried.</p>
+<p>The app already has a cart that triggers a small &quot;add to cart&quot; haptic on iOS through an optional native module, <code>apps/mobile/modules/harbourline-haptics</code>. Android has no such module and must keep working. Treat the haptic as nice-to-have: the order-status proof matters more.</p>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>Product owner (mobile)</strong> — decides whether this ships. Wants one update with proof on both platforms, the risks and one clear ask. Not an engineer.</li>
+<li><strong>Mobile tech lead</strong> — cares that <code>android/</code> and <code>ios/</code> stay generated (Continuous Native Generation) and that the repo setup is reproducible for the next engineer, not just on your session.</li>
+<li><strong>Platform finance</strong> — pays for the machines. Will ask which parts needed a Mac and for how long.</li>
+</ul>
+<p>Constraints:</p>
+<ul>
+<li>Expo SDK 54, React Native 0.81, Expo Router. No SDK upgrade this week.</li>
+<li><code>android/</code> and <code>ios/</code> are generated by <code>pnpm exec expo prebuild</code> and are never committed or hand-edited.</li>
+<li>The app runs in mock mode by default (<code>EXPO_PUBLIC_API_MODE=mock</code>): no backend, no credentials, no real customer data.</li>
+<li>The planted defects listed in <code>packages/contracts/seed-spec.yaml#planted_edge_cases</code> are features of the course. Do not fix one on <code>main</code>.</li>
+<li>iOS work is optional for the lab (it needs a macOS machine). If you cannot get one, the Android half plus an honest &quot;not exercised&quot; list is a complete answer.</li>
+</ul>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>pnpm lab:reset -- 13</code></pre><pre><code>rm -rf apps/mobile/android apps/mobile/ios apps/mobile/dist</code></pre><pre><code>pnpm --filter @harbourline/mobile run build</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 13</code> to run these steps for you, and <code>@skills:lab-cleanup 13</code> when you finish. From a terminal: <code>pnpm lab:start -- 13</code> and <code>pnpm lab:cleanup -- 13</code>.</p></div><h3>What “clean” looks like</h3><p>No <code>apps/mobile/android/</code> or <code>apps/mobile/ios/</code> folder exists, <code>git status</code> is clean, and <code>pnpm --filter @harbourline/mobile run build</code> ends with an Android <code>expo export</code> into <code>apps/mobile/dist</code>. No emulator is running yet (<code>adb devices</code> lists nothing). Without Docker, skip the first command: mock mode needs only Node.</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when all of the following are observable by someone who was not on the call. Items 1–5 and 9–11 can be met on Linux with zero credentials; items 6–8 need a macOS machine and are optional.</p>
+<ol>
+<li><strong>Android build.</strong> A Release (or development) build of <code>apps/mobile</code> is installed on an Android emulator started with KVM acceleration. The emulator command line and <code>adb devices</code> output are in <code>labs/13-expo-mobile/MOBILE-REPORT.md</code>.</li>
+<li><strong>Android order status.</strong> A screenshot of the order-detail screen for a <code>packed</code> or <code>shipped</code> order (status pill and timeline visible), taken with <code>adb exec-out screencap -p</code>.</li>
+<li><strong>Android fallback.</strong> A screenshot of the Cart tab showing <code>Haptics: JS fallback (no-op)</code> after adding an item, so the native module&#39;s absence is visible and harmless.</li>
+<li><strong>Generated native folders stay generated.</strong> <code>git status</code> shows no <code>apps/mobile/android/</code> or <code>apps/mobile/ios/</code> files, and the report says how you would detect and recover from prebuild drift.</li>
+<li><strong>Gates.</strong> <code>pnpm test</code>, <code>pnpm lint</code> and <code>pnpm build</code> in the <code>apps/mobile</code> workspace pass; paste the summary lines.</li>
+<li><strong>iOS build (optional).</strong> The same app built for the iOS Simulator on a macOS machine. The report names the Xcode version and how it was selected (<code>DEVELOPER_DIR</code> or <code>xcode-select</code>).</li>
+<li><strong>iOS order status (optional).</strong> A Simulator screenshot of the same order in the same status as item 2.</li>
+<li><strong>Native module (optional).</strong> A Simulator screenshot of the Cart tab showing <code>Haptics: native (harbourline-haptics)</code>, and the line in <code>ios/Podfile.lock</code> that proves <code>HarbourlineHaptics</code> was autolinked.</li>
+<li><strong>Reproducible setup.</strong> A blueprint (or a proposed one in the report) with one document per platform, each starting with its <code>runs-on:</code> line, containing only commands you actually ran. Say which document a future Android session and a future iOS session would boot from.</li>
+<li><strong>Credential and platform honesty.</strong> A short &quot;not exercised&quot; list: at least physical-device haptics and store signing, plus anything else you skipped.</li>
+<li><strong>Articulation drill completed</strong> with the voice coach (section 8) or against a timer, and the gap report (or your self-score) saved as <code>labs/13-expo-mobile/MOBILE-REPORT.coach.md</code>. Do not commit it.</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Mock API (`EXPO_PUBLIC_API_MODE=mock`) — default path</td><td>required</td><td>`MockStore` serves the seed in-process; the Orders tab lists the demo customer&#39;s orders including `packed` and `shipped` ones.</td><td>Zero credentials, no backend. Every Android criterion can be met on this path.</td></tr><tr><td>Android emulator on the Linux session VM</td><td>required</td><td>`labs/13-expo-mobile/evidence/android/` holds reference screenshots from the course build.</td><td>Needs `/dev/kvm`; without it the emulator is too slow to be useful and you stop at `pnpm build` (expo export).</td></tr><tr><td>macOS Devin session (Xcode, iOS Simulator) — optional</td><td>optional</td><td>`labs/13-expo-mobile/evidence/ios/` holds the reference Simulator screenshots and build notes from the course build.</td><td>Org must allow the `macos` platform. Without it, items 6–8 are &#39;not exercised&#39; and the lab is still complete.</td></tr><tr><td>Live `services/api` (`EXPO_PUBLIC_API_MODE=live`) — optional</td><td>optional</td><td>Mock mode stands in for it.</td><td>Needs `pnpm db:up`, migrate, seed and `pnpm --filter @harbourline/api run dev` (port 3001); the emulator reaches the host at `http://10.0.2.2:3001`.</td></tr></tbody></table><h3>Cannot be exercised without live credentials</h3><ul><li>Haptic feel on a physical iPhone (the Simulator cannot vibrate; it only proves the module is linked and called)</li><li>App Store / Play Store signing, TestFlight and EAS Build (cloud builds)</li><li>Live `services/api` mode on either platform in the reference run</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>snapshot-mismatch</code></td><td><span class="placeholder">facilitator action</span></td><td>T+10 min</td><td>Start the session from a snapshot built before the Android SDK step was added: `emulator -list-avds` is empty or the system image is missing. Decide whether to install by hand or fix the blueprint, and say which one the next engineer will thank you for.</td></tr><tr><td><code>prebuild-drift</code></td><td><span class="placeholder">facilitator action</span></td><td>T+45 min</td><td>Change `android.package` or add a plugin in `apps/mobile/app.json` after `android/` was generated. The next `expo run:android` uses the stale native project. Detect it and recover without hand-editing `android/`.</td></tr><tr><td><code>ios-only-native-dependency</code></td><td><span class="placeholder">facilitator action</span></td><td>T+60 min</td><td>The Cart tab must say `Haptics: JS fallback (no-op)` on Android. If the Android build fails on `harbourline-haptics`, the module&#39;s platform list or import path is wrong — explain why the JS fallback, not a platform `if`, keeps Android working.</td></tr><tr><td><code>xcode-version</code></td><td><span class="placeholder">facilitator action</span></td><td>iOS path, T+120 min</td><td>The macOS machine has more than one Xcode, or the default one is too old for Expo SDK 54. Select the right one with `DEVELOPER_DIR` (or `xcode-select`) and record which one in the report.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>This lab uses the four-part articulation drill with two think-aloud checkpoints, one per platform. The coach plays the Harbourline product owner: not an engineer, wants to see the same screen on two phones, and counts every hour of machine time.</p>
+<h5>60-second framing</h5>
+<p>Say what the customer gets before you say how. Stems you may use:</p>
+<ul>
+<li>&quot;Customers will see … on their phone, on … and …&quot;</li>
+<li>&quot;The proof is …&quot;</li>
+<li>&quot;I am using Devin&#39;s … because…&quot;</li>
+<li>&quot;You will know it works when…&quot;</li>
+</ul>
+<p>Sinhala-first note: lead with the outcome sentence. Do not start with the toolchain.</p>
+<h5>Think-aloud checkpoint (T+30, Android)</h5>
+<p>The coach asks where you are on Android. Use the four verbs: <em>I see… I think… I&#39;ll try… I&#39;ll check…</em>. Name the one thing that decided your next step. If a build is still running, say &quot;Give me ten seconds to read this&quot; and read the last log line.</p>
+<h5>Think-aloud checkpoint (T+120, iOS)</h5>
+<p>You have moved to the second platform. Say what is different there and what you carried over from Android. One platform per sentence; do not lose the thread between the two. End on a full stop, not on &quot;…right?&quot;.</p>
+<h5>Update to the product owner (3 minutes)</h5>
+<p>Skeleton: <strong>Outcome → Evidence → Risk → Next action → Ask.</strong> Show the evidence per platform. Give each risk its own sentence and say what was not tried. Close with the one decision you need. Drop fillers (&quot;actually&quot;, &quot;basically&quot;, &quot;so, yeah&quot;).</p>
+<h5>Objection round</h5>
+<p>The coach raises one commercial and one technical objection, in character, 90 seconds each. Reply pattern: acknowledge → boundary → evidence → offer. The objections are not printed here — that is the point.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>60-second framing</td><td>framing</td><td>—</td><td>1 min</td></tr><tr><td>Think-aloud checkpoint (T+30, Android)</td><td>checkpoint</td><td>T+30 min</td><td>45 s</td></tr><tr><td>Think-aloud checkpoint (T+120, iOS)</td><td>checkpoint</td><td>T+120 min</td><td>45 s</td></tr><tr><td>Update to the product owner</td><td>update</td><td>—</td><td>3 min</td></tr><tr><td>Objection 1 (commercial)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 (technical)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-13-expo-mobile &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><h4>Feature fit</h4>
+<p>One Devin session cannot run both simulators: the Android emulator needs a Linux (or any KVM-capable) VM, and the iOS Simulator only exists inside Xcode on macOS. The Devin features that close the gap are a Linux session with the Android emulator, a <strong>macOS child session</strong> (platform <code>macos</code>) for Xcode, and a <strong>multi-document blueprint</strong> where each document starts with <code>runs-on: linux</code> or <code>runs-on: macos</code>, so each platform gets its own snapshot. Expo&#39;s Continuous Native Generation keeps <code>android/</code> and <code>ios/</code> out of git, so both machines regenerate the same native projects from <code>app.json</code>.</p>
+<h4>Worked approach</h4>
+<ol>
+<li><strong>Frame first (60 s).</strong> &quot;Customers will see packed and shipped on the order screen, on Android and iOS. The proof is the same order on both simulators, side by side.&quot;</li>
+<li><strong>Android on the Linux session.</strong> Check <code>ls -l /dev/kvm</code> and <code>emulator -list-avds</code>. Boot headless: <code>emulator -avd &lt;avd&gt; -no-window -gpu swiftshader_indirect -no-snapshot -accel on</code>, then <code>adb wait-for-device</code> and poll <code>getprop sys.boot_completed</code>.</li>
+<li><code>cd apps/mobile &amp;&amp; pnpm exec expo run:android --variant release</code> — this runs <code>expo prebuild</code> (generates <code>android/</code>), Gradle, and installs on the emulator. Release bundles the JS, so no Metro server has to stay up.</li>
+<li>Drive the flow: pick Lumen Home → add an item → Cart says <code>Haptics: JS fallback (no-op)</code> → Orders → open a <code>packed</code>/<code>shipped</code> order. <code>adb exec-out screencap -p &gt; order-android.png</code>.</li>
+<li><strong>iOS on a macOS child.</strong> Start one child session with platform <code>macos</code>, hand it a self-contained brief (branch name, commands, what to screenshot) and wait with <code>notify_on_response</code>. On the Mac: <code>export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer</code> (the reference Mac had GA Xcode 26.6 and a 27.0 RC; pin the GA one), <code>pnpm exec expo prebuild --platform ios --no-install</code>, <code>cd ios &amp;&amp; pod install</code>, <code>grep HarbourlineHaptics ios/Podfile.lock</code>, then <code>pnpm exec expo run:ios --configuration Release</code> or the equivalent <code>xcodebuild -workspace ios/Harbourline.xcworkspace -scheme Harbourline -sdk iphonesimulator -configuration Release build</code>, <code>xcrun simctl install booted …</code>, <code>xcrun simctl io booted screenshot order-ios.png</code>.</li>
+<li><strong>Blueprint.</strong> Put only the commands that worked into two documents separated by <code>---</code>: Linux (Node 22, Android SDK, AVD, <code>pnpm install --frozen-lockfile</code>) and macOS (Node 22, Xcode selection, CocoaPods, <code>pnpm install --frozen-lockfile</code>, <code>expo prebuild --platform ios</code>, <code>pod install</code>). Apply it so the next session boots from the right snapshot.</li>
+<li><strong>Update (3 min).</strong> Outcome → evidence per platform → risks (snapshot mismatch, prebuild drift, physical-device feel untested) → next action → one ask.</li>
+</ol>
+<p>Reference run (course build, 22 Oct 2026): <code>labs/13-expo-mobile/evidence/README.md</code> and the screenshots next to it. Lumen Home order <code>LH-001004</code> is <code>packed</code> and <code>LH-001003</code> is <code>shipped</code> in the mock seed.</p>
+<h4>The injectors</h4>
+<ul>
+<li><strong>snapshot-mismatch</strong> — The snapshot predates the SDK step. Installing by hand works for you once; the next engineer pays again. Fix the Linux document of the blueprint, rebuild the snapshot, and say so in the update.</li>
+<li><strong>prebuild-drift</strong> — <code>android/</code> was generated from the old <code>app.json</code>. Recover with <code>pnpm exec expo prebuild --clean --platform android</code> (or delete <code>android/</code>), never by editing the generated project. Detect it by diffing <code>app.json</code> against the generated <code>applicationId</code>.</li>
+<li><strong>ios-only-native-dependency</strong> — <code>expo-module.config.json</code> lists only <code>apple</code>, and <code>requireOptionalNativeModule(&quot;HarbourlineHaptics&quot;)</code> returns <code>null</code> on Android, so <code>impact()</code> returns <code>false</code>. No <code>Platform.OS</code> branch is needed, and a missing module never throws.</li>
+<li><strong>xcode-version</strong> — Expo SDK 54 needs Xcode 16.1+. Pin it with <code>DEVELOPER_DIR</code> in the macOS document; <code>xcode-select -s</code> needs sudo and is global. The reference Mac had GA Xcode 26.6 plus a 27.0 RC; the GA one matched an installed Simulator runtime.</li>
+<li><strong>Podspec deployment target (found in the reference run)</strong> — <code>HarbourlineHaptics</code> was silently missing from <code>Podfile.lock</code> because its podspec asked for iOS 16.4 while the generated Podfile targets 15.1. <code>expo-modules-autolinking resolve</code> listed it, <code>use_expo_modules!</code> skipped it. Matching the podspec to 15.1 fixed it — always grep <code>Podfile.lock</code> before claiming the native module is in.</li>
+</ul>
+<h4>Pitfalls</h4>
+<ul>
+<li>Starting with &quot;I set up Gradle and CocoaPods…&quot; — the product owner hears toolchain, not customers.</li>
+<li>Trying to run the iOS Simulator on Linux, or the Android emulator without <code>/dev/kvm</code> (it boots in 10+ minutes, if at all).</li>
+<li>Committing <code>android/</code> or <code>ios/</code> &quot;to save time&quot;: the next prebuild silently disagrees with them.</li>
+<li>Calling the Simulator haptic &quot;tested&quot;. The Simulator proves the module is linked and called; the feel needs a physical iPhone.</li>
+<li>One blueprint document for both platforms: the macOS commands fail on Linux and vice versa.</li>
+<li>Keeping the Mac session alive while writing the report.</li>
+</ul>
+<h4>Recovery moves</h4>
+<ul>
+<li>Emulator stuck: <code>adb kill-server</code>, restart with <code>-no-snapshot -wipe-data</code>.</li>
+<li>Gradle out of memory on a small VM: <code>org.gradle.jvmargs=-Xmx4g</code> via <code>app.json</code> <code>expo-build-properties</code>, not by editing <code>android/</code>.</li>
+<li><code>pod install</code> fails on the Mac: <code>pod repo update</code>, then re-run prebuild with <code>--clean</code>.</li>
+<li>No macOS access: ship the Android half and list items 6–8 under &quot;not exercised&quot;; that is a complete answer.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<ul>
+<li><strong>&quot;macOS minutes are expensive.&quot;</strong> — &quot;I acknowledge that; Mac time costs more than Linux time. The boundary is that only the iOS build and the screenshots need the Mac; Android, tests, lint and the report all run on Linux. The evidence: in the reference run the macOS child was busy for well under an hour and stopped as soon as it pushed. I can offer to run the iOS check only on release candidates, not on every change.&quot;</li>
+<li><strong>&quot;Why can&#39;t one VM do both?&quot;</strong> — &quot;Fair question. The boundary is the vendors: Apple only ships the iOS Simulator inside Xcode on macOS, and the Android emulator needs KVM, which a macOS VM does not give us in the same way. The evidence is the blueprint: two documents, <code>runs-on: linux</code> and <code>runs-on: macos</code>, one snapshot each. I can offer one PR and one report that covers both, even though two machines did the work.&quot;</li>
+</ul>
+<h4>References</h4>
+<ul>
+<li>Devin docs — Environment configuration: <a href="https://docs.devin.ai/onboard-devin/environment-yaml" rel="noopener">https://docs.devin.ai/onboard-devin/environment-yaml</a></li>
+<li>Expo — Continuous Native Generation: <a href="https://docs.expo.dev/workflow/continuous-native-generation/" rel="noopener">https://docs.expo.dev/workflow/continuous-native-generation/</a></li>
+<li>Expo — Modules API: <a href="https://docs.expo.dev/modules/overview/" rel="noopener">https://docs.expo.dev/modules/overview/</a></li>
+<li>Android — Emulator acceleration: <a href="https://developer.android.com/studio/run/emulator-acceleration" rel="noopener">https://developer.android.com/studio/run/emulator-acceleration</a></li>
+</ul>
+</div><div data-slot="debrief"><ul>
+<li>Did your first sentence name the customer outcome on both platforms?</li>
+<li>Did you show the same order on both screens, or two different things?</li>
+<li>Could the next engineer boot both machines from your blueprint without asking you?</li>
+<li>Did you say what the Simulator cannot prove?</li>
+<li>How long did the Mac run, and could it have been shorter?</li>
+</ul>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/onboard-devin/environment-yaml" rel="noopener">Devin docs — Environment configuration (blueprints, multi-platform runs-on documents)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/release-notes/2026" rel="noopener">Devin release notes 2026 — macOS machines and multi-platform blueprints</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.expo.dev/workflow/continuous-native-generation/" rel="noopener">Expo docs — Continuous Native Generation (prebuild)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.expo.dev/modules/overview/" rel="noopener">Expo docs — Expo Modules API (native modules)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://developer.android.com/studio/run/emulator-acceleration" rel="noopener">Android developers — Configure hardware acceleration for the Android Emulator</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — Voice mode</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/skills" rel="noopener">Devin docs — Skills (@skills: invocation)</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/13-expo-mobile/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>

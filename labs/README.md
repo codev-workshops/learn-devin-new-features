@@ -2,7 +2,8 @@
 
 Static, promptless practice labs. Every lab is a folder `labs/NN-slug/` with five source
 files; `build.mjs` turns each one into a single self-contained HTML page and generates
-`labs/index.html` from the folders present.
+`labs/index.html` from the folders present. The rendered pages are committed, so they
+open straight from a clone.
 
 ```
 labs/
@@ -25,12 +26,14 @@ From the repo root (`labs` is an pnpm workspace) or from `labs/`:
 | Command | What it does |
 |---|---|
 | `pnpm labs:build` (root) / `pnpm build` (labs) | renders `labs/NN-slug/index.html` for every lab and `labs/index.html` |
-| `node labs/build.mjs --check` | runs every rule, writes nothing (use as a lint gate) |
+| `node labs/build.mjs --check` / `pnpm --filter @harbourline/labs run check` | runs every rule and fails if a committed page is missing, stale or orphaned; writes nothing (the labs `lint` gate) |
 | `pnpm test` (labs) | Vitest suite for the build rules and the dry-run harness |
 | `pnpm coach:dryrun -- <nn>` | validates `labs/<nn>-*/coaching/dryrun/` |
 | `node labs/coach-dryrun.mjs --render <report.json>` | prints the Markdown form of a report |
 
-Generated pages are git-ignored; open `labs/index.html` straight from `file://`.
+Generated pages are committed; open `labs/index.html` straight from `file://`. After editing
+any lab source, run `pnpm labs:build` and commit the regenerated `index.html` files with
+the change; `--check` (run by `pnpm lint`) names every page that is out of date.
 
 ## Page template
 

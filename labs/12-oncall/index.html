@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 12 — Oncall investigation — the 02:10 oversell page after the Lamp Week deploy · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 12</p>
+<h1>Lab 12 — Oncall investigation — the 02:10 oversell page after the Lamp Week deploy</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Devin Oncall (Alerts responder, PagerDuty trigger, runbook, incident report, Lite vs Ultra) with PagerDuty and Datadog MCPs — or the local fixture MCP shim</li>
+<li><b>Duration:</b> 150 min</li>
+<li><b>Difficulty:</b> advanced</li>
+<li><b>Prerequisites:</b> Repo cloned, `pnpm install` done at the root, Node 22; Lab 00 warm-up done once (framing stems and the update skeleton); Fixture path: the `fixtures/mcp` shim registered in Devin as a custom stdio MCP server from `fixtures/mcp/mcp.example.json` (no credentials); Optional live path: org admin access to Devin Oncall settings and a PagerDuty and/or Datadog MCP connection</li>
+<li><span class="badge badge-fixture">Credentials: fixture</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<p>It is 02:55 UTC and I am the incident commander for <strong>Harbourline</strong> tonight. PagerDuty woke our platform on-call at 02:10 with &quot;negative on-hand for SKU LH-LAMP-03&quot; — the Ember Table Lamp, the hero product of Lumen Home&#39;s <strong>Lamp Week</strong> flash sale. We had three units in the US-NJ warehouse. By the time I was escalated, <strong>40 customers had ordered and paid</strong> for a lamp we do not have: roughly <strong>$2,360</strong> of orders we cannot fulfil, before vouchers and care-team time. The webhook failure-rate monitor started warning at the same time.</p>
+<p>The Lamp Week release (<code>harbourline-api 2026.10.21-lampweek</code>) went out at 22:40 last night. Our on-call followed the runbook bookmarked on his phone, restarted the worker, corrected the stock count by hand and went back to bed. Twenty minutes later it paged again. This is our second overnight page in two weeks, and leadership is already asking whether flash sales should pause.</p>
+<p>We have just turned on <strong>Devin Oncall</strong>. I want it working this incident with you, not instead of you. By 09:00 I need: a clear statement of who is affected and how much it costs; the evidence that connects the page to a cause — monitor, incident, traces, code; the likely cause in words my merchandising lead understands; a mitigation that holds until the morning team is in; and a written incident report I can forward without editing. Tell me also how you set Devin up for this — how much of it you would run in the cheaper mode and why.</p>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>In the room (virtually):</strong> me (incident commander, Platform Ops); Sam Ortiz, the platform on-call who took the first page; Maya Perera, Lumen Home merchandising lead (joins at 08:00); the US-NJ warehouse shift lead; the PayGate integration owner.</li>
+<li><strong>Forbidden tonight:</strong> no deploy before 08:00 without my approval; <strong>no manual stock edits</strong> — that is what made the second page worse; nothing that touches production data; no fix to the code on <code>main</code> (proposals go in the report; demos on throwaway branches you close).</li>
+<li><strong>Site stays up:</strong> Lamp Week continues unless I decide otherwise; your mitigation must keep the storefront serving.</li>
+<li><strong>Evidence standard:</strong> every claim in the report points at something I can open — a monitor id, an incident log entry, a trace id, a file and line, a command output.</li>
+<li><strong>Deadlines:</strong> a first update at T+15 into the incident channel (or <code>labs/12-oncall/INCIDENT-UPDATES.md</code> if you have no channel), the incident report at <code>labs/12-oncall/INCIDENT-REPORT.md</code> by 09:00, post-incident review within three days. Do not commit either file.</li>
+<li><strong>Budget:</strong> you choose the session mode for each part of the work; be ready to defend the cost.</li>
+</ul>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>pnpm lab:reset -- 12</code></pre><pre><code>node fixtures/mcp/shim.mjs --call pagerduty_get_incident &#39;{&quot;incident_id&quot;:&quot;2187&quot;}&#39;</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 12</code> to run these steps for you, and <code>@skills:lab-cleanup 12</code> when you finish. From a terminal: <code>pnpm lab:start -- 12</code> and <code>pnpm lab:cleanup -- 12</code>.</p></div><h3>What “clean” looks like</h3><p><code>lab:reset</code> ends with the lab 12 starting state: LH-LAMP-03 on hand = 3, no negative inventory, no Lamp Week orders beyond the seed, PayGate knobs off. The shim returns incident 2187 in status <code>acknowledged</code>. <code>git status --short</code> is clean and there is no <code>labs/12-oncall/INCIDENT-REPORT.md</code>. Without Docker, skip the first command: the fixture path needs only the shim.</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when all of the following are observable by someone who was not on the call. Every item can be met on the fixture path with zero credentials.</p>
+<ol>
+<li><strong>A responder exists.</strong> A Devin Oncall responder of the Alerts type is configured for Harbourline (screenshot of the settings page), with its trigger (PagerDuty on the live path; manual on the fixture path), the repo, and a runbook attached. The page or a manual trigger started at least one investigation session (session link or screenshot).</li>
+<li><strong>Impact statement.</strong> <code>labs/12-oncall/INCIDENT-REPORT.md</code> opens with one paragraph naming the SKU, the number of affected orders and customers, the money at risk with its currency, and the window (first order beyond stock → page → re-page). Each number cites its source (a shim tool call, a metric point, a log entry).</li>
+<li><strong>Evidence chain.</strong> The report links, in order, the Datadog monitor (id and threshold), the PagerDuty incident (number, trigger, acknowledgement, the note at 02:20 and the re-trigger), at least one trace (trace id and the span attribute that matters), and the code path in <code>services/api</code> (file and function). A reader can follow the chain without asking you.</li>
+<li><strong>Likely cause, with its amplifier.</strong> The report states the primary cause and the second defect that made the numbers worse, each with one piece of evidence that would look different if you were wrong. &quot;A race condition&quot; on its own does not count.</li>
+<li><strong>Local reproduction.</strong> On a local stack, one injector run reproduces the primary cause and its <code>RESULT:</code> line is pasted into the report (on hand before and after, succeeded vs rejected). If you cannot run Docker, say so and cite the trace fixture instead.</li>
+<li><strong>Mitigation that respects the constraints.</strong> The report lists the mitigation until 08:00 — no deploy, no manual stock edit, site stays up — and how you would know it is holding (which series or monitor, what value). Code fixes appear only as follow-ups with an owner.</li>
+<li><strong>Runbook judgement.</strong> The report says which runbook you followed after the T+15 injector, which one you rejected, and the observation that decided it.</li>
+<li><strong>Alert storm absorbed.</strong> After the T+25 injector the report says whether the new alerts are one incident or several, and why.</li>
+<li><strong>Mode choice justified.</strong> One paragraph says which parts of the investigation ran (or would run) in Lite and which in a full mode, with one reason each and a rough cost comparison.</li>
+<li><strong>Updates sent.</strong> The T+15 update and the closing update exist (incidents channel thread or <code>labs/12-oncall/INCIDENT-UPDATES.md</code>), each following Outcome → Evidence → Risk → Next action → Ask.</li>
+<li><strong>Credential honesty.</strong> The report has a short &quot;not exercised&quot; list: which integrations were live, which were fixtures.</li>
+<li><strong>Articulation drill completed</strong> with the voice coach (section 8) or against a timer, and the gap report (or your self-score) saved as <code>labs/12-oncall/INCIDENT-REPORT.coach.md</code>. Do not commit it.</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Fixture MCP shim (`fixtures/mcp/shim.mjs`) — default path</td><td>required</td><td>It is the fixture: read-only tools for PagerDuty, Datadog, AWS, GCP, BigQuery and Google Workspace serving incident 2187. Smoke-test with `node fixtures/mcp/shim.mjs --list`.</td><td>Zero credentials and zero environment variables. Every acceptance criterion can be met on this path.</td></tr><tr><td>PagerDuty (Devin Oncall trigger + PagerDuty MCP) — optional</td><td>optional</td><td>`pagerduty_*` shim tools return incident 2187, its log entries, grouped alerts and the on-call schedule; `observability/pagerduty/webhook-incident-triggered.json` is the v3 webhook a live trigger would deliver.</td><td>Live: connect PagerDuty in Settings → Integrations and add it as a responder trigger. Needs a PagerDuty account; nothing in this repo assumes one.</td></tr><tr><td>Datadog MCP — optional</td><td>optional</td><td>`datadog_*` shim tools: monitors 48213771 and 48213802, the Inventory &amp; Payments dashboard, the on-hand and webhook failure-rate series, worker logs and deploy events.</td><td>Live: org MCP connection with a read-only Datadog key; the monitor and dashboard JSON in `observability/datadog/` can be imported into a sandbox org.</td></tr><tr><td>AWS, GCP, BigQuery, Google Workspace MCPs — optional</td><td>optional</td><td>`aws_*`, `gcp_*`, `bigquery_*` and `workspace_*` shim tools (ECS deployment of the Lamp Week build, Pub/Sub backlog, `orders_daily`, the merchandiser sheet and the incident Doc).</td><td>Useful for the deploy timeline and the order count; never required.</td></tr><tr><td>Slack or Teams incidents channel — optional</td><td>optional</td><td>Write the T+15 and closing updates into `labs/12-oncall/INCIDENT-UPDATES.md` instead of a channel.</td><td>A live incidents channel needs the Slack (or Teams) integration and a test channel; do not post into a real one.</td></tr></tbody></table><h3>With fixtures only</h3><p>With the shim alone you get the whole incident as the responder would have seen it at 02:55: the page, the timeline (including the on-call&#39;s notes), the monitors and series, worker logs, OTLP traces, the deploy event, the runbooks and the draft incident Doc. You configure the Devin Oncall responder in settings but trigger it by hand (or start an ordinary session with the same instructions) instead of from a real page. The local API and <code>scenarios/</code> reproduce the cause on your machine.</p>
+<h3>Cannot be exercised without live credentials</h3><ul><li>A real PagerDuty page triggering a Devin Oncall responder (fixture path triggers by hand)</li><li>Live Datadog, AWS, GCP, BigQuery and Google Workspace MCP calls</li><li>Posting into a real incidents channel in Slack or Teams</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>wrong-runbook</code></td><td><span class="placeholder">facilitator action</span></td><td>T+15 min</td><td>The on-call hands your responder the runbook they used at 02:20 and asks you to follow it. It is not the only runbook for this monitor. Your T+15 update must say which runbook you are following and why.</td></tr><tr><td><code>alert-storm</code></td><td><span class="placeholder">facilitator action</span></td><td>T+25 min</td><td>The incident&#39;s alert list grows: more Lamp Week SKUs and the webhook failure-rate monitor page within minutes (`pagerduty_list_incident_alerts`; facilitator may copy ALRT03 for LH-LAMP-02 and LH-BNDL-01 as described in `observability/pagerduty/alerts-lamp-week.json`). Decide whether this is one incident or several, and say so.</td></tr><tr><td><code>oversell</code></td><td><span class="placeholder">facilitator action</span></td><td>any time after reset</td><td>`scenarios/oversell.sh --sku LH-LAMP-03 --concurrency 20` reproduces the symptom on your local API: several checkouts succeed against 3 units and on hand goes negative.</td></tr><tr><td><code>duplicate-webhook</code></td><td><span class="placeholder">facilitator action</span></td><td>T+40 min</td><td>`scenarios/duplicate-webhook.sh` redelivers an identical `payment.succeeded`; on a local stack with the worker the order is confirmed twice and stock drops twice. Without the worker it exits 4 and the logs and traces fixtures carry the evidence.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>This lab uses the incident version of the four-part articulation drill. The coach plays the Harbourline incident commander: tired, precise, short on patience for jargon. Incident voice means short sentences, the number first, and no speculation without a label (&quot;likely&quot;, &quot;confirmed&quot;).</p>
+<h5>45-second incident framing</h5>
+<p>Shorter than usual — an incident commander gives you less than a minute. Stems you may use:</p>
+<ul>
+<li>&quot;Right now, … customers are affected by … It is costing …&quot;</li>
+<li>&quot;What I know for sure is… What I do not know yet is…&quot;</li>
+<li>&quot;I am using Devin to… because…&quot;</li>
+<li>&quot;I will call it mitigated when…&quot;</li>
+</ul>
+<p>Sinhala-first note: say the impact first. Do not build up through the timeline (&quot;first the deploy, then the newsletter, then…&quot;) before saying what is broken.</p>
+<h5>T+15 incident update (2 minutes)</h5>
+<p>The coach asks for the first update as if you were posting it to the incident channel. Skeleton: <strong>Outcome → Evidence → Risk → Next action → Ask.</strong> Use &quot;confirmed&quot; and &quot;suspected&quot; explicitly. One number per sentence. If a runbook changed your plan, say which one and why in one sentence.</p>
+<h5>Think-aloud checkpoint (T+60)</h5>
+<p>When the coach asks what you are looking at and what you will check next, use the four verbs: <em>I see… I think… I&#39;ll try… I&#39;ll check…</em>. If you need to read a log, say &quot;Give me ten seconds to read this&quot; rather than going silent. End on a full stop, not on &quot;…no?&quot;.</p>
+<h5>Closing update (3 minutes)</h5>
+<p>The handover to the morning team. Same skeleton, plus the decision you need from the incident commander. Breathe after each heading word. Drop fillers (&quot;actually&quot;, &quot;basically&quot;, &quot;so, yeah&quot;).</p>
+<h5>Objection round</h5>
+<p>The coach raises one commercial and one technical objection, in character, 90 seconds each. Reply pattern: acknowledge → boundary → evidence → offer. The objections are not printed here — that is the point.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>45-second incident framing</td><td>framing</td><td>—</td><td>45 s</td></tr><tr><td>T+15 incident update</td><td>update</td><td>T+15 min</td><td>2 min</td></tr><tr><td>Think-aloud checkpoint (T+60)</td><td>checkpoint</td><td>T+60 min</td><td>45 s</td></tr><tr><td>Closing update</td><td>update</td><td>—</td><td>3 min</td></tr><tr><td>Objection 1 (commercial)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 (technical)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-12-oncall &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><h4>Feature fit</h4>
+<p>This is an <strong>incident</strong>, not a bug ticket: the job tonight is impact, evidence, mitigation and a report, in that order. Devin Oncall fits because an <strong>Alerts</strong> responder is built for exactly that flow (&quot;assessing impact and severity quickly, then finding the root cause and a mitigation&quot;), it can start from a PagerDuty trigger, and it reads telemetry through MCP connectors you choose per responder. On the fixture path the <code>fixtures/mcp</code> shim stands in for PagerDuty, Datadog, AWS, GCP, BigQuery and Workspace, so the same investigation runs with zero credentials. A plain session plus the shim would also work, but you would lose the responder&#39;s trigger, connectors and runbook settings — the reusable part the incident commander actually bought.</p>
+<p>Mode choice: Oncall responders and incident investigations can run in <strong>Lite</strong> (release notes, 21 Oct 2026). Incident settings split the main incident session, the initial investigation and thread sessions. A defensible split here: Lite for the bounded, read-only triage (pull the incident, the monitor, the series, count orders — narrow, cheap, fast) and for thread questions; a full mode for the root cause, which crosses three systems (API reservation code, PayGate webhooks, worker) and needs the local reproduction. Say what you would lose in Lite (depth across services) and what you would waste in a full mode (ACUs on fetching fixtures).</p>
+<h4>Worked approach</h4>
+<ol>
+<li><strong>Set up.</strong> Register the shim as a custom stdio MCP server (<code>fixtures/mcp/mcp.example.json</code>) and create an Alerts responder: repo <code>codev-workshops/learn-devin-new-features</code>, connectors = the shim (or PagerDuty + Datadog live), runbook = the steps that are specific to Harbourline (where the incident Doc lives, no manual stock edits, escalate to the incident commander when orders exceed units by more than 10). On the fixture path, trigger it by hand with the incident number.</li>
+<li><strong>Impact first (T+0–10).</strong> <code>pagerduty_get_incident</code> (2187, created 02:10:14, <code>-37</code> on hand), <code>datadog_query_metrics</code> for <code>harbourline.inventory.on_hand{sku:LH-LAMP-03}</code> (3 at the deploy, negative from 00:50, the hand correction to 50 at 02:31, negative again by 02:52), and the orders count (BigQuery <code>orders_daily</code> or the local API). Result: <strong>40 paid orders against 3 units: $1,888.00 USD charged</strong> (40 × $47.20, the Lamp Week price of 20% off $59.00; <code>orders_daily</code> shows $188.80 on 21 Oct plus $1,699.20 on 22 Oct). The brief&#39;s &quot;roughly $2,360&quot; is the same 40 lamps at list price; quote the charged figure and say which one you are using. 37 customers will not get a lamp unless stock arrives.</li>
+<li><strong>Timeline.</strong> <code>pagerduty_list_incident_log_entries</code>: trigger 02:10, ack 02:13, the on-call&#39;s note at 02:20 citing RB-101, resolve 02:31 after the manual correction, re-trigger 02:52 at <code>-3</code>, escalation 02:55. The deploy event (<code>datadog_list_events</code> / AWS ECS) puts <code>harbourline-api 2026.10.21-lampweek</code> at 22:40.</li>
+<li><strong>Evidence chain.</strong> Monitor <code>48213771</code> (<code>on_hand &lt; 0</code>, its message links RB-102) → incident 2187 → <code>traces-oversell-checkout.json</code>: three <code>checkout.reserve</code> spans in the same second, each with <code>inventory.available_read = 3</code> and a <code>SELECT … FROM inventory</code> without <code>FOR UPDATE</code> → <code>services/api/src/routes/checkout.ts</code>, the reservation loop that reads availability then writes <code>reserved + n</code>.</li>
+<li><strong>Amplifier.</strong> Monitor <code>48213802</code> (webhook failure rate warning) and <code>datadog_search_logs</code> for the worker: <code>evt_9f2a7c01</code> for order <code>LH-100611</code> processed twice, stock decremented twice, two confirmation e-mails. <code>traces-duplicate-webhook.json</code> shows attempts 1 and 2 both decrementing. Cause in plain words: <em>&quot;checkout lets several customers buy the last lamp at the same moment, and when the payment provider sends the same &#39;paid&#39; message twice we count the sale twice.&quot;</em></li>
+<li><strong>Reproduce locally (optional, needs Docker).</strong> <code>pnpm lab:reset -- 12</code>, then <code>scenarios/oversell.sh --sku LH-LAMP-03 --concurrency 20</code>; paste the <code>RESULT:</code> line. <code>scenarios/duplicate-webhook.sh</code> exits 4 without the worker — cite the log and trace fixtures instead.</li>
+<li><strong>Mitigate without a deploy, and check what the runbook promises against the code.</strong> RB-102 step 3 says that raising <code>safetyStock</code> makes the storefront show out of stock. It does not: <code>availability()</code> in <code>services/api/src/services/catalog.ts</code> only returns <code>out_of_stock</code> at <code>available &lt;= 0</code>, and the <code>POST /checkout</code> reservation loop checks raw availability alone. Ending the Lamp Week list (<code>activeTo</code> = now, step 6) does not stop sales either, because <code>currentPrice</code> falls back to <code>lumen-home-base</code>. The lever that works and stays reversible is <code>PUT /admin/price-lists/lamp-week-2026</code> and <code>PUT /admin/price-lists/lumen-home-base</code>, each re-sending its current entries <strong>minus</strong> <code>LH-LAMP-03</code>. With no active price, <code>POST /carts/{id}/lines</code> returns 404 for the lamp while the rest of the storefront and Lamp Week keep running. Carts that already hold the lamp can still check out, because checkout uses the cart&#39;s stored unit price. Name that residual risk, watch <code>harbourline.inventory.on_hand{sku:LH-LAMP-03}</code> and the checkout-outcome panel, and if paid lamp orders keep arriving, hand the incident commander the choice of an approved early deploy of the guarded decrement. Afterwards, restore both lists from the saved <code>GET /admin/price-lists</code> output. No stock edit, no restart.</li>
+<li><strong>Report.</strong> Fill <code>infra/workspace/incident-doc-2187.md</code>&#39;s TODO sections into <code>labs/12-oncall/INCIDENT-REPORT.md</code>: impact, timeline, evidence chain, likely cause + amplifier, mitigation, follow-ups with owners (row lock or atomic guarded decrement on reservation → W1-api owner; idempotent webhook consumer keyed on <code>event_id</code> → worker owner; affected-order list to merchandising at 08:00), and the not-exercised list.</li>
+</ol>
+<p>Sample instruction for the responder&#39;s first session (blockquote, not a prompt block):</p>
+<blockquote>
+<p>Incident 2187 (negative on-hand for LH-LAMP-03). Read-only. First give me impact: paid orders since the 22:40 deploy vs units on hand, money at risk. Then the evidence chain monitor → incident → trace → code with ids. Do not edit stock, do not deploy, do not push to main. Use RB-102; tell me if any runbook contradicts the traces.</p>
+</blockquote>
+<h4>The two injectors</h4>
+<ul>
+<li><strong>Wrong runbook (T+15).</strong> RB-101 blames an inventory cache and says restart the worker and correct stock by hand. Three observations refute it: RB-102 states the worker has had no inventory cache since 2026.07; the monitor&#39;s own message links RB-102; and the 02:31 hand correction was followed by a re-trigger at 02:52 — exactly what RB-102 predicts. Switch runbooks, say so in the T+15 update, and propose retiring RB-101 as a follow-up.</li>
+<li><strong>Alert storm (T+25).</strong> The extra alerts are the same incident: same deploy, same reservation path, same window; the webhook failure-rate alert is the amplifier, not a second cause. Group them under 2187, list each SKU in the impact table, and escalate per RB-102 (more than one SKU affected).</li>
+</ul>
+<h4>Pitfalls</h4>
+<ul>
+<li>Leading with the timeline instead of the impact.</li>
+<li>&quot;It&#39;s a race condition&quot; without the trace attribute that proves it, or without the webhook amplifier.</li>
+<li>Following RB-101 because the on-call already did — or correcting stock by hand &quot;just to stop the page&quot;.</li>
+<li>Fixing <code>checkout.ts</code> on <code>main</code> at 03:00. The fix is a follow-up PR with review, after 08:00, on a branch.</li>
+<li>Running everything in a full mode (cost) or everything in Lite (the cross-service cause gets a shallow answer).</li>
+<li>Claiming a live PagerDuty trigger when you triggered by hand on the fixture path.</li>
+</ul>
+<h4>Recovery moves</h4>
+<ul>
+<li>If the responder starts following RB-101: interrupt with the re-trigger evidence (02:31 → 02:52) and point it at RB-102.</li>
+<li>If the order count disagrees between sources, report the lower bound with its source and say which number is pending.</li>
+<li>If Docker is unavailable, the trace and log fixtures are the evidence; say so in the report.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<ul>
+<li><strong>On escalating to a human sooner:</strong> acknowledge the 45 minutes the page sat with one person; boundary — Devin Oncall does not replace the escalation policy, the escalation rule lives in RB-102 and the responder&#39;s runbook (&quot;more than one SKU or orders exceed units by more than 10 → incident commander&quot;); evidence — by 02:15 the series already showed orders far beyond 3 units, which that rule would have caught; offer — add the rule to the responder runbook and a PagerDuty escalation condition, and review it at the post-incident meeting.</li>
+<li><strong>On the wrong runbook:</strong> acknowledge that RB-101 was handed over first; boundary — a runbook is guidance, telemetry wins when they disagree; evidence — no cache since 2026.07, the monitor links RB-102, and the manual correction re-fired in 21 minutes; offer — retire RB-101, and give the responder a runbook that names RB-102 only.</li>
+</ul>
+<h4>References</h4>
+<ul>
+<li>Devin Oncall — <a href="https://docs.devin.ai/product-guides/devin-oncall" rel="noopener">https://docs.devin.ai/product-guides/devin-oncall</a></li>
+<li>PagerDuty integration — <a href="https://docs.devin.ai/integrations/pagerduty" rel="noopener">https://docs.devin.ai/integrations/pagerduty</a></li>
+<li>Release notes 2026 (Devin Oncall GA, 19 Oct; Lite mode in Devin Oncall, 21 Oct) — <a href="https://docs.devin.ai/release-notes/2026" rel="noopener">https://docs.devin.ai/release-notes/2026</a></li>
+<li>MCP — <a href="https://docs.devin.ai/work-with-devin/mcp" rel="noopener">https://docs.devin.ai/work-with-devin/mcp</a></li>
+</ul>
+</div><div data-slot="debrief"><p>Strong runs read like an incident channel: number first, confirmed vs suspected, one owner per follow-up. The skill is restraint — mitigation without a deploy, a report a non-engineer can forward, and an honest list of what was fixture and what was live.</p>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/product-guides/devin-oncall" rel="noopener">Devin docs — Devin Oncall (responders, triggers, responder settings, incidents and their modes, reports)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/integrations/pagerduty" rel="noopener">Devin docs — PagerDuty integration</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/release-notes/2026" rel="noopener">Devin release notes 2026 — Devin Oncall generally available (Oct 19) and Lite mode for Oncall responders and incident investigations (Oct 21)</a> <span class="placeholder">(Oct 19 and Oct 21, 2026)</span></li><li><a href="https://docs.devin.ai/work-with-devin/mcp" rel="noopener">Devin docs — MCP (custom stdio servers, org connections)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/use-cases/tutorials/mcp-use-cases" rel="noopener">Devin docs — MCP use cases (Datadog, PagerDuty, AWS, BigQuery)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — Voice mode</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/skills" rel="noopener">Devin docs — Skills (@skills: invocation)</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/12-oncall/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 10 — the package registry and the PayGate sandbox, nothing else — a security floor every session inherits · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 10</p>
+<h1>Lab 10 — the package registry and the PayGate sandbox, nothing else — a security floor every session inherits</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Enterprise guardrails: Security Profiles (network allowlist, MCP allowlist, Devin MCP read-only, git access level, GitHub CLI token), mandatory vs recommended bindings, child-session and snapshot-build resolution, running-session timing, and AI Guardrails message screening</li>
+<li><b>Duration:</b> 75 min</li>
+<li><b>Difficulty:</b> advanced</li>
+<li><b>Prerequisites:</b> Lab 01 done (blueprint, AGENTS.md and skills), so you know what a snapshot build installs; Repo cloned, `pnpm install` done at the root (the offline resolver and its tests run under `labs/`); A Devin account. Enterprise-admin or organization-admin rights are needed only to save and bind profiles; without them you take the observer path; Optional: access to the Devin API, to bind a profile to snapshot builds</li>
+<li><span class="badge badge-fixture">Credentials: fixture</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<p>Hi — I&#39;m the CISO at Harbourline. Devin sessions now run for both brands, <strong>Lumen Home</strong> and <strong>Trailhead Supply</strong>, every day, and I have no written answer to the first question my auditors ask: <em>where can those machines talk to, and who decides?</em></p>
+<p>Here is what I will sign:</p>
+<ol>
+<li><strong>Two destinations, nothing else.</strong> A session may install packages from the public package registry (<code>registry.npmjs.org</code>) and call the PayGate <strong>sandbox</strong>. Not production PayGate, not GitHub&#39;s API, not random websites, and no MCP servers until we approve one.</li>
+<li><strong>Nobody switches it off.</strong> A developer, a team lead or a session choosing &quot;no profile&quot; must not get around it. Teams may be stricter than me; never looser.</li>
+<li><strong>Robots are stricter than people.</strong> The webhook-triage automation reads code and reports; it does not push, and it does not create other sessions.</li>
+<li><strong>No escape hatch through delegation.</strong> If a session spins up helper sessions, they live under the same rules.</li>
+<li><strong>Screen what comes in.</strong> People and PR comments will try to talk Devin into leaking things or skipping review. I want to know when that happens, and to stop the obvious ones.</li>
+<li><strong>Tell me when a change lands.</strong> If I tighten the rules at 3 p.m., I need to know which sessions are still on the old rules and for how long.</li>
+</ol>
+<p>You have seventy-five minutes. Finish with a three-minute update I can repeat to the audit committee in plain language — I care about the difference between what we <em>require</em> and what we merely <em>suggest</em>.</p>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>The CISO</strong> (the coach) signs off. She reads the policy matrix and the resolver output, not your prompts. She will ask what is enforced, by whom, and from when.</li>
+<li><strong>The platform lead</strong> wants <code>pnpm install</code> to keep working in every session and in snapshot builds, and will push back on anything that slows teams down.</li>
+<li><strong>The payments lead</strong> needs the PayGate sandbox reachable from sessions and from the webhook-triage automation&#39;s investigations only when it needs them.</li>
+<li><strong>The enterprise admin</strong> is the only person who can save an enterprise-wide profile or change guardrail settings. You may not be that person: if you are not an admin, you work offline and hand the admin a change request.</li>
+<li><strong>Forbidden:</strong> changes on <code>main</code>, editing <code>packages/contracts/</code>, binding a draft profile to the whole organization before it has been resolved offline, testing against production PayGate, and putting any token in a profile, a fixture or a commit.</li>
+<li><strong>Output:</strong> your policy matrix as a JSON world in <code>~/lab10/</code>, the resolver output for every target, the probe output from one of your own sessions, a guardrail action table for the three messages, and a one-page change request for the admin. Keep all of it out of commits.</li>
+</ul>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>git switch main &amp;&amp; git status --short</code></pre><pre><code>git branch --list &#39;lab10/*&#39; | xargs -r git branch -D</code></pre><pre><code>rm -rf ~/lab10</code></pre><pre><code>pnpm lab:reset -- 10</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 10</code> to run these steps for you, and <code>@skills:lab-cleanup 10</code> when you finish. From a terminal: <code>pnpm lab:start -- 10</code> and <code>pnpm lab:cleanup -- 10</code>.</p></div><h3>What “clean” looks like</h3><p>On <code>main</code> with <code>git status --short</code> empty, no local <code>lab10/*</code> branches and no <code>~/lab10</code> working folder. If you are an admin, no profile named <code>harbourline-*</code> exists at any scope you control and no profile is bound to your test automation or session; otherwise note which profile already governs your sessions (run <code>probe.sh</code> once and keep its output).</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when someone who was not in the room can see each of the following.</p>
+<ol>
+<li><strong>The matrix exists.</strong> <code>~/lab10/matrix.json</code> has at least one enterprise profile, one organization default and one automation-level profile, and <code>profile-resolve.mjs --validate</code> reports no problems for it.</li>
+<li><strong>Two destinations, nothing else.</strong> For a normal session the resolver shows <code>registry.npmjs.org</code> and a PayGate sandbox host allowed, and <code>api.paygate.example</code>, <code>api.github.com</code>, <code>pypi.org</code> and <code>example.com</code> blocked. The MCP list in force is empty.</li>
+<li><strong>Opt-out goes nowhere.</strong> A session bound to &quot;no profile&quot; resolves to the same network list as your enterprise profile, and your note says which setting makes that true.</li>
+<li><strong>Same opt-out, other setting.</strong> With <code>injectors/recommended-floor.json</code> you show the opted-out session and the child session reaching hosts the CISO forbade, and say in one sentence why.</li>
+<li><strong>The automation is stricter.</strong> The webhook-triage target resolves to read-only git, read-only Devin MCP and a network list no wider than the normal session&#39;s.</li>
+<li><strong>Helpers stay inside.</strong> The child target resolves to exactly the parent&#39;s profiles, even though the child asked for none.</li>
+<li><strong>Timing written down.</strong> For <code>floor-tightened</code>, your note gives three answers: the running session now, the same session after it wakes, a new session. The resolver&#39;s <code>--then</code> output agrees.</li>
+<li><strong>Builds checked.</strong> You resolved the <code>snapshot-build</code> target, found what the Python install needs, and wrote who must change which profile (or blueprint) so the build passes without widening normal sessions more than the CISO accepts.</li>
+<li><strong>Drafts fixed.</strong> The GitHub-token draft and the hurried wildcard draft each have every problem named, with one unintended hostname per wildcard.</li>
+<li><strong>Observer evidence.</strong> <code>probe.sh</code> output from one of your own sessions is saved, with a sentence on what it tells you about the profile governing you — whether or not you are an admin.</li>
+<li><strong>Guardrails table.</strong> For each of the three messages and each AI Guardrails action, your table says what the sender sees, whether Devin acts on it, and where the event shows up later.</li>
+<li><strong>Articulation drill completed</strong> with the voice coach (section 8), or against a timer offline. The gap report (or self-score) is saved in <code>~/lab10/</code> and not committed.</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Devin Enterprise Settings → Security Profiles (enterprise admin)</td><td>optional</td><td>`node labs/10-guardrails/solution/profile-resolve.mjs --world &lt;your-matrix.json&gt; --check &lt;hosts&gt;` resolves the same bindings offline</td><td>Only enterprise-scope profiles can be bound as the enterprise default; mandatory floors are set here</td></tr><tr><td>Devin Organization Settings → Security Profiles (organization admin)</td><td>optional</td><td>Edit `bindings.org_default`, `automations_default` and `automations` in your copy of the reference matrix</td><td>Organization admins bind the org default, the automations default and individual automations</td></tr><tr><td>Devin Enterprise Settings → Guardrails (Manage enterprise settings)</td><td>optional</td><td>Classify the three messages in `injectors/guardrail-messages.md` against each action level on paper</td><td>Guardrails are enterprise-wide; organizations cannot set their own</td></tr><tr><td>Any Devin session, no admin rights (observer path)</td><td>required</td><td>Run `labs/10-guardrails/solution/probe.sh` inside the session to see which hosts the governing profile lets it reach</td><td>Members cannot edit profiles; they can observe the effect and write the change request</td></tr><tr><td>Devin API — snapshot-build binding</td><td>optional</td><td>The `snapshot-build` target in the reference matrix</td><td>Builds can be given their own binding or opted out, subject to the same floors</td></tr></tbody></table><h3>With fixtures only</h3><p>Without any admin rights you still write the whole policy matrix as a JSON world, resolve every kind of session against it with the offline resolver until each target reaches exactly the hosts the CISO allowed, replay the injectors (a floor downgraded to recommended, a floor tightened mid-lab, a GitHub-token draft, a hurried wildcard draft, a mid-session access request and three incoming messages for AI Guardrails), probe what your own session can actually reach, and hand an admin a change request they can paste into settings.</p>
+<h3>Cannot be exercised without live credentials</h3><ul><li>Saving and binding profiles in Enterprise or Organization settings; the reference answer resolves them offline</li><li>Binding a profile to snapshot builds through the Devin API</li><li>Switching AI Guardrails modes and reading real violations in the audit log</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>recommended-floor</code></td><td><span class="placeholder">facilitator action</span></td><td>T+15 min</td><td>The platform lead asks you to set the enterprise profile to recommended &quot;so teams can unblock themselves&quot; (`injectors/recommended-floor.json`). Predict what an opted-out session and a child of a normal session can reach, then resolve both.</td></tr><tr><td><code>mid-session-request</code></td><td><span class="placeholder">facilitator action</span></td><td>During the matrix</td><td>A session tries to download browsers from `cdn.playwright.dev` and asks you to approve access. Say what approving does in the session and whether it can reach the host afterwards (`--grant cdn.playwright.dev`).</td></tr><tr><td><code>floor-tightened</code></td><td><span class="placeholder">facilitator action</span></td><td>T+45 min</td><td>The CISO narrows the PayGate entry to the API host only (`injectors/floor-tightened.json`). A session started before the change is still running. Say what it can reach now, after its next wake, and what a new session gets (`--then`).</td></tr><tr><td><code>snapshot-build-python</code></td><td><span class="placeholder">facilitator action</span></td><td>After the matrix</td><td>The repo blueprint also installs the Python fulfilment worker. Resolve the `snapshot-build` target and check `pypi.org` and `files.pythonhosted.org`. Decide who must change what.</td></tr><tr><td><code>gh-token-keep</code></td><td><span class="placeholder">facilitator action</span></td><td>Any time</td><td>A teammate drafts two profiles that keep the GitHub CLI token (`injectors/gh-token-keep.json`). Find why neither saves, before running `--validate`.</td></tr><tr><td><code>broad-wildcard</code></td><td><span class="placeholder">facilitator action</span></td><td>Any time</td><td>A hurried draft floor (`injectors/broad-wildcard.json`) uses a trailing wildcard, a leading wildcard with no dot and a URL. Name one hostname each entry lets through that the CISO never meant.</td></tr><tr><td><code>guardrail-messages</code></td><td><span class="placeholder">facilitator action</span></td><td>T+60 min</td><td>Three incoming messages (`injectors/guardrail-messages.md`), one of them a PR comment. For each AI Guardrails action, say what the sender sees and what the security team can read later.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>The coach plays Harbourline&#39;s CISO. She is fluent in risk and audit, not in Devin settings, and she wants each sentence to be something she can repeat to her committee.</p>
+<h5>60-second framing</h5>
+<p>Lead with what is now true for every session, then the one word that makes it true, then what you still need from her. Stems you can use:</p>
+<ul>
+<li>&quot;From today every Devin session can reach…&quot;</li>
+<li>&quot;What makes that stick is…&quot;</li>
+<li>&quot;What I need from you is…&quot;</li>
+</ul>
+<p>Sinhala-first note: say the outcome first — two places, nothing else — before naming any setting or level.</p>
+<h5>Think-aloud checkpoint (T+10)</h5>
+<p>The coach asks what you are looking at and what you will check next. Answer with <em>I see… I think… I&#39;ll try… I&#39;ll check…</em>. At T+10 you should be deciding which list each destination goes into and at which level each profile sits, not polishing JSON.</p>
+<h5>Think-aloud checkpoint (T+45)</h5>
+<p>Same four verbs, later in the block. The CISO has just changed something. Name what a session that is already running does about it, and how you checked. If you need to read the resolver output, say &quot;Give me ten seconds to read the resolver&quot; rather than going silent.</p>
+<h5>Three-minute CISO update</h5>
+<p>Skeleton: <strong>What is enforced → Where it is set → Who can loosen it (nobody / whom) → What runs stricter → When changes land → What it does not cover → Ask.</strong> One fact per sentence. Name hosts, levels and profile names, not features. Pause after each heading word.</p>
+<h5>Objection round</h5>
+<p>The CISO raises one technical and one commercial objection, in character, about 90 seconds each. Reply with: acknowledge → boundary → evidence → offer. The commercial objection needs a number — of hosts, packages or builds. The objections themselves are not printed here.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>60-second framing</td><td>framing</td><td>—</td><td>1 min</td></tr><tr><td>Think-aloud checkpoint (T+10)</td><td>checkpoint</td><td>T+10 min</td><td>45 s</td></tr><tr><td>Think-aloud checkpoint (T+45)</td><td>checkpoint</td><td>T+45 min</td><td>45 s</td></tr><tr><td>Three-minute CISO update</td><td>update</td><td>—</td><td>3 min</td></tr><tr><td>Objection 1 (technical)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 (commercial)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-10-guardrails &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><h4>Feature fit</h4>
+<p>Two Devin features answer the CISO, and they do different jobs:</p>
+<ul>
+<li><strong>Security Profiles</strong> restrict what a session&#39;s machine can <em>do</em>: which hosts it reaches (network allowlist, enforced for shell, browser, package installs and scripts), which MCP servers it may use (a separate MCP allowlist), whether the Devin MCP is read-only (no creating sessions, no editing knowledge or playbooks), the git access level (<code>Read-only</code> or <code>Full</code>) and whether the GitHub CLI token is removed.</li>
+<li><strong>AI Guardrails</strong> screen what <em>comes in</em>: user messages, follow-ups and PR comments, for prompt injection, data exfiltration and policy violations. Each category is set to Off, Log only, Warn user or Block message. Guardrails are an enterprise setting (Manage enterprise settings) and apply to every organization; they are not configured per organization.</li>
+</ul>
+<p>&quot;Floor vs default&quot; in one line: a <strong>mandatory</strong> profile is the floor — it intersects with everything below it and opting out has no effect; a <strong>recommended</strong> profile is a default — anything more specific (organization, automation, session) may replace it, including with &quot;no profile&quot;.</p>
+<h4>The reference matrix</h4>
+<p><code>solution/harbourline-guardrails.json</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Profile</th>
+<th>Scope</th>
+<th>Enforcement</th>
+<th>Network</th>
+<th>MCP</th>
+<th>Devin MCP</th>
+<th>Git</th>
+<th>GitHub CLI token</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>harbourline-floor</code></td>
+<td>enterprise</td>
+<td><strong>mandatory</strong></td>
+<td><code>registry.npmjs.org</code>, <code>*.sandbox.paygate.example</code></td>
+<td>none allowed</td>
+<td>(unset)</td>
+<td>(unset)</td>
+<td>removed</td>
+</tr>
+<tr>
+<td><code>harbourline-dev</code></td>
+<td>org</td>
+<td>recommended</td>
+<td>same two</td>
+<td>(unset)</td>
+<td>read/write</td>
+<td>Full</td>
+<td>(unset)</td>
+</tr>
+<tr>
+<td><code>harbourline-automation</code></td>
+<td>org</td>
+<td>recommended</td>
+<td><code>registry.npmjs.org</code></td>
+<td>(unset)</td>
+<td>read-only</td>
+<td>Read-only</td>
+<td>(unset)</td>
+</tr>
+</tbody></table>
+<p>Bindings: enterprise default → <code>harbourline-floor</code>; organization default → <code>harbourline-dev</code>; automations default → <code>harbourline-automation</code>; <code>webhook-triage</code> automation → inherit; snapshot builds → inherit.</p>
+<p>Why each choice:</p>
+<ul>
+<li><code>*.sandbox.paygate.example</code> has a dot after the star, so <code>api.sandbox.paygate.example</code> and <code>webhooks.sandbox.paygate.example</code> match, and <code>evilsandbox.paygate.example</code> and production <code>api.paygate.example</code> do not.</li>
+<li><code>api.github.com</code> is absent because the token is removed. Devin&#39;s own connected-repository integration still clones, pushes and opens PRs through the git proxy; only direct <code>gh</code>/API calls stop. Keeping the token would require Full git access <strong>and</strong> <code>api.github.com</code> in the network list.</li>
+<li>An empty MCP allowlist means no MCP server until the CISO approves one by name. MCP servers do not need to be in the network list; the two lists are independent.</li>
+<li>The floor leaves git and Devin MCP unset so the organization default can give people Full git; the automations default narrows both for robots.</li>
+</ul>
+<p>Resolver output (<code>node labs/10-guardrails/solution/profile-resolve.mjs --world labs/10-guardrails/solution/harbourline-guardrails.json --check registry.npmjs.org,api.sandbox.paygate.example,pypi.org,files.pythonhosted.org --grant cdn.playwright.dev</code>), summarised:</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Profiles in force</th>
+<th>Winning level</th>
+<th>Git</th>
+<th>Devin MCP RO</th>
+<th>Token</th>
+<th>registry</th>
+<th>PayGate sandbox</th>
+<th>pypi</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>dev-session</code></td>
+<td>floor + dev</td>
+<td>organization default</td>
+<td>full</td>
+<td>no</td>
+<td>removed</td>
+<td>yes</td>
+<td>yes</td>
+<td>no</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>opt-out-session</code></td>
+<td>floor</td>
+<td>session (&quot;no profile&quot;)</td>
+<td>full</td>
+<td>no</td>
+<td>removed</td>
+<td>yes</td>
+<td>yes</td>
+<td>no</td>
+<td>opt-out ignored: mandatory floor</td>
+</tr>
+<tr>
+<td><code>webhook-triage-run</code></td>
+<td>floor + automation</td>
+<td>automations default</td>
+<td>read-only</td>
+<td>yes</td>
+<td>removed</td>
+<td>yes</td>
+<td><strong>no</strong></td>
+<td>no</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>child-of-dev</code></td>
+<td>floor + dev</td>
+<td>organization default</td>
+<td>full</td>
+<td>no</td>
+<td>removed</td>
+<td>yes</td>
+<td>yes</td>
+<td>no</td>
+<td>governed by parent chain</td>
+</tr>
+<tr>
+<td><code>snapshot-build</code></td>
+<td>floor + dev</td>
+<td>organization default</td>
+<td>full</td>
+<td>no</td>
+<td>removed</td>
+<td>yes</td>
+<td>yes</td>
+<td><strong>no</strong></td>
+<td>—</td>
+</tr>
+</tbody></table>
+<p><code>pnpm --filter @harbourline/labs test</code> runs <code>solution/profile.test.mjs</code> (12 cases) over the same table.</p>
+<h4>How resolution works</h4>
+<ol>
+<li>Walk the chain broad → specific: enterprise default, organization default, (automations default, the automation), session. Snapshot builds use enterprise default, organization default, then the snapshot-build binding.</li>
+<li>The most specific level that does not say &quot;inherit&quot; wins. That can be a profile or &quot;no profile&quot;.</li>
+<li>Every <strong>mandatory</strong> profile at or above the winner stays in force. Restrictions intersect: network and MCP allowlists narrow (a host must be in every list), git takes the stricter level, Devin MCP is read-only if any profile says so, the token is removed if any profile removes it.</li>
+<li>A child session is governed by the same chain as its parent; it does not get a level of its own.</li>
+<li>A running session keeps what it resolved at its last boot or wake. Edits and new bindings apply to new sessions immediately and to an existing session when it wakes or reboots.</li>
+</ol>
+<p>The resolver encodes exactly these five rules. Rule 4&#39;s handling of a child that <em>asks</em> for &quot;no profile&quot; (ignored) and the snapshot-build chain in rule 1 are this lab&#39;s reading of the documentation, which says children follow the parent&#39;s chain and that builds can have their own binding or be opted out; check both against the live product before you rely on them in front of an auditor.</p>
+<h4>Injector answers</h4>
+<ul>
+<li><strong>recommended-floor</strong> — with <code>harbourline-floor</code> recommended, <code>opt-out-session</code> resolves to no profiles at all: every host reachable, token kept. <code>child-of-dev</code> drops to <code>harbourline-dev</code> only, which happens to match the CISO&#39;s list today but is one org-admin edit away from not doing so. One sentence: <em>recommended is a suggestion any lower level can replace; mandatory is the floor.</em></li>
+<li><strong>mid-session-request</strong> — approving the request adds <code>cdn.playwright.dev</code> to that session only. Under a mandatory floor that does not list the host, the grant is clamped: the session still cannot reach it. Fix at source instead: set <code>PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1</code>, or ask the CISO to add the host to the floor.</li>
+<li><strong>floor-tightened</strong> — the running session keeps <code>*.sandbox.paygate.example</code> (so <code>webhooks.sandbox.paygate.example</code> still works) until its next wake; after waking, and for every new session, only <code>api.sandbox.paygate.example</code> is in the floor. If the change is urgent, ask owners to put running sessions to sleep (or end them) so they re-resolve.</li>
+<li><strong>snapshot-build-python</strong> — the build reaches the package registry (every one of the 1,163 remote packages in <code>pnpm-lock.yaml</code> resolves to <code>registry.npmjs.org</code>, and the two install scripts — <code>esbuild</code>, <code>msw</code> — fetch nothing else) but the blueprint&#39;s <code>pip install -e &quot;services/fulfilment-worker[dev]&quot;</code> needs <code>pypi.org</code> and <code>files.pythonhosted.org</code>. A snapshot-build binding cannot loosen a mandatory floor, so either the CISO adds those two hosts to the floor, or the build stops installing Python packages. That is the CISO&#39;s call; the change request names the two hosts and the one blueprint line.</li>
+<li><strong>gh-token-keep</strong> — <code>harbourline-gh</code> keeps the token but its network list has no <code>api.github.com</code>; <code>harbourline-gh-readonly</code> keeps the token with Read-only git. The documentation makes both conditions a requirement for keeping the token, so expect neither to save. <code>--validate</code> exits 1 with one problem each.</li>
+<li><strong>broad-wildcard</strong> — <code>registry.npmjs.org*</code> also matches <code>registry.npmjs.org.evil.example</code>; <code>*paygate.example</code> also matches <code>evil-paygate.example</code> and <code>evilpaygate.example</code>; <code>https://registry.npmjs.org/</code> is a URL, not a hostname (no scheme, port or path).</li>
+<li><strong>guardrail-messages</strong> — message 1 is data exfiltration, message 2 (PR comment) is prompt injection, message 3 is ordinary work.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>What the sender sees</th>
+<th>Does Devin act on it</th>
+<th>Where the security team sees it</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Off</td>
+<td>nothing</td>
+<td>yes</td>
+<td>nowhere</td>
+</tr>
+<tr>
+<td>Log only</td>
+<td>nothing</td>
+<td>yes</td>
+<td>violations list, audit log <code>ai_guardrail_violation</code>, guardrail violations API</td>
+</tr>
+<tr>
+<td>Warn user</td>
+<td>a warning</td>
+<td>yes, after the warning</td>
+<td>same as Log only</td>
+</tr>
+<tr>
+<td>Block message</td>
+<td>the message is blocked</td>
+<td>no</td>
+<td>same as Log only</td>
+</tr>
+</tbody></table>
+<p>A sensible start: Log only for a week to see the volume, then Block message for exfiltration and prompt injection, Warn user for policy violations. Message 3 should not trigger anything; if it does at the chosen level, you have learned the cost of that level.</p>
+<h4>Observer path (no admin)</h4>
+<p>You cannot edit profiles or guardrails, but you can still prove what governs you:</p>
+<ol>
+<li>Run <code>labs/10-guardrails/solution/probe.sh</code> in a Devin session. Reference output from the session that built this lab (22 Oct 2026):
+<code>reachable registry.npmjs.org</code>, <code>blocked api.sandbox.paygate.example</code> (the fixture host does not exist, so this is DNS, not policy), <code>reachable pypi.org</code>, <code>reachable files.pythonhosted.org</code>, <code>reachable api.github.com</code>, <code>reachable example.com</code>. Reading: <code>example.com</code> is reachable, so no restrictive network profile governs that session yet.</li>
+<li>Build your matrix offline and resolve it.</li>
+<li>Hand the admin a change request: profiles to create (table above), bindings, the two Python hosts decision, the guardrail levels, and the timing note (running sessions keep the old profile until they wake).</li>
+<li>After the admin applies it, start a <strong>new</strong> session and run the probe again: <code>example.com</code> should now be blocked.</li>
+</ol>
+<h4>Worked prompts</h4>
+<p>Prompts belong here and only here. A session can help you write and check the matrix; it cannot change settings you lack rights to.</p>
+<pre><code class="language-prompt">In labs/10-guardrails, copy solution/harbourline-guardrails.json to ~/lab10/matrix.json. Add a target for an
+automation called &quot;refund-audit&quot; that inherits the automations default, then run profile-resolve.mjs with
+--validate and --check registry.npmjs.org,api.sandbox.paygate.example,example.com for every target.
+Give me a table: target, profiles in force, winning level, git, Devin MCP read-only, token, and which
+hosts are allowed. Do not edit anything under labs/ itself.
+</code></pre>
+<pre><code class="language-prompt">Run labs/10-guardrails/solution/probe.sh in this session and tell me, in two sentences, what it says about
+the security profile governing this session. Do not try to reach any other host.
+</code></pre>
+<pre><code class="language-prompt">Write a one-page change request for our enterprise admin from ~/lab10/matrix.json: profiles to create with
+every field, bindings per level, which ones are mandatory and why, the two hosts the Python install needs,
+and when each change takes effect for running sessions, new sessions and snapshot builds.
+</code></pre>
+<h4>Pitfalls</h4>
+<ul>
+<li>Putting MCP server hostnames into the network list &quot;to be safe&quot; — MCP access is its own allowlist.</li>
+<li>Leaving the floor recommended because it &quot;works&quot; today: it works only until someone below you opts out.</li>
+<li>Assuming a saved change protects a session that is already running.</li>
+<li>Granting a mid-session request and believing it widened a mandatory floor.</li>
+<li>Writing hosts with schemes, paths or dotless wildcards.</li>
+<li>Treating AI Guardrails as a network control: it screens messages, it does not stop a command reaching a host.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<ol>
+<li><em>&quot;A profile is config — what stops a developer turning it off?&quot;</em> — &quot;You&#39;re right that it&#39;s a setting. The enterprise profile is <strong>mandatory</strong>, and only enterprise admins can edit or unbind it. Below that, organization admins, automations and sessions can only add restrictions: a session that picks &#39;no profile&#39; still resolves to the floor, helper sessions follow the parent&#39;s chain, and a mid-session approval for a new host is clamped. Our resolver shows the opt-out session with exactly the floor&#39;s two hosts. I&#39;ll re-run it and send you the output after every profile change.&quot;</li>
+<li><em>&quot;This will block legitimate pnpm installs.&quot;</em> — &quot;It would if pnpm reached more than one place. All 1,163 remote packages in our lockfile resolve to <code>registry.npmjs.org</code>, and the two packages with install scripts fetch nothing else, so pnpm installs pass. The real break is two hosts for the Python worker in snapshot builds — <code>pypi.org</code> and <code>files.pythonhosted.org</code> — and I&#39;d like your decision on those two. Anything else shows up as a blocked request we can review rather than a silent hole.&quot;</li>
+</ol>
+</div><div data-slot="debrief"><ul>
+<li>Could you say &quot;floor vs default&quot; without the words mandatory or recommended?</li>
+<li>Which of your three timing answers surprised you most, and how would you tell a running team?</li>
+<li>What would you need from the live product to remove the two caveats in &quot;How resolution works&quot;?</li>
+<li>Which guardrail level would you pick on day one, and what evidence would make you change it?</li>
+</ul>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/product-guides/security-profiles" rel="noopener">Devin docs — Security Profiles</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/enterprise/features/ai-guardrails" rel="noopener">Devin docs — AI Guardrails</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/release-notes/2026" rel="noopener">Devin release notes 2026 — Security Profiles, snapshot-build binding and related entries</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — Voice mode</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/10-guardrails/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>

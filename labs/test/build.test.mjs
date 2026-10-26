@@ -33,6 +33,7 @@ async function scratchLabs(name, mutate = async () => {}) {
   const labs = path.join(repo, 'labs');
   await fs.mkdir(labs, { recursive: true });
   await fs.cp(sampleDir, path.join(labs, '00-sample'), { recursive: true });
+  await fs.rm(path.join(labs, '00-sample', 'index.html'), { force: true });
   await mutate({ repo, labs, lab: path.join(labs, '00-sample') });
   return { repo, labs, out: path.join(dir, 'out') };
 }
@@ -50,7 +51,7 @@ async function expectBuildFailure(opts, pattern) {
 }
 
 describe('labs/build.mjs on the real labs/ tree', () => {
-  it('renders every lab plus the index without writing in --check mode', async () => {
+  it('renders every lab plus the index, matches the committed pages and writes nothing in --check mode', async () => {
     const r = await buildLabs({ labsDir, repoDir, check: true });
     expect(r.labs).toContain('00-sample');
     expect([...r.pages.keys()].some((p) => p.endsWith(`${path.sep}index.html`))).toBe(true);
@@ -168,6 +169,7 @@ describe('build rules', () => {
     const s = await scratchLabs('prompt-ok', async ({ lab }) => {
       await fs.appendFile(path.join(lab, 'answer.md'), '\n```prompt\nanother hidden prompt\n```\n');
     });
+    await buildLabs({ labsDir: s.labs, repoDir: s.repo });
     await expect(buildLabs({ labsDir: s.labs, repoDir: s.repo, check: true })).resolves.toBeTruthy();
   });
 
@@ -228,8 +230,43 @@ describe('build rules', () => {
       await fs.mkdir(path.join(labs, '99-empty'), { recursive: true });
       await fs.writeFile(path.join(labs, 'coach-dryrun', 'fixtures', 'generic-mediocre.md'), '```prompt\nnot a lab\n```');
     });
+    await buildLabs({ labsDir: s.labs, repoDir: s.repo });
     const r = await buildLabs({ labsDir: s.labs, repoDir: s.repo, check: true });
     expect(r.labs).toEqual(['00-sample']);
+  });
+});
+
+describe('--check against committed pages', () => {
+  it('passes when every page matches and fails naming each missing page', async () => {
+    const s = await scratchLabs('check-missing');
+    await expectBuildFailure({ labsDir: s.labs, repoDir: s.repo }, /labs\/00-sample\/index\.html is missing; run `pnpm labs:build`/);
+    await buildLabs({ labsDir: s.labs, repoDir: s.repo });
+    await expect(buildLabs({ labsDir: s.labs, repoDir: s.repo, check: true })).resolves.toBeTruthy();
+  });
+
+  it('fails when a lab source changed but its page was not rebuilt', async () => {
+    const s = await scratchLabs('check-stale');
+    await buildLabs({ labsDir: s.labs, repoDir: s.repo });
+    await fs.appendFile(path.join(s.labs, '00-sample', 'criteria.md'), '\n9. A new observable criterion.\n');
+    const err = await expectBuildFailure({ labsDir: s.labs, repoDir: s.repo }, /labs\/00-sample\/index\.html is stale/);
+    expect(err.problems).toHaveLength(1);
+  });
+
+  it('fails when a page is edited by hand or its lab sources are gone', async () => {
+    const s = await scratchLabs('check-orphan');
+    await buildLabs({ labsDir: s.labs, repoDir: s.repo });
+    await fs.appendFile(path.join(s.labs, 'index.html'), '<!-- hand edit -->');
+    await fs.mkdir(path.join(s.labs, '42-removed'), { recursive: true });
+    await fs.writeFile(path.join(s.labs, '42-removed', 'index.html'), '<html></html>');
+    const err = await expectBuildFailure({ labsDir: s.labs, repoDir: s.repo }, /labs\/index\.html is stale/);
+    expect(err.problems.join('\n')).toMatch(/labs\/42-removed\/index\.html has no lab sources/);
+  });
+
+  it('renders byte-identical output on every run', async () => {
+    const s = await scratchLabs('deterministic');
+    const a = await buildLabs({ labsDir: s.labs, repoDir: s.repo, check: false });
+    const b = await buildLabs({ labsDir: s.labs, repoDir: s.repo, check: true });
+    expect([...b.pages.entries()]).toEqual([...a.pages.entries()]);
   });
 });
 

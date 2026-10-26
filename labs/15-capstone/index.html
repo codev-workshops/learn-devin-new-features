@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 15 — Customer capstone — one sealed envelope: an incident, a feature request and a governance constraint · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 15</p>
+<h1>Lab 15 — Customer capstone — one sealed envelope: an incident, a feature request and a governance constraint</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Learner&#39;s choice. You pick and combine the Devin capabilities from labs 01–14; nothing on this page tells you which.</li>
+<li><b>Duration:</b> 240 min</li>
+<li><b>Difficulty:</b> advanced</li>
+<li><b>Prerequisites:</b> Labs 01–14 attempted (at least their fixture paths), so you know what each capability does and costs; Repo cloned, `pnpm install` done at the root, Node 22, Docker for `pnpm db:up`; A facilitator or the capstone coach to hand you a sealed envelope; you never choose or open it yourself; Half a day blocked in your calendar, with the voice call free to stay connected while you work</li>
+<li><span class="badge badge-fixture">Credentials: fixture</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<blockquote>
+<p><strong>From:</strong> Amara Okafor, COO, Harbourline
+<strong>To:</strong> The Devin lead on duty today
+<strong>Subject:</strong> One morning, three problems, no script</p>
+<p>Every week someone at Harbourline brings three things to the same stand-up: something broke last night, a brand team wants something new by a date, and legal, finance or security adds a rule we did not have last week. Today that someone is you, and I want to see how you run it with Devin.</p>
+<p>You will get one sealed envelope. Inside is a real-shaped morning for one of our brands: an incident that is costing us orders or money right now, a feature a brand lead has promised to a customer, and a constraint you must not break while you do either. Nobody will tell you which Devin capabilities to use. Choosing them, and saying why, is the job.</p>
+<p>By the end of the half day I want the incident understood and contained, the feature started the right way, the constraint respected and provable, and an update I could forward to the board without editing. Things will change while you work. That is also the job.</p>
+</blockquote>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>Amara Okafor (COO)</strong> — owns the outcome and the budget for the day; she will ask what it cost.</li>
+<li><strong>The customer in the envelope</strong> — a brand lead, a finance owner or a risk owner; the coach plays them on the call.</li>
+<li><strong>Your facilitator</strong> — hands out the envelope when there is no coach call, and answers only &quot;is this in scope?&quot; questions.</li>
+<li><strong>Constraints</strong><ul>
+<li>The envelope is read to you once. Do not open <code>labs/15-capstone/scenarios/</code>; a learner who has read a scenario file draws a different one.</li>
+<li>No scaffold: this page offers no stems, no feature list and no plan. The hidden answer is for the debrief, after the coach report.</li>
+<li>Work on your own leaf branch. Planted defects stay on <code>main</code>; anything you fix is a pull request you close without merging.</li>
+<li>Never ask anyone for credentials. Where a live integration is missing, use the repo&#39;s fixtures and say so.</li>
+<li>Spend like it is your own money: the COO will ask for the session count and ACU you used.</li>
+<li>Coaching is started by you, manually, at T+0.</li>
+</ul>
+</li>
+</ul>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>pnpm db:up</code></pre><pre><code>pnpm lab:reset -- 15</code></pre><pre><code>git switch main &amp;&amp; git status --short (must print nothing) — work on your own leaf branch, never on main</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 15</code> to run these steps for you, and <code>@skills:lab-cleanup 15</code> when you finish. From a terminal: <code>pnpm lab:start -- 15</code> and <code>pnpm lab:cleanup -- 15</code>.</p></div><h3>What “clean” looks like</h3><p>Seed-spec dataset for both brands, no scenario orders, every planted defect still in place on <code>main</code>, <code>bad-migration.patch</code> not applied, <code>scenarios/.state/</code> empty, and you have not read anything under <code>labs/15-capstone/scenarios/</code>.</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when someone who was not in the room can check every item below from the artefacts alone. The envelope decides the content; the evidence shape is the same for every envelope.</p>
+<ol>
+<li><strong>Capstone report.</strong> <code>labs/15-capstone/CAPSTONE-REPORT.md</code> exists on your leaf branch (not on <code>main</code>) and opens with three one-sentence problem statements — incident, feature, constraint — in the customer&#39;s words.</li>
+<li><strong>Capability choices.</strong> For each of the three, the report names the Devin capability you used, one sentence on why it beat the alternative you rejected, and a link to the session, scan, review, run or report it produced.</li>
+<li><strong>Incident evidence.</strong> The incident is reproduced on the local stack (the injector&#39;s <code>SYMPTOM:</code> line or an equivalent observation), its cause is located to a file and line, and the containment or fix is a pull request against <code>main</code> that you leave open, with the re-run that proves it.</li>
+<li><strong>Feature evidence.</strong> The feature is a separate pull request (or a written design if the change at T+60 moved it), sized for review, with tests that fail before and pass after.</li>
+<li><strong>Constraint evidence.</strong> The report shows, with one artefact per claim, that the constraint held for every session you started — not only the last one.</li>
+<li><strong>Change handling.</strong> The report has a dated entry for the T+60 change: what you kept, what you dropped, what you re-planned and why.</li>
+<li><strong>Blocker handling.</strong> The report names the blocker you hit, how you noticed it and what you did instead, without widening a permission or weakening the constraint.</li>
+<li><strong>Cost.</strong> Sessions started, ACU used per session and in total, and the one step you would not run with Devin next time.</li>
+<li><strong>Live versus fixture.</strong> A table of every integration you touched and whether it ran live, ran on a fixture, or was not exercised and why.</li>
+<li><strong>Coach run.</strong> The capstone coach&#39;s gap report for your run is on your coaching branch.</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Harbourline stack (API, worker, PayGate fake, seed data, scenario injectors)</td><td>required</td><td>`pnpm db:up &amp;&amp; pnpm lab:reset -- 15`, then `pnpm --filter @harbourline/api run dev` (port 3001); the webhook and sweeper injectors also need the fulfilment worker: `(cd services/fulfilment-worker &amp;&amp; DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline python3 -m fulfilment_worker run)`.</td><td>Zero credentials. This is the only part every envelope needs.</td></tr><tr><td>Observability, paging and cloud evidence (Datadog, PagerDuty, AWS, GCP, BigQuery, Workspace)</td><td>optional</td><td>`fixtures/mcp/` and its local shim, `observability/` and `infra/` (the same fixtures labs 07, 08 and 12 use).</td><td>Use a live connection only if your organization already has one; never ask anyone for credentials.</td></tr><tr><td>Governance surfaces (Security Profiles, AI Guardrails, ACU limits, Outposts)</td><td>optional</td><td>The offline models from labs 10, 11 and 14 (`labs/10-guardrails/solution/`, `labs/11-acu-analytics/tools/`, `labs/14-outposts/tools/`).</td><td>Changing a real organization setting needs an admin; the observer path is acceptable if you say so.</td></tr><tr><td>Slack or Teams</td><td>optional</td><td>Speak the customer update on the call; a written copy goes in your capstone report.</td><td>Post nowhere the customer did not ask for.</td></tr></tbody></table><h3>With fixtures only</h3><p>Every envelope can be completed with the local stack and the repo&#39;s fixtures. Where a live integration would have been the natural choice, say so, show what the fixture proved and list the live step as not exercised.</p>
+<h3>Cannot be exercised without live credentials</h3><ul><li>Any live integration your organization has not already connected (you list which).</li><li>Organization-level settings you are not an admin for (you describe them, you do not change them).</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>envelope</code></td><td><span class="placeholder">facilitator action</span></td><td>T+0</td><td>The coach (or your facilitator) reads one sealed envelope to you in the customer&#39;s voice. It names an incident, a feature request and a governance constraint. You get it once; take notes.</td></tr><tr><td><code>requirement-change</code></td><td><span class="placeholder">facilitator action</span></td><td>T+60 min</td><td>The customer changes one requirement, in character, without warning. Decide out loud what you keep, what you drop and what you re-plan.</td></tr><tr><td><code>injected-blocker</code></td><td><span class="placeholder">facilitator action</span></td><td>between T+60 and the update</td><td>Something you depend on stops working the way you expected. The coach will not tell you what it is.</td></tr><tr><td><code>cost-challenge</code></td><td><span class="placeholder">facilitator action</span></td><td>objection round</td><td>Someone with a budget asks what this half day cost and whether it was worth it. Have your numbers.</td></tr><tr><td><code>security-objection</code></td><td><span class="placeholder">facilitator action</span></td><td>objection round</td><td>Someone responsible for risk challenges a choice you made. You get a follow-up question if your answer skips evidence.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>The capstone drill has no scaffold. Nothing on this page tells you what to say; the envelope, the clock and the customer do.</p>
+<p>Start the coach yourself at T+0: in the Devin web app, select this repo in Agent mode, type <code>@skills:coach-15-capstone &lt;your-handle&gt;</code> and press the voice-call button. A facilitator running a cohort may add <code>--scenario &lt;id&gt;</code> to that line; otherwise the coach picks an envelope you have not drawn before. Keep the call connected for the whole half day; mute while you work (space to talk).</p>
+<h5>90-second framing</h5>
+<p>Right after the envelope. The customer stops talking and the clock starts.</p>
+<h5>Think-aloud checkpoints (T+30, T+90)</h5>
+<p>Forty-five seconds each, whenever the coach calls in. The T+90 checkpoint comes after the customer has changed something.</p>
+<h5>Four-minute customer update</h5>
+<p>Unscripted. No skeleton is printed here.</p>
+<h5>Objection round</h5>
+<p>Three objections, ninety seconds each, each with one follow-up if your answer skips evidence.</p>
+<h5>About the feedback</h5>
+<p>The coach grades from the speech transcript in the session history, not from audio. Every clarity and pronunciation line in its report is <strong>transcript-based, approximate</strong>; timings are ±5 s.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>90-second framing after the envelope</td><td>framing</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Think-aloud checkpoint (T+30)</td><td>checkpoint</td><td>T+30 min</td><td>45 s</td></tr><tr><td>Think-aloud checkpoint (T+90, after the change)</td><td>checkpoint</td><td>T+90 min</td><td>45 s</td></tr><tr><td>Four-minute unscripted customer update</td><td>update</td><td>—</td><td>4 min</td></tr><tr><td>Objection 1 with follow-up</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 with follow-up</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 3 with follow-up</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-15-capstone &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><h4>Feature fit</h4>
+<p>There is no single feature. Every envelope is three problems that each have a natural Devin tool, and the grade is for choosing, sequencing and proving — not for using as many features as possible. The envelope-specific key (cause, file, expected evidence) lives with the facilitator in <code>labs/15-capstone/scenarios/&lt;id&gt;.md</code> and is opened together at the debrief.</p>
+<table>
+<thead>
+<tr>
+<th>Problem shape in the envelope</th>
+<th>Natural first choice</th>
+<th>Lab</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&quot;It broke overnight and costs money now&quot;</td>
+<td>A session that reproduces with the injector first; on-call triage if a page exists</td>
+<td>12, 07</td>
+</tr>
+<tr>
+<td>&quot;Find every place this could also be wrong&quot;</td>
+<td>Code Scan, or a dynamic workflow fanned out per endpoint or file</td>
+<td>05, 09</td>
+</tr>
+<tr>
+<td>&quot;A brand lead promised a feature by a date&quot;</td>
+<td>One session per pull request, a plan before code, Devin Review on the final head</td>
+<td>06</td>
+</tr>
+<tr>
+<td>&quot;Execution or data must stay somewhere&quot;</td>
+<td>Outposts and the organization default platform</td>
+<td>14</td>
+</tr>
+<tr>
+<td>&quot;Only these hosts / these tools / these actions&quot;</td>
+<td>Security Profiles, AI Guardrails, hooks on a leaf branch</td>
+<td>10, 02</td>
+</tr>
+<tr>
+<td>&quot;Finance has a number for you&quot;</td>
+<td>ACU limits and the analytics export, with per-session numbers</td>
+<td>11</td>
+</tr>
+<tr>
+<td>&quot;Tell the team&quot; / &quot;post the update&quot;</td>
+<td>The Slack or Teams write-back, scoped to what the customer allowed</td>
+<td>08</td>
+</tr>
+<tr>
+<td>&quot;Make it repeatable for the next person&quot;</td>
+<td>A repo skill, rule or plugin — not a bigger prompt</td>
+<td>03, 04</td>
+</tr>
+</tbody></table>
+<h4>Worked approach</h4>
+<ol>
+<li><strong>T+0–T+10.</strong> Write the three problem statements in the customer&#39;s words before opening any code. Say which one is costing money right now; that one goes first.</li>
+<li><strong>Constraint before work.</strong> Configure or verify the governance constraint before the first session that touches the incident, so every session is inside it — evidence &quot;for the last session only&quot; fails criterion 5.</li>
+<li><strong>Reproduce, then locate.</strong> Run the relevant injector on a freshly reset stack and capture its <code>SYMPTOM:</code> line. Locate the cause to a file and line. Only then open a fix branch.</li>
+<li><strong>One pull request per problem.</strong> The fix and the feature are separate PRs, each with tests that fail before and pass after. Leave them open: planted defects stay on <code>main</code>.</li>
+<li><strong>Keep a dated log.</strong> Every decision — especially at T+60 — goes in <code>CAPSTONE-REPORT.md</code> with the time, what was kept, dropped and re-planned.</li>
+<li><strong>Prove the constraint across the whole day</strong>, one artefact per claim (session list filtered by platform, the profile in force, the per-session ACU export, the review status on the final head).</li>
+<li><strong>Cost last, honestly.</strong> Sessions, ACU per session and in total, and the step a person would have done more cheaply.</li>
+</ol>
+<h4>The injectors</h4>
+<ul>
+<li><strong>Envelope (T+0).</strong> Heard once. Learners who take no notes re-ask, which the customer answers impatiently and the rubric counts against customer relevance.</li>
+<li><strong>Requirement change (T+60).</strong> Always narrows or reorders the work; it never adds a fourth problem. The right move is to say aloud what is dropped.</li>
+<li><strong>Injected blocker.</strong> Always arises from honouring the constraint. The tempting workaround breaks the constraint; the expected move keeps it and finds another path.</li>
+<li><strong>Cost challenge and security objection.</strong> Answer with numbers and artefacts you produced today, not with how the feature works in general.</li>
+</ul>
+<h4>Pitfalls</h4>
+<ul>
+<li>Starting with the feature because it is more fun; the incident is still costing money.</li>
+<li>Proving the constraint only for the last session, or describing the setting instead of showing it was in force.</li>
+<li>Fixing a planted defect on <code>main</code>, or merging the fix PR.</li>
+<li>Widening a permission to get past the blocker, then disclosing it in the update.</li>
+<li>Treating &quot;Devin Review passed&quot; as evidence without naming what it checked and what it caught.</li>
+<li>Spending the half day on a perfect feature and having no time for the update; the update is the deliverable the COO reads.</li>
+<li>Asking a colleague for a credential. The fixture path is always enough.</li>
+</ul>
+<h4>Recovery moves</h4>
+<ul>
+<li>Missed the T+60 change while heads-down: say so at T+90, then re-plan in one sentence — &quot;I heard X; I am dropping Y; Z moves first.&quot;</li>
+<li>Constraint broken by one early session: stop, say it in the next checkpoint, end that session, and list it under risk in the update. Hiding it is the only unrecoverable move.</li>
+<li>Out of time on the feature: ship the design and the failing test, and say what the next session will do.</li>
+<li>Objection you cannot answer: acknowledge, state the boundary of what you know, name the artefact that would answer it, and offer it by a time.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<p>The questions differ per envelope; the shape does not.</p>
+<ul>
+<li><strong>Cost.</strong> &quot;Today used N sessions and M ACU, about K per problem. The step I would not hand to Devin next time is …, because it took a person ten minutes. The incident fix would have taken a person …; here is the open PR.&quot;</li>
+<li><strong>Data or security boundary.</strong> &quot;Execution stayed …; inference ran in Devin Cloud; this is the artefact that shows where each session ran. Customer data in the seed is synthetic; in production the boundary is …&quot;</li>
+<li><strong>Governance or trust.</strong> &quot;The control is enforced at … by …, not by good intentions. You can verify it without trusting Devin by re-running …; I will send the commands with the report.&quot;</li>
+</ul>
+<h4>References</h4>
+<ul>
+<li>Every capability above is documented on its own lab page (labs 01–14) with the official docs link and release-note date.</li>
+<li><code>labs/VALIDATION.md</code> — the facilitator pilot of every lab, including this one.</li>
+<li><code>packages/contracts/seed-spec.yaml#planted_edge_cases</code> — the planted defects the envelopes draw on.</li>
+</ul>
+</div><div data-slot="debrief"><p>Open the facilitator key together after the coach report. Compare the learner&#39;s three problem statements with the envelope, then their capability choices with the table above: a different choice with a stated reason is fine; an unstated one is not. Check criteria 3–5 against artefacts, not against the spoken update. Close on one question: &quot;What would you put in a skill so the next person starts at T+30 instead of T+0?&quot; — that answer is often the learner&#39;s best lab 03/04 work.</p>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/" rel="noopener">Devin docs — introduction and feature index</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — voice mode (start a call from the message box; transcript lands in session history)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/skills" rel="noopener">Devin docs — Skills (repo skills under .devin/skills, @skills: invocation, triggers)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/release-notes/2026" rel="noopener">Devin release notes 2026 (window used by the course: Aug 21 – Oct 21, 2026)</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/15-capstone/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>

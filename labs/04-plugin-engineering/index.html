@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 04 — Ship the flash-sale release checklist once — a plugin every brand team installs · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 04</p>
+<h1>Lab 04 — Ship the flash-sale release checklist once — a plugin every brand team installs</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Plugin engineering: manifest, skills, rules, hooks, MCP and subagents in one bundle; repository vs uploaded vs skills-only installs; revisions; MCP connection after install; proposing edits to shared plugins</li>
+<li><b>Duration:</b> 120 min</li>
+<li><b>Difficulty:</b> core</li>
+<li><b>Prerequisites:</b> Lab 03 done (rules and skills in this repo), so you know what a skill and a rule look like on their own; Repo cloned, `pnpm install` done at the root (the offline checker and its tests run under `labs/`); A Devin account where you can open Customize → Plugins; organization-admin rights are needed only for the shared-scope steps; Optional: the Devin CLI installed locally, to load the plugin from a folder on your machine</li>
+<li><span class="badge badge-fixture">Credentials: fixture</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<p>Hi — I lead platform engineering at Harbourline. We run two brands, <strong>Lumen Home</strong> (USD) and <strong>Trailhead Supply</strong> (EUR), and each brand team runs its own flash sales. Every one of them has re-invented the release checklist: Lumen keeps a three-line skill in a repo of its own, Trailhead pastes a long prompt into each session, and neither checks the things that hurt us last quarter (sale prices stored the wrong way, stock reserved too early, a push to <code>main</code> in the middle of a sale, an on-call engineer with no first-hour procedure).</p>
+<p>What I need from you:</p>
+<ol>
+<li><strong>One package, shipped once.</strong> The flash-sale release checklist and the first-hour incident procedure, installable by any brand team, so every Devin session in the organization gets the same steps.</li>
+<li><strong>It must carry more than text.</strong> The pricing rule, a guard against pushing to <code>main</code> during a sale, a reviewer that checks a release diff, and the incident tools the incident procedure needs.</li>
+<li><strong>Change without chaos.</strong> Brand teams will want to tweak it. They must not be able to change what everyone else runs without someone on my team looking at the change first.</li>
+<li><strong>Nobody&#39;s credentials inside it.</strong> The incident tools need a PagerDuty connection. That connection must not live in the package.</li>
+</ol>
+<p>You have one two-hour block. My security reviewer signs off before this reaches every session, and she will want a three-minute update at the end.</p>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>The security reviewer</strong> signs off on anything that runs in every session. She reads files, install screens and approval cards, not prompts. She will ask what runs, where it came from, and who can change it.</li>
+<li><strong>Brand engineering leads</strong> (one per brand) will install it and will want to change thresholds. They do not have admin rights on organization plugins.</li>
+<li><strong>Me (platform lead)</strong> owns <code>main</code>. The planted defects stay in the baseline; any demonstration change goes on a throwaway <code>lab04/*</code> branch and is deleted without merging.</li>
+<li><strong>Forbidden:</strong> real credentials in any file, changes on <code>main</code>, changes to <code>packages/contracts/</code>, and installing at Organization or Enterprise scope before the plugin has been checked at Personal scope.</li>
+<li><strong>Output:</strong> the plugin folder (kept outside the repo or on a throwaway branch), the checker&#39;s clean report, a screenshot of the plugin&#39;s details panel after install, and a short note for the security reviewer. Keep the note out of commits.</li>
+</ul>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>git switch main &amp;&amp; git status --short</code></pre><pre><code>git branch --list &#39;lab04/*&#39; | xargs -r git branch -D</code></pre><pre><code>rm -rf ~/harbourline-flash-sale ~/harbourline-flash-sale.zip</code></pre><pre><code>pnpm lab:reset -- 04</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 04</code> to run these steps for you, and <code>@skills:lab-cleanup 04</code> when you finish. From a terminal: <code>pnpm lab:start -- 04</code> and <code>pnpm lab:cleanup -- 04</code>.</p></div><h3>What “clean” looks like</h3><p>On <code>main</code> with <code>git status --short</code> empty, no local <code>lab04/*</code> branches, no <code>~/harbourline-flash-sale</code> working folder, and no plugin named <code>harbourline-flash-sale</code> installed at any scope you control (check Customize → Plugins at Personal and Organization). The seed-spec dataset is loaded for both brands.</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when someone who was not in the room can see each of the following.</p>
+<ol>
+<li><strong>One manifest, one name.</strong> The plugin folder has <code>.devin-plugin/plugin.json</code> with a lowercase name, and the offline checker (<code>node labs/04-plugin-engineering/solution/plugin-check.mjs --kit &lt;dir&gt;</code>) reports no problems for it.</li>
+<li><strong>Both procedures are skills.</strong> The release checklist and the incident procedure are separate <code>skills/&lt;name&gt;/SKILL.md</code> files, and after install they appear as two <code>/&lt;plugin&gt;:&lt;skill&gt;</code> commands.</li>
+<li><strong>More than text.</strong> The same bundle carries at least one always-on or triggered rule, one <code>hooks.json</code> entry, one subagent and one MCP server declaration, and the install preview or details panel lists them.</li>
+<li><strong>The guard behaves.</strong> With the sale freeze set, the hook refuses a push to <code>main</code> and allows everything else; with the freeze unset it allows the push. Your note says where plugin hooks run and what happens when one fails.</li>
+<li><strong>No credentials in the bundle.</strong> Every credential in the MCP declaration is a <code>${NAME}</code> reference. Your note says when and where the connection is made, and who it is shared with.</li>
+<li><strong>Installed at Personal scope first.</strong> A screenshot shows the plugin installed for you, with the security notice you accepted, before any shared-scope step.</li>
+<li><strong>Install routes compared.</strong> Your note says, for repository, uploaded <code>.zip</code> and skills-only repository installs: what each can carry, what name it gets, and whether it follows later changes or stays fixed.</li>
+<li><strong>Revision predicted, then checked.</strong> You wrote down what the installed plugin would contain after the partial revision-2 upload before you checked it, then confirmed with the checker&#39;s <code>--revise</code> output or the plugin&#39;s version history.</li>
+<li><strong>The unauthorised edit goes nowhere on its own.</strong> For the brand engineer without edit rights, you show a pending proposal with a diff, the person who must approve it, and the unchanged installed plugin in the meantime.</li>
+<li><strong>Inline-secret draft fixed.</strong> All three problems in <code>injectors/inline-secret/</code> are named, and you say what Devin does with each.</li>
+<li><strong>Articulation drill completed</strong> with the voice coach (section 8), or against a timer offline. The gap report (or self-score) is saved next to your note and not committed.</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Devin web app — Customize → Plugins (Personal scope)</td><td>required</td><td>Offline: `node labs/04-plugin-engineering/solution/plugin-check.mjs --kit &lt;your-plugin-dir&gt;` reads your folder the way the criteria do</td><td>Personal scope needs no admin; install there first, then move to Organization</td></tr><tr><td>Devin web app — Organization scope (org admin)</td><td>optional</td><td>Replay the shared-scope steps with `--revise` and `--propose` in the checker and the injector files</td><td>Upload, revision and approval of a proposed edit all happen at this scope</td></tr><tr><td>Second Devin account without plugin edit rights</td><td>optional</td><td>`injectors/unauthorised-proposer.json` plays the brand engineer</td><td>Needed only to watch a real proposal card arrive for the admin</td></tr><tr><td>PagerDuty MCP (OAuth or API token)</td><td>optional</td><td>Leave the declared server unconnected, or point a local copy at the `fixtures/mcp` shim (`node fixtures/mcp/shim.mjs --list`)</td><td>The plugin declares the server; nobody&#39;s credential goes in the bundle</td></tr><tr><td>Devin CLI or Devin Desktop</td><td>optional</td><td>Run the hook through `--hook` in the checker</td><td>Plugin hooks and plugin subagents load in local sessions only</td></tr></tbody></table><h3>With fixtures only</h3><p>Without admin rights or any credentials you still build the whole plugin in a folder, check it with the offline checker until it reports no problems, install it at Personal scope from that folder (zip or repository), and replay the shared-scope moments with the injectors: a skills-only brand repo, a partial revision upload, a plugin with inline secrets, and a brand engineer who is not allowed to edit the shared plugin.</p>
+<h3>Cannot be exercised without live credentials</h3><ul><li>Connecting a live PagerDuty account to the plugin&#39;s MCP server; the reference answer leaves it declared and unconnected</li><li>Approving a proposed edit from a second, non-admin account; the reference answer replays it from the injector fixture</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>skills-only-brand-repo</code></td><td><span class="placeholder">facilitator action</span></td><td>T+20 min</td><td>Lumen Home&#39;s team says they already have a checklist repo and asks you to install that instead. It has `skills/&lt;name&gt;/SKILL.md` and no manifest (`injectors/brand-checklists/`). Predict what name it installs under, what it can and cannot carry, and whether it replaces your plugin.</td></tr><tr><td><code>partial-revision</code></td><td><span class="placeholder">facilitator action</span></td><td>After the first install</td><td>A brand lead raises the low-stock threshold and uploads a zip containing only the file they changed (`injectors/revision-2/`). Say what the installed plugin contains afterwards, before you look.</td></tr><tr><td><code>inline-secret</code></td><td><span class="placeholder">facilitator action</span></td><td>During packaging</td><td>A teammate&#39;s draft (`injectors/inline-secret/`) pastes a PagerDuty token and an OAuth client secret straight into the manifest, under a display-style name. Find all three problems and say what Devin does with each.</td></tr><tr><td><code>unauthorised-proposer</code></td><td><span class="placeholder">facilitator action</span></td><td>T+70 min</td><td>A Trailhead engineer who cannot edit organization plugins asks their session to change the shared plugin (`injectors/unauthorised-proposer.json`). Show what they get, who has to act, and what the installed plugin contains in the meantime.</td></tr><tr><td><code>hook-fails-open</code></td><td><span class="placeholder">facilitator action</span></td><td>Any time</td><td>The security reviewer asks whether the freeze hook is your guarantee that nobody pushes to `main` during a sale. Answer from the documentation, not from your hope.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>The coach plays Harbourline&#39;s security reviewer. She approves what runs in every session, reads files and approval cards, and asks who can change what.</p>
+<h5>60-second framing</h5>
+<p>Lead with what the organization gets, then what is in the box, then what you still need from her. Stems you can use:</p>
+<ul>
+<li>&quot;Every brand team will run the same checklist because…&quot;</li>
+<li>&quot;In one install you get…&quot;</li>
+<li>&quot;What it does not contain is…&quot;</li>
+</ul>
+<p>Sinhala-first note: say the outcome first — one package for every team — before naming files or folders.</p>
+<h5>Think-aloud checkpoint (T+20)</h5>
+<p>The coach asks what you are looking at and what you will check next. Answer with <em>I see… I think… I&#39;ll try… I&#39;ll check…</em>. At T+20 you should be choosing how the plugin will be installed and what that choice means later, not polishing the checklist wording.</p>
+<h5>Think-aloud checkpoint (T+70)</h5>
+<p>Same four verbs, later in the block. By now a revision or a teammate&#39;s change has surprised you. Name the surprise and what you checked. If you need to read the checker output, say &quot;Give me ten seconds to read the checker&quot; rather than going silent.</p>
+<h5>Three-minute security-reviewer update</h5>
+<p>Skeleton: <strong>What runs → Where it came from → Credentials → Who can change it → What it does not guarantee → Ask.</strong> One fact per sentence. Name files and scopes, not features. Pause after each heading word.</p>
+<h5>Objection round</h5>
+<p>The reviewer raises one technical and one commercial objection, in character, about 90 seconds each. Reply with: acknowledge → boundary → evidence → offer. The commercial objection needs a number about the brand teams or the upkeep. The objections themselves are not printed here.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>60-second framing</td><td>framing</td><td>—</td><td>1 min</td></tr><tr><td>Think-aloud checkpoint (T+20)</td><td>checkpoint</td><td>T+20 min</td><td>45 s</td></tr><tr><td>Think-aloud checkpoint (T+70)</td><td>checkpoint</td><td>T+70 min</td><td>45 s</td></tr><tr><td>Three-minute security-reviewer update</td><td>update</td><td>—</td><td>3 min</td></tr><tr><td>Objection 1 (technical)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 (commercial)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-04-plugin-engineering &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><p>Do not open this before you have built your plugin, run the checker on it and done the drill.</p>
+<h4>Feature fit</h4>
+<p>The platform lead wants one procedure everywhere, carrying more than text, changed only through review, and holding no credentials. That is a plugin:</p>
+<ul>
+<li><strong>One unit.</strong> A plugin bundles skills and, optionally, rules, hooks, MCP servers and subagents, and is installed as a whole. You cannot install one skill out of it. Installed at Organization scope, it reaches every cloud session of the organization from the next session on.</li>
+<li><strong>Commands everywhere.</strong> Each skill becomes <code>/&lt;plugin&gt;:&lt;skill&gt;</code> in cloud sessions, the CLI and Desktop.</li>
+<li><strong>Governed sharing.</strong> Organization plugins are edited by admins. Since October 19, 2026 a session whose creator cannot edit a shared plugin can still <em>propose</em> an edit, and an admin with the right permission approves it; the approval card shows the proposed diff.</li>
+<li><strong>Credentials outside.</strong> The plugin declares the MCP server; the connection (OAuth or API key) is made after install from the install toast&#39;s <strong>Connect MCP</strong> or Customize → MCPs, with Access set to Organization (shared) or Personal.</li>
+</ul>
+<p>What it is not: a guaranteed guardrail. Plugin hooks run only in local sessions (CLI and Desktop) and are best effort and fail open. The freeze on <code>main</code> is still enforced by branch protection; the hook is an early warning.</p>
+<h4>The reference plugin</h4>
+<p><code>labs/04-plugin-engineering/solution/harbourline-flash-sale/</code>:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>.devin-plugin/plugin.json</code></td>
+<td>Manifest. Only <code>name</code> is required; it must be lowercase</td>
+</tr>
+<tr>
+<td><code>skills/flash-sale-release/SKILL.md</code></td>
+<td>The eight-step release checklist</td>
+</tr>
+<tr>
+<td><code>skills/flash-sale-incident/SKILL.md</code></td>
+<td>The first-hour incident procedure</td>
+</tr>
+<tr>
+<td><code>AGENTS.md</code></td>
+<td>Always-on rule: sale freeze, which command to use when, no tokens in chat</td>
+</tr>
+<tr>
+<td><code>rules/sale-pricing.md</code></td>
+<td>Triggered rule (<code>trigger: glob</code>) for money and stock during a sale</td>
+</tr>
+<tr>
+<td><code>agents/release-checker.md</code></td>
+<td>Subagent <code>harbourline-flash-sale:release-checker</code> (local sessions only)</td>
+</tr>
+<tr>
+<td><code>hooks.json</code></td>
+<td><code>PreToolUse</code> on <code>exec</code>: exit 2 for <code>git push … main</code> while <code>HARBOURLINE_SALE_FREEZE=1</code></td>
+</tr>
+<tr>
+<td><code>.mcp.json</code></td>
+<td><code>harbourline-incidents</code> server with <code>PAGERDUTY_API_TOKEN: &quot;${PAGERDUTY_API_TOKEN}&quot;</code></td>
+</tr>
+</tbody></table>
+<p>The hook command is self-contained (<code>node -e …</code>) so it does not depend on where the plugin is unpacked.</p>
+<p>Checker on the reference (<code>node labs/04-plugin-engineering/solution/plugin-check.mjs --kit labs/04-plugin-engineering/solution/harbourline-flash-sale</code>), abridged:</p>
+<pre><code class="language-json">{
+  &quot;kind&quot;: &quot;manifest&quot;,
+  &quot;name&quot;: &quot;harbourline-flash-sale&quot;,
+  &quot;commands&quot;: [&quot;/harbourline-flash-sale:flash-sale-incident&quot;, &quot;/harbourline-flash-sale:flash-sale-release&quot;],
+  &quot;rules&quot;: [&quot;AGENTS.md&quot;, &quot;rules/sale-pricing.md&quot;],
+  &quot;agents&quot;: [&quot;release-checker&quot;],
+  &quot;hooks&quot;: [&quot;PreToolUse&quot;],
+  &quot;mcpServers&quot;: [{ &quot;name&quot;: &quot;harbourline-incidents&quot;, &quot;envRefs&quot;: [&quot;PAGERDUTY_API_TOKEN&quot;], &quot;literals&quot;: [], &quot;needsConnection&quot;: true }],
+  &quot;problems&quot;: []
+}
+</code></pre>
+<p><code>cd labs &amp;&amp; pnpm exec vitest run 04-plugin-engineering</code> replays every criterion and injector (8 tests).</p>
+<h4>Install routes</h4>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Carries</th>
+<th>Name</th>
+<th>Follows changes?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>From repository</strong> (<code>owner/repo</code>, optional subdirectory)</td>
+<td>Everything in the folder</td>
+<td>From the manifest</td>
+<td>Yes — tracks the default branch (or a <code>ref</code>) unless pinned with a <code>sha</code>; new content reaches new sessions after merge, Customize after a reindex</td>
+</tr>
+<tr>
+<td><strong>Upload .zip</strong></td>
+<td>Everything in the zip</td>
+<td>From the manifest</td>
+<td>No — pinned to what you uploaded until a new revision is uploaded; every save is in version history</td>
+</tr>
+<tr>
+<td><strong>Skills-only repository</strong> (<code>skills/&lt;name&gt;/SKILL.md</code>, no manifest)</td>
+<td>Skills only</td>
+<td>Named after the repo</td>
+<td>Like a repository install</td>
+</tr>
+<tr>
+<td><strong>CLI</strong> <code>devin plugins install &lt;source&gt;</code></td>
+<td>Everything</td>
+<td>From the manifest</td>
+<td>Personal scope by default; <code>--local</code> for this machine only</td>
+</tr>
+</tbody></table>
+<p>A repository install also needs the organization to have access to that repository; otherwise Customize shows <em>Plugin repos unauthorized</em> and withholds the content.</p>
+<h4>Worked prompts</h4>
+<p>These are the prompts the reference run used. They live here only; the lab page stays promptless.</p>
+<pre><code class="language-prompt">Package the flash-sale release checklist and the first-hour incident procedure as one Devin plugin named harbourline-flash-sale in ~/harbourline-flash-sale. Include: two skills, an always-on AGENTS.md, a glob-triggered pricing rule, a release-checker subagent, a PreToolUse hook that blocks git push to main while HARBOURLINE_SALE_FREEZE=1, and a PagerDuty MCP server whose token is a ${PAGERDUTY_API_TOKEN} reference. No literal credentials anywhere. Then run labs/04-plugin-engineering/solution/plugin-check.mjs on the folder and fix every problem it reports.
+</code></pre>
+<pre><code class="language-prompt">Install ~/harbourline-flash-sale as a plugin for me only (personal scope). Show me the approval card before you install it. Do not install it for the organization.
+</code></pre>
+<pre><code class="language-prompt">Before you check anything: if I upload labs/04-plugin-engineering/injectors/revision-2/harbourline-flash-sale as a new revision of harbourline-flash-sale, list the files the plugin will contain afterwards. Then run plugin-check.mjs --revise against the reference and compare.
+</code></pre>
+<pre><code class="language-prompt">Propose an edit to the organization plugin harbourline-flash-sale: in skills/flash-sale-release/SKILL.md change &quot;fewer than 10 units&quot; to &quot;fewer than 25 units&quot;. I cannot edit organization plugins myself; raise it for an admin to approve and tell me who has to act.
+</code></pre>
+<h4>Injector answers</h4>
+<ul>
+<li><strong>skills-only-brand-repo</strong> — installs as a separate skills-only plugin named after the repo (<code>/lumen-checklists:lumen-sale-checklist</code> with the checker&#39;s <code>--repo-name</code>). It cannot carry a rule, hook, MCP or subagent, and it does not replace <code>harbourline-flash-sale</code>; both would be installed side by side. Better: fold its steps into the shared release skill.</li>
+<li><strong>partial-revision</strong> — a new revision replaces the uploaded bundle. <code>--revise</code> shows the result is exactly two files; six are removed (<code>AGENTS.md</code>, <code>rules/sale-pricing.md</code>, <code>agents/release-checker.md</code>, <code>hooks.json</code>, <code>.mcp.json</code>, the incident skill). Restore from version history, or upload the full folder with the one change. Running sessions keep what they loaded at start.</li>
+<li><strong>inline-secret</strong> — (1) <code>&quot;Harbourline Flash Sale&quot;</code> is not a valid name: lowercase with <code>-</code> or <code>.</code>; (2) a literal token in <code>env</code> is stripped — use <code>${PAGERDUTY_API_TOKEN}</code> and connect after install; (3) an MCP config with a client secret is rejected at activation; a plugin may set an OAuth client ID and scopes only.</li>
+<li><strong>unauthorised-proposer</strong> — <code>--propose</code> returns <code>outcome: &quot;proposal&quot;</code>, <code>applied: false</code>, <code>awaiting: &quot;platform-admin&quot;</code> with a one-line diff. In the product the admin sees an approval card that opens the diff against the saved plugin; nothing changes until it is approved, and then only for new sessions.</li>
+<li><strong>hook-fails-open</strong> — no. Plugin hooks load in local sessions only, and fail open. The guarantee is branch protection on <code>main</code>; the hook catches the mistake earlier.</li>
+</ul>
+<h4>Pitfalls</h4>
+<ul>
+<li>Installing at Organization scope first. Check at Personal scope; the security notice and preview are your first review.</li>
+<li>Treating a revision upload as a patch.</li>
+<li>Putting the PagerDuty token in <code>.mcp.json</code> &quot;just for the demo&quot;.</li>
+<li>Claiming the release-checker subagent or the hook runs in cloud sessions.</li>
+<li>Leaving a repository install unpinned and calling it reviewed: the next merge changes what every session runs.</li>
+</ul>
+<h4>Recovery moves</h4>
+<ul>
+<li>Checker still reports a literal: replace the value with <code>${NAME}</code>, then connect from Customize → MCPs.</li>
+<li>Plugin missing after install: check Customize → Plugins → <em>Installed but blocked</em> (a forbid at a higher level) and the indexing status; reindex after fixing.</li>
+<li>Revision lost files: open Version history and restore, then re-upload the complete folder.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<ul>
+<li><strong>Supply chain (technical).</strong> &quot;It is new code in every session, so treat it like a dependency. Boundary: it runs rules, skills and, in local sessions only, a hook and a subagent; it holds no credential. Evidence: the install preview and security notice list every file; the upload is pinned to what we reviewed, or the repository install is pinned to a SHA; brand engineers can only propose edits, which an admin approves as a diff. Offer: I will keep it at Personal scope until you have read the preview, and pin the SHA we review.&quot;</li>
+<li><strong>Playbook (commercial).</strong> &quot;A playbook is quicker to start, and fine for one team. Boundary: a playbook is a prompt; it cannot carry the pricing rule, the push guard, the reviewer or the incident MCP, and each brand&#39;s copy drifts. Evidence: today two brands keep two different checklists and neither checks stock reservation; the plugin is one install at Organization scope, and one approved edit reaches every team&#39;s next session. Offer: one sale cycle with the plugin, counting checklist steps skipped per release.&quot;</li>
+</ul>
+</div><div data-slot="debrief"><ul>
+<li><strong>Unit of sharing:</strong> the plugin, not the skill. If two teams need different pieces, split plugins.</li>
+<li><strong>Revision = replacement:</strong> always upload the whole folder; use version history to undo.</li>
+<li><strong>Credentials:</strong> declared in the plugin as <code>${NAME}</code>, connected after install, shared or personal by the MCP&#39;s Access setting.</li>
+<li><strong>Local-only parts:</strong> plugin hooks and subagents load in the CLI and Desktop; hooks fail open. Do not sell them as cloud guardrails.</li>
+<li><strong>Change control:</strong> pin (SHA or upload) what was reviewed; non-editors propose, admins approve the diff.</li>
+</ul>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/product-guides/plugins" rel="noopener">Devin docs — Devin plugins and the Customize page</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/cli/extensibility/plugins/overview" rel="noopener">Devin docs — Devin CLI plugins (layout and manifest)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/cli/extensibility/plugins/quickstart" rel="noopener">Devin docs — Plugins quickstart</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/plugin-ecosystem" rel="noopener">Devin docs — Set up your plugin ecosystem</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/release-notes/2026" rel="noopener">Devin release notes 2026 — Propose Edits to Shared Plugins and Skills (October 19, 2026)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — Voice mode</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/04-plugin-engineering/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>

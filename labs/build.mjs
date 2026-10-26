@@ -5,8 +5,13 @@
 // into one self-contained static HTML page (11-section template) and
 // generates labs/index.html from the folders present.
 //
+// The rendered pages are committed so they open straight from a clone; run
+// `pnpm labs:build` after every lab source change and commit the result.
+//
 //   node labs/build.mjs            render all labs + index
-//   node labs/build.mjs --check    validate and render in memory, write nothing
+//   node labs/build.mjs --check    validate, render in memory and compare with the
+//                                  pages on disk (missing, stale or orphaned
+//                                  index.html fails); write nothing
 //   node labs/build.mjs --labs <dir> --out <dir> --repo <dir>
 //
 // Rules enforced at build time (the build fails, exit 1):
@@ -710,9 +715,47 @@ export async function buildLabs({ labsDir = __dirname, outDir = labsDir, repoDir
       log(`wrote ${path.relative(process.cwd(), file)}`);
     }
   } else {
-    log(`checked ${loaded.length} lab(s), nothing written`);
+    const stale = await findStalePages(pages, outDir, repoDir);
+    if (stale.length) throw new BuildError(stale);
+    log(`checked ${loaded.length} lab(s) and ${pages.size} page(s) up to date, nothing written`);
   }
   return { labs: loaded.map((l) => l.dirName), pages };
+}
+
+/** --check: every rendered page must match the committed file byte for byte. */
+async function findStalePages(pages, outDir, repoDir) {
+  const rel = (file) => path.relative(repoDir, file).split(path.sep).join('/');
+  const hint = 'run `pnpm labs:build` and commit the result';
+  const problems = [];
+  for (const [file, html] of pages) {
+    let onDisk;
+    try {
+      onDisk = await fs.readFile(file, 'utf8');
+    } catch (err) {
+      if (err.code !== 'ENOENT') throw err;
+      problems.push(`${rel(file)} is missing; ${hint}`);
+      continue;
+    }
+    if (onDisk !== html) problems.push(`${rel(file)} is stale (differs from the rendered lab sources); ${hint}`);
+  }
+  let entries = [];
+  try {
+    entries = await fs.readdir(outDir, { withFileTypes: true });
+  } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+  }
+  for (const e of entries.sort((a, b) => a.name.localeCompare(b.name))) {
+    if (!e.isDirectory() || !LAB_DIR_PATTERN.test(e.name)) continue;
+    const file = path.join(outDir, e.name, 'index.html');
+    if (pages.has(file)) continue;
+    try {
+      await fs.access(file);
+      problems.push(`${rel(file)} has no lab sources (orphaned page); delete it or restore the lab`);
+    } catch {
+      // no page, nothing to report
+    }
+  }
+  return problems;
 }
 
 /** Defensive: answer text may only appear inside the <template>. */

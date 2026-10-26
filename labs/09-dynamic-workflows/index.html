@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 09 — Prove no endpoint leaks across brands — an audit → fix → verify workflow · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 09</p>
+<h1>Lab 09 — Prove no endpoint leaks across brands — an audit → fix → verify workflow</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Dynamic workflows (pilot): agent(), pipeline() and parallel() over child sessions, flat structured outputs, failure handling, resume by run ID and ACU per agent</li>
+<li><b>Duration:</b> 180 min</li>
+<li><b>Difficulty:</b> advanced</li>
+<li><b>Prerequisites:</b> Labs 01–03 done (environment, rules and skills) so a child session can bring the API up from the repo alone; Repo cloned, `pnpm install` done at the root and `pnpm db:up` working locally; Dynamic workflows enabled for your Devin organization and enough ACU allowance for roughly ten child sessions; Push access to a fork or sandbox copy of the repo, so fixer agents can push throwaway `audit/*` branches</li>
+<li><span class="badge badge-fixture">Credentials: fixture</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<p>Hello — I am the external security auditor Harbourline has hired ahead of its payment-provider renewal. Harbourline runs two brands, <strong>Lumen Home</strong> (USD) and <strong>Trailhead Supply</strong> (EUR), on one Node API and one PostgreSQL database. Every request names its brand in the <code>X-Harbourline-Brand</code> header. Last quarter a Lumen merchandiser opened a Trailhead order by pasting its link. Harbourline says that was a one-off. I need proof, not reassurance.</p>
+<p>What I need from you:</p>
+<ol>
+<li><strong>Proof that no endpoint leaks across brands.</strong> That means every route the API serves, not a sample. For each endpoint I want a verdict: can a caller from one brand read or change a row that belongs to the other brand? Back each verdict with a file and line I can check.</li>
+<li><strong>Confirmed leaks fixed, and each fix verified by someone other than whoever wrote it.</strong> I will not accept &quot;the fixer&#39;s tests pass&quot; as verification.</li>
+<li><strong>A cost I can put in my report.</strong> Harbourline wants to use Devin&#39;s dynamic workflows to do this in parallel. Finance wants a number per agent, not a monthly total.</li>
+</ol>
+<p>You have <strong>seven calendar days</strong> before my report goes to the payment provider. Today you have one three-hour working block. Finance has said the first run must be small: try the method on a slice before paying for the whole API.</p>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>The auditor (me)</strong> signs off on evidence. I read diffs, test names, run logs and cost tables. I do not read prompts.</li>
+<li><strong>Harbourline&#39;s platform lead</strong> owns <code>main</code> and has a freeze on it. No fix lands on <code>main</code> this week. Every remediation goes on a throwaway branch and is closed without merging. The known defects stay in the baseline because other teams train on them.</li>
+<li><strong>Harbourline&#39;s finance lead</strong> approves ACU spend. They want to see the slice cost before they approve the full run.</li>
+<li><strong>Brand merchandisers</strong> (one per brand) can confirm what they should and should not be able to see.</li>
+<li><strong>Forbidden:</strong> changes on <code>main</code>, changes to <code>packages/contracts/</code>, real credentials, and any production database.</li>
+<li><strong>Output:</strong> a short audit note covering endpoint count, verdicts, the fix branch, the verifier&#39;s verdict, and per-agent ACU. Bring the workflow&#39;s execution graph and run log. Keep the note out of commits.</li>
+</ul>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>git switch main &amp;&amp; git status --short</code></pre><pre><code>git branch --list &#39;audit/*&#39; | xargs -r git branch -D</code></pre><pre><code>pnpm lab:reset -- 09</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 09</code> to run these steps for you, and <code>@skills:lab-cleanup 09</code> when you finish. From a terminal: <code>pnpm lab:start -- 09</code> and <code>pnpm lab:cleanup -- 09</code>.</p></div><h3>What “clean” looks like</h3><p>On <code>main</code> with <code>git status --short</code> empty, no local <code>audit/*</code> branches, and the seed-spec dataset loaded for both brands. The planted <code>cross-brand-leak</code> (GET /orders/:orderId ignores the caller&#39;s brand) is still present and its test in services/api/test/planted.test.ts is still skipped.</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when someone who was not in the room can see each of the following.</p>
+<ol>
+<li><strong>Full endpoint inventory.</strong> The audit note lists every endpoint served by <code>services/api</code> (22 on the clean baseline) with one verdict each, <em>leaks</em> or <em>isolated</em>, and a file:line reference for every verdict. The inventory was derived from the code, not typed from memory.</li>
+<li><strong>Slice first.</strong> The run log shows a first run limited to a small slice of route files, and the slice&#39;s cost appears before any wider run. Widening the run changes data, not the workflow&#39;s structure.</li>
+<li><strong>The workflow script exists only in your hidden notes.</strong> It uses separate agent calls for audit, fix and verify, chains them so results flow from one stage to the next, and returns small flat structured outputs. Nothing about it is committed to <code>main</code>.</li>
+<li><strong>Execution graph captured.</strong> A screenshot of the workflow run shows its phases and its agents.</li>
+<li><strong>At least one agent failure handled.</strong> The run log shows an agent that failed or returned invalid output, and shows what the script did about it (bounded retry, corrective re-ask or loud stop). The audit note says whether that failure changed any verdict.</li>
+<li><strong>Resume demonstrated.</strong> A second invocation with the same run ID shows completed agents replaying from the record rather than starting new sessions, and you can explain what would make an agent run again.</li>
+<li><strong>Fixes on throwaway branches only.</strong> Each confirmed leak has a fix branch named by the script, so no two fixers can collide, with a test that fails on the baseline and passes on the branch. <code>main</code> still contains every planted defect, and the branch is closed or deleted without merging.</li>
+<li><strong>Independent verification.</strong> A different agent from the fixer gives a pass/fail verdict per fix branch, based on its own check.</li>
+<li><strong>ACU per agent reported.</strong> The audit note has a table with one row per agent (including retries) plus the run total. It also projects the cost of the full fan-out from the slice numbers.</li>
+<li><strong>Injectors absorbed.</strong> The note says how branch names avoid collision, and predicts what adding a date to a prompt would do on resume.</li>
+<li><strong>Articulation drill completed</strong> with the voice coach (section 8), or against a timer offline. The gap report (or self-score) is saved next to the audit note and not committed.</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Devin web app with dynamic workflows</td><td>required</td><td>Fixture-only: replay the reference run recorded in the hidden answer (run log, per-agent ACU table, fix diff) and do the audit by hand with the API tests</td><td>Child sessions are billed per agent; the slice-first rule keeps the first run small</td></tr><tr><td>GitHub push to the course repo or a fork</td><td>required</td><td>Shared-VM agents committing to local `audit/*` branches only; nothing is pushed</td><td>Separate-VM fixers can only hand work back through pushed branches</td></tr><tr><td>PostgreSQL 16 (docker compose)</td><td>required</td><td>Same container locally and inside each child session</td><td>The API tests in services/api need it; `pnpm lab:reset -- 09` reseeds</td></tr></tbody></table><h3>With fixtures only</h3><p>Without workflow access you still do the whole audit: enumerate the 22 endpoints from services/api/src/routes, decide per endpoint whether a caller of the other brand can read or change a row, un-skip the planted cross-brand test on a throwaway branch to prove the fix, then read the reference run in the hidden answer and price your own design with its per-agent ACU numbers.</p>
+<h3>Cannot be exercised without live credentials</h3><ul><li>Running every route file through the full fan-out — the reference run deliberately stops after the slice; the full run is priced from the slice&#39;s per-agent numbers</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>slice-first</code></td><td><span class="placeholder">facilitator action</span></td><td>Before the first run</td><td>The auditor allows one small run before the full fan-out: at most two route files. Your workflow must accept the slice as data and widen without code changes once the slice is clean.</td></tr><tr><td><code>invalid-agent-output</code></td><td><span class="placeholder">facilitator action</span></td><td>During the first run</td><td>At least one agent fails or returns output that does not match what you asked for (session creation refused, a skipped endpoint, a path where you expected a file name). The run must notice it in code and recover or stop loudly — never report it as clean.</td></tr><tr><td><code>branch-collision</code></td><td><span class="placeholder">facilitator action</span></td><td>Fix stage</td><td>Two fixers are told to push the same branch name. Decide in the script, not in a prompt, how branch names are derived so separate-VM fixers can never overwrite each other.</td></tr><tr><td><code>date-in-prompt</code></td><td><span class="placeholder">facilitator action</span></td><td>After the first run, before resuming</td><td>The facilitator adds today&#39;s date to the audit prompt and asks you to resume the same run ID. Predict which agents replay and which run again, then explain what that costs.</td></tr><tr><td><code>budget-cap</code></td><td><span class="placeholder">facilitator action</span></td><td>T+120 min</td><td>The finance lead caps the auditor&#39;s proof at a fixed ACU figure. You must say whether the full fan-out fits, using per-agent numbers from your own run.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>The coach plays the external auditor from the brief. The auditor reads evidence, not prompts, and expects numbers.</p>
+<h5>60-second framing</h5>
+<p>Lead with what the auditor gets, then how, then what it costs. Stems you can use:</p>
+<ul>
+<li>&quot;You asked for proof about every endpoint; here is how many there are and how I covered them…&quot;</li>
+<li>&quot;I split the work into stages because…&quot;</li>
+<li>&quot;The first run was deliberately small: …&quot;</li>
+</ul>
+<p>Sinhala-first note: say the verdict first. Do not walk the auditor through the method before you give the answer.</p>
+<h5>Think-aloud checkpoint (T+20)</h5>
+<p>The coach asks what you are looking at and what you will check next. Answer with <em>I see… I think… I&#39;ll try… I&#39;ll check…</em>. At T+20 you should be talking about the inventory and the shape of the slice, not the fix.</p>
+<h5>Think-aloud checkpoint (T+120)</h5>
+<p>Same four verbs, later in the run. By now something has gone wrong or nearly gone wrong. Name it, and say how the run noticed it. If you need to read the log, say &quot;Give me ten seconds to read the run log&quot; rather than going silent.</p>
+<h5>Three-minute auditor update</h5>
+<p>Skeleton: <strong>Verdict → Coverage → Failure and recovery → Fix and verification → Cost → Ask.</strong> Use one number per sentence. Name the cost per agent, not just a total. Pause after each heading word.</p>
+<h5>Objection round</h5>
+<p>The auditor raises one technical and one commercial objection, in character, about 90 seconds each. Reply with: acknowledge → boundary → evidence → offer. The commercial objection cannot be answered without numbers from your own run. The objections themselves are not printed here.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>60-second framing</td><td>framing</td><td>—</td><td>1 min</td></tr><tr><td>Think-aloud checkpoint (T+20)</td><td>checkpoint</td><td>T+20 min</td><td>45 s</td></tr><tr><td>Think-aloud checkpoint (T+120)</td><td>checkpoint</td><td>T+120 min</td><td>45 s</td></tr><tr><td>Three-minute auditor update</td><td>update</td><td>—</td><td>3 min</td></tr><tr><td>Objection 1 (technical)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 (commercial)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-09-dynamic-workflows &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><p>Do not open this before you have run the slice, written your audit note and done the drill.</p>
+<h4>Feature fit</h4>
+<p>The auditor wants per-endpoint verdicts for the whole API, fixes that someone other than the fixer verifies, and a cost per agent. A dynamic workflow fits that shape:</p>
+<ul>
+<li><strong>Audit fans out.</strong> There are 22 endpoints in 7 route files. Each route file is an independent judgment unit, and you derive the list from code, so it is deterministic.</li>
+<li><strong>Data flows between stages.</strong> An audit&#39;s confirmed leaks become the fixer&#39;s prompt, and the fixer&#39;s branch and commit become the verifier&#39;s prompt. That is a <code>pipeline()</code>, not three unrelated sessions.</li>
+<li><strong>Verification has to be independent.</strong> A fresh agent on its own VM cannot reuse the fixer&#39;s assumptions.</li>
+<li><strong>Cost is visible per agent.</strong> The run prints ACU per agent and per phase. That is the number finance asked for.</li>
+</ul>
+<p>What it is not: a reason to use <code>vm_mode=&quot;shared&quot;</code>. Everything the agents need is on the remote (the repo at a pinned commit), so every agent runs on its own VM. Fixers hand work back <strong>through pushed branches</strong>, the only channel between separate VMs. Shared VM is for local-only state, and fixers sharing one checkout would also collide on files.</p>
+<h4>The workflow (reference run)</h4>
+<p>Small flat schemas: strings and arrays of strings, three to four fields each. The inventory comes from a regex over <code>services/api/src/routes/*.ts</code> inside the script, so a resume sees exactly the same list. The slice is data (<code>SLICE</code>); to widen, set <code>SLICE = sorted(MOUNTS)</code>.</p>
+<p><code>BASE_SHA</code> comes from your checkout&#39;s <code>HEAD</code>, so agents audit the same code the inventory was parsed from. That commit must be pushed, because agents clone from the remote. The reference run pinned <code>c94b9da</code>; routes changed on <code>main</code> after that, so never hard-code a SHA. If you can only push to a fork, set <code>LAB09_REPO</code>; otherwise fixer pushes fail and the verifier has no branch to check.</p>
+<pre><code class="language-python">import asyncio
+import json
+import os
+import re
+import subprocess
+from pathlib import Path
+
+CHECKOUT = Path(&quot;/home/ubuntu/repos/learn-devin-new-features&quot;)
+ROUTES_DIR = CHECKOUT / &quot;services/api/src/routes&quot;
+# Push target for fixer branches: set LAB09_REPO=&lt;you&gt;/&lt;fork&gt; when you cannot push to the course repo.
+REPO = os.environ.get(&quot;LAB09_REPO&quot;, &quot;codev-workshops/learn-devin-new-features&quot;)
+# Agents audit exactly the commit whose routes the inventory below was parsed from.
+BASE_SHA = subprocess.run([&quot;git&quot;, &quot;-C&quot;, str(CHECKOUT), &quot;rev-parse&quot;, &quot;HEAD&quot;],
+                          check=True, capture_output=True, text=True).stdout.strip()
+MOUNTS = {&quot;system.ts&quot;: &quot;&quot;, &quot;catalog.ts&quot;: &quot;/catalog&quot;, &quot;carts.ts&quot;: &quot;/carts&quot;, &quot;checkout.ts&quot;: &quot;/checkout&quot;,
+          &quot;orders.ts&quot;: &quot;/orders&quot;, &quot;admin.ts&quot;: &quot;/admin&quot;, &quot;webhooks.ts&quot;: &quot;/webhooks&quot;}
+SLICE = [&quot;carts.ts&quot;, &quot;orders.ts&quot;]  # run on a slice first; widen to sorted(MOUNTS) once the slice is clean
+ROUTE_RE = re.compile(r&#39;r\.(get|post|put|patch|delete)\(\s*&quot;([^&quot;]*)&quot;&#39;)
+
+AUDIT_SCHEMA = {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {
+    &quot;route_file&quot;: {&quot;type&quot;: &quot;string&quot;},
+    &quot;endpoints_checked&quot;: {&quot;type&quot;: &quot;array&quot;, &quot;items&quot;: {&quot;type&quot;: &quot;string&quot;}},
+    &quot;leaks&quot;: {&quot;type&quot;: &quot;array&quot;, &quot;items&quot;: {&quot;type&quot;: &quot;string&quot;}},
+    &quot;evidence&quot;: {&quot;type&quot;: &quot;string&quot;}},
+    &quot;required&quot;: [&quot;route_file&quot;, &quot;endpoints_checked&quot;, &quot;leaks&quot;, &quot;evidence&quot;]}
+FIX_SCHEMA = {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {
+    &quot;branch&quot;: {&quot;type&quot;: &quot;string&quot;}, &quot;commit_sha&quot;: {&quot;type&quot;: &quot;string&quot;},
+    &quot;fixed&quot;: {&quot;type&quot;: &quot;array&quot;, &quot;items&quot;: {&quot;type&quot;: &quot;string&quot;}}, &quot;tests&quot;: {&quot;type&quot;: &quot;string&quot;}},
+    &quot;required&quot;: [&quot;branch&quot;, &quot;commit_sha&quot;, &quot;fixed&quot;, &quot;tests&quot;]}
+VERIFY_SCHEMA = {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {
+    &quot;branch&quot;: {&quot;type&quot;: &quot;string&quot;}, &quot;verdict&quot;: {&quot;type&quot;: &quot;string&quot;, &quot;enum&quot;: [&quot;pass&quot;, &quot;fail&quot;]},
+    &quot;endpoints_proven&quot;: {&quot;type&quot;: &quot;array&quot;, &quot;items&quot;: {&quot;type&quot;: &quot;string&quot;}}, &quot;notes&quot;: {&quot;type&quot;: &quot;string&quot;}},
+    &quot;required&quot;: [&quot;branch&quot;, &quot;verdict&quot;, &quot;endpoints_proven&quot;, &quot;notes&quot;]}
+
+COMMON = (f&quot;Repository {REPO}, commit {BASE_SHA} (check it out exactly; never push to main, never open a PR, &quot;
+          &quot;never merge anything). Harbourline has two brands; the caller&#39;s brand is the X-Harbourline-Brand header &quot;
+          &quot;(services/api/src/middleware/auth.ts sets req.caller.brand). An endpoint LEAKS when a caller of one brand &quot;
+          &quot;can read or change a row that belongs to the other brand. &quot;)
+
+
+def inventory():
+    out = {}
+    for name in sorted(MOUNTS):
+        src = (ROUTES_DIR / name).read_text()
+        out[name] = sorted(f&quot;{m.upper()} {MOUNTS[name]}{p}&quot;.rstrip(&quot;/&quot;) or &quot;/&quot; for m, p in ROUTE_RE.findall(src))
+    return out
+
+
+async def call(prompt, phase, schema, label, mode):
+    try:
+        return await agent(prompt, phase=phase, schema=schema, label=label, mode=mode, repos=[REPO],
+                           soft_time_limit_minutes=25)
+    except WorkflowAgentError as err:
+        log(f&quot;{label}: agent failed ({err}); retrying once in the inherited mode&quot;)
+        return await agent(prompt + &quot; (retry)&quot;, phase=phase, schema=schema, label=f&quot;{label}-retry&quot;,
+                           repos=[REPO], soft_time_limit_minutes=25)
+
+
+def audit_stage(inv):
+    async def run(route_file):
+        expected = inv[route_file]
+        prompt = (COMMON + f&quot;Audit services/api/src/routes/{route_file} for cross-brand leaks. Endpoints in scope &quot;
+                  f&quot;(exactly these): {json.dumps(expected)}. Read the code and the services it calls; you may run &quot;
+                  &quot;the API tests (pnpm install --frozen-lockfile &amp;&amp; pnpm --filter @harbourline/api test) but change nothing. Report every endpoint in &quot;
+                  &quot;endpoints_checked using the same &#39;METHOD /path&#39; strings, each confirmed leak in leaks as &quot;
+                  &quot;&#39;METHOD /path: one-line reason&#39;, and file:line evidence in one string.&quot;)
+        res = await call(prompt, &quot;audit&quot;, AUDIT_SCHEMA, f&quot;audit-{route_file}&quot;, &quot;lite&quot;)
+        missing = sorted(set(expected) - set(res.get(&quot;endpoints_checked&quot;, [])))
+        if missing:  # invalid output: the agent skipped endpoints -&gt; one corrective retry, then fail loudly
+            log(f&quot;audit-{route_file}: missed {missing}; re-asking&quot;)
+            res = await call(prompt + f&quot; Your previous answer skipped {json.dumps(missing)}; cover them.&quot;,
+                             &quot;audit&quot;, AUDIT_SCHEMA, f&quot;audit-{route_file}-recheck&quot;, &quot;lite&quot;)
+            missing = sorted(set(expected) - set(res.get(&quot;endpoints_checked&quot;, [])))
+            if missing:
+                raise RuntimeError(f&quot;audit-{route_file} still skips {missing}&quot;)
+        log(f&quot;audit-{route_file}: {len(expected)} endpoints, {len(res[&#39;leaks&#39;])} leak(s)&quot;)
+        return res
+    return run
+
+
+async def fix_stage(audit):
+    if not audit[&quot;leaks&quot;]:
+        return {&quot;audit&quot;: audit, &quot;fix&quot;: None}
+    stem = audit[&quot;route_file&quot;].removesuffix(&quot;.ts&quot;)
+    branch = f&quot;audit/lab09-{stem}-fix&quot;  # one branch per route file: fixers never collide
+    prompt = (COMMON + f&quot;Fix these confirmed leaks in services/api/src/routes/{audit[&#39;route_file&#39;]} and nothing &quot;
+              f&quot;else: {json.dumps(audit[&#39;leaks&#39;], sort_keys=True)}. Add or un-skip a Vitest test per leak that &quot;
+              &quot;fails before and passes after. Run pnpm install --frozen-lockfile &amp;&amp; pnpm --filter @harbourline/api test &amp;&amp; pnpm --filter @harbourline/api run lint. &quot;
+              f&quot;Commit on a new branch {branch} cut from {BASE_SHA} and push it. This is a throwaway demo branch.&quot;)
+    fix = await call(prompt, &quot;fix&quot;, FIX_SCHEMA, f&quot;fix-{stem}&quot;, None)
+    log(f&quot;fix-{stem}: {fix[&#39;branch&#39;]} @ {fix[&#39;commit_sha&#39;][:7]}&quot;)
+    return {&quot;audit&quot;: audit, &quot;fix&quot;: fix}
+
+
+async def verify_stage(item):
+    audit, fix = item[&quot;audit&quot;], item[&quot;fix&quot;]
+    if fix is None:
+        return {**item, &quot;verify&quot;: None}
+    stem = audit[&quot;route_file&quot;].removesuffix(&quot;.ts&quot;)
+    prompt = (COMMON + f&quot;Independently verify branch {fix[&#39;branch&#39;]} at {fix[&#39;commit_sha&#39;]}. Do not trust its &quot;
+              f&quot;tests: for every endpoint in {json.dumps(audit[&#39;endpoints_checked&#39;])} decide from the diff and a &quot;
+              &quot;test of your own (run locally, do not push) whether a caller of the other brand is now refused. &quot;
+              &quot;verdict is pass only if every listed leak is closed and no endpoint regressed.&quot;)
+    ver = await call(prompt, &quot;verify&quot;, VERIFY_SCHEMA, f&quot;verify-{stem}&quot;, &quot;lite&quot;)
+    log(f&quot;verify-{stem}: {ver[&#39;verdict&#39;]}&quot;)
+    return {**item, &quot;verify&quot;: ver}
+
+
+async def main():
+    await register_workflow({
+        &quot;name&quot;: &quot;lab09-brand-isolation-audit&quot;,
+        &quot;description&quot;: &quot;Audit services/api routes for cross-brand leaks, fix on throwaway branches, verify independently&quot;,
+        &quot;product&quot;: &quot;Harbourline services/api&quot;,
+        &quot;soft_time_limit_minutes&quot;: 25,
+        &quot;phases&quot;: [
+            {&quot;title&quot;: &quot;audit&quot;, &quot;detail&quot;: &quot;one agent per route file, read-only&quot;, &quot;labels&quot;: [f&quot;audit-{f}&quot; for f in SLICE]},
+            {&quot;title&quot;: &quot;fix&quot;, &quot;detail&quot;: &quot;one agent per route file with confirmed leaks, own branch&quot;},
+            {&quot;title&quot;: &quot;verify&quot;, &quot;detail&quot;: &quot;fresh agent re-checks every fix branch&quot;},
+        ],
+    })
+    inv = inventory()
+    log(f&quot;inventory: {sum(len(v) for v in inv.values())} endpoints in {len(inv)} files; slice {SLICE}&quot;)
+    results = await pipeline(SLICE, audit_stage(inv), fix_stage, verify_stage)
+    for r in results:
+        a, f, v = r[&quot;audit&quot;], r[&quot;fix&quot;], r[&quot;verify&quot;]
+        log(json.dumps({&quot;file&quot;: a[&quot;route_file&quot;], &quot;endpoints&quot;: len(a[&quot;endpoints_checked&quot;]), &quot;leaks&quot;: a[&quot;leaks&quot;],
+                        &quot;branch&quot;: f and f[&quot;branch&quot;], &quot;verdict&quot;: v and v[&quot;verdict&quot;]}, sort_keys=True))
+
+
+asyncio.run(main())
+</code></pre>
+<p>Kick-off you would type into a session that has the dynamic-workflows skill:</p>
+<pre><code class="language-prompt">Write a dynamic workflow that audits services/api for cross-brand leaks. Enumerate endpoints deterministically from services/api/src/routes inside the script. Use one read-only audit agent per route file, run as a pipeline into one fixer per file with confirmed leaks (own branch audit/lab09-&lt;file&gt;-fix, pinned base commit, never main), then a fresh verifier per fix branch. Use flat schemas only. Run it on carts.ts and orders.ts first, then show me ACU per agent before widening.
+</code></pre>
+<h5>What the reference run actually did (2026-10-22, run <code>wfr-b3ece5951a8b489e89f6b17a4a19e602</code>)</h5>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Phase</th>
+<th>Result</th>
+<th>ACU</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>audit-carts.ts</td>
+<td>audit</td>
+<td><strong>failed at session creation</strong>: requested mode <code>lite</code> is not available to the org</td>
+<td>0</td>
+</tr>
+<tr>
+<td>audit-carts.ts-retry</td>
+<td>audit</td>
+<td>5 endpoints checked, 0 leaks</td>
+<td>0.99</td>
+</tr>
+<tr>
+<td>audit-orders.ts</td>
+<td>audit</td>
+<td><strong>failed at session creation</strong> (same reason)</td>
+<td>0</td>
+</tr>
+<tr>
+<td>audit-orders.ts-retry</td>
+<td>audit</td>
+<td>4 endpoints checked, 1 leak: <code>GET /orders/:orderId</code> filters on id only, so a merchandiser/admin of one brand reads the other brand&#39;s order</td>
+<td>0.71</td>
+</tr>
+<tr>
+<td>fix-…/orders</td>
+<td>fix</td>
+<td>commit <code>a9313cf</code> on a throwaway <code>audit/lab09-…</code> branch: <code>WHERE id = $1 AND brand = $2</code>, planted test un-skipped</td>
+<td>0.96</td>
+</tr>
+<tr>
+<td>verify-…/orders</td>
+<td>verify</td>
+<td><strong>failed at session creation</strong> (same reason)</td>
+<td>0</td>
+</tr>
+<tr>
+<td>verify-…/orders-retry</td>
+<td>verify</td>
+<td><code>pass</code>: the other brand now gets 404, no endpoint regressed</td>
+<td>0.84</td>
+</tr>
+<tr>
+<td><strong>Slice total</strong></td>
+<td></td>
+<td>2 of 7 route files, 9 of 22 endpoints, wall time 616 s</td>
+<td><strong>3.49</strong></td>
+</tr>
+</tbody></table>
+<p>ACU figures are as printed at the end of the first run. On the resume a few minutes later the same four sessions reported 1.02 / 0.73 / 1.01 / 0.89 = 3.64, because usage settles after a session finishes. Quote the settled figure, and say that you did.</p>
+<p><strong>Failure handling.</strong> Three agents failed. <code>call()</code> catches <code>WorkflowAgentError</code> and retries once in the inherited mode, labelled <code>-retry</code> so the journal and the cost table stay honest. The coverage check is the second guard: if an audit&#39;s <code>endpoints_checked</code> misses any endpoint from the deterministic inventory, the script re-asks once, then raises. A skipped endpoint can never read as &quot;isolated&quot;.</p>
+<p><strong>The bug the run exposed.</strong> The orders auditor returned <code>route_file</code> as <code>services/api/src/routes/orders.ts</code> instead of <code>orders.ts</code>. <code>fix_stage</code> built the branch name from that output, which produced <code>audit/lab09-services/api/src/routes/orders-fix</code>. It was harmless here, but it is exactly how two fixers collide. <strong>Derive keys (labels, branch names) from the input item, never from agent output.</strong> Pass the route file through the pipeline yourself, for example <code>{&quot;route_file&quot;: f, **res}</code>.</p>
+<p><strong>Resume.</strong> Re-invoking <code>run_workflow</code> with the same run ID took 271 s and logged <code>recorded result (replay)</code> for all four completed agents. No new session did any work. The three <code>lite</code> calls failed again at creation (they have no recorded result) and cost nothing.</p>
+<p><strong>Date-in-prompt injector.</strong> Recorded results replay only while the agent&#39;s call (prompt, schema, options) is byte-identical. Add <code>f&quot;Today is {date.today()}&quot;</code> to the audit prompt and every audit misses replay and runs again. Each new audit result is new data, so every downstream fixer and verifier prompt changes too, and the whole slice is paid for again (≈3.5 ACU). If the auditor needs a date, pin it as a constant in the script, or record it with <code>log()</code>.</p>
+<p><strong>Projection for the full fan-out.</strong> Audits average ≈0.85 ACU each, so 7 route files cost ≈6 ACU. Each route file with a confirmed leak adds ≈1.85 ACU (fix plus verify). With the one known leak, the full proof costs about <strong>8 ACU</strong>. Allow ≈10 if another route file turns out to leak. One large single session would read all 22 endpoints in one context for less. But it gives no per-endpoint journal, no independent verifier, no resume and no per-agent bill.</p>
+<h5>Clean-up</h5>
+<p>The fix branch was deleted after its SHA was recorded. <code>main</code> still has the planted leak and the skipped test (<code>git grep -n &quot;it.skip(\&quot;cross-brand-leak&quot; services/api/test</code>).</p>
+<h4>Pitfalls</h4>
+<ul>
+<li>Hard-coding the endpoint list in a prompt instead of deriving it in the script. The first new route silently escapes the audit.</li>
+<li>Fixers that share a branch name, or a shared VM. The second push overwrites the first, or the second fixer edits the first one&#39;s files.</li>
+<li>Treating &quot;the fixer&#39;s tests pass&quot; as verification. The auditor asked for independent evidence.</li>
+<li>Requesting a mode the org does not have and assuming the run is fine. Read the log: the retry is visible and must appear in the cost table.</li>
+<li>Quoting a monthly total instead of ACU per agent, or quoting the unsettled number without saying so.</li>
+<li>Merging the fix. The leak is a planted course defect, so the branch is evidence, not a delivery.</li>
+</ul>
+<h4>Recovery moves</h4>
+<ul>
+<li>If the coach asks &quot;how do you know it covered everything?&quot;, give the number first (&quot;22 endpoints, derived from code, 9 in the slice&quot;), then the guard (the coverage check raises).</li>
+<li>If you lose the thread in the update, go back to the skeleton heading you are on and say one number.</li>
+<li>If you do not have the settled ACU figure, say &quot;3.5 ACU for the slice, as printed; the settled figure may be slightly higher&quot;.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<ul>
+<li><strong>Technical: &quot;How do I know an agent didn&#39;t skip endpoints and call it clean?&quot;</strong> Acknowledge: an agent can omit things. Boundary: the endpoint list is computed by the script from the route files, not by an agent. Evidence: every audit&#39;s <code>endpoints_checked</code> is compared with that list, a gap triggers one re-ask and then a hard failure, and the run log shows all 9 slice endpoints accounted for. Offer: widen to all 22 with the same check and attach the log.</li>
+<li><strong>Commercial: &quot;Why pay for a fan-out of agents when one engineer could read 22 endpoints in an afternoon?&quot;</strong> Acknowledge: one reader is cheaper per line read. Boundary: what you are buying is an independent verifier and a per-agent bill. Evidence: the slice cost 3.49 ACU across four working agents (0.99 and 0.71 per audit, 0.96 for the fix, 0.84 for the verifier), and the full proof projects to about 8 ACU. Offer: approve the full run at a 10 ACU cap, with each extra leaking file adding about 1.9.</li>
+</ul>
+</div><div data-slot="debrief"><ul>
+<li><strong>Single large session.</strong> Wins when the inventory is small and nobody needs per-agent cost or independent verification. Here it would be cheaper but weaker evidence.</li>
+<li><strong><code>parallel()</code> of audits only, fixes by hand.</strong> Wins when fixes need human judgment or touch frozen contracts.</li>
+<li><strong>Shared-VM agents.</strong> Wins only when inputs exist only on your machine (uncommitted work, local fixtures). It is billed to your session and cannot isolate fixers.</li>
+<li><strong>Pipeline (what we did).</strong> Wins when one stage&#39;s output is the next stage&#39;s prompt and stages should not wait for each other. The orders fixer started while the carts audit was still running.</li>
+</ul>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/product-guides/dynamic-workflows" rel="noopener">Devin docs — Dynamic workflows</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/api-reference/sessions" rel="noopener">Devin docs — Structured output for sessions</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/billing" rel="noopener">Devin docs — Billing and ACUs</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — Voice mode</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/" rel="noopener">OWASP API Security Top 10 2023 — API1 Broken Object Level Authorization</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/09-dynamic-workflows/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>
