@@ -4,10 +4,11 @@ import type { Address, CheckoutResult } from "@harbourline/contracts";
 import type { Db } from "../db.js";
 import { config, now } from "../config.js";
 import { conflict, outOfStock, validationFailed } from "../errors.js";
-import { requireCaller } from "../middleware/auth.js";
+import { isStaff, requireCaller } from "../middleware/auth.js";
 import { Validator } from "../middleware/validate.js";
 import { brandPricing, getBrandRow, type BrandRow } from "../services/brands.js";
 import { getCartLines, getCartRow, type CartLineRow } from "../services/carts.js";
+import { currentPrice, resolveSellable } from "../services/catalog.js";
 import { computeTotals, totalsToApi } from "../money.js";
 import { ORDER_COLUMNS, ordersToApi, type OrderRow } from "../services/orders.js";
 
@@ -201,9 +202,24 @@ export function checkoutRouter(db: Db): Router {
         reservationsByLine.set(line.id, taken);
       }
 
-      // Totals from the cart's stored unit prices, not the current price list (PLANTED.md `stale-cart-prices`).
+      // Re-price every line from the current price list so flash-sale prices apply at checkout.
+      // Staff may pin a goodwill price per SKU (customer-service requests) with `priceOverrides`.
+      const overrides = (req.body?.priceOverrides ?? {}) as Record<string, string>;
+      for (const line of lines) {
+        const sellable = await resolveSellable(tx, brandRow.id, line.sku);
+        const current = await currentPrice(
+          tx,
+          brandRow.id,
+          sellable?.sku ?? line.sku,
+          pricing.currency,
+        );
+        const pinned = isStaff(req.caller) ? overrides[line.sku] : undefined;
+        line.unit_price = pinned ?? current.price.amount;
+      }
+      // Round per line, like the fulfilment worker, so the API and the worker agree on totals.
+      const toCents = (value: number) => Math.floor(value * 100) / 100;
       const totals = computeTotals(
-        lines.map((l) => ({ unitPrice: Number(l.unit_price), quantity: l.quantity })),
+        lines.map((l) => ({ unitPrice: toCents(Number(l.unit_price) * l.quantity), quantity: 1 })),
         pricing,
       );
       const numberRow = await tx.query<{ n: number }>("SELECT nextval('order_number_seq') AS n");
