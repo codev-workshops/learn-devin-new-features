@@ -5,7 +5,7 @@
 // the runner never drift. Used directly from a terminal and by the `lab-start` / `lab-cleanup`
 // skills in Devin Cloud sessions.
 //
-//   start   : pnpm install if needed, Postgres up + migrated when the lab touches the database,
+//   start   : pnpm install if needed, contracts built if needed, Postgres up + migrated when the lab touches the database,
 //             then every reset command; ends by printing the lab's clean state.
 //   cleanup : every reset command (restores the starting state, including steps marked
 //             "only if …"), then stops Postgres unless --keep-db.
@@ -48,6 +48,8 @@ const needsDb = steps.some((s) => /\b(lab:reset|db:seed|db:migrate|db:up)\b/.tes
 const plan = [];
 if (mode === "start" && !existsSync(join(root, "node_modules")))
   plan.push({ cmd: "pnpm install --frozen-lockfile" });
+if (needsDb && !existsSync(join(root, "packages/contracts/dist/index.js")))
+  plan.push({ cmd: "pnpm --filter @harbourline/contracts build" });
 if (needsDb) plan.push({ cmd: "pnpm db:up" }, { cmd: "pnpm db:migrate" });
 for (const s of steps) {
   if (s.optional && mode === "start")
