@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 00 — Read the brief, write the plan — a Harbourline warm-up · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 00</p>
+<h1>Lab 00 — Read the brief, write the plan — a Harbourline warm-up</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Framing a Devin task (no Devin execution): choosing a capability and the evidence that proves it worked</li>
+<li><b>Duration:</b> 20 min</li>
+<li><b>Difficulty:</b> intro</li>
+<li><b>Prerequisites:</b> Repo cloned locally and `pnpm install` done at the root; Read the root README.md once</li>
+<li><span class="badge badge-fixture">Credentials: fixture</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<p>Hi — I run the platform team at <strong>Harbourline</strong>. We operate two online brands on one codebase and one PostgreSQL database: <strong>Lumen Home</strong> (USD, lighting and home goods, tax added at checkout) and <strong>Trailhead Supply</strong> (EUR, outdoor gear, VAT-inclusive prices, free shipping over €80). Together they process roughly 400 orders a week in the quiet season and several times that during Lumen&#39;s &quot;Lamp Week&quot; flash sale.</p>
+<p>We have just been given a Devin seat and I have a list of things that hurt: a new engineer takes a week to run the store locally and someone reset the shared database on day two; a merchandiser once saw another brand&#39;s order; the Trailhead reconciliation report is off by a few cents on about 3% of orders; and during the last flash sale we sold lamps we did not have. I do not expect you to fix any of that today.</p>
+<p>What I want from you in the next twenty minutes is a <strong>one-page plan</strong>: which problem you would put in front of Devin first, which Devin capability you would use for it, why that one and not the others, and how you — and I — would know it worked. I will read the plan, then ask you to explain it to me out loud as if I were paying for it.</p>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>In the room:</strong> the platform lead (me), one merchandiser from each brand, the on-call engineer who was paged during Lamp Week.</li>
+<li><strong>Forbidden this week:</strong> no schema changes, no changes on <code>main</code>, nothing that touches the production database. Demos happen on throwaway branches.</li>
+<li><strong>Decision deadline:</strong> the Lamp Week flash sale starts in four weeks; whatever you pick first must show evidence before then.</li>
+<li><strong>Budget:</strong> one Devin seat; assume a modest ACU allowance, so the first task must be small enough to finish in one session.</li>
+<li><strong>Output:</strong> a Markdown file, <code>labs/00-sample/PLAN.md</code>, no longer than one printed page. Do not commit it.</li>
+</ul>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>git status --short</code></pre><pre><code>rm -f labs/00-sample/PLAN.md labs/00-sample/PLAN.report.md</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 00</code> to run these steps for you, and <code>@skills:lab-cleanup 00</code> when you finish. From a terminal: <code>pnpm lab:start -- 00</code> and <code>pnpm lab:cleanup -- 00</code>.</p></div><h3>What “clean” looks like</h3><p><code>git status --short</code> prints nothing and there is no <code>labs/00-sample/PLAN.md</code>. This lab touches no database, no service and no Devin settings.</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when all of the following are observable by someone who was not in the room.</p>
+<ol>
+<li><strong>A plan exists</strong> at <code>labs/00-sample/PLAN.md</code>, one printed page or less, with four headed parts in this order: the problem, the approach, the evidence, the next step.</li>
+<li><strong>One problem, one capability.</strong> The plan names exactly one of the four problems in the brief as the first task and exactly one Devin capability for it. A reader can tell in one sentence why that capability and not an alternative.</li>
+<li><strong>Business impact is quantified.</strong> At least one sentence states the cost of the chosen problem in orders, money or engineer-days using numbers from the brief (or an explicit assumption).</li>
+<li><strong>Evidence is observable, not a command.</strong> The &quot;evidence&quot; part lists what artefact, number, screenshot or recording would prove success. Lines such as &quot;run the tests&quot; do not count; &quot;the oversell script leaves on-hand at 0, not −4&quot; does.</li>
+<li><strong>Constraints are respected explicitly.</strong> The plan states at least one thing it will <em>not</em> do because of the stakeholder constraints (schema freeze, no changes on <code>main</code>, budget).</li>
+<li><strong>The injector is absorbed.</strong> After the T+10 &quot;deadline moved&quot; announcement the plan has a dated one-line amendment saying what changed and what did not.</li>
+<li><strong>Articulation drill completed</strong> with the voice coach (section 8), or against a timer if you work offline, and the gap report (or your self-score) is saved next to the plan as <code>labs/00-sample/PLAN.report.md</code>. Do not commit either file.</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Devin web app (Agent mode)</td><td>optional</td><td>Write the plan in a local Markdown file instead</td><td>Only the voice coach in section 8 needs Devin</td></tr></tbody></table><h3>With fixtures only</h3><p>Everything in this lab works offline. Without the voice coach you run the drill against a timer and self-score with the rubric in the answer.</p>
+<h3>Cannot be exercised without live credentials</h3><ul><li>A live Devin session — this warm-up deliberately asks for a plan, not an execution</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>deadline-moved</code></td><td><span class="placeholder">facilitator action</span></td><td>T+10 min</td><td>The facilitator (or the coach, in character) announces that the Lamp Week flash sale moved forward by one week. Your plan must say what changes and what does not.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>This warm-up uses a shortened version of the four-part articulation drill. The coach plays the Harbourline platform lead.</p>
+<h5>60-second framing</h5>
+<p>Open with the headline, then one reason, then the proof. Stems you may use:</p>
+<ul>
+<li>&quot;The customer&#39;s problem is… It costs them…&quot;</li>
+<li>&quot;I will use… because…&quot;</li>
+<li>&quot;I will know it worked when…&quot;</li>
+</ul>
+<p>Sinhala-first note: resist front-loading the context (&quot;because A, because B, therefore X&quot;). Say X first.</p>
+<h5>Think-aloud checkpoint (T+10)</h5>
+<p>When the coach asks &quot;What are you looking at right now, and what will you check next?&quot;, answer with the four verbs: <em>I see… I think… I&#39;ll try… I&#39;ll check…</em>. If you need to read, say &quot;Give me ten seconds to read this&quot; rather than going silent. Finish on a full stop, not on &quot;…no?&quot;.</p>
+<h5>Two-minute customer update</h5>
+<p>Skeleton: <strong>Outcome → Evidence → Risk → Next action → Ask.</strong> One number per sentence. Breathe after each heading word; the pause sounds like confidence.</p>
+<h5>Objection round</h5>
+<p>The coach raises one technical and one commercial objection, in character, 90 seconds each. Reply pattern: acknowledge → boundary → evidence → offer. The objections themselves are not printed here — that is the point.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>60-second framing</td><td>framing</td><td>—</td><td>1 min</td></tr><tr><td>Think-aloud checkpoint</td><td>checkpoint</td><td>T+10 min</td><td>45 s</td></tr><tr><td>Customer update</td><td>update</td><td>—</td><td>2 min</td></tr><tr><td>Objection 1 (technical)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 (commercial)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-00-sample &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><p>Do not open this before you have written your plan and done the drill.</p>
+<h4>Feature fit</h4>
+<p>The brief lists four problems. Three of them need code to exist first (cross-brand leak, rounding drift, oversell) and are the subjects of later labs. The one that pays back on day one with a Devin seat and no schema change is <strong>onboarding</strong>: a new engineer takes a week to run the store and someone reset the shared database. The capability is <strong>environment setup plus repository instructions</strong> — a blueprint that reproduces the local stack, an <code>AGENTS.md</code> under the 16 KiB injection limit that says where the lab database is and which commands are forbidden, and a <code>lab:reset</code> script so nobody touches the shared one.</p>
+<p>Why not the others first: the oversell and the leak are real revenue and security risks, but both need the API code and a reproducible injector before Devin can show evidence, and both tempt you into a schema change during the freeze. Rounding drift is the cheapest to find but the most political to fix (two services disagree about money); it is a good second task once the reset script exists.</p>
+<h4>Worked prompt sequence</h4>
+<p>The prompts below are the kind you would type once you move from planning to doing. They are hidden here on purpose.</p>
+<pre><code class="language-prompt">Read README.md and every AGENTS.md in this repo. Tell me, in a table, every command a new engineer must run to get the storefront and the API working locally, and which of those commands could touch a database other than the local one. Do not change anything yet.
+</code></pre>
+<pre><code class="language-prompt">Write a root AGENTS.md under 16 KiB with: the local-only database rule, the lab reset command, and the list of files no session may edit. Then propose a blueprint YAML in docs/ that installs Node 20, Python 3.12 and PostgreSQL 16 and runs the gate scripts. Open a PR; do not touch main.
+</code></pre>
+<pre><code class="language-prompt">Start a fresh session from the blueprint and follow only AGENTS.md to bring the stack up. Record the screen. Report every step where the instructions were wrong or missing.
+</code></pre>
+<h4>Pitfalls</h4>
+<ul>
+<li>Picking the most exciting problem (oversell) instead of the one that unblocks every later lab.</li>
+<li>Writing evidence as commands (&quot;run pnpm test&quot;) instead of observations (&quot;a fresh session reaches the storefront in under 15 minutes, recorded&quot;).</li>
+<li>Forgetting the budget: one session, one PR. If your plan needs three sessions, it is not the first task.</li>
+<li>Ignoring the T+10 injector. Moving Lamp Week forward does not change the first task; it shortens the window before the oversell lab must start. Say so in one line.</li>
+</ul>
+<h4>Recovery moves</h4>
+<ul>
+<li>If you froze in the framing, restart with the headline: &quot;The first task is onboarding, because every later fix needs a safe local stack.&quot;</li>
+<li>If the coach interrupts with &quot;how many orders?&quot;, answer with one number from the brief (≈400 a week; 3% of Trailhead orders drift) and return to the skeleton.</li>
+<li>If you realise mid-update that your evidence is a command, convert it live: &quot;Specifically, you would see…&quot;.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<ul>
+<li><strong>Technical — &quot;How do you know Devin will respect our no-schema-change rule?&quot;</strong> Acknowledge: a markdown rule is not a lock. Boundary: the first task touches no migrations at all; the rule is written into AGENTS.md and the reset script only ever points at the lab database. Evidence: the PR diff contains no <code>db/</code> changes and the recording shows the stack coming up from the instructions alone. Offer: in lab 2 we turn the rule into a lifecycle hook that blocks the command outright, which is enforcement rather than advice.</li>
+<li><strong>Commercial — &quot;Why pay for an agent to write a plan a senior engineer writes in ten minutes?&quot;</strong> Acknowledge: the plan itself is cheap. Boundary: what we buy is the fresh-session proof — a session with no memory of the codebase following the instructions and reporting every gap, which a senior engineer cannot do because they already know the answers. Evidence: the week-to-first-run drops to under an hour and the day-two database reset cannot recur because the reset script is the only path. Offer: run it once, measure the time, and decide on the second task with that number.</li>
+</ul>
+</div><div data-slot="debrief"><p><strong>Alternatives considered.</strong> (a) Start with the cross-brand leak using a code scan: fastest security win, but the scan needs the API to exist and the fix tempts a data-model change. (b) Start with rounding drift using Devin Review on a reconciliation PR: cheap and concrete, but splits two teams on day one. (c) Start with oversell using an oncall investigation: the most impressive demo, the least reusable, and it needs fixtures that do not exist yet.</p>
+<p><strong>When each would win.</strong> (a) if a merchandiser has already seen another brand&#39;s order this week; (b) if finance is the sponsor; (c) if the flash sale is next week rather than in four weeks.</p>
+<p><strong>Cost note.</strong> The onboarding task is one session of roughly 3–6 ACU and one PR. Each alternative needs at least one prerequisite session before Devin can show evidence, so their true first-task cost is double.</p>
+<p><strong>Self-score (offline path).</strong> Accuracy 30 — did you name the brands, the shared database, the cost, one capability with one reason, the proof, and one thing you would not do? Structure 25 — four parts in order. Customer relevance 20 — numbers from the brief, not generic claims. Brevity and fluency 15 — framing within 60 s ± 5, fillers under 3 per minute. Recovery 10 — did the injector and the objections get an answer that followed acknowledge → boundary → evidence → offer?</p>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/" rel="noopener">Devin docs — Working with Devin: Agent vs Ask</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — Voice mode</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/skills" rel="noopener">Devin docs — Skills (cloud discovery and @skills: invocation)</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/00-sample/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>

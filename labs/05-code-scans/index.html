@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 05 — Code Scan lifecycle — find the brand leak and the slow Lamp Week page · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 05</p>
+<h1>Lab 05 — Code Scan lifecycle — find the brand leak and the slow Lamp Week page</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Devin Code Scans: Security Swarm vs performance and accessibility scan types, scan profiles, the Findings tab, Assign to Devin, dismissal, Scan new commits and SARIF export</li>
+<li><b>Duration:</b> 150 min</li>
+<li><b>Difficulty:</b> core</li>
+<li><b>Prerequisites:</b> Lab 00 done (or you know the Harbourline brands and planted-defect rule); Repo connected to your Devin org; `pnpm install --frozen-lockfile` done at the root; Your Devin role includes the Use code scans permission (see section 6)</li>
+<li><span class="badge badge-full">Credentials: full</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<p>Hi — this is Dana, CTO of <strong>Harbourline</strong>. Two things landed on my desk on the same morning.</p>
+<p>First, a <strong>Lumen Home</strong> merchandiser opened an order link a colleague pasted in chat and saw a <strong>Trailhead Supply</strong> customer&#39;s order — lines, totals, shipping country. Same database, same API, different brand. I need to know whether that was a one-off or whether any merchandiser can read any brand&#39;s orders, and whether there are more holes of the same family. Our payments partner also asked last quarter whether we verify their webhook signatures; I said yes, and I would like that to be true.</p>
+<p>Second, the <strong>Lamp Week</strong> flash-sale collection page on Lumen is slow. It is our biggest week; we expect several times our normal ~400 orders a week. The page was fine with ten products and is not fine now.</p>
+<p>We just switched on Devin Code Scans. I want you to use it properly — not as &quot;run it and paste the list&quot; but as a lifecycle: pick the right kinds of scan, read the findings like an engineer, get one real fix proposed by Devin, throw out what is noise with a reason, show me the scan staying current after a change, and give our security team an export they can load into their own tooling. Then explain it to me in three minutes with numbers.</p>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>Dana (CTO)</strong> — sponsor; wants numbers and a yes/no on &quot;are we leaking across brands&quot;.</li>
+<li><strong>Security lead</strong> — owns the existing SAST pipeline and the dashboard it feeds; sceptical of a second tool.</li>
+<li><strong>Platform team</strong> — will triage whatever you leave open; their time is the scarce resource.</li>
+<li><strong>Merchandisers (both brands)</strong> — use the <code>/admin</code> console daily, one of them with a screen reader.</li>
+<li><strong>Forbidden:</strong> merging any fix into <code>main</code>. Harbourline&#39;s known defects stay in place for the course; any fix Devin proposes goes to a throwaway branch or a PR you close unmerged.</li>
+<li><strong>Forbidden:</strong> creating Automations or schedules for scans in this lab; every scan run is started by you.</li>
+<li><strong>Budget:</strong> at most three scans plus one Scan-new-commits run; Normal effort unless you can justify Deep.</li>
+<li><strong>Deliverable:</strong> evidence for each acceptance criterion (finding links or screenshots, the PR link, the export file) collected in a local <code>labs/05-code-scans/EVIDENCE.md</code> that you do not commit.</li>
+</ul>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>git checkout main &amp;&amp; git pull --ff-only</code></pre><pre><code>pnpm lab:reset -- 05</code></pre><pre><code>git branch --list &#39;lab05/*&#39; | xargs -r git branch -D</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 05</code> to run these steps for you, and <code>@skills:lab-cleanup 05</code> when you finish. From a terminal: <code>pnpm lab:start -- 05</code> and <code>pnpm lab:cleanup -- 05</code>.</p></div><h3>What “clean” looks like</h3><p><code>main</code> is at the latest commit with every planted defect intact (<code>services/api/PLANTED.md</code>, <code>apps/web/PLANTED.md</code>). Your org may already contain the facilitator&#39;s reference scans from 22 Oct 2026 — read them but start your own. No open lab-05 remediation PR is yours yet.</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when all of the following are observable by someone who was not in the room. Collect the evidence in <code>labs/05-code-scans/EVIDENCE.md</code> (do not commit it).</p>
+<ol>
+<li><strong>Brand-isolation finding.</strong> A Security scan on <code>main</code> has an open finding whose location is <code>GET /orders/:orderId</code> in <code>services/api/src/routes/orders.ts</code>, and you can explain in one sentence why a Lumen merchandiser can read a Trailhead order (the lookup is not constrained by the caller&#39;s <code>X-Harbourline-Brand</code>).</li>
+<li><strong>Webhook-signature finding.</strong> The same scan, or a second Security run, has an open finding on <code>POST /webhooks/payments</code> in <code>services/api/src/routes/webhooks.ts</code>: the HMAC is computed but never compared with <code>X-PayGate-Signature</code>.</li>
+<li><strong>Performance finding.</strong> A Performance scan has a finding on the collection listing (<code>GET /catalog/collections/:slug</code> in <code>services/api/src/routes/catalog.ts</code> → <code>buildProduct</code> in <code>services/api/src/services/catalog.ts</code>) that states the per-product query pattern, and your evidence gives the statement count for the Lamp Week collection (from the finding or from the <code>lamp-week-proof</code> injector).</li>
+<li><strong>Accessibility finding in admin.</strong> An Accessibility scan has at least one finding under <code>apps/web/src/admin/</code> (unnamed icon buttons on the inventory page, or the low-contrast price badge), with the WCAG success criterion it violates.</li>
+<li><strong>Assigned to Devin, PR produced.</strong> Exactly one finding is assigned to Devin from the Findings tab; the resulting remediation session opens a pull request; the PR link is in your evidence and the PR is <strong>closed without merging</strong> (or targets a throwaway branch). <code>main</code> still contains the plant.</li>
+<li><strong>Dismissed with a note.</strong> Exactly one finding is dismissed with a written reason a security reviewer would accept (for example a fixture-only secret, or a duplicate of another finding), and the note is visible on the finding.</li>
+<li><strong>Scan new commits after the PR.</strong> After the PR step you ran Scan new commits on the same scan and recorded what it reported, including why nothing new appears when no commit has landed on <code>main</code>.</li>
+<li><strong>SARIF export.</strong> A SARIF 2.1.0 file exported from the scan is saved locally; you can point at one <code>result</code> in it and match its <code>ruleId</code>, location and level to the Findings tab.</li>
+<li><strong>Profile choice is justified.</strong> Your evidence names the scan type and profile (or defaults plus guidance) used for each scan, the include/exclude globs, the effort level, and the permission (Use vs Manage) each step needed.</li>
+<li><strong>Articulation drill completed</strong> with the voice coach (section 8) and the gap report saved as <code>labs/05-code-scans/EVIDENCE.report.md</code>. Do not commit it.</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Devin Code Scans (Security page) — run, read and act on findings</td><td>required</td><td>Read the committed reference findings in labs/05-code-scans/fixtures/findings.json</td><td>Needs the org permission Use code scans; code scanning must be enabled for the org</td></tr><tr><td>Devin Code Scans — create or edit shared scan profiles</td><td>optional</td><td>Use an existing profile, or run Security with the defaults and type your focus as extra guidance</td><td>Needs Manage code scans; without it ask an admin to create the profiles you design</td></tr><tr><td>GitHub write access for the Devin app (Assign to Devin opens a PR)</td><td>optional</td><td>Skip the PR step and describe the fix branch you would expect; the facilitator shows a closed demo PR</td><td>The PR must target a throwaway branch or be closed unmerged — never merge a plant fix into main</td></tr><tr><td>Local stack (Postgres, services/api) to confirm a finding</td><td>optional</td><td>Un-skip the matching test in services/api/test/planted.test.ts on a throwaway branch</td><td>Optional: proves a finding is real before you assign it</td></tr></tbody></table><h3>With fixtures only</h3><p>Without scan permissions you work from the committed findings export (titles, severities, statuses, locations and triage notes); open each cited file to judge its reasoning yourself: classify every finding (real, duplicate, false positive), choose which one you would assign and which you would dismiss and with what note, then run the drill. You still answer every acceptance criterion in writing; criteria 5–8 are marked observer-only.</p>
+<h3>Cannot be exercised without live credentials</h3><ul><li>Creating scans and profiles without the Manage code scans permission</li><li>Opening the remediation PR without GitHub write access for the Devin app</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>fixture-false-positive</code></td><td><span class="placeholder">facilitator action</span></td><td>while triaging</td><td>The fixtures and contract stub (`scenarios/`, `fixtures/mcp/`, `.env.example`) contain a fake PayGate secret. A scan may flag it as a hard-coded credential. Decide whether it is real, and if not dismiss it with a note a security reviewer would accept.</td></tr><tr><td><code>no-new-commits</code></td><td><span class="placeholder">facilitator action</span></td><td>right after a scan completes</td><td>Press Scan new commits before anything has landed on main. Observe what happens and explain it to the customer in one sentence.</td></tr><tr><td><code>permission-downgrade</code></td><td><span class="placeholder">facilitator action</span></td><td>facilitator action, T+60</td><td>The facilitator moves you to a role with Use but not Manage code scans. You can still run scans and assign findings, but the profile editor is read-only. Carry on without asking for the role back.</td></tr><tr><td><code>lamp-week-proof</code></td><td><code>pnpm --filter @harbourline/api test -t n-plus-one</code></td><td>after the performance scan</td><td>On a throwaway branch with the `n-plus-one` test un-skipped, the test reports the statement count for the Lamp Week collection — the number the CTO will ask for.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>The coach plays Dana, the Harbourline CTO, with the security lead joining for the objection round. It follows the base articulation protocol: framing, two think-aloud checkpoints, a three-minute update, then three objections.</p>
+<h5>60-second framing</h5>
+<p>Headline first: what is at risk, which kinds of scan you will run and why, and what the CTO will have at the end. Stems you may use:</p>
+<ul>
+<li>&quot;The risk is… for both brands…&quot;</li>
+<li>&quot;I will run… because… and not… because…&quot;</li>
+<li>&quot;You will get… by…&quot;</li>
+</ul>
+<p>Sinhala-first note: name the decision before the reasons. &quot;Three scans, here is why&quot; — then the why.</p>
+<h5>Think-aloud checkpoints (T+20 and T+90)</h5>
+<p>At T+20 you are usually reading the Findings tab; at T+90 you are usually deciding what to assign and what to throw out. Use the four verbs: <em>I see… I think… I&#39;ll try… I&#39;ll check…</em>. Read a finding&#39;s title aloud before you judge it. Say &quot;Give me ten seconds to read this&quot; rather than going silent.</p>
+<h5>Three-minute update to the CTO</h5>
+<p>Skeleton: <strong>Outcome → Evidence → Risk → Next action → Ask.</strong> Every sentence carries one number: findings by severity, statements per page load, minutes to a proposed fix, findings you threw out. Name the files a reviewer would open. Close with one concrete ask.</p>
+<h5>Objection round</h5>
+<p>Three objections — technical, commercial, governance — 90 seconds each, in character. Reply pattern: <strong>acknowledge → boundary → evidence → offer</strong>. The objections are not printed here; that is the point.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>60-second framing</td><td>framing</td><td>—</td><td>1 min</td></tr><tr><td>Think-aloud checkpoint (T+20)</td><td>checkpoint</td><td>T+20 min</td><td>45 s</td></tr><tr><td>Think-aloud checkpoint (T+90)</td><td>checkpoint</td><td>T+90 min</td><td>45 s</td></tr><tr><td>Customer update to the CTO</td><td>update</td><td>—</td><td>3 min</td></tr><tr><td>Objection 1 (technical)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 (commercial)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 3 (governance)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-05-code-scans &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><h4>Feature fit</h4>
+<ul>
+<li><strong>Security (Security Swarm)</strong> is the scan type for the order leak and the webhook. It builds a threat model of the repo, investigates candidate issues in parallel, validates them, and reports findings with severity, location, reasoning and a fix suggestion. Run it with a profile whose scan model names Harbourline&#39;s actual trust boundary: the brand comes from <code>X-Harbourline-Brand</code>, so every read of orders, carts or price lists must be constrained by it, and inbound PayGate webhooks are only trusted after the HMAC in <code>X-PayGate-Signature</code> is compared in constant time. Include <code>services/api/**</code>, exclude <code>labs/**</code>, <code>**/node_modules/**</code>, <code>**/dist/**</code>.</li>
+<li><strong>Performance</strong> is the scan type for Lamp Week. Its profile says what &quot;slow&quot; means here: statements per request on catalog and collection routes, loops that issue a query per product or line. The finding to expect: <code>GET /catalog/collections/:slug</code> calls <code>buildProduct</code> per product. Each call runs a price query, a variants query and one stock query per variant or bundle component, or a single stock query for a simple product. The fixed 3 are brand, collection and product list. Lamp Week holds eight simple products, so the page costs 3 + 3 × 8 = 27 statements.</li>
+<li><strong>Accessibility</strong> is the scan type for the merchandiser console: WCAG 2.2 AA on <code>apps/web/**</code>, focus on <code>/admin</code>. Expected: the &quot;−&quot; / &quot;+&quot; icon buttons on the inventory page have no accessible name (SC 4.1.2), and <code>.price-badge</code> is ≈3.1:1 (SC 1.4.3).</li>
+<li>Profiles are org-shared. Creating or editing them needs <strong>Manage code scans</strong>; running scans, reading findings, assigning to Devin, dismissing and exporting need <strong>Use code scans</strong>. Without Manage, run Security with the default profile and put the focus in guidance, or reuse a profile an admin made.</li>
+<li>Effort: Normal is enough for a lab of this size; Deep traces and validates each finding one at a time and is worth it when you need the exploit path proven for an audit. Other scan types always run at Normal.</li>
+</ul>
+<h4>Worked sequence</h4>
+<ol>
+<li>On the Security page, start a Security scan on <code>codev-workshops/learn-devin-new-features</code>, default branch <code>main</code>, with the brand-isolation profile. Start a Performance scan and an Accessibility scan with their profiles. Three scans, no schedules.</li>
+<li>While they run, open the orchestrating session of one scan and read its threat model or plan — it shows what the scan decided to look at.</li>
+<li><strong>Findings tab:</strong> filter by scan and by status Open, sort by severity. For each finding read title → location (file and line) → severity → reasoning → suggested fix. Check the location against the source before you believe it. Group duplicates: the same root cause reported on two routes is one fix.</li>
+<li><strong>Classify</strong> each finding: real and in scope; real but a known plant (record, do not fix on <code>main</code>); duplicate; false positive. The fake PayGate secret in fixtures and <code>.env.example</code> is the classic false positive here.</li>
+<li><strong>Assign to Devin</strong> the clearest real finding (the brand leak is a one-file fix). A remediation session starts, writes the fix with a test, and opens a PR. Review the PR like any other; then close it unmerged, because the plant must stay on <code>main</code>.</li>
+<li><strong>Dismiss</strong> one finding with a reason a reviewer would accept: &quot;Fixture-only value; PAYGATE_SECRET in <code>.env.example</code> is the documented local fake, never deployed. Real secrets come from the environment.&quot; Dismissed findings stay visible with the note, so the decision is auditable.</li>
+<li><strong>Scan new commits</strong> on the Security scan. It scans only commits that landed on <code>main</code> since the last run, and its findings join the same scan. Because the demo PR was closed and nothing new landed, the run reports no new findings — that is the expected result, not a failure. It is refused while a run is still active.</li>
+<li><strong>Export SARIF</strong> from the scan and open it: each <code>runs[].results[]</code> entry has <code>ruleId</code>, <code>level</code>, <code>message</code> and <code>locations[].physicalLocation</code>. That file is what the security lead loads into the existing dashboard or GitHub code scanning.</li>
+</ol>
+<h4>Reference run (22 Oct 2026, <code>main</code>)</h4>
+<p>The facilitator&#39;s run, exported in <code>labs/05-code-scans/fixtures/findings.json</code>, with all three scans at Normal effort:</p>
+<ul>
+<li><strong>Security:</strong> 12 findings. 1 critical (PayGate HMAC computed but never compared), 4 high (including <code>GET /orders/:orderId</code> not scoped to the caller&#39;s brand and the client-chosen <code>X-Harbourline-Role</code>), 3 medium, 4 low. The triage phase dismissed 1 of them as a duplicate and left a note naming the primary finding.</li>
+<li><strong>Performance:</strong> 24 findings, 10 left open. The critical one is the <code>buildProduct</code> N+1 behind the collection page. Triage dismissed 14 as duplicates, each with a note, which is the kind of grouping the platform team should expect.</li>
+<li><strong>Accessibility:</strong> 5 findings. 2 high (unnamed −/+ buttons on the inventory page, one static document title for every route), 2 medium (the price badge measured at 2.8:1, and form-field borders at 1.3–1.5:1), 1 low (the result of an inventory adjustment is not announced).</li>
+<li>The finding about the hard-coded fallback PayGate secret is the one to dismiss. The value is the documented local fake, but a scanner has no way of knowing that.</li>
+<li>Assign to Devin on the brand-leak finding started a remediation session, and that session opened a PR. The facilitator closed the PR unmerged. Scan new commits, run after the PR was closed, added exactly one finding: a low on the cart ownership check that a sibling change had merged into <code>main</code> in the meantime (<code>services/api/src/services/carts.ts</code>). It also ignores a self-declared staff role. Nothing came from the closed PR. On a base that has not moved, expect zero new findings.</li>
+</ul>
+<h4>Pitfalls</h4>
+<ul>
+<li>Treating the findings count as the outcome. The CTO wants &quot;are we leaking across brands&quot;: answer yes or no, then the count.</li>
+<li>One scan type for everything. A security scan will not tell you about statement counts; a performance scan will not reason about trust boundaries.</li>
+<li>Merging the Devin PR because it is green. In this course the plant stays on <code>main</code>.</li>
+<li>Dismissing without a note, or dismissing a real plant as &quot;known&quot;. Known is not the same as accepted risk.</li>
+<li>Expecting Scan new commits to re-scan the whole repo.</li>
+</ul>
+<h4>Recovery moves</h4>
+<ul>
+<li>A scan is still running at T+90: report what the other scans found, and say when the last one will finish.</li>
+<li>No Manage permission: run Security with defaults plus typed guidance; ask an admin for the profile in writing.</li>
+<li>The remediation session fails to open a PR (no GitHub write for the Devin app): keep the session link as evidence and describe the branch it would have pushed.</li>
+<li>A finding&#39;s location is wrong: do not dismiss it as false; open the right file, confirm the root cause, and note the corrected location.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<ul>
+<li><strong>Technical (existing SAST):</strong> Acknowledge the pipeline is valuable. Boundary: pattern-based SAST does not know that <code>X-Harbourline-Brand</code> is a trust boundary, so a lookup by ID alone looks fine to it. Evidence: the brand-leak and unverified-signature findings, with reasoning. Offer: export SARIF into the same dashboard so there is one queue, not two.</li>
+<li><strong>Commercial (triage cost):</strong> Acknowledge triage time is the scarce resource. Boundary: findings are validated before they are reported and duplicates are grouped. Evidence: how many findings you kept, merged and dismissed, and how long that took. Offer: tighten the profile (scope globs, triage guidance) after the first run.</li>
+<li><strong>Governance (who allowed PRs):</strong> Acknowledge it. Boundary: nothing opens a PR until a person assigns that finding, and the PR goes through normal review and branch protection; nothing merges itself. Evidence: the closed demo PR. Offer: restrict Assign to Devin to roles with Use code scans and keep Manage with the security lead.</li>
+</ul>
+</div><div data-slot="debrief"><ul>
+<li>Which finding would you have missed without a profile that names the brand boundary?</li>
+<li>What number did you give the CTO first, and was it the right first number?</li>
+<li>What would change if this ran every night? (Out of scope here — scans in this course are started by hand.)</li>
+</ul>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/product-guides/code-scans" rel="noopener">Devin docs — Code Scans</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/security-swarm" rel="noopener">Devin docs — Security Swarm</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/admin/roles-and-permissions" rel="noopener">Devin docs — Roles and permissions (Use vs Manage code scans)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — Voice mode</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/skills" rel="noopener">Devin docs — Skills (cloud discovery and @skills: invocation)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html" rel="noopener">OASIS SARIF 2.1.0 specification</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/05-code-scans/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>

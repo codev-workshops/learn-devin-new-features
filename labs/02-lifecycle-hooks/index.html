@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 02 — Guard the database — a lifecycle hook policy for Harbourline · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 02</p>
+<h1>Lab 02 — Guard the database — a lifecycle hook policy for Harbourline</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Devin lifecycle hooks: .devin/hooks.v1.json with PreToolUse (exit 0 / exit 2, updatedInput), PostToolUse and Stop, matcher as regex or list</li>
+<li><b>Duration:</b> 120 min</li>
+<li><b>Difficulty:</b> core</li>
+<li><b>Prerequisites:</b> Repo cloned locally, `pnpm install` done at the root, Node 22; PostgreSQL up with `pnpm db:up` and seeded with `pnpm db:seed -- --reset` (only needed to see the read-only wrapper reject a write for real); Lab 00 done once, so you know how the voice coach works; Work on a throwaway branch such as `lab/02-&lt;your-handle&gt;`; never commit hooks to `main`</li>
+<li><span class="badge badge-fixture">Credentials: fixture</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<p>Hi — I&#39;m Priya, the database administrator for <strong>Harbourline</strong>. Lumen Home and Trailhead Supply share one PostgreSQL database in every environment, and last quarter a well-meaning session ran <code>pnpm db:seed -- --reset</code> against the shared staging database the afternoon before Lamp Week. We lost two days of merchandiser price-list edits for both brands and spent a weekend replaying about 400 orders from the payment provider. Nobody was careless; the command was simply allowed.</p>
+<p>We now want Devin working in this repo every day, and I am fine with that on one condition: <strong>Devin must never reset or migrate anything except the lab database, and every <code>psql</code> it runs must go through our read-only wrapper.</strong> I do not want a paragraph in a README that the agent may or may not read. I want the tool call itself stopped, or quietly rewritten, before it reaches the database, and I want a log that shows me what was stopped and why.</p>
+<p>Next week a contractor also proposes a migration that &quot;just relaxes&quot; <code>orders.currency</code> for multi-currency carts. On our side the fulfilment worker reads that column on every new order. If Devin is asked to apply that patch, I expect the policy to refuse it with a reason Devin can read, not to discover it at 2 a.m. when orders stop flowing.</p>
+<p>Show me a policy that lives in the repository, that I can review in a pull request, and that I can trust when it breaks: if the policy file itself is wrong, I need to know whether we are locked out or wide open.</p>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>In the room:</strong> Priya (DBA, the customer), the platform lead who owns <code>.devin/</code> configuration, and the on-call engineer who will read the audit log during an incident.</li>
+<li><strong>Forbidden:</strong> no change to <code>main</code> — hooks are demonstrated on a throwaway branch only; no schema change; no command may touch any database other than the lab database at <code>localhost:5432/harbourline</code>; do not fix any planted defect in the services.</li>
+<li><strong>Policy shape:</strong> project-level configuration only (<code>.devin/hooks.v1.json</code> plus scripts in the repo); no user-level config, no edits to <code>.devin/config.json</code> permissions.</li>
+<li><strong>Read-only access:</strong> a <code>psql</code> session that Devin opens must be unable to write, even if the SQL it sends is a <code>DELETE</code>.</li>
+<li><strong>Decision deadline:</strong> Priya signs off before the contractor&#39;s migration PR is reviewed — end of this session.</li>
+<li><strong>Budget:</strong> one Devin session plus your own verification; no paid integrations.</li>
+</ul>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>pnpm lab:reset -- 02</code></pre><pre><code>git checkout main -- .devin/hooks.v1.json</code></pre><pre><code>rm -f .devin/hook-audit.log</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 02</code> to run these steps for you, and <code>@skills:lab-cleanup 02</code> when you finish. From a terminal: <code>pnpm lab:start -- 02</code> and <code>pnpm lab:cleanup -- 02</code>.</p></div><h3>What “clean” looks like</h3><p><code>.devin/hooks.v1.json</code> is <code>{}</code>, <code>git status --short</code> shows nothing under <code>db/</code> or <code>.devin/</code>, <code>scenarios/bad-migration.patch</code> is not applied (no <code>db/migrations/*currency-nullable*.sql</code>), and <code>pnpm db:seed -- --reset</code> has just rebuilt the seed dataset in the lab database.</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when someone who was not in the room can see each of the following on your throwaway branch, without re-running anything.</p>
+<ol>
+<li><strong>The policy is reviewable.</strong> <code>.devin/hooks.v1.json</code> on your branch defines a <code>PreToolUse</code> entry for shell commands, a <code>PostToolUse</code> entry and a <code>Stop</code> entry, and every command it runs is a script committed in the repository (not an inline one-liner nobody can read).</li>
+<li><strong>Allowed case evidenced.</strong> An ordinary command (for example the test suite) and a reset against the lab database both run unchanged; the evidence shows exit 0 and the original input.</li>
+<li><strong>Blocked case evidenced.</strong> A reset or migration pointed at any other database is denied: the evidence shows exit code 2 and the reason text the agent receives, and the command never ran.</li>
+<li><strong>Rewritten case evidenced.</strong> A <code>psql</code> command is executed through the read-only wrapper instead of as typed; the evidence shows the original and the rewritten command side by side, and — if PostgreSQL is up — a write attempted through it failing with a read-only error while the row count is unchanged.</li>
+<li><strong>Bad migration stopped.</strong> After the <code>bad-migration</code> injector, <code>db/migrations/</code> gains no currency-nullable migration that reached the database, the audit entry names the patch and the reason, and the <code>Stop</code> hook refuses to let the session finish while the file is in the working tree.</li>
+<li><strong>Timed-out case evidenced.</strong> After the <code>slow-hook</code> injector you record what happened to the tool call (blocked, delayed or allowed), how long it took, and whether that is documented behaviour or something you observed.</li>
+<li><strong>Malformed-config case evidenced.</strong> After the <code>malformed-hooks</code> injector you record whether the guard still ran, state in one sentence whether the policy fails open or closed in that situation, and name the one change that would make the outcome safe.</li>
+<li><strong>Matcher pitfall explained.</strong> After the <code>matcher-glob</code> injector you show which tool names the broken matcher guards (if any) and the corrected matcher, with one sentence on the difference between a single pattern and a list of patterns.</li>
+<li><strong>Audit trail.</strong> One log file lists every allow, block and rewrite decision with a timestamp and the command; it is not committed.</li>
+<li><strong>Articulation drill completed</strong> with the voice coach (section 8), or against a timer if you work offline. Save the gap report next to your evidence; do not commit it.</li>
+<li><strong>Clean exit.</strong> <code>main</code> is untouched, the throwaway branch is not merged, and the reset commands in section 4 return the repository to the clean state.</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Devin CLI (hooks are loaded from .devin/hooks.v1.json; /hooks lists them)</td><td>optional</td><td>Offline replay: `node labs/02-lifecycle-hooks/solution/simulate.mjs --config .devin/hooks.v1.json --event PreToolUse --tool exec --command &#39;&lt;shell command&gt;&#39;` feeds one event to your hooks with the documented stdin/exit-code contract</td><td>With the CLI you also see the agent&#39;s reaction to a block; the replay only shows the decision</td></tr><tr><td>Devin web app (Agent mode) for the voice coach in section 8</td><td>optional</td><td>Run the drill against a timer and self-score with the rubric in the answer</td><td>Coaching is always started by you; nothing is scheduled</td></tr><tr><td>PostgreSQL 16 (docker compose)</td><td>optional</td><td>Skip the live write test; the replay still shows the psql rewrite</td><td>Only the lab database at localhost:5432/harbourline is ever touched</td></tr></tbody></table><h3>With fixtures only</h3><p>Everything except the agent&#39;s own reaction works offline: you write .devin/hooks.v1.json and the hook scripts, then replay each acceptance case through simulate.mjs and keep its JSON output and the audit log as evidence. The replay labels the two behaviours the docs do not state (timeout and malformed config) as assumptions; with the Devin CLI you confirm them yourself.</p>
+<h3>Cannot be exercised without live credentials</h3><ul><li>Whether cloud (web app) sessions honour .devin/hooks.v1.json — the hooks docs describe the Devin CLI</li><li>Timeout and malformed-config behaviour of the real CLI — not stated in the docs; the replay assumes fail-open and says so</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>bad-migration</code></td><td><span class="placeholder">facilitator action</span></td><td>T+30 min, once your PreToolUse hook exists</td><td>The patch `scenarios/bad-migration.patch` lands on your branch and someone wants it applied and migrated. It drops the NOT NULL default on orders.currency; your policy must stop it before anything reaches the database and leave a reason Devin can read.</td></tr><tr><td><code>malformed-hooks</code></td><td><span class="placeholder">facilitator action</span></td><td>T+60 min</td><td>Copy `labs/02-lifecycle-hooks/injectors/malformed-hooks.v1.json` over `.devin/hooks.v1.json` (it has a trailing comma and a missing brace). Find out what your guard does now and decide whether the policy fails open or closed.</td></tr><tr><td><code>slow-hook</code></td><td><span class="placeholder">facilitator action</span></td><td>T+75 min</td><td>Copy `labs/02-lifecycle-hooks/injectors/slow-hook.v1.json` into place: a hook that sleeps 15 s against a 3 s timeout and would block if it ever finished. Observe whether the tool call is blocked, delayed or allowed.</td></tr><tr><td><code>matcher-glob</code></td><td><span class="placeholder">facilitator action</span></td><td>T+90 min</td><td>Copy `labs/02-lifecycle-hooks/injectors/matcher-glob.v1.json` into place. A colleague wrote the matcher the way they write permission globs. Check which tool calls it still guards.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>The coach plays Priya, the Harbourline DBA from the brief. It asks one question at a time, times every answer with the shell, stays in character and keeps all feedback for the written report at the end.</p>
+<h5>60-second framing</h5>
+<p>Headline first, then one reason, then the proof. Stems you may use:</p>
+<ul>
+<li>&quot;The risk you described is… It cost you…&quot;</li>
+<li>&quot;I am putting the policy in… because…&quot;</li>
+<li>&quot;You will know it works when…&quot;</li>
+</ul>
+<p>Sinhala-first note: resist front-loading (&quot;because the reset happened, because the shared database, therefore…&quot;). Say the policy first, then why.</p>
+<h5>Think-aloud checkpoints (T+15 and T+60)</h5>
+<p>At T+15 and again at T+60 the coach asks what you are looking at and what you will check next. Answer with the four verbs: <em>I see… I think… I&#39;ll try… I&#39;ll check…</em>. If you need to read hook output, say &quot;Give me ten seconds to read this&quot; instead of going silent. End on a full stop, not on &quot;…no?&quot;.</p>
+<h5>Three-minute update to the DBA</h5>
+<p>Skeleton: <strong>Outcome → Evidence → Risk → Next action → Ask.</strong> One number per sentence (exit codes, seconds, rows). Priya may interrupt twice with a short question; answer it in one sentence and return to the skeleton. Breathe after each heading word.</p>
+<h5>Objection round</h5>
+<p>Two objections in character, 90 seconds each, one technical and one commercial; the coach may ask one follow-up if your answer skips the evidence. Reply pattern: acknowledge → boundary → evidence → offer. The objections are not printed here — that is the point.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>60-second framing</td><td>framing</td><td>—</td><td>1 min</td></tr><tr><td>Think-aloud checkpoint</td><td>checkpoint</td><td>T+15 min</td><td>45 s</td></tr><tr><td>Think-aloud checkpoint</td><td>checkpoint</td><td>T+60 min</td><td>45 s</td></tr><tr><td>3-minute update to the DBA</td><td>update</td><td>—</td><td>3 min</td></tr><tr><td>Objection 1 (technical)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 (commercial, one follow-up allowed)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-02-lifecycle-hooks &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><p>Do not open this before you have finished the evidence table and the drill.</p>
+<h4>Feature fit</h4>
+<p>The customer is asking for <strong>enforcement at the tool call</strong>, which is exactly what lifecycle hooks are: commands that Devin runs before and after each tool call, receive the event as JSON on stdin and decide by exit code. A rule in <code>AGENTS.md</code> or <code>.devin/rules/</code> is advice the model reads; a <code>PreToolUse</code> hook is code the harness runs whether or not the model agrees.</p>
+<ul>
+<li><strong><code>PreToolUse</code> on <code>exec</code></strong> — exit <code>0</code> continues, exit <code>2</code> blocks and the reason (stderr, or <code>{&quot;decision&quot;:&quot;block&quot;,&quot;reason&quot;:…}</code> on stdout) is shown to the agent; any other exit code is logged and does <strong>not</strong> block.</li>
+<li><strong><code>hookSpecificOutput.updatedInput</code></strong> — printed by a <code>PreToolUse</code> hook, it is merged into the tool&#39;s arguments, so <code>psql …</code> can be rewritten into <code>psql-ro.sh …</code> without the agent having to cooperate.</li>
+<li><strong><code>PostToolUse</code></strong> — sees <code>tool_response</code> (<code>success</code>, <code>output</code>, <code>error</code>); the right place for the audit trail of what actually ran.</li>
+<li><strong><code>Stop</code></strong> — can block the end of a turn with a reason; guard it with <code>stop_hook_active</code> so it cannot loop.</li>
+<li><strong><code>matcher</code></strong> — a regex on <code>tool_name</code>, unanchored (<code>exec</code> means &quot;contains exec&quot;); <code>&quot;&quot;</code> or omitted matches every tool. Since the 21 October 2026 release a matcher written as a list matches <strong>any</strong> entry, not only the first.</li>
+</ul>
+<p>The whole of <code>.devin/hooks.v1.json</code> is the hooks object (no <code>&quot;hooks&quot;</code> wrapper key); the <code>/hooks</code> command in the Devin CLI lists what was loaded and from which file.</p>
+<h4>Worked policy</h4>
+<p>The reference implementation lives in <code>labs/02-lifecycle-hooks/solution/</code> (outside <code>.devin/</code> on purpose, so nothing on <code>main</code> is enforced). Copy <code>solution/hooks.v1.json</code> to <code>.devin/hooks.v1.json</code> on your throwaway branch:</p>
+<pre><code class="language-json">{
+  &quot;PreToolUse&quot;: [
+    { &quot;matcher&quot;: &quot;^exec$&quot;, &quot;hooks&quot;: [{ &quot;type&quot;: &quot;command&quot;, &quot;command&quot;: &quot;node \&quot;$DEVIN_PROJECT_DIR/labs/02-lifecycle-hooks/solution/pretool-guard.mjs\&quot;&quot;, &quot;timeout&quot;: 5 }] }
+  ],
+  &quot;PostToolUse&quot;: [
+    { &quot;matcher&quot;: &quot;^exec$&quot;, &quot;hooks&quot;: [{ &quot;type&quot;: &quot;command&quot;, &quot;command&quot;: &quot;node \&quot;$DEVIN_PROJECT_DIR/labs/02-lifecycle-hooks/solution/posttool-audit.mjs\&quot;&quot;, &quot;timeout&quot;: 5 }] }
+  ],
+  &quot;Stop&quot;: [
+    { &quot;matcher&quot;: &quot;&quot;, &quot;hooks&quot;: [{ &quot;type&quot;: &quot;command&quot;, &quot;command&quot;: &quot;node \&quot;$DEVIN_PROJECT_DIR/labs/02-lifecycle-hooks/solution/stop-check.mjs\&quot;&quot;, &quot;timeout&quot;: 5 }] }
+  ]
+}
+</code></pre>
+<ul>
+<li><code>pretool-guard.mjs</code> — blocks <code>db:seed --reset</code>, <code>lab:reset</code> and migrations unless the effective <code>DATABASE_URL</code> (inline assignment, else environment, else the Compose default) is the lab database; blocks <code>git apply</code>/<code>git am</code> of a patch whose Up migration contains destructive DDL, and <code>db:migrate</code> while such a migration is in <code>db/migrations/</code>; rewrites every <code>psql</code> into <code>psql-ro.sh</code> via <code>updatedInput</code>; <strong>fails closed</strong> — unreadable input is a block.</li>
+<li><code>psql-ro.sh</code> — sets <code>default_transaction_read_only=on</code> through <code>PGOPTIONS</code>, so a <code>DELETE</code> fails with &quot;cannot execute DELETE in a read-only transaction&quot;.</li>
+<li><code>posttool-audit.mjs</code> / <code>.devin/hook-audit.log</code> — one JSON line per decision and per executed command (<code>*.log</code> is git-ignored).</li>
+<li><code>stop-check.mjs</code> — refuses to stop while <code>db/migrations/*currency-nullable*.sql</code> is present; lets the second stop through.</li>
+<li><code>simulate.mjs</code> — the offline replay; <code>hooks.test.mjs</code> is the evidence table as a Vitest suite (<code>pnpm test</code> in <code>labs/</code>).</li>
+</ul>
+<h4>Worked prompt sequence</h4>
+<pre><code class="language-prompt">Read the hooks overview and lifecycle-hooks pages of the Devin docs. On a new branch lab/02-&lt;handle&gt;, write .devin/hooks.v1.json with a PreToolUse hook on the exec tool only (anchored matcher) that runs a committed Node script. The script must exit 2 with a readable reason for any db:seed --reset, lab:reset or migration whose DATABASE_URL is not postgres://harbourline:harbourline@localhost:5432/harbourline, and must exit 2 if its own stdin is not valid JSON. Do not touch main or .devin/config.json.
+</code></pre>
+<pre><code class="language-prompt">Extend the same script: when the command runs psql, print hookSpecificOutput.updatedInput with the command rewritten to call labs/02-lifecycle-hooks/solution/psql-ro.sh (or your own wrapper that sets default_transaction_read_only=on). Add a PostToolUse hook that appends the executed command and tool_response.success to .devin/hook-audit.log, and a Stop hook that blocks while db/migrations contains the currency-nullable migration, guarded by stop_hook_active.
+</code></pre>
+<pre><code class="language-prompt">Now prove it. For each case — ordinary command, lab-DB reset, staging reset, psql read, psql DELETE, git apply scenarios/bad-migration.patch — run it, then show me the hook exit code, the reason or rewritten command, and the matching audit-log line in one table. Do not retry a blocked command another way.
+</code></pre>
+<pre><code class="language-prompt">Replace .devin/hooks.v1.json with labs/02-lifecycle-hooks/injectors/malformed-hooks.v1.json, then slow-hook.v1.json, then matcher-glob.v1.json. For each, run the staging reset again (it must not reach any database — if the guard is not loaded, stop and tell me instead) and report what /hooks lists, what happened to the call and how long it took. Restore the reference file afterwards.
+</code></pre>
+<p>If you have no Devin CLI, the last two prompts become replay runs: <code>node labs/02-lifecycle-hooks/solution/simulate.mjs --config &lt;file&gt; --command &#39;&lt;cmd&gt;&#39;</code> prints the outcome, the exit code, the reason and the rewritten input.</p>
+<h4>Expected evidence</h4>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Outcome</th>
+<th>What proves it</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pnpm test</code></td>
+<td>allow</td>
+<td>exit 0, input unchanged</td>
+</tr>
+<tr>
+<td><code>pnpm db:seed -- --reset</code> (lab DB)</td>
+<td>allow</td>
+<td>exit 0</td>
+</tr>
+<tr>
+<td><code>DATABASE_URL=…staging… pnpm db:seed -- --reset</code></td>
+<td>block</td>
+<td>exit 2, reason &quot;targets … not the lab database&quot;</td>
+</tr>
+<tr>
+<td><code>psql &quot;$DATABASE_URL&quot; -c &quot;delete from carts&quot;</code></td>
+<td>rewrite</td>
+<td><code>updatedInput.command</code> calls <code>psql-ro.sh</code>; PostgreSQL answers &quot;read-only transaction&quot;; cart count unchanged</td>
+</tr>
+<tr>
+<td><code>docker compose exec postgres psql … -c &quot;delete …&quot;</code></td>
+<td>rewrite</td>
+<td><code>-e PGOPTIONS=&#39;-c default_transaction_read_only=on&#39;</code> is injected after <code>exec</code> (the host wrapper does not exist inside the container)</td>
+</tr>
+<tr>
+<td><code>psql -c &#39;SET default_transaction_read_only=off; …&#39;</code></td>
+<td>block</td>
+<td>exit 2; switching the transaction mode is refused</td>
+</tr>
+<tr>
+<td><code>git apply scenarios/bad-migration.patch</code></td>
+<td>block</td>
+<td>exit 2, reason names the patch and &quot;destructive DDL&quot;; no migration file appears</td>
+</tr>
+<tr>
+<td>malformed <code>hooks.v1.json</code></td>
+<td>guard not loaded → the call is <strong>allowed</strong></td>
+<td><code>/hooks</code> (or the replay) shows no hooks; this is fail-open</td>
+</tr>
+<tr>
+<td>slow hook (sleep 15, timeout 3)</td>
+<td>killed after ~3 s, call <strong>not blocked</strong></td>
+<td>replay <code>outcome: timeout</code>; the docs do not specify this — record what the CLI did</td>
+</tr>
+<tr>
+<td><code>&quot;matcher&quot;: &quot;*exec*&quot;</code></td>
+<td>guards nothing</td>
+<td><code>*exec*</code> is not a valid regex (nothing to repeat); <code>^exec$</code> or <code>[&quot;^exec$&quot;]</code> is</td>
+</tr>
+</tbody></table>
+<h4>Pitfalls</h4>
+<ul>
+<li><strong>The matcher is a regex, not a glob.</strong> <code>*exec*</code> is invalid; <code>mcp__neon__*</code> means &quot;<code>mcp__neon_</code> followed by any number of <code>_</code>&quot; and happens to work by accident; <code>edit</code> also matches <code>notebook_edit</code>. Anchor what you mean: <code>^exec$</code>, <code>^mcp__neon__.*</code>. A list (<code>[&quot;^exec$&quot;, &quot;^write_to_process$&quot;]</code>) matches any entry since 21 Oct 2026 — before that only the first entry counted, so older examples that relied on the list silently guarded one tool.</li>
+<li><strong>Exit 1 does not block.</strong> A script that crashes (exit 1) or uses <code>process.exit(1)</code> for &quot;deny&quot; lets the command through. Only exit 2 or <code>decision: &quot;block&quot;</code> blocks.</li>
+<li><strong>Fail-open by construction.</strong> A hooks file that does not parse, a missing interpreter or a timed-out hook all end with the guard not deciding. The policy can only fail closed <em>inside</em> the script (treat bad input as a block); a broken config file has to be caught before merge — validate it in CI or a pre-commit check.</li>
+<li><strong>Rewrite, don&#39;t block, the read path.</strong> Blocking every <code>psql</code> makes Devin route around it (<code>docker compose exec postgres psql</code>, a Node one-off). Rewriting keeps the agent productive and is invisible to it; the guard regex must also catch <code>psql</code> after <code>exec</code>, <code>&amp;&amp;</code> and <code>;</code>.</li>
+<li><strong>A read-only default is not a read-only role.</strong> <code>default_transaction_read_only=on</code> can be switched off by the SQL itself (<code>SET … = off</code>, <code>BEGIN READ WRITE</code>); the guard and wrapper refuse those strings in arguments, but SQL piped on stdin is invisible to both. Treat the hook as the agent-side layer and ask the DBA for a read-only role as the database-side one.</li>
+<li><strong>Parse the target like the client does.</strong> Check every <code>DATABASE_URL=</code> in the command (the last one wins in the shell) and reject query parameters such as <code>?host=</code> that override the address libpq connects to.</li>
+<li><strong>Stop hooks can loop.</strong> Always return early when <code>stop_hook_active</code> is true.</li>
+<li><strong>Hooks live on the branch.</strong> Committing an enforcing <code>.devin/hooks.v1.json</code> to <code>main</code> changes every learner&#39;s session; keep it on the throwaway branch.</li>
+</ul>
+<h4>Recovery moves</h4>
+<ul>
+<li>Blocked yourself? The CLI reads the file at session start — fix the script, or move <code>.devin/hooks.v1.json</code> aside, and start a new session; <code>/hooks</code> confirms what is loaded.</li>
+<li>Guard not firing? Run <code>/hooks</code>, then add a temporary <code>PostToolUse</code> hook with <code>matcher: &quot;&quot;</code> that appends stdin to a file, to see the real <code>tool_name</code>.</li>
+<li>Rewrite not applied? <code>updatedInput</code> must sit inside <code>hookSpecificOutput</code> with <code>hookEventName: &quot;PreToolUse&quot;</code>, and the hook must exit 0.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<ul>
+<li><strong>Technical — &quot;Isn&#39;t this just a lint rule?&quot;</strong> Acknowledge: both encode a policy. Boundary: a lint rule checks code someone wrote; a hook runs at the moment the agent calls the tool, on the actual command, and can refuse or rewrite it — there is nothing to lint in <code>pnpm db:seed -- --reset</code>. Evidence: the staging reset was denied with exit 2 and the audit line; the <code>psql</code> delete was rewritten and failed read-only, with the row count unchanged. Offer: keep the lint rule for migrations in review <em>and</em> the hook for execution; they cover different moments.</li>
+<li><strong>Commercial / governance — &quot;If the hook has a bug, are we locked out of our own database?&quot;</strong> Acknowledge: a policy that blocks everything is an outage. Boundary: hooks only govern the agent&#39;s tool calls, never a human&#39;s terminal, and they are read from a file on a branch — removing it and starting a new session restores the old behaviour. Evidence: the malformed-config injector showed the opposite risk (fail-open), and the slow hook was killed at its timeout rather than hanging the session. Offer: a CI check that parses <code>hooks.v1.json</code> and replays the evidence table on every PR, so a broken policy never merges, plus the audit log for the on-call engineer.</li>
+<li><strong>Follow-up the coach may ask — &quot;So which is it, open or closed?&quot;</strong> Inside the script: closed (bad input → exit 2). Around the script (bad config, crash, timeout): open. Say both, then the CI check.</li>
+</ul>
+</div><div data-slot="debrief"><p><strong>Alternatives considered.</strong> (a) A rule in <code>AGENTS.md</code> / <code>.devin/rules/</code> — cheapest, but advisory: the model can ignore or forget it. (b) Permissions in <code>.devin/config.json</code> (<code>deny: [&quot;Bash(pnpm db:seed*)&quot;]</code>) — enforced and simple, but pattern-based on the command text: it cannot inspect <code>DATABASE_URL</code>, cannot rewrite, and cannot explain why. (c) Database-side controls (a read-only role for the agent, no network route to staging) — the strongest, and the right long-term answer, but they live outside the repo and take a DBA ticket. (d) Hooks — enforced, inspect the full input, rewrite, log, and live in the repo for review.</p>
+<p><strong>When each would win.</strong> (a) for style and conventions; (b) when a command is always forbidden regardless of arguments; (c) for production, always, alongside hooks; (d) when the decision depends on arguments or context and the customer wants evidence in the repo.</p>
+<p><strong>Cost note.</strong> Hooks add milliseconds per guarded tool call and no ACU of their own (command hooks run locally; <code>prompt</code> hooks would cost model calls). The lab is one session of roughly 3–6 ACU plus your verification; the reference scripts and replay are free to rerun.</p>
+<p><strong>Self-score (offline path).</strong> Accuracy 30 — exit codes, the rewrite, the regex matcher, open versus closed, the bad migration stopped with evidence. Structure 25 — Outcome → Evidence → Risk → Next action → Ask. Customer relevance 20 — the lost price-list edits and replayed orders, the 2 a.m. worker crash. Brevity and fluency 15 — framing within 60 s ± 5, fillers under 3 per minute. Recovery 10 — both objections answered acknowledge → boundary → evidence → offer.</p>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/cli/extensibility/hooks/lifecycle-hooks" rel="noopener">Devin docs — Lifecycle Hooks (events, stdin fields, matcher)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/cli/extensibility/hooks/overview" rel="noopener">Devin docs — Hooks overview (hooks.v1.json, exit codes, decision, updatedInput)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/release-notes/2026" rel="noopener">Devin release notes 2026 — Hook Matchers Written as a List</a> <span class="placeholder">(October 21, 2026)</span></li><li><a href="https://docs.devin.ai/product-guides/skills" rel="noopener">Devin docs — Skills (@skills: invocation for the voice coach)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — Voice mode</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/02-lifecycle-hooks/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>

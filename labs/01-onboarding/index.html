@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 01 — Onboarding — make Harbourline safe and fast to set up before Monday&#39;s new starter · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 01</p>
+<h1>Lab 01 — Onboarding — make Harbourline safe and fast to set up before Monday&#39;s new starter</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Devin environment blueprints (initialize, maintenance, knowledge), the AGENTS.md hierarchy and its automatic-inclusion limit, Knowledge migrating to Skills, and choosing Ask Devin or an Agent session</li>
+<li><b>Duration:</b> 120 min</li>
+<li><b>Difficulty:</b> intro</li>
+<li><b>Prerequisites:</b> Repo cloned, Node 22, `pnpm install` done at the root; Lab 00 warm-up done once (framing stems and the update skeleton); Fixture path: nothing beyond the repository connection — the blueprint audit, the AGENTS.md budget tool and all three injectors run locally; Optional live path: permission to edit the repository blueprint in Settings → Environment and to start a snapshot build</li>
+<li><span class="badge badge-fixture">Credentials: fixture</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<p>I run engineering for <strong>Harbourline</strong> — the platform behind Lumen Home and Trailhead Supply. We hire two engineers a month, and every one of them loses their <strong>first week</strong> to getting the store running locally: the setup page points at a service we deleted months ago, the per-service notes disagree with each other, and nobody can say which instructions are current. That is roughly <strong>40 engineer-days a year</strong> spent before anyone ships anything.</p>
+<p>Worse: on day two of her first week, our last hire followed a &quot;reset the database&quot; line from an old note and <strong>wiped the shared development database</strong> that three brand teams were demoing from. We lost an afternoon of merchandising work and a customer demo slipped a week.</p>
+<p>We have just connected Devin to the repository. Before Monday&#39;s new starter arrives, I want Devin to be the thing that makes Harbourline safe and fast to set up — for Devin itself and for a human. Concretely: the machine Devin works on should come up ready to run every gate without anyone typing setup commands; the instructions Devin reads should be the right ones, in the right place, and short enough that it actually reads them; and nobody — human or Devin — should be able to reset a database that is not their own lab database by following our docs.</p>
+<p>I am not an engineer by background any more. When you report back, explain what you changed in words I can repeat to our hiring manager, and tell me what you would <em>not</em> hand to Devin.</p>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>In the room:</strong> me (Head of Engineering); Priya Nair, the hiring manager who owns the onboarding checklist; Jonas Weber, Trailhead&#39;s tech lead, who still has a personal setup note he trusts more than the repo; the new starter, who joins Monday and will be watching.</li>
+<li><strong>Forbidden:</strong> no change to any planted defect (<code>packages/contracts/seed-spec.yaml#planted_edge_cases</code>) and no change to frozen files (<code>packages/contracts/*</code>, <code>.devin/skills/articulation-base/</code>). Proposals for shared files go in your PR description, not in the file.</li>
+<li><strong>Never</strong> run <code>db:seed -- --reset</code>, a migration or <code>docker compose down -v</code> against anything except the local lab database; never write a secret value into a blueprint, an <code>AGENTS.md</code> or a skill — names of variables only.</li>
+<li><strong>One source of truth:</strong> when two documents disagree you must say which one wins and why, and remove or correct the loser on a throwaway branch — not by adding a third document.</li>
+<li><strong>Deadline:</strong> Friday 17:00, so Monday&#39;s starter uses the result. A 3-minute update to Priya at the end.</li>
+<li><strong>Budget:</strong> one Devin session for the work; you decide where Ask Devin is enough and where you need an Agent session.</li>
+</ul>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>bash labs/01-onboarding/injectors/inject.sh --revert</code></pre><pre><code>pnpm lab:reset -- 01</code></pre><pre><code>node labs/01-onboarding/tools/agents-budget.mjs</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 01</code> to run these steps for you, and <code>@skills:lab-cleanup 01</code> when you finish. From a terminal: <code>pnpm lab:start -- 01</code> and <code>pnpm lab:cleanup -- 01</code>.</p></div><h3>What “clean” looks like</h3><p>The injector revert prints <code>reverted</code> and <code>git status --short</code> is clean (no <code>docs/SETUP.md</code>, no <code>services/api/src/AGENTS.md</code>, no <code>labs/01-onboarding/.env.lab</code>). <code>lab:reset</code> reseeds whatever <code>DATABASE_URL</code> names from the seed spec — the local Compose database when it is unset; it has no host guard, so check <code>echo $DATABASE_URL</code> is empty or points at <code>localhost</code> before running it. The budget tool lists six <code>AGENTS.md</code> files, all under the limit, with exit code 0. Without Docker, skip the second command: everything else in this lab needs only the clone.</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when someone who was not in the session can see all of the following. Every item can be met with zero credentials beyond the repository connection.</p>
+<ol>
+<li><strong>Environment inventory.</strong> A short table (in your session notes or <code>labs/01-onboarding/ONBOARDING-NOTES.md</code>, not committed) listing, for each setup step a new engineer needs — runtime, dependency install, Python worker tooling, Postgres, seed, gates — where it is configured today (blueprint section, <code>AGENTS.md</code>, skill, README, <code>.env.example</code>) and whether it is correct. At least one step that is wrong today is identified with the file and line or the blueprint line that proves it.</li>
+<li><strong>Blueprint that builds.</strong> The repository blueprint in Devin&#39;s settings references only paths that exist, installs what the gates need, keeps commands idempotent and holds no secret values. Evidence: the blueprint text before and after, and a session (or snapshot build) where the gates ran without manual setup — or, if you cannot trigger a build, the commands executed by hand on a session VM with their exit codes.</li>
+<li><strong>Instruction hierarchy mapped.</strong> A list of every <code>AGENTS.md</code>, rule and repo skill Devin will read in this repo, with its size in bytes, what it is for, and what happens to content past the automatic-inclusion limit. The output of <code>node labs/01-onboarding/tools/agents-budget.mjs</code> (before and after any change) is acceptable evidence.</li>
+<li><strong>Contradiction resolved.</strong> After the <code>contradictory-agents</code> injector, you state which instruction Devin should follow, why (scope, recency, owner), and show the corrected text on a throwaway branch. The contradiction must be gone afterwards, not &quot;explained&quot; by a new file.</li>
+<li><strong>Stale setup doc handled.</strong> After the <code>stale-setup-doc</code> injector, the stale page is either deleted or reduced to a pointer, on a throwaway branch, and every command it gave that still matters now lives in exactly one place.</li>
+<li><strong>Unsafe reset closed.</strong> You show that the repo&#39;s own instructions now point only at the local lab database: which documented command is the supported reset, which database it touches (<code>DATABASE_URL</code>, and its default), what it does <em>not</em> guard against, and what a new engineer would see if they tried the old note. Quote the command output.</li>
+<li><strong>Missing secret behaviour explained.</strong> After the <code>missing-paygate-secret</code> injector you explain what happens to payment webhooks when the signing key is absent or different between services, where the key&#39;s <em>name</em> is documented for a new engineer, and why its value is not in the blueprint.</li>
+<li><strong>Ask vs Agent decision.</strong> For at least three questions you had (for example &quot;where is the seed defined?&quot;, &quot;why does the worker fail to start?&quot;), say whether you used Ask Devin or an Agent session and one reason each.</li>
+<li><strong>Reusable know-how.</strong> At least one piece of repeated setup guidance lives as a skill (repo <code>SKILL.md</code> or an organization skill), not as a long paragraph in <code>AGENTS.md</code>, and you can say where your organization&#39;s old Knowledge notes now live.</li>
+<li><strong>No plant fixed, nothing merged.</strong> <code>git log origin/main</code> shows no commit from this lab; your throwaway branch is closed or deleted; <code>pnpm lab:reset -- 01</code> returns the tree to the starting state.</li>
+<li><strong>Articulation drill completed</strong> with the voice coach (section 8) or against a timer, with the gap report or your self-score saved as <code>labs/01-onboarding/ONBOARDING-NOTES.coach.md</code> (not committed).</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Repository connection (GitHub) — default path</td><td>required</td><td>Your clone plus `docs/blueprint.proposed.yaml`, the per-service `AGENTS.md` files, `.devin/` and `labs/01-onboarding/tools/agents-budget.mjs`.</td><td>Zero credentials and zero secret values. Every acceptance criterion can be met by reading and running the repo on a session VM.</td></tr><tr><td>Devin environment settings (repo blueprint, snapshot builds) — optional</td><td>optional</td><td>`docs/blueprint.proposed.yaml` is the reference blueprint; compare it with what Settings → Environment shows and run its `initialize` and `maintenance` commands by hand on a session VM.</td><td>Live: edit the repository blueprint and trigger a build. Needs settings access; the fixture path proves the same commands with exit codes.</td></tr><tr><td>Organization Knowledge and Skills — optional</td><td>optional</td><td>`.devin/skills/harbourline-dev/SKILL.md` is the repo skill a Knowledge note becomes; the blueprint `knowledge:` section in `docs/blueprint.proposed.yaml` shows environment-level context.</td><td>Live: open Settings → Knowledge (or Skills) to see where migrated notes landed. Read-only is enough.</td></tr><tr><td>Ask Devin — optional</td><td>optional</td><td>Answer your three questions from the repo yourself and record which mode you would have used and why.</td><td>Ask Devin needs the repository to be indexed in your organization; nothing here assumes it.</td></tr></tbody></table><h3>With fixtures only</h3><p>With the clone alone you audit every place setup knowledge lives today, run the blueprint commands by hand on a session VM to prove they work, measure the AGENTS.md hierarchy with the budget tool, and work through the three injectors on a throwaway branch. You do not save a blueprint in settings or trigger a snapshot build; you show the before and after text and the exit codes instead.</p>
+<h3>Cannot be exercised without live credentials</h3><ul><li>Saving the repository blueprint in Settings → Environment and watching a snapshot build (fixture path runs the same commands by hand)</li><li>Browsing migrated Knowledge in a live organization</li><li>Ask Devin over an indexed repository</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>contradictory-agents</code></td><td><span class="placeholder">facilitator action</span></td><td>T+20 min</td><td>`bash labs/01-onboarding/injectors/inject.sh contradictory-agents` adds a deeper `services/api/src/AGENTS.md` whose test and reset instructions disagree with `services/api/AGENTS.md` and the root file. Decide which one Devin should follow, and make the contradiction disappear on a throwaway branch.</td></tr><tr><td><code>stale-setup-doc</code></td><td><span class="placeholder">facilitator action</span></td><td>T+35 min</td><td>`bash labs/01-onboarding/injectors/inject.sh stale-setup-doc` restores the old new-starter page, `docs/SETUP.md`, the one Jonas still trusts. It names a service that no longer exists, an old runtime and a database reset line. Decide what happens to it.</td></tr><tr><td><code>missing-paygate-secret</code></td><td><span class="placeholder">facilitator action</span></td><td>T+50 min</td><td>`bash labs/01-onboarding/injectors/inject.sh missing-paygate-secret` writes `labs/01-onboarding/.env.lab` in which the fake payment provider signs with a rotated key and delivers to the fulfilment worker inbox (port 3003) instead of the API. Explain what a new engineer would see, and where the key&#39;s name (never its value) should be documented.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>This lab uses the standard four-part articulation drill. The coach plays Priya Nair, Harbourline&#39;s hiring manager: friendly, not technical, and responsible for Monday&#39;s new starter. Everything you say must survive being repeated by someone who has never opened a terminal.</p>
+<h5>60-second framing for a non-engineer</h5>
+<p>Say what the problem costs and what will be different on Monday before you say anything about tools. Stems you may use:</p>
+<ul>
+<li>&quot;Today a new engineer spends … before they can … It costs us …&quot;</li>
+<li>&quot;The risk I care most about is …&quot;</li>
+<li>&quot;I am using Devin to … and I am deliberately not using it to …&quot;</li>
+<li>&quot;You will know it worked when …&quot;</li>
+</ul>
+<p>Sinhala-first note: lead with the outcome. Do not walk through the setup steps in order (&quot;first Node, then pnpm, then Docker…&quot;) before saying what changes for the new starter.</p>
+<h5>Think-aloud checkpoints (T+10 and T+40)</h5>
+<p>The coach asks what you are looking at and what you will check next. Use the four verbs: <em>I see… I think… I&#39;ll try… I&#39;ll check…</em>. At T+10 you are usually still auditing; at T+40 you are usually in the middle of an injector. Name the file you are reading. If you need a moment, say &quot;Give me ten seconds to read this&quot; rather than going silent.</p>
+<h5>3-minute update to the hiring manager</h5>
+<p>Skeleton: <strong>Outcome → Evidence → Risk → Next action → Ask.</strong> One number per sentence. For every change, say <em>where</em> it lives (machine setup, instructions Devin reads, reusable know-how) in plain words, then the proof. End with one concrete ask of Priya.</p>
+<h5>Objection round</h5>
+<p>The coach raises two objections, 90 seconds each: one technical, one about people and adoption. Acknowledge, answer with evidence from your session, and close with a next step. Avoid &quot;basically&quot; and &quot;actually&quot;; do not end on &quot;…right?&quot;.</p>
+<p>Scores and timings are transcript-based, approximate.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>60-second framing for a non-engineer</td><td>framing</td><td>—</td><td>1 min</td></tr><tr><td>Think-aloud checkpoint (T+10)</td><td>checkpoint</td><td>T+10 min</td><td>45 s</td></tr><tr><td>Think-aloud checkpoint (T+40)</td><td>checkpoint</td><td>T+40 min</td><td>45 s</td></tr><tr><td>3-minute update to the hiring manager</td><td>update</td><td>—</td><td>3 min</td></tr><tr><td>Objection 1 (technical)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 (commercial)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-01-onboarding &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><h4>Feature fit</h4>
+<p>This lab is about putting each kind of onboarding knowledge where Devin will use it. <strong>Machine setup</strong> (runtime, installs, database, idempotent commands) belongs in the repository <strong>blueprint</strong>: <code>initialize</code> runs once when the snapshot is built, <code>maintenance</code> keeps dependencies current and is surfaced to the agent, and the blueprint&#39;s <code>knowledge</code> entries give environment context. <strong>How to work in this repo</strong> (ownership, gates, what never to do) belongs in <code>AGENTS.md</code>, layered root → service → deeper folders. <strong>Reusable procedures</strong> (bring-up, reset, gate sequence) belong in a <strong>skill</strong>. Mixing them is how Harbourline got here.</p>
+<p>The two numbers to know: Devin automatically includes the <strong>first 16 KiB of each <code>AGENTS.md</code></strong>; anything after that is only read if Devin goes looking. Knowledge is being retired in favour of <strong>Skills</strong> (organization skills in plugins, or repo <code>SKILL.md</code> files under <code>.agents/skills/</code>, <code>.devin/skills/</code> and friends); existing notes are migrated, not lost.</p>
+<h4>Worked approach</h4>
+<ol>
+<li><strong>Ask first, cheaply.</strong> Use Ask Devin (or read the repo) for &quot;where is setup defined?&quot;, &quot;which AGENTS.md files exist?&quot;, &quot;where is the seed?&quot; — questions with answers already in the code. Switch to an Agent session only for things that must <em>run</em>: installing, gates, reset.</li>
+<li><strong>Audit the blueprint against the tree.</strong> The live repo blueprint in settings still runs <code>pip install -e &quot;services/payroll-worker[dev]&quot;</code>; the directory is <code>services/fulfilment-worker</code>. That single stale path is why snapshot builds fail and sessions start with no <code>node_modules</code> and no worker package. <code>docs/blueprint.proposed.yaml</code> already has the corrected line. Apply it, rebuild, and keep the file and settings in sync.</li>
+<li><strong>Find the other stale lines.</strong> <code>services/api/AGENTS.md</code> tells you to <code>cp .env.example .env</code> inside <code>services/api</code>, but <code>.env.example</code> lives at the root. <code>.devin/skills/harbourline-dev/SKILL.md</code> and the blueprint&#39;s <code>knowledge</code> still say the database scripts are no-ops until the API lands — they are not any more. Each is a one-line correction on a throwaway branch.</li>
+<li><strong>Measure the hierarchy.</strong> <code>node labs/01-onboarding/tools/agents-budget.mjs</code> lists seven files totalling about 16.5 KiB — no single file is over the limit, because the limit is <em>per file</em>. The lesson is to keep each file short and front-loaded, and move procedures into skills, not to merge everything into one file.</li>
+<li><strong>Close the unsafe reset.</strong> The supported reset is <code>pnpm lab:reset -- &lt;nn&gt;</code>: it reseeds through <code>db:seed -- --reset</code> using <code>DATABASE_URL</code> from your environment (default <code>postgres://harbourline:harbourline@localhost:5432/harbourline</code>, the Compose database) and then runs the lab&#39;s scenario script. Note what it does <em>not</em> do: nothing refuses a non-local URL. So the safety comes from the documents — every doc points at <code>lab:reset</code>, nobody&#39;s notes export a shared URL, and <code>.env.example</code> holds only local values. A code guard (refuse <code>--reset</code> when the host is not local) is a sensible proposal for the API owners, not something to slip in here.</li>
+<li><strong>Move repeated guidance into a skill.</strong> Bring-up and gates already live in <code>harbourline-dev</code>; anything you find repeated across <code>AGENTS.md</code> files (gate order, &quot;never fix a plant&quot;) stays once in the root and is referenced elsewhere.</li>
+</ol>
+<h4>The three injectors</h4>
+<ul>
+<li><strong>contradictory-agents.</strong> The deeper <code>services/api/src/AGENTS.md</code> says to run tests against a shared database and to reset with <code>docker compose down -v</code>. Deeper files are more specific, but specificity does not beat safety: the root file&#39;s ownership and gate rules win, and the deeper file is simply wrong. Delete it (or rewrite it to agree) on the throwaway branch; do not add a fourth file explaining which to believe.</li>
+<li><strong>stale-setup-doc.</strong> <code>docs/SETUP.md</code> names <code>services/payroll-worker</code>, Node 18 and a reset against a shared host. Replace it with a three-line pointer to the root <code>AGENTS.md</code> and the <code>harbourline-dev</code> skill, or delete it. Every command that still matters already lives in the blueprint or the skill.</li>
+<li><strong>missing-paygate-secret.</strong> The services all fall back to the same local default key, so a <em>missing</em> key silently works locally and a <em>different</em> key makes the worker inbox answer <code>401 invalid_signature</code> to every delivery — which is why the injector also points <code>PAYGATE_WEBHOOK_URL</code> at the worker (<code>:3003</code>). Sent to the default target, the API, the same deliveries are accepted, because the API does not verify signatures (a planted defect; do not fix it). The variable <strong>name</strong> <code>PAYGATE_SECRET</code> is already in the root <code>.env.example</code> with a local-only value; the fix is to point the stale <code>services/api/AGENTS.md</code> line at that root file and to mention the name in the skill. Never put a value in the blueprint; a real key belongs in Devin&#39;s secrets.</li>
+</ul>
+<h4>Pitfalls</h4>
+<ul>
+<li>Pasting setup commands into <code>AGENTS.md</code> instead of the blueprint: Devin reads them but the machine is still not ready when the session starts.</li>
+<li>Putting a secret value in a blueprint or skill &quot;because it is only local&quot;.</li>
+<li>Treating &quot;deeper <code>AGENTS.md</code> wins&quot; as absolute and following an unsafe instruction.</li>
+<li>Fixing the API&#39;s missing signature check while you are there — that is a planted defect.</li>
+<li>Starting an Agent session for questions Ask Devin answers in seconds; or using Ask for something that must actually run.</li>
+<li>Explaining the 16 KiB limit as a limit on the whole hierarchy.</li>
+</ul>
+<h4>Recovery moves</h4>
+<ul>
+<li>Snapshot build fails: read the build log for the first failing command, run it by hand on a session VM, fix the path in the blueprint, rebuild.</li>
+<li>You edited a shared file on the wrong branch: <code>git stash</code>, switch to your throwaway branch, <code>git stash pop</code>.</li>
+<li>You ran an injector and lost track: <code>bash labs/01-onboarding/injectors/inject.sh --revert</code> then <code>pnpm lab:reset -- 01</code>.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<p><strong>&quot;Why not just fix the README?&quot;</strong> — &quot;Because the README is not what Devin or the machine reads first. I did fix the stale lines, on a branch. But the reason Monday&#39;s starter will be productive is that the environment now builds itself from the blueprint — the gates ran on a fresh session with no manual steps — and the instructions Devin reads are short, layered and agree with each other. A README helps a human read; a blueprint and <code>AGENTS.md</code> make the setup happen and keep it true. Next step: I&#39;ll delete the old setup page and point to the skill.&quot;</p>
+<p><strong>&quot;Will the new hire still learn the codebase if Devin does it for them?&quot;</strong> — &quot;Yes, because setup is not where learning happens — it is where the first week disappears. Devin gets the machine ready and the reset safe; the new starter spends week one in the code, with Ask Devin to answer &#39;where is this defined?&#39; and the same <code>AGENTS.md</code> rules Devin follows, so they learn the real conventions. The things they must learn by hand — the money rules, the brand differences, what never to fix — are written down once. Next step: Priya and I pair them on one real ticket on day two.&quot;</p>
+<h4>References</h4>
+<p>See the reference list for this lab.</p>
+</div><div data-slot="debrief"><p>What changed on Monday: the blueprint references only real paths and the snapshot builds; the instruction files agree; the unsafe reset path is gone; secrets are named, not stored. What you did not hand to Devin: deciding which document is authoritative and deleting the losers — that is an ownership decision a person makes.</p>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/onboard-devin/agents-md" rel="noopener">Devin docs — AGENTS.md (hierarchy, automatic inclusion of the first 16 KiB of each file)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/onboard-devin/environment/blueprints" rel="noopener">Devin docs — Environment blueprints (initialize, maintenance, knowledge; snapshot builds)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/skills" rel="noopener">Devin docs — Skills (repo skill locations, organization skills in plugins)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/knowledge" rel="noopener">Devin docs — Knowledge (deprecation and migration to Skills)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/ask-devin" rel="noopener">Devin docs — Ask Devin</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/release-notes/2026" rel="noopener">Devin release notes 2026 — AGENTS.md read during repository setup; Knowledge moving to Skills</a> <span class="placeholder">(2026 entries, fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — Voice mode</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/01-onboarding/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>

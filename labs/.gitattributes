@@ -1,0 +1,3 @@
+# Rendered lab pages are committed; --check compares them byte for byte, so keep LF everywhere.
+/index.html text eol=lf
+/*/index.html text eol=lf

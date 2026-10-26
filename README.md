@@ -24,7 +24,7 @@ pnpm --filter @harbourline/api run dev                                   # http:
 (cd services/fulfilment-worker && DATABASE_URL=postgres://harbourline:harbourline@localhost:5432/harbourline python3 -m fulfilment_worker run)
 ```
 
-Open `labs/index.html` after `pnpm labs:build`. Each lab has a hidden answer and a voice articulation coach that the learner starts by hand (`@skills:coach-<nn>-<slug> <handle>`; `pnpm coach:dryrun -- <nn>` for the transcript-driven dry run).
+Open `labs/index.html` straight from a clone (the rendered pages are committed; rerun `pnpm labs:build` after editing lab sources). Each lab has a hidden answer and a voice articulation coach that the learner starts by hand (`@skills:coach-<nn>-<slug> <handle>`; `pnpm coach:dryrun -- <nn>` for the transcript-driven dry run).
 
 ## Labs
 

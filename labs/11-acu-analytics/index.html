@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 11 — ACU governance and analytics — control cost without blocking brand teams · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 11</p>
+<h1>Lab 11 — ACU governance and analytics — control cost without blocking brand teams</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Organization ACU limits, usage policies (per-user tiers, IdP group mapping, per-member overrides, additional usage requests), Consumption / Consumption Analytics / My analytics, the analytics Version setting (Newest vs Legacy)</li>
+<li><b>Duration:</b> 75 min</li>
+<li><b>Difficulty:</b> core</li>
+<li><b>Prerequisites:</b> Repo cloned, `pnpm install` done at the root, Node 22; Lab 00 warm-up done once (framing stems and the update skeleton); Fixture path: nothing else — `labs/11-acu-analytics/tools/acu-sim.mjs` replays the documented limit rules over a fictional Harbourline enterprise; Optional observer path: a Devin account whose role can open Settings → Analytics (organization), and, if your enterprise enabled it, Settings → Personal → My analytics</li>
+<li><span class="badge badge-fixture">Credentials: fixture</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<blockquote>
+<p>&quot;Finance wants a cap per team. Trailhead says they&#39;ll be blocked in the middle of the Winter Drop.&quot;
+— Harbourline finance controller, Friday budget review</p>
+</blockquote>
+<p>Harbourline runs three Devin organizations under one enterprise: <strong>Harbourline Platform</strong>, <strong>Lumen Home</strong> and <strong>Trailhead Supply</strong>. The contract renews its ACU window every month on the 23rd. Last month the enterprise overspent its plan by a little under ten percent, and finance wants a hard number per brand team before the next window opens. Nobody has been blocked yet, and everyone wants to keep it that way.</p>
+<p>This morning (Saturday 14 November 2026) two things happened. Trailhead&#39;s engineering lead could not start a Devin session even though her own usage is well under what she was told she has. And a Lumen engineer who is on the on-call rota this month was stopped mid-investigation with a message about his personal limit, while Lumen as a whole has used about two thirds of its budget. Trailhead&#39;s Winter Drop sale runs <strong>18–20 November</strong> and needs Devin for flash-sale releases.</p>
+<p>To make it worse, the finance controller and the Trailhead lead brought two different dashboards to the meeting and their totals do not match. Finance wants to know which number is &quot;the real one&quot; before signing off on any cap.</p>
+<p><code>labs/11-acu-analytics/fixtures/harbourline-consumption.json</code> is a fictional copy of that enterprise: organizations and their limits, usage tiers, IdP group mappings, members, and usage split by surface. <code>labs/11-acu-analytics/tools/acu-sim.mjs</code> applies the documented limit rules to it (run it with <code>--help</code>).</p>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>Finance controller</strong> — wants a cap per brand team and one number per sentence. Reads a three-minute update and forwards it.</li>
+<li><strong>Trailhead Supply engineering lead</strong> — blocked this morning; the sale starts on Wednesday. Will not accept &quot;wait for the reset&quot;.</li>
+<li><strong>Lumen Home on-call engineer</strong> — blocked mid-investigation; expects his on-call role to give him more room.</li>
+<li><strong>Enterprise admin (Platform)</strong> — the only person who can change organization limits, tiers, mappings and overrides. Will ask what exactly to change and until when.</li>
+</ul>
+<p>Constraints:</p>
+<ul>
+<li>No change to a real enterprise during the lab. Every limit change is simulated with <code>acu-sim.mjs</code> flags; screenshots of your own tenant are read-only and stay in the git-ignored <code>figures/tenant/</code> folder.</li>
+<li>Every number you quote must come from a named view or a simulator line, and you must say whether it includes local (Desktop, CLI) usage and Devin Review.</li>
+<li>No Automations, no scheduled reports: finance gets one update from you, today.</li>
+<li>No real customer or employee data. The members in the fixture are fictional.</li>
+</ul>
+<h5>Navigation map (where each number lives)</h5>
+<table>
+<thead>
+<tr>
+<th>You want</th>
+<th>Go to</th>
+<th>Who can open it</th>
+<th>Figure</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Usage per organization across the enterprise</td>
+<td>Enterprise Settings → Consumption</td>
+<td>Enterprise admins (or the View Consumption permission)</td>
+<td><a href="figures/fig-11-7.svg" rel="noopener">11.7</a></td>
+</tr>
+<tr>
+<td>One organization&#39;s usage by user and repository</td>
+<td>Organization Settings → Analytics → Consumption</td>
+<td>Organization admins</td>
+<td><a href="figures/fig-11-2.svg" rel="noopener">11.2</a></td>
+</tr>
+<tr>
+<td>Switch the analytics layout</td>
+<td>Gear icon next to the date picker → Version: Newest / Legacy</td>
+<td>Anyone who can open Analytics</td>
+<td><a href="figures/fig-11-1.svg" rel="noopener">11.1</a>, <a href="figures/fig-11-5.svg" rel="noopener">11.5</a></td>
+</tr>
+<tr>
+<td>Which metrics leave out local usage</td>
+<td>The &quot;Cloud only&quot; marker on Newest metric cards; the Cloud and Local tabs</td>
+<td>Anyone who can open Analytics</td>
+<td><a href="figures/fig-11-3.svg" rel="noopener">11.3</a></td>
+</tr>
+<tr>
+<td>Why a chart is empty</td>
+<td>The billing-cycle empty state for ranges outside any contract window</td>
+<td>Anyone who can open Analytics</td>
+<td><a href="figures/fig-11-4.svg" rel="noopener">11.4</a></td>
+</tr>
+<tr>
+<td>Your own usage and the Request more button</td>
+<td>Settings → Personal → My analytics</td>
+<td>Users whose role has View Personal Analytics (off by default)</td>
+<td><a href="figures/fig-11-6.svg" rel="noopener">11.6</a></td>
+</tr>
+<tr>
+<td>Organization limits</td>
+<td>Enterprise Settings → Organizations → pencil icon (Update name and limits)</td>
+<td>Enterprise admins</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Tiers, IdP mappings, overrides, requests, members at risk</td>
+<td>Enterprise Settings → Usage policies</td>
+<td>Manage ACU limits or billing admin permission</td>
+<td><a href="figures/fig-11-8.svg" rel="noopener">11.8</a></td>
+</tr>
+</tbody></table>
+<p>Every figure is a placeholder captioned <em>screenshot pending: replace with your tenant&#39;s view</em> until you or your facilitator capture it (see <code>figures/README.md</code>).</p>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>pnpm lab:reset -- 11</code></pre><pre><code>rm -rf labs/11-acu-analytics/figures/tenant labs/11-acu-analytics/ACU-DECISION.md</code></pre><pre><code>node labs/11-acu-analytics/tools/acu-sim.mjs --views</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 11</code> to run these steps for you, and <code>@skills:lab-cleanup 11</code> when you finish. From a terminal: <code>pnpm lab:start -- 11</code> and <code>pnpm lab:cleanup -- 11</code>.</p></div><h3>What “clean” looks like</h3><p>The simulator is stateless: every run starts from <code>fixtures/harbourline-consumption.json</code> and only the flags you pass change it, so <code>lab:reset</code> (which reseeds the shop database) is optional here. Clean means no <code>ACU-DECISION.md</code> of your own and no <code>figures/tenant/</code> folder. <code>--views</code> prints an enterprise total of 8870 ACU for the current billing window (23 Oct → 14 Nov 2026) and three organization rows.</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when all of the following are observable by someone who was not on the call. Every item can be met on the fixture path with zero credentials.</p>
+<ol>
+<li><strong>A decision file exists.</strong> <code>labs/11-acu-analytics/ACU-DECISION.md</code> (git-ignored; keep it on your own branch or attach it to your report) holds both decisions, the numbers ledger and the finance update.</li>
+<li><strong>Decision A (Trailhead).</strong> The file names which limit blocked the Trailhead lead this morning, quotes the simulator <code>RESULT:</code> line, and shows one change that does <em>not</em> unblock her and one that does, each with its <code>RESULT:</code> line.</li>
+<li><strong>The sale holds.</strong> After the <code>sale-spike</code> injector, the file gives the number you would set for Trailhead, who sets it, until when it applies, and the <code>RESULT:</code> line for 20 November.</li>
+<li><strong>Decision B (Lumen on-call).</strong> The file explains why the on-call engineer has the limit he has (which rule picked it), compares at least two fixes (for example a temporary override versus changing his tier), picks one, and quotes the <code>RESULT:</code> line.</li>
+<li><strong>Reset day.</strong> After the <code>reset-day</code> injector, one sentence says what happened to the override and to both meters on 23 November.</li>
+<li><strong>Review storm.</strong> After the <code>review-storm</code> injector, one sentence says which meter moved and which did not, with both numbers.</li>
+<li><strong>Numbers ledger.</strong> A table with one row per number you quote: value, source view (or simulator line), date range, and two yes/no columns — <em>includes local usage?</em> and <em>includes Devin Review?</em> At least five rows, including the enterprise total, one organization&#39;s total, one Cloud-tab number and one per-user number.</li>
+<li><strong>The two dashboards.</strong> A short paragraph that explains, with numbers from the ledger, why the finance controller&#39;s total and the Trailhead lead&#39;s total differ. The <code>billing-org-drift</code> and <code>empty-cycle</code> injectors each get one sentence.</li>
+<li><strong>Newest vs Legacy.</strong> Two or three sentences on what the Version setting changes, what a &quot;Cloud only&quot; metric leaves out, and which figures you replaced with your own tenant&#39;s screenshots (or that all eight are still placeholders).</li>
+<li><strong>&quot;A cap per team&quot;.</strong> One paragraph answering finance&#39;s request directly: what mechanism gives a team cap, what mechanism gives a per-person cap, and what you recommend for Harbourline.</li>
+<li><strong>Credential honesty.</strong> A short &quot;not exercised&quot; list: which admin actions were simulated, which analytics pages you looked at live (if any).</li>
+<li><strong>Articulation drill completed</strong> with the voice coach (section 8) or against a timer, and the gap report (or your self-score) saved as <code>labs/11-acu-analytics/ACU-DECISION.coach.md</code>. Do not commit it.</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Offline limit and analytics simulator (`tools/acu-sim.mjs`) — default path</td><td>required</td><td>`fixtures/harbourline-consumption.json`: 3 organizations with limits, 3 usage tiers, 3 IdP mappings, 4 named members plus aggregate rows, cloud / local / Devin Review usage for the current billing window and the last week of the previous one.</td><td>Zero credentials. Both limit decisions and the dashboard-totals question can be answered on this path.</td></tr><tr><td>Your own tenant&#39;s analytics pages — optional, read-only</td><td>optional</td><td>Placeholder figures in `figures/` show where each screenshot goes; the navigation map in the brief names the page for each one.</td><td>Read only. Do not change any limit, tier or override in a real enterprise during this lab; capture screenshots into `labs/11-acu-analytics/figures/tenant/` (git-ignored).</td></tr><tr><td>Enterprise admin settings (Organizations, Usage policies) — not used live</td><td>optional</td><td>The simulator&#39;s `--raise-org`, `--override`, `--assign`, `--unassign` and `--billing-org` flags stand in for the admin actions.</td><td>Changing limits needs an enterprise admin (Manage ACU limits or billing admin permission). The lab never asks you to do it for real.</td></tr></tbody></table><h3>With fixtures only</h3><p>With fixtures only you still make both limit decisions, see which view counts which surface, and write the finance update. What you cannot do is confirm the exact layout of the Newest and Legacy analytics in your own tenant: the figures stay placeholders until you replace them.</p>
+<h3>Cannot be exercised without live credentials</h3><ul><li>Changing a real organization limit, usage tier, IdP mapping or per-member override (simulated by `acu-sim.mjs`)</li><li>The live Newest / Legacy analytics pages and My analytics in your tenant (placeholder figures until you capture your own)</li><li>Additional usage requests and their approval notifications (described, not simulated)</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>sale-spike</code></td><td><code>node labs/11-acu-analytics/tools/acu-sim.mjs --scenario A --inject sale-spike --date 2026-11-20</code></td><td>T+30 min</td><td>Trailhead&#39;s merchandising lead forwards the Winter Drop forecast: about 900 extra cloud ACU between 18 and 20 November. Check whether your proposed fix still holds on the last sale day.</td></tr><tr><td><code>review-storm</code></td><td><code>node labs/11-acu-analytics/tools/acu-sim.mjs --scenario B --inject review-storm</code></td><td>T+40 min</td><td>Lumen pushes a burst of PRs and Devin Review spends 300 more ACU on them. Watch which of the two meters moves.</td></tr><tr><td><code>reset-day</code></td><td><code>node labs/11-acu-analytics/tools/acu-sim.mjs --scenario B --override arjun=520 --date 2026-11-23</code></td><td>after decision B</td><td>Jump to the first day of the next billing window. Say what happened to the override you set and to both meters.</td></tr><tr><td><code>empty-cycle</code></td><td><code>node labs/11-acu-analytics/tools/acu-sim.mjs --views --range 2026-03-01..2026-04-15</code></td><td>any time</td><td>Finance asks for spring numbers. The selected period is before the contract started; read the message and explain it in one sentence.</td></tr><tr><td><code>billing-org-drift</code></td><td><code>node labs/11-acu-analytics/tools/acu-sim.mjs --views --billing-org noor=harbourline-trailhead</code></td><td>built into the fixture</td><td>One Trailhead engineer never had a billing organization assigned. Compare the Platform and Trailhead rows with and without the flag.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>This lab uses the four-part articulation drill with two think-aloud checkpoints. The coach plays the Harbourline finance controller: polite, numerate, suspicious of any figure without a source, and impatient with product vocabulary.</p>
+<h5>60-second framing</h5>
+<p>Say what finance gets before you say how. Stems you may use:</p>
+<ul>
+<li>&quot;Two people were blocked this morning for two different reasons: …&quot;</li>
+<li>&quot;There are two kinds of cap, and they do different jobs: …&quot;</li>
+<li>&quot;I am using … because…&quot;</li>
+<li>&quot;You will know it works when…&quot;</li>
+</ul>
+<p>Sinhala-first note: open with the outcome. Do not explain the contract, the three organizations and the tier list before you say what changes.</p>
+<h5>Think-aloud checkpoint (T+10)</h5>
+<p>The coach asks what you are looking at and what you will check next. Use the four verbs: <em>I see… I think… I&#39;ll try… I&#39;ll check…</em>. Name the meter you read first and its number. If you need to read the simulator output, say &quot;Give me ten seconds to read this&quot;.</p>
+<h5>Think-aloud checkpoint (T+40)</h5>
+<p>You are filling in the numbers ledger. Say, for two numbers on your screen, what each one counts and what it leaves out. One number per sentence. End on a full stop, not on &quot;…right?&quot;.</p>
+<h5>Update to the finance controller (3 minutes)</h5>
+<p>Skeleton: <strong>Outcome → Evidence → Risk → Next action → Ask.</strong> Finance asked for a short update: choose your numbers carefully, say where each one comes from, and do not read the ledger aloud. Close with the decision you need from finance.</p>
+<h5>Objection round</h5>
+<p>The coach raises one commercial and one technical objection, in character, 90 seconds each. Reply pattern: acknowledge → boundary → evidence → offer. The objections are not printed here — that is the point.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>60-second framing</td><td>framing</td><td>—</td><td>1 min</td></tr><tr><td>Think-aloud checkpoint (T+10)</td><td>checkpoint</td><td>T+10 min</td><td>45 s</td></tr><tr><td>Think-aloud checkpoint (T+40)</td><td>checkpoint</td><td>T+40 min</td><td>45 s</td></tr><tr><td>Update to the finance controller</td><td>update</td><td>—</td><td>3 min</td></tr><tr><td>Objection 1 (commercial)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 (technical)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-11-acu-analytics &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><h4>Feature fit</h4>
+<p>There are two independent caps, and each one does a different job. The <strong>organization ACU limit</strong> is set by an enterprise admin per organization and caps the organization&#39;s total monthly consumption: cloud sessions run in it, Devin Review billed to it, and Devin Desktop, Windsurf JetBrains and Devin CLI usage of users whose billing organization it is. <strong>Usage policies</strong> cap each member individually: a tier gives each member the same monthly allocation (not a pooled budget), local and cloud usage share one cap, and Devin Review is excluded. A session is blocked if <em>either</em> limit is reached, and raising one never lifts the other. Both reset at the start of the contract&#39;s monthly billing window — here the 23rd.</p>
+<p>Finance&#39;s &quot;cap per team&quot; is therefore an organization limit (one organization per brand team already exists), and the tiers are a per-person guardrail inside it. The analytics pages are where you check which number counts what before you put it in front of finance.</p>
+<h4>Worked approach</h4>
+<ol>
+<li>Baseline the views: <code>node labs/11-acu-analytics/tools/acu-sim.mjs --views</code> → enterprise 8870 ACU; Platform 1770, Lumen 4100, Trailhead 3000 for 23 Oct → 14 Nov.</li>
+<li>Decision A: <code>--scenario A</code> → <code>RESULT: member=mira org=harbourline-trailhead blocked by organization limit</code>. Her meter is 180 of 400; Trailhead is 3000 of 3000.</li>
+<li>Prove the wrong fix: <code>--scenario A --override mira=600</code> → still blocked by organization limit. A per-member override changes only her own meter.</li>
+<li>Size the fix with the sale: <code>--scenario A --raise-org harbourline-trailhead=4000 --inject sale-spike --date 2026-11-20</code> → 3900 of 4000, allowed. 4000 leaves only 100 ACU of margin; propose 4200 for this window, set by an enterprise admin in Settings → Organizations, and lowered back to 3000 (or a re-sized number) after the 23rd.</li>
+<li>Decision B: <code>--scenario B</code> → <code>blocked by per-user limit</code>, 410 of 400 (250 cloud + 160 local; 90 Review not counted). Lumen has 1900 ACU of headroom.</li>
+<li>Why 400 and not 800: he is in <code>harbourline-oncall</code> (mapped to the 800 On-call tier, priority 1), but an explicit assignment to Brand engineers beats every IdP mapping. Compare <code>--unassign arjun</code> (resolves to On-call, 800, permanent until someone reassigns him, and his approval policy becomes Always approve) with <code>--override arjun=520</code> (temporary, expires 22 Nov, stays in Brand engineers with manual approval). For a one-month on-call rota the temporary override is the narrow fix; if on-call people should always get 800, remove the stale explicit assignment instead.</li>
+<li>Injectors: <code>review-storm</code> moves only the Lumen organization total (4100 → 4400); <code>reset-day</code> shows both meters at 0 and the override gone on 23 Nov; <code>billing-org-drift</code> moves Noor&#39;s 120 local ACU from Platform to Trailhead; <code>empty-cycle</code> prints the billing-cycle message.</li>
+<li>Write <code>ACU-DECISION.md</code> with the ledger, both decisions and the update, then run the drill.</li>
+</ol>
+<p>Worked prompts, if you used a Devin session to do the analysis:</p>
+<pre><code class="language-prompt">Read labs/11-acu-analytics/fixtures/harbourline-consumption.json and the docs pages for organization ACU limits and usage policies. For mira in harbourline-trailhead and arjun in harbourline-lumen, tell me which limit blocks each of them today (2026-11-14), using tools/acu-sim.mjs, and quote every RESULT line you rely on. Do not change any real enterprise setting.
+</code></pre>
+<pre><code class="language-prompt">Build a numbers ledger for the finance controller from acu-sim --views (cycle and last-30): value, source view, date range, includes local usage yes/no, includes Devin Review yes/no. Then explain in five sentences why the Enterprise Consumption row for Trailhead and the Trailhead Cloud tab disagree.
+</code></pre>
+<h4>Which numbers include local usage</h4>
+<table>
+<thead>
+<tr>
+<th>Number</th>
+<th>Local (Desktop, CLI, JetBrains)</th>
+<th>Devin Review</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Per-user limit meter (Usage policies → Members, limit warnings)</td>
+<td>yes</td>
+<td><strong>no</strong></td>
+<td>Usage policies docs</td>
+</tr>
+<tr>
+<td>Organization limit consumption</td>
+<td>yes, for users whose billing organization it is</td>
+<td>yes</td>
+<td>Org ACU limits docs</td>
+</tr>
+<tr>
+<td>Enterprise Consumption (per organization)</td>
+<td>yes, attributed to the billing organization</td>
+<td>yes (own Review line)</td>
+<td>Enterprise billing, Devin Review docs</td>
+</tr>
+<tr>
+<td>Org Analytics, Newest → Overview</td>
+<td>yes (Oct 7: Active users there include free usage)</td>
+<td>shown on its own tab</td>
+<td>Release notes Oct 7; verify with Figure 11.2</td>
+</tr>
+<tr>
+<td>Org Analytics, Newest → Cloud tab and any metric marked &quot;Cloud only&quot;</td>
+<td><strong>no</strong></td>
+<td>no</td>
+<td>Observed in the product (Figure 11.3); not in the docs</td>
+</tr>
+<tr>
+<td>Org Analytics, Newest → Local tab</td>
+<td>yes, only local; no organization filter (Oct 7)</td>
+<td>no</td>
+<td>Release notes Oct 7</td>
+</tr>
+<tr>
+<td>My analytics</td>
+<td>your own usage across every organization</td>
+<td>check your tenant (Figure 11.6)</td>
+<td>Personal Analytics docs</td>
+</tr>
+</tbody></table>
+<p>In the simulator, Trailhead&#39;s 3000 is the organization total (cloud 2180 + local 400 + Review 420); the Cloud tab shows 2180; Mira&#39;s meter shows 180 because her 60 Review ACU are not counted.</p>
+<h4>Why the two dashboards disagree</h4>
+<p>Finance brought Enterprise Settings → Consumption; the Trailhead lead brought Trailhead&#39;s own Analytics on the Cloud tab with &quot;Last 30 days&quot;. They differ for four reasons, all visible in the fixture:</p>
+<ul>
+<li><strong>Scope.</strong> Enterprise Consumption sums all three organizations (8870); an organization&#39;s analytics shows one (Trailhead 3000).</li>
+<li><strong>Surface.</strong> The Cloud tab and Cloud-only metrics leave out local usage and Review (2180 of Trailhead&#39;s 3000).</li>
+<li><strong>Attribution.</strong> Local usage counts toward the user&#39;s billing organization, which falls back to the first organization they can access. Noor&#39;s 120 local ACU sit in Platform, not Trailhead, until an admin assigns her billing organization.</li>
+<li><strong>Date range.</strong> Since Oct 5, &quot;Last 7 / 30 / 90 days&quot; include today and are rolling; the limit works on the billing window that started on the 23rd. Trailhead&#39;s last 30 days are 3210, the window is 3000.</li>
+</ul>
+<p>A range that lies entirely before the contract started returns &quot;No billing cycle covers the selected period&quot;: cycle-based figures have no window to belong to, which is not the same as zero usage.</p>
+<h4>Newest vs Legacy</h4>
+<p>The official docs do not describe the analytics Version setting. What the product shows (plan §8, to be confirmed with Figures 11.1–11.5): the gear icon next to the date picker on Settings → Analytics has a <strong>Version</strong> setting with <strong>Newest</strong> and <strong>Legacy</strong>. Newest groups the page into Overview, Cloud, Local and More tabs and marks some metrics &quot;Cloud only&quot;. The Oct 7 release note lists the metric corrections that a Newest-vs-Legacy comparison may expose: ACUs per merged PR counts merged PRs created in the period, &quot;per session user&quot; counts users who started sessions, previous-period comparisons cover the same number of days, trailing averages are usage-weighted, Overview and Local &quot;Active users&quot; include free usage, and the Review tab&#39;s repository usage counts only the period&#39;s days. Inference, not verified: Legacy keeps the earlier layout and definitions, so the same date range can show different per-PR and per-user figures. Never mix numbers from the two versions in one update.</p>
+<h4>The injectors</h4>
+<ul>
+<li><strong>sale-spike</strong>: without a change Trailhead stays blocked through the sale; with 4000 it ends the 20th at 3900. Say the margin out loud and round up.</li>
+<li><strong>review-storm</strong>: +300 Review ACU raise Lumen to 4400 and leave Arjun&#39;s meter at 410. Review is an organization cost, not a personal one; if Review spend matters, it is managed per organization (and Devin Review has its own spend controls).</li>
+<li><strong>reset-day</strong>: on 23 Nov both meters read 0 and the temporary override has expired, so Arjun is back to 400 and the raised Trailhead limit is still whatever the admin left it at — changing the limit does not reset usage, and the reset does not restore the old limit.</li>
+<li><strong>empty-cycle</strong>: spring 2026 is before the 23 April contract start; there is no billing cycle to report.</li>
+<li><strong>billing-org-drift</strong>: assigning Noor&#39;s billing organization moves 120 local ACU to Trailhead (3120), which makes Trailhead&#39;s overrun bigger, not smaller.</li>
+</ul>
+<h4>&quot;A cap per team&quot; — recommendation</h4>
+<p>Give finance the team cap they asked for with the organization limits they already have: Platform 2500, Lumen 6000, Trailhead 3000 raised to 4200 for this window because of the sale. Keep tiers as the per-person guardrail and fix the two drifts the lab exposed: the stale explicit assignment that overrides on-call people&#39;s tier, and members without a billing organization. Set the Trailhead lead&#39;s tier approval policy so Request more works during the sale (Always approve up to a ceiling), because requests are never denied automatically and a blocked engineer during a sale is expensive.</p>
+<h4>Pitfalls</h4>
+<ul>
+<li>Raising the Trailhead lead&#39;s personal limit to fix an organization block.</li>
+<li>Telling finance that a tier is a team budget. It is per member.</li>
+<li>Adding Devin Review to someone&#39;s personal usage, or leaving it out of the organization&#39;s.</li>
+<li>&quot;Wait for the reset&quot; when the reset is three days after the sale.</li>
+<li>Quoting a Cloud-tab number as &quot;total usage&quot;.</li>
+<li>Mixing a rolling 30-day number with a billing-window number in one sentence.</li>
+<li>Mixing Newest and Legacy figures.</li>
+<li>Changing a real limit &quot;to test it&quot;.</li>
+</ul>
+<h4>Recovery moves</h4>
+<ul>
+<li>If two numbers disagree, write both in the ledger with their view and range before you explain the gap.</li>
+<li>If you are unsure which limit blocked someone, run <code>--check &lt;handle&gt; --org &lt;org&gt;</code> and read both meter lines; the <code>RESULT:</code> line names every limit reached.</li>
+<li>If the coach asks &quot;which dashboard is that from?&quot;, name the page and the tab, then the date range.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<p><strong>&quot;Trailhead will be blocked mid-sale.&quot;</strong> — Acknowledge: a blocked flash-sale release is the expensive outcome, and the lead is right that waiting is not an option. Boundary: Trailhead is blocked by its organization limit, not by anyone&#39;s personal tier, and the window resets on the 23rd, three days after the sale. Evidence: Trailhead is at 3,000 of 3,000 today; with the 900-ACU sale forecast, a 4,000 limit ends the 20th at 3,900, so I propose 4,200 for this window. Offer: the enterprise admin raises it today, we review the number on the 23rd, and the tier&#39;s Request more path stays open for individuals during the sale.</p>
+<p><strong>&quot;Why do the two dashboards show different totals?&quot;</strong> — Acknowledge: two totals for one team is exactly how budgets lose trust. Boundary: they are both right; they count different things. Evidence: Enterprise Consumption shows all three organizations, 8,870; Trailhead&#39;s own Cloud tab shows 2,180 because it leaves out 400 local and 420 Review ACU; its last 30 days are 3,210 against 3,000 for the billing window; and 120 local ACU from one Trailhead engineer sit in Platform until her billing organization is set. Offer: for budget decisions we use one view — the organization total for the billing window — and I attach the ledger that says which number includes local usage and Review.</p>
+<h4>References</h4>
+<ul>
+<li>Devin docs — <a href="https://docs.devin.ai/admin/billing/enterprise" rel="noopener">Enterprise billing</a>: tracking consumption, organization ACU limits, what members see at the limit. Fetched 2026-10-22.</li>
+<li>Devin docs — <a href="https://docs.devin.ai/admin/billing/org-acu-limits" rel="noopener">Organization-level ACU limits</a>: monthly billing window, independent enforcement, billing organization attribution for local usage. Fetched 2026-10-22.</li>
+<li>Devin docs — <a href="https://docs.devin.ai/enterprise/features/usage-policies" rel="noopener">Usage policies</a>: tiers, IdP mappings and priority, tier resolution order, overrides, additional usage requests, Review excluded, reset on the contract day. Fetched 2026-10-22.</li>
+<li>Devin docs — <a href="https://docs.devin.ai/enterprise/security-access/personal-analytics" rel="noopener">Personal Analytics</a> and <a href="https://docs.devin.ai/admin/billing/usage" rel="noopener">Usage</a>. Fetched 2026-10-22.</li>
+<li>Devin docs — <a href="https://docs.devin.ai/work-with-devin/devin-review" rel="noopener">Devin Review</a>: consumption dashboard and Review usage counting toward the organization limit. Fetched 2026-10-22.</li>
+<li>Devin <a href="https://docs.devin.ai/release-notes/2026" rel="noopener">release notes 2026</a>: analytics drilldown paging (Sep 30), date ranges include today (Oct 5), analytics metric corrections and Local tab (Oct 7), resolved counts only include fixed findings (Oct 21).</li>
+<li>Not in the docs: the analytics Version setting (Newest / Legacy), the &quot;Cloud only&quot; marker and the billing-cycle empty state — taken from the product as described in the course plan §8; confirm against Figures 11.1–11.5.</li>
+</ul>
+</div><div data-slot="debrief"><ul>
+<li>Which of the two caps did finance actually ask for, and which one did the Trailhead lead hit?</li>
+<li>What would have happened if the admin had raised every Trailhead member&#39;s tier instead of the organization limit?</li>
+<li>Which of your ledger numbers would change if you switched the analytics Version to Legacy, and how would you check?</li>
+<li>Alternatives: one organization per team with a pooled limit (wins when teams want hard budgets), tiers only (wins when the risk is one heavy user, not a team), additional usage requests with Always approve (wins when you want spend visible but never blocking). Cost note: the lab itself is read-only and runs offline; a Devin session doing the analysis is typically well under 2 ACU.</li>
+</ul>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/admin/billing/enterprise" rel="noopener">Devin docs — Enterprise billing (tracking consumption, organization ACU limits)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/admin/billing/org-acu-limits" rel="noopener">Devin docs — Organization-level ACU limits (billing windows, billing organization attribution)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/enterprise/features/usage-policies" rel="noopener">Devin docs — Usage policies: per-user ACU limits (tiers, IdP mappings, overrides, requests)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/admin/billing/usage" rel="noopener">Devin docs — Usage (how meters work)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/enterprise/security-access/personal-analytics" rel="noopener">Devin docs — Personal Analytics (My analytics, View Personal Analytics permission)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/devin-review" rel="noopener">Devin docs — Devin Review (consumption dashboard, review usage counts toward the organization limit)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/release-notes/2026" rel="noopener">Devin release notes 2026 — Analytics drilldown paging (Sep 30), date ranges include today (Oct 5), analytics metric corrections and Local tab (Oct 7), resolved counts (Oct 21)</a> <span class="placeholder">(Sep 30 – Oct 21, 2026)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — Voice mode</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/11-acu-analytics/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>

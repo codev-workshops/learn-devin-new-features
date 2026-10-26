@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Harbourline labs</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#labs">Skip to the lab list</a>
+<main class="wrap">
+<header class="lab">
+<h1>Harbourline — Devin practice labs</h1>
+<p>Promptless labs: each page gives you a customer brief, constraints, a starting state and acceptance criteria — never a prompt. You frame the problem, pick the Devin capability and explain your decisions aloud to the Devin voice coach.</p>
+</header>
+<section aria-labelledby="labs-h" id="labs">
+<h2 id="labs-h">Labs (16)</h2>
+<table class="index-table"><thead><tr><th>#</th><th>Lab</th><th>Devin feature</th><th>Duration</th><th>Difficulty</th><th>Credentials</th></tr></thead><tbody><tr><td>00</td><td><a href="00-sample/index.html">Read the brief, write the plan — a Harbourline warm-up</a></td><td>Framing a Devin task (no Devin execution): choosing a capability and the evidence that proves it worked</td><td>20 min</td><td>intro</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>01</td><td><a href="01-onboarding/index.html">Onboarding — make Harbourline safe and fast to set up before Monday&#39;s new starter</a></td><td>Devin environment blueprints (initialize, maintenance, knowledge), the AGENTS.md hierarchy and its automatic-inclusion limit, Knowledge migrating to Skills, and choosing Ask Devin or an Agent session</td><td>120 min</td><td>intro</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>02</td><td><a href="02-lifecycle-hooks/index.html">Guard the database — a lifecycle hook policy for Harbourline</a></td><td>Devin lifecycle hooks: .devin/hooks.v1.json with PreToolUse (exit 0 / exit 2, updatedInput), PostToolUse and Stop, matcher as regex or list</td><td>120 min</td><td>core</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>03</td><td><a href="03-customization-scopes/index.html">Customization scopes — standardise checkout review without overriding brand teams</a></td><td>Devin customization scopes: root and nested AGENTS.md, AGENTS.local.md, .devin/rules trigger frontmatter (always_on, glob, manual, model_decision), repo and global skills, personal / organization / enterprise plugin scopes</td><td>90 min</td><td>core</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>04</td><td><a href="04-plugin-engineering/index.html">Ship the flash-sale release checklist once — a plugin every brand team installs</a></td><td>Plugin engineering: manifest, skills, rules, hooks, MCP and subagents in one bundle; repository vs uploaded vs skills-only installs; revisions; MCP connection after install; proposing edits to shared plugins</td><td>120 min</td><td>core</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>05</td><td><a href="05-code-scans/index.html">Code Scan lifecycle — find the brand leak and the slow Lamp Week page</a></td><td>Devin Code Scans: Security Swarm vs performance and accessibility scan types, scan profiles, the Findings tab, Assign to Devin, dismissal, Scan new commits and SARIF export</td><td>150 min</td><td>core</td><td><span class="badge badge-full">full</span></td></tr><tr><td>06</td><td><a href="06-review-remediation/index.html">Review and remediation — the price-drift fix that touches totals and tax</a></td><td>Devin Review: effort levels, Bugs vs Flags, the always-on Security section, quoting a finding into chat, re-review on new commits (and the unchanged-diff skip), and review rules in the Review settings rules editor</td><td>90 min</td><td>core</td><td><span class="badge badge-full">full</span></td></tr><tr><td>07</td><td><a href="07-automation-preflight/index.html">Automation with Preflight — investigate only real payment-webhook failures</a></td><td>Devin Automations: webhook trigger, conditions, Preflight (LLM filter vs script with STATE_FILE and item id/version), Run now, queueing and concurrent runs, structured questions</td><td>120 min</td><td>core</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>08</td><td><a href="08-slack-triage/index.html">Stop the &#39;charged twice&#39; pile-up — triage #harbourline-bugs and answer in the thread</a></td><td>Slack triage and write-back: a channel-watching Devin (Oncall Support + Bugs responder, or the legacy Triage Bug Reports automation) that filters noise, deduplicates repeated reports, keeps a scratchpad with a routing table, takes routing corrections in the thread, writes the diagnosis back to the original thread, and runs under a network policy because the messages are untrusted input; Microsoft Teams channel variant</td><td>90 min</td><td>core</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>09</td><td><a href="09-dynamic-workflows/index.html">Prove no endpoint leaks across brands — an audit → fix → verify workflow</a></td><td>Dynamic workflows (pilot): agent(), pipeline() and parallel() over child sessions, flat structured outputs, failure handling, resume by run ID and ACU per agent</td><td>180 min</td><td>advanced</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>10</td><td><a href="10-guardrails/index.html">the package registry and the PayGate sandbox, nothing else — a security floor every session inherits</a></td><td>Enterprise guardrails: Security Profiles (network allowlist, MCP allowlist, Devin MCP read-only, git access level, GitHub CLI token), mandatory vs recommended bindings, child-session and snapshot-build resolution, running-session timing, and AI Guardrails message screening</td><td>75 min</td><td>advanced</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>11</td><td><a href="11-acu-analytics/index.html">ACU governance and analytics — control cost without blocking brand teams</a></td><td>Organization ACU limits, usage policies (per-user tiers, IdP group mapping, per-member overrides, additional usage requests), Consumption / Consumption Analytics / My analytics, the analytics Version setting (Newest vs Legacy)</td><td>75 min</td><td>core</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>12</td><td><a href="12-oncall/index.html">Oncall investigation — the 02:10 oversell page after the Lamp Week deploy</a></td><td>Devin Oncall (Alerts responder, PagerDuty trigger, runbook, incident report, Lite vs Ultra) with PagerDuty and Datadog MCPs — or the local fixture MCP shim</td><td>150 min</td><td>advanced</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>13</td><td><a href="13-expo-mobile/index.html">Expo mobile on iOS and Android — order status on both phones</a></td><td>Devin on Linux with the Android emulator (KVM), a macOS child session with Xcode and the iOS Simulator, multi-document blueprints with runs-on, Continuous Native Generation (expo prebuild), an optional Swift Expo module with a JS fallback</td><td>180 min</td><td>advanced</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>14</td><td><a href="14-outposts/index.html">Outposts — keep PayGate sandbox keys and the repo inside Harbourline&#39;s VPC</a></td><td>Devin Outposts (Outpost queue, Docker worker image with the repo baked in, devin worker start, Slack !outpost, organization default platform, queueing across two containers) — or the offline queue model and Dockerfile check</td><td>120 min</td><td>advanced</td><td><span class="badge badge-fixture">fixture</span></td></tr><tr><td>15</td><td><a href="15-capstone/index.html">Customer capstone — one sealed envelope: an incident, a feature request and a governance constraint</a></td><td>Learner&#39;s choice. You pick and combine the Devin capabilities from labs 01–14; nothing on this page tells you which.</td><td>240 min</td><td>advanced</td><td><span class="badge badge-fixture">fixture</span></td></tr></tbody></table>
+</section>
+<footer><p>Generated by <code>labs/build.mjs</code> from the folders present under <code>labs/</code>. Do not edit by hand.</p></footer>
+</main>
+</body>
+</html>

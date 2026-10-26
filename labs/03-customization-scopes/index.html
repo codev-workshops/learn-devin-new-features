@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab 03 — Customization scopes — standardise checkout review without overriding brand teams · Harbourline</title>
+<style>
+:root{--ink:#1d1d1f;--muted:#5c5f66;--line:#d9dbe0;--bg:#fff;--panel:#f5f6f8;--accent:#0b5fff;--accent-ink:#fff;--warn:#8a4b00;--warn-bg:#fff4e5;--ok:#0a6b3d;--ok-bg:#e7f6ee;--focus:#ff8c00}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e8ea;--muted:#a3a6ad;--line:#3a3d44;--bg:#131417;--panel:#1c1e23;--accent:#7aa7ff;--accent-ink:#0b1020;--warn:#ffc777;--warn-bg:#3a2a10;--ok:#7fd6a4;--ok-bg:#10301f}}
+*{box-sizing:border-box}
+html{font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:68rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+header.lab{border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem}
+header.lab h1{margin:.25rem 0 .5rem;font-size:2rem;line-height:1.2}
+.crumbs{font-size:.9rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;list-style:none;padding:0;margin:.5rem 0}
+.meta li{font-size:.95rem}
+.meta b{color:var(--muted);font-weight:600}
+.badge{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.85rem;font-weight:600;border:1px solid transparent}
+.badge-full{background:var(--ok-bg);color:var(--ok)}
+.badge-fixture{background:var(--warn-bg);color:var(--warn)}
+nav.toc ol{columns:2;column-gap:2rem;padding-left:1.25rem;margin:.5rem 0}
+nav.toc li{break-inside:avoid;margin:.15rem 0}
+section.lab-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+section.lab-section>h2{font-size:1.35rem;margin:0 0 .75rem}
+section.lab-section>h2 .num{color:var(--muted);font-weight:500;margin-right:.5rem}
+h3{font-size:1.1rem;margin:1.25rem 0 .5rem}
+table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border:1px solid var(--line)}
+th{background:var(--panel)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+pre{background:var(--panel);padding:.8rem 1rem;overflow:auto;border-radius:6px}
+.callout{background:var(--panel);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.start-line{font-size:1.05rem}
+button.reveal{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:.6rem 1.1rem;cursor:pointer}
+button.reveal[aria-expanded="true"]{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.answer-panel{margin-top:1rem}
+.answer-panel:empty{display:none}
+.answer-panel[tabindex]{outline-offset:6px}
+.placeholder{color:var(--muted);font-style:italic}
+footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+.index-table a{font-weight:600}
+@media print{nav.toc,button.reveal,.skip{display:none}section.lab-section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#section-2">Skip to the customer brief</a>
+<main class="wrap" id="main">
+<header class="lab">
+<p class="crumbs"><a href="../index.html">Harbourline labs</a> › Lab 03</p>
+<h1>Lab 03 — Customization scopes — standardise checkout review without overriding brand teams</h1>
+<ul class="meta">
+<li><b>Devin feature:</b> Devin customization scopes: root and nested AGENTS.md, AGENTS.local.md, .devin/rules trigger frontmatter (always_on, glob, manual, model_decision), repo and global skills, personal / organization / enterprise plugin scopes</li>
+<li><b>Duration:</b> 90 min</li>
+<li><b>Difficulty:</b> core</li>
+<li><b>Prerequisites:</b> Repo cloned locally, `pnpm install` done at the root, Node 22; Lab 00 done once, so you know how the voice coach works; Work on a throwaway branch such as `lab/03-&lt;your-handle&gt;`; never commit rules or skills from this lab to `main`; No database is needed: this lab changes instruction files only</li>
+<li><span class="badge badge-fixture">Credentials: fixture</span></li>
+</ul>
+<nav class="toc" aria-label="Sections"><ol><li><a href="#section-1">Header</a></li><li><a href="#section-2">Customer brief</a></li><li><a href="#section-3">Stakeholders and constraints</a></li><li><a href="#section-4">Starting state and reset</a></li><li><a href="#section-5">Acceptance criteria</a></li><li><a href="#section-6">Credential matrix and fixture fallback</a></li><li><a href="#section-7">Edge cases and injectors</a></li><li><a href="#section-8">Articulation drill (voice coach)</a></li><li><a href="#section-9">Show answer</a></li><li><a href="#section-10">Debrief</a></li><li><a href="#section-11">References</a></li></ol></nav>
+</header>
+<section class="lab-section" id="section-2" aria-labelledby="section-2-h">
+<h2 id="section-2-h"><span class="num" aria-hidden="true">2.</span>Customer brief</h2>
+<p>Hi — I&#39;m Dana Okafor, platform engineering lead at <strong>Harbourline</strong>. Both brands run on one checkout service, and every team now reviews checkout changes with Devin. The trouble is that every team taught Devin its own way: one checklist in a PR template, another in somebody&#39;s notes, a third pasted into chat. Last month a review that followed the Lumen Home habit asked a Trailhead change to show tax &quot;as its own line, added on top&quot;. It reached staging before QA noticed that every Trailhead basket was 19% more expensive than the price on the product page. Two engineers spent two days unpicking it.</p>
+<p>I want <strong>one checkout-review practice for both brands</strong>, kept in the repository, that I can review in a pull request and that Devin picks up without anyone pasting it in.</p>
+<p>I&#39;m Jonas Becker, Trailhead Supply&#39;s engineering lead. I am fine with Dana&#39;s checklist on one condition: <strong>our VAT rules win wherever they apply, and my team can change them without opening a ticket with Platform.</strong> Trailhead prices include 19% VAT, shipping is free from €80 gross, and our totals must match what the fulfilment worker computes to the cent. Last quarter we filed six requests to edit a shared instruction file; I do not want a seventh.</p>
+<p>Between us: show which instructions Devin will have in front of it when it touches <code>services/api/src/money.ts</code>, prove the two layers do not contradict each other, and tell us who is allowed to change which layer. Personal habits are fine, as long as they stay personal.</p>
+
+</section>
+<section class="lab-section" id="section-3" aria-labelledby="section-3-h">
+<h2 id="section-3-h"><span class="num" aria-hidden="true">3.</span>Stakeholders and constraints</h2>
+<ul>
+<li><strong>In the room:</strong> Dana (Platform lead, owns the shared checklist), Jonas (Trailhead lead, owns the VAT rules) and a reviewer from each team who will use the checklist daily.</li>
+<li><strong>Forbidden:</strong> no change to <code>main</code> — everything happens on a throwaway branch; no change to application code under <code>services/</code> or <code>apps/</code>; do not fix any planted defect (the rounding drift in <code>money.ts</code> stays); no edits to the existing <code>.devin/rules/repo-conventions.md</code>, <code>.devin/rules/money-and-brands.md</code> or root <code>AGENTS.md</code>.</li>
+<li><strong>Your own machine:</strong> never write to your real home directory for this lab; the global layer is simulated under <code>/tmp/harbourline-home</code>.</li>
+<li><strong>Shared settings:</strong> do not change organization or enterprise settings; describe what would live there instead.</li>
+<li><strong>Ownership:</strong> Trailhead must be able to change its rules without a Platform approver, and Platform must be able to change the shared checklist without a Trailhead approver.</li>
+<li><strong>Decision deadline:</strong> both leads sign off at the end of this session.</li>
+<li><strong>Budget:</strong> one Devin session plus your own verification; no paid integrations.</li>
+</ul>
+
+</section>
+<section class="lab-section" id="section-4" aria-labelledby="section-4-h">
+<h2 id="section-4-h"><span class="num" aria-hidden="true">4.</span>Starting state and reset</h2>
+<p>Run before you start, and again whenever you want the starting state back:</p><pre><code>git checkout main -- .devin/rules .devin/skills</code></pre><pre><code>git clean -fd -- .devin/rules .devin/skills .github</code></pre><pre><code>rm -f AGENTS.local.md services/api/src/AGENTS.md</code></pre><pre><code>rm -rf /tmp/harbourline-home</code></pre><div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start 03</code> to run these steps for you, and <code>@skills:lab-cleanup 03</code> when you finish. From a terminal: <code>pnpm lab:start -- 03</code> and <code>pnpm lab:cleanup -- 03</code>.</p></div><h3>What “clean” looks like</h3><p><code>.devin/rules/</code> holds only <code>repo-conventions.md</code> and <code>money-and-brands.md</code>, there is no <code>.devin/skills/checkout-review/</code>, no <code>.github/CODEOWNERS</code>, no <code>AGENTS.local.md</code> at the root and no <code>services/api/src/AGENTS.md</code>, and <code>/tmp/harbourline-home</code> does not exist. <code>node labs/03-customization-scopes/solution/resolve.mjs --file services/api/src/money.ts</code> exits 0 and lists the root and <code>services/api</code> AGENTS.md files and the two existing rules.</p>
+
+</section>
+<section class="lab-section" id="section-5" aria-labelledby="section-5-h">
+<h2 id="section-5-h"><span class="num" aria-hidden="true">5.</span>Acceptance criteria</h2>
+<p>You are done when someone who was not in the room can see each of the following on your throwaway branch, without re-running anything.</p>
+<ol>
+<li><strong>One shared checklist.</strong> A Platform-owned rule under <code>.devin/rules/</code> holds the checkout-review checklist with a <code>glob</code> trigger covering the checkout code of both brands, and a repo skill under <code>.devin/skills/</code> holds the review procedure. The resolver output for <code>services/api/src/money.ts</code> lists both.</li>
+<li><strong>Brand rule in its own file.</strong> A Trailhead-owned rule file under <code>.devin/rules/</code> states the VAT presentation, rounding and free-shipping threshold. The resolver loads it for <code>money.ts</code> and skips it for <code>services/api/src/routes/catalog.ts</code>, with the reason it was skipped.</li>
+<li><strong>No contradiction left to chance.</strong> The resolver&#39;s <code>conflicts</code> list for <code>money.ts</code> contains no <code>unresolved</code> entry; for every shared topic, the evidence names which file owns it and which file explicitly yields.</li>
+<li><strong>Ownership is reviewable.</strong> <code>.github/CODEOWNERS</code> on your branch sends the shared checklist and skill to Platform and the brand rule files to Trailhead, and your scope matrix (a table in your evidence) lists every layer — enterprise, organization, personal, repo root, nested directory, local file, global — with what lives there and who can change it.</li>
+<li><strong>Nested conflict handled.</strong> After the <code>nested-conflict</code> injector, you show the resolver output with the unresolved conflict, then the output after your fix, and one sentence on why you kept the deeper file instead of deleting it.</li>
+<li><strong>Local override contained.</strong> After the <code>local-override</code> injector, <code>git status --short</code> does not list <code>AGENTS.local.md</code>, <code>git check-ignore -v AGENTS.local.md</code> names the <code>.gitignore</code> line that hides it, and you state in one sentence who is affected by it and who is not.</li>
+<li><strong>Dead rule found.</strong> After the <code>wrong-glob</code> injector, you show the resolver skipping the Trailhead rule for <code>money.ts</code>, the corrected globs, and the resolver loading it again.</li>
+<li><strong>Skill names unambiguous.</strong> After the <code>global-skill</code> injector, the resolver reports the name collision; after your fix it reports none, and you state which copy you changed and why.</li>
+<li><strong>Articulation drill completed</strong> with the voice coach (section 8), or against a timer if you work offline. Save the gap report next to your evidence; do not commit it.</li>
+<li><strong>Clean exit.</strong> <code>main</code> is untouched, the throwaway branch is not merged, <code>/tmp/harbourline-home</code> is deleted and the reset commands in section 4 return the repository to the clean state.</li>
+</ol>
+
+</section>
+<section class="lab-section" id="section-6" aria-labelledby="section-6-h">
+<h2 id="section-6-h"><span class="num" aria-hidden="true">6.</span>Credential matrix and fixture fallback</h2>
+<table><thead><tr><th>Integration</th><th>Needed</th><th>Fixture fallback</th><th>Note</th></tr></thead><tbody><tr><td>Offline scope resolver — default path</td><td>optional</td><td>`node labs/03-customization-scopes/solution/resolve.mjs --file &lt;path&gt; [--home /tmp/harbourline-home] [--mention &lt;rule&gt;]` lists which instruction files and rules would be in context for that path, which were skipped and why, conflicting statements and same-named skills</td><td>Models the documented loading rules; every behaviour the docs leave open is printed under `assumptions`</td></tr><tr><td>Devin web app (Agent mode) or Devin CLI on your throwaway branch</td><td>optional</td><td>Skip the live check; the resolver output is your evidence</td><td>With a live session, open `services/api/src/money.ts` and ask which rules and instruction files are in context; compare with the resolver</td></tr><tr><td>Organization or enterprise Customize settings (plugins, rules, skills at org/enterprise scope)</td><td>optional</td><td>Describe the layer in your scope matrix; do not change shared org settings for a lab</td><td>Editing those scopes needs org or enterprise settings access, which most learners do not have</td></tr><tr><td>Devin web app (Agent mode) for the voice coach in section 8</td><td>optional</td><td>Run the drill against a timer and self-score with the rubric in the answer</td><td>Coaching is always started by you; nothing is scheduled</td></tr></tbody></table><h3>With fixtures only</h3><p>Everything is offline: you write the shared checklist rule, the Trailhead rule, the repo skill and the ownership file on a throwaway branch, apply each injector, and keep the resolver JSON for <code>services/api/src/money.ts</code> and <code>services/api/src/routes/catalog.ts</code> before and after each fix as evidence. The sandbox home <code>/tmp/harbourline-home</code> stands in for your real home directory, so no global file on your machine is touched.</p>
+<h3>Cannot be exercised without live credentials</h3><ul><li>What a live Devin session actually loads for a given path — the resolver models the documented rules and labels its assumptions</li><li>Organization and enterprise scope changes in Customize settings — need admin access and would affect other people&#39;s sessions</li><li>Precedence between two loaded instructions that disagree — not stated in the docs; the lab resolves it by design (one owner, the rest defer) instead of relying on load order</li></ul>
+</section>
+<section class="lab-section" id="section-7" aria-labelledby="section-7-h">
+<h2 id="section-7-h"><span class="num" aria-hidden="true">7.</span>Edge cases and injectors</h2>
+<table><thead><tr><th>Injector</th><th>Command</th><th>When</th><th>Behaviour it triggers</th></tr></thead><tbody><tr><td><code>nested-conflict</code></td><td><span class="placeholder">facilitator action</span></td><td>T+20 min, once your checklist and brand rule resolve cleanly</td><td>Copy `labs/03-customization-scopes/injectors/nested-conflict.AGENTS.md` to `services/api/src/AGENTS.md`. A Platform engineer left notes one directory deeper that state the opposite tax presentation. Find out what is in context for `money.ts` now, and fix it without deleting the engineer&#39;s file.</td></tr><tr><td><code>local-override</code></td><td><span class="placeholder">facilitator action</span></td><td>T+35 min</td><td>Copy `labs/03-customization-scopes/injectors/local-override.AGENTS.local.md` to `AGENTS.local.md` at the repo root. Find out who sees it, whether `git status` shows it and what happens to the checklist statement it contradicts.</td></tr><tr><td><code>wrong-glob</code></td><td><span class="placeholder">facilitator action</span></td><td>T+50 min</td><td>Copy `labs/03-customization-scopes/injectors/trailhead-vat.wrong-glob.md` over `.devin/rules/trailhead-vat.md`. The Trailhead team rewrote their globs from memory. Check which files the rule now covers and correct it.</td></tr><tr><td><code>global-skill</code></td><td><span class="placeholder">facilitator action</span></td><td>T+60 min</td><td>Create `/tmp/harbourline-home/.config/devin/skills/checkout-review/` and copy `labs/03-customization-scopes/injectors/global-skill.SKILL.md` into it as `SKILL.md`, then resolve with `--home /tmp/harbourline-home`. A reviewer&#39;s personal shortcut now has the same name as the team&#39;s procedure. Decide what to change and where.</td></tr></tbody></table>
+</section>
+<section class="lab-section" id="section-8" aria-labelledby="section-8-h">
+<h2 id="section-8-h"><span class="num" aria-hidden="true">8.</span>Articulation drill (voice coach)</h2>
+<p>The coach plays both team leads from the brief: Dana (Platform) and Jonas (Trailhead). It asks one question at a time, names who is speaking, times every answer with the shell, stays in character and keeps all feedback for the written report at the end.</p>
+<h5>60-second framing</h5>
+<p>Headline first, then one reason, then the proof. Stems you may use:</p>
+<ul>
+<li>&quot;You will get one checklist, and Trailhead keeps… because…&quot;</li>
+<li>&quot;Each rule lives in… so that…&quot;</li>
+<li>&quot;You will see it working when the resolver shows…&quot;</li>
+</ul>
+<p>Sinhala-first note: resist building up to the point (&quot;because the staging incident, because two teams, therefore…&quot;). Say the layout first, then why.</p>
+<h5>Think-aloud checkpoints (T+10 and T+45)</h5>
+<p>At T+10 and again at T+45 the coach asks what you are looking at and what you will check next. Answer with the four verbs: <em>I see… I think… I&#39;ll try… I&#39;ll check…</em>. Read a file path aloud slowly, segment by segment (&quot;services, slash, api…&quot;). If you need to read resolver output, say &quot;Give me ten seconds to read this&quot; instead of going silent.</p>
+<h5>Three-minute update to both team leads</h5>
+<p>Skeleton: <strong>Outcome → Evidence → Risk → Next action → Ask.</strong> Address each lead by name at least once and give each one the sentence that answers their own condition. One number or file per sentence. Either lead may interrupt twice in total with a short question; answer it in one sentence and return to the skeleton.</p>
+<h5>Objection round</h5>
+<p>Two objections in character, 90 seconds each, one technical and one commercial; the coach may ask one follow-up if your answer skips the evidence. Reply pattern: acknowledge → boundary → evidence → offer. The objections are not printed here — that is the point.</p>
+
+<h3>Timing table</h3>
+<table><thead><tr><th>Segment</th><th>Kind</th><th>When</th><th>Target</th></tr></thead><tbody><tr><td>60-second framing</td><td>framing</td><td>—</td><td>1 min</td></tr><tr><td>Think-aloud checkpoint</td><td>checkpoint</td><td>T+10 min</td><td>45 s</td></tr><tr><td>Think-aloud checkpoint</td><td>checkpoint</td><td>T+45 min</td><td>45 s</td></tr><tr><td>3-minute update to both team leads</td><td>update</td><td>—</td><td>3 min</td></tr><tr><td>Objection 1 (technical)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr><tr><td>Objection 2 (commercial, one follow-up allowed)</td><td>objection</td><td>—</td><td>1 min 30 s</td></tr></tbody></table>
+<h3>Start the Devin voice coach</h3>
+<div class="callout">
+<p class="start-line">In the Devin web app, select this repo in <b>Agent</b> mode, type exactly the line below, then click <b>Start voice call</b>:</p>
+<pre><code>@skills:coach-03-customization-scopes &lt;your-handle&gt;</code></pre>
+<p>Replace <code><your-handle></code> with your handle. If the call connects before the skill activates, press Enter first and then start the call in the same session.</p>
+<p><b>Mute hint:</b> between checkpoints you may mute and keep working; the call stays connected. Hold <kbd>Space</kbd> to talk if your client offers push-to-talk, and say “done” when you finish a timed segment.</p>
+</div>
+<div class="callout warn"><p><b>Caveat:</b> clarity and pronunciation feedback from the coach is <b>transcript-based, approximate</b>. The coach works from the speech transcript in the session history, not from audio, so it cannot judge intonation, stress or vowel quality. Record yourself and listen back for real pronunciation work.</p></div>
+</section>
+<section class="lab-section" id="section-9" aria-labelledby="section-9-h">
+<h2 id="section-9-h"><span class="num" aria-hidden="true">9.</span>Show answer</h2>
+<p>Attempt the lab first. The answer is not in the page until you ask for it, and a refresh hides it again.</p>
+<p><button type="button" class="reveal" id="show-answer" aria-expanded="false" aria-controls="answer-panel debrief-panel">Show answer</button></p>
+<div class="answer-panel" id="answer-panel" tabindex="-1" aria-live="polite"></div>
+<template id="answer-template"><div data-slot="answer"><p>Do not open this before you have finished the evidence table and the drill.</p>
+<h4>Feature fit</h4>
+<p>The customers are asking for <strong>layered guidance with clear owners</strong>, which is what Devin&#39;s customization scopes give you. The key fact is that layers <strong>add up</strong>: every instruction file and rule that applies is put in front of the model together. Nothing in the docs says a deeper file or a later rule silently replaces an earlier one, so the design must never depend on load order — one file owns each topic and the others say they yield.</p>
+<ul>
+<li><strong>Root <code>AGENTS.md</code></strong> — read automatically at session start (the first 16 KiB are injected; longer files are read on demand).</li>
+<li><strong>Nested <code>AGENTS.md</code></strong> — discovered when the agent works in that directory, so it only adds context for that part of the tree.</li>
+<li><strong><code>AGENTS.local.md</code></strong> — loaded alongside <code>AGENTS.md</code> with the same always-on behaviour, but meant to be git-ignored: it is personal and never reviewed. This repo&#39;s <code>.gitignore</code> already hides it at any depth.</li>
+<li><strong><code>.devin/rules/*.md</code></strong> — frontmatter <code>trigger:</code> is <code>always_on</code>, <code>glob</code> (with <code>globs:</code>), <code>manual</code> (only when mentioned) or <code>model_decision</code> (the model decides from <code>description</code>). A glob rule that matches nothing is silently never loaded.</li>
+<li><strong>Skills</strong> — repo skills in <code>.devin/skills/&lt;name&gt;/SKILL.md</code> or <code>.agents/skills/&lt;name&gt;/SKILL.md</code> are shared and reviewed in PRs; global skills in <code>~/.config/devin/skills/</code> (or <code>~/.agents/skills/</code>) follow one person on one machine. Only one skill is active at a time, so two skills with the same name are a trap.</li>
+<li><strong>Personal, organization and enterprise scopes</strong> — plugins (which bundle skills, rules, MCP servers and hooks) installed at each scope. Higher authority wins for plugin policy: enterprise can require or forbid a plugin and lower scopes cannot override it. Scope changes apply to new sessions.</li>
+</ul>
+<h4>Worked layout</h4>
+<p>The reference files live in <code>labs/03-customization-scopes/solution/layers/</code> as <code>dot-devin/</code> and <code>dot-github/</code> so nothing inside <code>labs/</code> is ever discovered as a live rule. On your throwaway branch run <code>node labs/03-customization-scopes/solution/apply.mjs .</code> to copy them into place:</p>
+<ul>
+<li><code>.devin/rules/checkout-review.md</code> — Platform&#39;s checklist, <code>trigger: glob</code> on <code>services/api/src/**/*.ts</code> and <code>apps/web/src/**</code>. Its tax and rounding statements are written as <code>[tax.presentation:defer]</code> / <code>[tax.rounding:defer]</code>: &quot;follows the brand&#39;s own rule file&quot;.</li>
+<li><code>.devin/rules/trailhead-vat.md</code> — Trailhead&#39;s rule, <code>trigger: glob</code> on <code>money.ts</code>, the checkout/orders/carts routes and services, and <code>apps/web/src/**</code>. It owns <code>[tax.presentation]</code>, <code>[tax.rounding]</code> and <code>[shipping.threshold]</code>.</li>
+<li><code>.devin/skills/checkout-review/SKILL.md</code> — the review procedure: list the brand rules for the changed paths, walk the checklist, cite the brand rule where the checklist defers, run the gates.</li>
+<li><code>.github/CODEOWNERS</code> — the checklist and skill to <code>@harbourline/platform</code>, <code>.devin/rules/trailhead-*.md</code> to <code>@harbourline/trailhead</code>.</li>
+</ul>
+<p>The bracketed keys are a lab convention, not a Devin feature: they make &quot;who owns this topic&quot; greppable and let <code>solution/resolve.mjs</code> flag two files stating the same key without one deferring.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Lives in</th>
+<th>Who can change it</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Enterprise</td>
+<td>enterprise-scope plugins and settings</td>
+<td>enterprise admins</td>
+<td>policy nobody may opt out of</td>
+</tr>
+<tr>
+<td>Organization</td>
+<td>org-scope plugins, Knowledge</td>
+<td>people with org settings access</td>
+<td>conventions for every repo in the org</td>
+</tr>
+<tr>
+<td>Personal</td>
+<td>personal-scope plugins</td>
+<td>the user</td>
+<td>your own habits across repos</td>
+</tr>
+<tr>
+<td>Repo root</td>
+<td><code>AGENTS.md</code>, <code>.devin/rules/</code>, <code>.devin/skills/</code></td>
+<td>anyone who can merge; CODEOWNERS decides the approver</td>
+<td>the shared checklist</td>
+</tr>
+<tr>
+<td>Nested</td>
+<td><code>services/api/src/AGENTS.md</code> and other directory files</td>
+<td>owners of that directory</td>
+<td>notes for one part of the tree</td>
+</tr>
+<tr>
+<td>Local</td>
+<td><code>AGENTS.local.md</code> (git-ignored)</td>
+<td>only you, on your checkout</td>
+<td>personal overrides that must never reach others</td>
+</tr>
+<tr>
+<td>Global (CLI)</td>
+<td><code>~/.config/devin/AGENTS.md</code>, <code>~/.config/devin/skills/</code></td>
+<td>only you, on your machine</td>
+<td>personal skills across projects</td>
+</tr>
+</tbody></table>
+<h4>Worked prompt sequence</h4>
+<pre><code class="language-prompt">On branch lab/03-&lt;handle&gt;, add a Platform-owned rule .devin/rules/checkout-review.md with trigger: glob covering services/api/src/**/*.ts and apps/web/src/**. It holds the shared checkout-review checklist. Write tax presentation and rounding as statements that defer to the brand&#39;s own rule file. Do not edit the existing rules or root AGENTS.md.
+</code></pre>
+<pre><code class="language-prompt">Add .devin/rules/trailhead-vat.md, owned by Trailhead, with trigger: glob on services/api/src/money.ts and the checkout, orders and carts routes and services. It states: prices include 19% VAT, VAT is shown as included and never added on top, VAT must match the fulfilment worker to the cent, shipping is free from €80 gross. Do not change money.ts.
+</code></pre>
+<pre><code class="language-prompt">Add a repo skill .devin/skills/checkout-review/SKILL.md that applies the brand rule files for the changed paths before the shared checklist, and a .github/CODEOWNERS that sends the checklist and skill to @harbourline/platform and .devin/rules/trailhead-*.md to @harbourline/trailhead.
+</code></pre>
+<pre><code class="language-prompt">Run node labs/03-customization-scopes/solution/resolve.mjs --file services/api/src/money.ts and again for services/api/src/routes/catalog.ts. Save both outputs. Tell me every conflict that is not resolved and which file should yield.
+</code></pre>
+<p>After each injector, ask Devin to rerun the resolver for <code>money.ts</code> and explain the difference before changing anything.</p>
+<h4>Expected evidence</h4>
+<ul>
+<li><strong>money.ts, solution applied:</strong> <code>loaded</code> lists root <code>AGENTS.md</code>, <code>services/api/AGENTS.md</code>, <code>money-and-brands.md</code>, <code>repo-conventions.md</code>, <code>checkout-review.md</code> and <code>trailhead-vat.md</code>; <code>conflicts</code> shows <code>tax.presentation</code> and <code>tax.rounding</code> as <code>resolved</code> with winner <code>.devin/rules/trailhead-vat.md</code>; exit code 0.</li>
+<li><strong>catalog.ts:</strong> <code>checkout-review.md</code> loaded; <code>trailhead-vat.md</code> in <code>skipped</code> with &quot;no glob matched services/api/src/routes/catalog.ts&quot;.</li>
+<li><strong>nested-conflict:</strong> <code>tax.presentation</code> becomes <code>unresolved</code> (the deeper file and the Trailhead rule both state it); exit code 1. Fix by rewriting the deeper statements as <code>[tax.presentation:defer]</code> / <code>[tax.rounding:defer]</code> — keep the file, because the engineer&#39;s Lumen context is still useful and deleting it would only hide the disagreement.</li>
+<li><strong>local-override:</strong> <code>AGENTS.local.md</code> appears with <code>local: true, git_ignored: true</code>; <code>git status --short</code> is silent; <code>git check-ignore -v AGENTS.local.md</code> prints <code>.gitignore:&lt;line&gt;:AGENTS.local.md</code>. The <code>review.checklist</code> conflict is unresolved — but only in that person&#39;s sessions. The fix is a conversation, not a commit: the personal shortcut contradicts the team rule, so the owner deletes it or narrows it.</li>
+<li><strong>wrong-glob:</strong> <code>trailhead-vat.md</code> moves to <code>skipped</code> (&quot;service/api/…&quot; is misspelt; &quot;src/routes/*.ts&quot; is relative to the service, not the repo root); the tax conflict disappears because the rule is not in context at all — the most dangerous result, because it looks clean. Restore the solution globs and the resolver loads it again.</li>
+<li><strong>global-skill:</strong> <code>skill_collisions</code> lists <code>checkout-review</code> at <code>~/.config/devin/skills/…</code> and <code>.devin/skills/…</code>. Rename the personal one (for example <code>my-quick-review</code>); the shared name belongs to the reviewed procedure.</li>
+</ul>
+<p><code>pnpm test</code> in <code>labs/</code> runs the same table as <code>solution/resolve.test.mjs</code>.</p>
+<h4>Pitfalls</h4>
+<ul>
+<li>Assuming a glob scopes by brand. Globs scope by path, and Harbourline&#39;s brands share <code>money.ts</code>, the routes and <code>apps/web</code>, so the Trailhead rule also loads for a Lumen change; it must say which brand it applies to (<code>[brand.applies]</code>).</li>
+<li>Expecting the deeper or later file to win. Both are in context; the model sees two instructions and may follow either.</li>
+<li>A glob written relative to a package instead of the repo root, or with a typo: the rule is dead and nothing warns you.</li>
+<li>Naming an injector or a sample file <code>AGENTS.md</code> inside <code>labs/</code> — it would itself become a nested instruction file. That is why the lab ships <code>nested-conflict.AGENTS.md</code> and <code>dot-devin/</code>.</li>
+<li><code>git add -f AGENTS.local.md</code> publishes a personal override to everyone.</li>
+<li>Putting the Trailhead VAT text in root <code>AGENTS.md</code>: it then loads for every file, and Trailhead needs a Platform approver to change it.</li>
+<li>Changing org or enterprise settings to &quot;test&quot; a scope: it affects other people&#39;s new sessions.</li>
+</ul>
+<h4>Recovery moves</h4>
+<ul>
+<li>Rule not loading? Run the resolver for the exact path and read <code>skipped[].reason</code>; with a live session, ask Devin which rules it has for that file.</li>
+<li>Unresolved conflict? Decide the owner, then make every other statement defer and name the owner&#39;s file.</li>
+<li>Skill invoked the wrong procedure? List skills with the resolver (<code>--home</code> for your real global directory only if you choose to), rename the personal copy and start a new session.</li>
+</ul>
+<h4>Model answers to the objections</h4>
+<ul>
+<li><strong>Technical — &quot;Platform&#39;s checklist will override Trailhead&#39;s VAT rule.&quot;</strong> Acknowledge: if both stated tax, nothing documented would decide between them. Boundary: rules add up rather than override, so the shared checklist does not state tax at all — it defers and points at the brand file. Evidence: the resolver for <code>money.ts</code> shows <code>tax.presentation</code> resolved with <code>trailhead-vat.md</code> as the only owner, and the nested-conflict injector showed the failure mode and its fix. Offer: Trailhead owns its file through CODEOWNERS, so Platform cannot change it without Jonas&#39;s team.</li>
+<li><strong>Commercial / governance — &quot;Governance by markdown — who audits it?&quot;</strong> Acknowledge: text instructions are guidance, not enforcement. Boundary: every shared layer is a file in the repo, so it has PR review, CODEOWNERS approval and git history; personal layers only affect their owner. Evidence: the CODEOWNERS split and the resolver&#39;s conflict list. Offer: run the resolver in CI on the checkout paths so an unresolved conflict or a dead glob fails the PR, and move anything that must be enforced to an enterprise-required plugin or a hook.</li>
+<li><strong>Follow-up the coach may ask — &quot;And the private overrides nobody reviews?&quot;</strong> They only change that person&#39;s sessions; the shared checklist and the PR it produces are still reviewed, and CI checks the repo layers.</li>
+</ul>
+</div><div data-slot="debrief"><p><strong>Alternatives considered.</strong> (a) One big root <code>AGENTS.md</code> with a Trailhead section — simple, always loaded, but Trailhead needs Platform approval for every edit and it loads for unrelated files. (b) A nested <code>AGENTS.md</code> owned by Trailhead — works where Trailhead has its own directory; Harbourline&#39;s brands share <code>services/api/src/</code>, so the glob-triggered rule fits better. (c) An organization-scope plugin or Knowledge entry for the checklist — reaches every repo, but changes need org settings access and are not reviewed in the repo&#39;s PRs. (d) Repo rules per owner with explicit deferral and CODEOWNERS — reviewable, path-targeted and owned by the team that knows the domain.</p>
+<p><strong>When each would win.</strong> (a) for a small team with one owner; (b) when the brand or team owns a directory; (c) when the same checklist must apply to many repos; (d) when several teams share one codebase and each owns a topic. Anything that must be enforced rather than advised belongs in an enterprise-required plugin, a hook or CI — not only in markdown.</p>
+<p><strong>Cost note.</strong> Rules and instruction files cost context, not ACU of their own: a glob-triggered rule only spends tokens when its paths are touched, while root <code>AGENTS.md</code> is in every session (keep it under 16 KiB). The lab is one session of roughly 2–4 ACU plus your verification; the resolver and its tests are free to rerun.</p>
+<p><strong>Self-score (offline path).</strong> Accuracy 30 — layers add up and one owner per topic, glob triggers and the dead rule, the local file staying personal, global versus repo skills, who can change each scope. Structure 25 — Outcome → Evidence → Risk → Next action → Ask. Customer relevance 20 — the 19% staging overcharge, two days of rework, six edit requests. Brevity and fluency 15 — framing within 60 s ± 5, fillers under 3 per minute. Recovery 10 — both objections answered acknowledge → boundary → evidence → offer.</p>
+</div></template>
+</section>
+<section class="lab-section" id="section-10" aria-labelledby="section-10-h">
+<h2 id="section-10-h"><span class="num" aria-hidden="true">10.</span>Debrief</h2>
+<p class="placeholder" id="debrief-placeholder">Revealed together with the answer (section 9).</p><div class="answer-panel" id="debrief-panel"></div>
+</section>
+<section class="lab-section" id="section-11" aria-labelledby="section-11-h">
+<h2 id="section-11-h"><span class="num" aria-hidden="true">11.</span>References</h2>
+<ul><li><a href="https://docs.devin.ai/onboard-devin/agents-md" rel="noopener">Devin docs — AGENTS.md (automatic loading, 16 KiB injected)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/cli/extensibility/rules" rel="noopener">Devin docs — CLI rules (AGENTS.local.md, nested files, .devin/rules trigger frontmatter, global rules)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/cli/extensibility/skills/overview" rel="noopener">Devin docs — CLI skills overview (project and global skill locations)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/skills" rel="noopener">Devin docs — Skills (repo skills, triggers, one active skill, @skills: invocation)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/plugins" rel="noopener">Devin docs — Plugins (personal, organization and enterprise scopes; governance)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/product-guides/knowledge" rel="noopener">Devin docs — Knowledge (org-level guidance, for comparison)</a> <span class="placeholder">(fetched 2026-10-22)</span></li><li><a href="https://docs.devin.ai/work-with-devin/voice-mode" rel="noopener">Devin docs — Voice mode</a> <span class="placeholder">(fetched 2026-10-22)</span></li></ul>
+</section>
+<footer><p>Harbourline practice course · generated by <code>labs/build.mjs</code> from <code>labs/03-customization-scopes/</code>. Do not edit the rendered page.</p></footer>
+</main>
+<script>
+(function(){
+  var btn=document.getElementById('show-answer');
+  var tpl=document.getElementById('answer-template');
+  var answer=document.getElementById('answer-panel');
+  var debrief=document.getElementById('debrief-panel');
+  var placeholder=document.getElementById('debrief-placeholder');
+  if(!btn||!tpl||!answer||!debrief){return;}
+  var shown=false;
+  function render(){
+    answer.replaceChildren();debrief.replaceChildren();
+    if(shown){
+      var frag=tpl.content.cloneNode(true);
+      var a=frag.querySelector('[data-slot="answer"]');
+      var d=frag.querySelector('[data-slot="debrief"]');
+      if(a){answer.append.apply(answer,Array.prototype.slice.call(a.childNodes));}
+      if(d){debrief.append.apply(debrief,Array.prototype.slice.call(d.childNodes));}
+    }
+    if(placeholder){placeholder.hidden=shown;}
+    btn.setAttribute('aria-expanded',shown?'true':'false');
+    btn.textContent=shown?'Hide answer':'Show answer';
+    if(shown){answer.focus();}
+  }
+  btn.addEventListener('click',function(){shown=!shown;render();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&shown){shown=false;render();btn.focus();}});
+  window.addEventListener('pageshow',function(e){if(e.persisted&&shown){shown=false;render();}});
+})();
+</script>
+</body>
+</html>
