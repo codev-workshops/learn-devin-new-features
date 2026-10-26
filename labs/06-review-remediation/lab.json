@@ -78,7 +78,7 @@
   ],
   "coach": {
     "skill": "coach-06-review-remediation",
-    "skill_path": ".devin/skills/articulation-06-review-remediation/SKILL.md",
+    "skill_path": ".devin/skills/coach-06-review-remediation/SKILL.md",
     "handle_hint": "<your-handle>",
     "segments": [
       { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
