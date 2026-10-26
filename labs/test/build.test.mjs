@@ -137,6 +137,13 @@ describe('rendered lab page', () => {
     expect(s8).toContain('T+10 min');
   });
 
+  it('points section 4 at the lab-start and lab-cleanup skills', () => {
+    const s4 = html.slice(html.indexOf('id="section-4"'), html.indexOf('id="section-5"'));
+    expect(s4).toContain('@skills:lab-start 00');
+    expect(s4).toContain('@skills:lab-cleanup 00');
+    expect(s4).toContain('pnpm lab:start -- 00');
+  });
+
   it('renders header metadata and the credential badge', () => {
     expect(html).toContain('Lab 00 — Read the brief, write the plan');
     expect(html).toContain('badge-fixture');

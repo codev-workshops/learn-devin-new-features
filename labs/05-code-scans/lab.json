@@ -77,7 +77,7 @@
   ],
   "coach": {
     "skill": "coach-05-code-scans",
-    "skill_path": ".devin/skills/articulation-05-code-scans/SKILL.md",
+    "skill_path": ".devin/skills/coach-05-code-scans/SKILL.md",
     "handle_hint": "<your-handle>",
     "segments": [
       { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },

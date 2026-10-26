@@ -1,20 +1,21 @@
 ---
 name: lab-start
-description: Start a Harbourline lab in one step — brings the stack up, resets the lab, creates the throwaway branch, applies the lab's injectors and prints the coach command. Use when the learner says "start lab <nn>" or types @skills:lab-start <nn> [handle].
+description: Put the session VM in a Harbourline lab's starting state (install, Postgres, reseed, lab-specific reset steps from lab.json). Use when the learner types `@skills:lab-start <nn>` before starting a lab.
 triggers: ["user"]
-argument-hint: "<nn> [handle]"
+argument-hint: "<nn> [<handle>] [--force]"
 ---
 
-# Start a lab
+# Start lab `$1`
 
-Arguments: the two-digit lab number and, optionally, the learner's handle (default: the git user name).
+Runs the same steps the lab page lists under "Starting state", via `pnpm lab:start -- <nn>` (`scripts/lab.mjs`, which reads `labs/<nn>-*/lab.json#scenarios.reset`).
 
-1. Run `bash scripts/lab.sh start <nn> --handle <handle> --no-open` from the repository root and wait for it to finish. It installs, starts Postgres, builds, migrates, seeds, renders the lab pages, runs `lab:reset`, creates `lab<nn>/<handle>`, applies every injector listed in `labs/<nn>-*/lab.json` and creates the uncommitted notes file. Only the step summary is printed; full output is in `.lab/logs/`.
-2. If it prints `Unclean state detected — running cleanup first`, tell the learner what was found (branch or changed paths) — the script already cleaned up and continued.
-3. If a step fails the script shows the failing command's last 25 lines. Report that verbatim with the log path; do not retry blindly and do not change repository files to make it pass.
-4. Open `labs/<nn>-*/index.html` in the browser for the learner, then relay the `Ready` block: lab page, branch, notes file, injected files, coach command, cleanup command.
-5. Stop there. Do not solve the lab, do not fix a planted defect, do not commit or push anything on the lab branch.
+1. If `$1` is not a two-digit lab number, ask the learner which lab (00–15) and stop.
+2. Run `pnpm lab:start -- $1 --dry-run` and show the learner the plan.
+3. Run `pnpm lab:start -- $1`.
+   - Exit 3 means uncommitted changes. Show the listed files and ask the learner whether to discard them. Only re-run with `--force` after they say yes: `--force` discards all uncommitted progress (`git switch --discard-changes`). Never stash, commit or push for them.
+   - Any other non-zero exit: report the failing command and its last 20 lines. Do not retry blindly and do not edit lab files to make it pass.
+4. Check the printed clean state yourself, for example with `git status --short` and `git branch --show-current`. Tell the learner in two or three sentences that the lab is ready, or what is not clean yet.
+   - Optional full start: if the learner gives a handle (`$2`) or asks for the "full" start (throwaway branch + injectors), run `pnpm lab:session -- start $1 --handle <h> --no-open` instead of step 3 and relay its Ready block (lab page, branch, notes, injected files, coach command, cleanup command). It runs `pnpm lab:start -- $1 --force` itself, after first running its own cleanup if the tree is unclean (that cleanup stashes, it never discards).
+5. Stop there. Do not start the lab work, open the brief's answer or start the coach. The learner does that.
 
-Articulation coach: the learner starts it with `@skills:coach-<nn>-<slug> <handle>` and a voice call. Voice calls exist only in Devin Cloud sessions — not in the desktop app or the CLI — so if this skill runs anywhere else, say so and point the learner to a Cloud session for the drill. `pnpm coach:dryrun -- <nn>` is the scripted dry run and works everywhere.
-
-When done, the learner runs `@skills:lab-cleanup <nn>` (or `scripts/lab.sh cleanup <nn>`).
+Never fix a planted defect while doing this (see `AGENTS.md`).

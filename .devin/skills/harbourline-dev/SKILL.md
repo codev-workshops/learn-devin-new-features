@@ -12,6 +12,6 @@ argument-hint: "[gates|reset <nn>|up]"
 3. `pnpm db:up` starts PostgreSQL 16 from `mirror.gcr.io/library/postgres:16-alpine` and waits for the healthcheck. Credentials live in `.env.example` (copy to `.env`).
 4. `pnpm db:migrate && pnpm db:seed` builds the seed in `packages/contracts/seed-spec.yaml` (delegated to `services/api`; both report "not present" until W1-api lands).
 5. `pnpm gates` runs the four gates: `test`, `lint`, `build`, `labs:build`. They succeed on a tree where later-wave workspaces are still absent.
-6. `pnpm lab:reset -- <nn>` reseeds the database and replays `scenarios/lab-reset.sh <nn>` when it exists.
+6. `pnpm lab:reset -- <nn>` reseeds the database and replays `scenarios/lab-reset.sh <nn>` when it exists. To put a lab in its full starting state, or clean up after it, use `pnpm lab:start -- <nn>` / `pnpm lab:cleanup -- <nn>` (the `lab-start` / `lab-cleanup` skills).
 
 Report the exact failing command and its last 20 lines when a gate fails; do not retry blindly.

@@ -71,7 +71,7 @@
   ],
   "coach": {
     "skill": "coach-02-lifecycle-hooks",
-    "skill_path": ".devin/skills/articulation-02-lifecycle-hooks/SKILL.md",
+    "skill_path": ".devin/skills/coach-02-lifecycle-hooks/SKILL.md",
     "handle_hint": "<your-handle>",
     "segments": [
       { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },

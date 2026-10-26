@@ -1,12 +1,20 @@
 ---
 name: lab-cleanup
-description: Return the repository to the clean starting state after a Harbourline lab — reverts injectors, discards lab-branch changes, deletes the throwaway branch and reseeds. Use when the learner says "clean up lab <nn>" or types @skills:lab-cleanup <nn>.
+description: Clean up after a Harbourline lab (revert injectors, remove lab branches and scratch files, reseed, stop Postgres) using the lab's own steps from lab.json. Use when the learner types `@skills:lab-cleanup <nn>` after finishing or abandoning a lab.
 triggers: ["user"]
-argument-hint: "<nn> [--db-down]"
+argument-hint: "<nn> [--keep-db] [--force]"
 ---
 
-# Clean up a lab
+# Clean up lab `$1`
 
-1. Run `bash scripts/lab.sh cleanup <nn>` from the repository root. It runs the lab's `inject.sh --revert`, discards working-tree changes (the learner's `labs/<nn>-*/*NOTES*.md` files are kept — they are uncommitted by design), checks out `main`, deletes every `lab<nn>/*` branch and runs `pnpm lab:reset -- <nn>`. Add `--db-down` to also stop Postgres.
-2. Relay the summary. `working tree clean on main` is the expected last line; if it lists leftover paths, show them and ask the learner before touching anything else.
-3. Never commit, merge or push lab work (criterion 10 in every lab). Lab branches are throwaway.
+Runs `pnpm lab:cleanup -- <nn>` (`scripts/lab.mjs`). It replays the lab's reset steps from `labs/<nn>-*/lab.json#scenarios.reset`, including the ones marked "only if …", then runs `pnpm db:down` unless `--keep-db` is given.
+
+1. If `$1` is not a two-digit lab number, ask the learner which lab (00–15) and stop.
+2. Run `pnpm lab:cleanup -- $1 --dry-run`. Show the plan and point out the destructive steps (`git branch -D`, `git clean`, `rm -rf`, `git checkout main -- …`). Ask the learner to confirm, because their lab branches and scratch files will be deleted. If they want to keep something, they should push or copy it first.
+3. After they confirm, run `pnpm lab:cleanup -- $1` and pass on any `--keep-db` they asked for.
+   - Exit 3 means uncommitted changes. List them and only re-run with `--force` after the learner explicitly agrees to lose them: `--force` discards all uncommitted progress (`git switch --discard-changes`).
+   - Any other failure: report the failing command and its last 20 lines.
+   - If the learner started with the session runner (they are on a `lab$1/<handle>` branch, or used `pnpm lab:session`), run `pnpm lab:session -- cleanup $1` instead (add `--db-down` to also stop Postgres). It reverts injectors, stashes (never discards) changes other than the notes file, returns to `main`, deletes only the current `lab$1/<handle>` branch and runs `pnpm lab:cleanup -- $1 --keep-db --force`.
+4. Confirm the printed clean state with `git status --short` and `git branch --list`, then report in two or three sentences.
+
+Never push, force-push or delete remote branches. Never fix a planted defect.

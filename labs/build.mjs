@@ -512,7 +512,9 @@ function renderHeader(lab, dirName) {
 
 function renderReset(lab) {
   const cmds = lab.scenarios.reset.map((c) => `<pre><code>${escapeHtml(c)}</code></pre>`).join('');
-  return `<p>Run before you start, and again whenever you want the starting state back:</p>${cmds}<h3>What “clean” looks like</h3>${renderMarkdown(lab.scenarios.clean_state)}`;
+  const nn = String(lab.number).padStart(2, '0');
+  const cloud = `<div class="callout"><p>In a Devin session with this repo selected, type <code>@skills:lab-start ${nn}</code> to run these steps for you, and <code>@skills:lab-cleanup ${nn}</code> when you finish. From a terminal: <code>pnpm lab:start -- ${nn}</code> and <code>pnpm lab:cleanup -- ${nn}</code>.</p></div>`;
+  return `<p>Run before you start, and again whenever you want the starting state back:</p>${cmds}${cloud}<h3>What “clean” looks like</h3>${renderMarkdown(lab.scenarios.clean_state)}`;
 }
 
 function renderCredentials(lab) {

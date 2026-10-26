@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# scripts/lab.sh — one command to start a Harbourline lab, one to clean it up.
+# scripts/lab.sh — full lab session: bring-up, throwaway branch, injectors, notes; and its cleanup.
 #
-#   scripts/lab.sh start   <nn> [--handle <h>] [--no-injectors] [--no-db] [--no-open]
-#   scripts/lab.sh cleanup <nn> [--no-db] [--db-down]
-#   scripts/lab.sh status  <nn>
+#   pnpm lab:session -- start   <nn> [--handle <h>] [--no-injectors] [--no-db] [--no-open]
+#   pnpm lab:session -- cleanup <nn> [--no-db] [--db-down]
+#   pnpm lab:session -- status  <nn>
 #
-# Also wired as `pnpm lab:start -- <nn>` and `pnpm lab:cleanup -- <nn>`.
+# The lab's own steps (lab.json#scenarios.reset) come from `pnpm lab:start|lab:cleanup` (scripts/lab.mjs).
 # Works with the macOS system bash (3.2) and Linux; needs Node 22 (nvm is picked up
 # automatically), pnpm 10 via corepack and Docker for the database steps.
 # Only the step summary is printed; full command output goes to .lab/logs/.
@@ -117,7 +117,7 @@ DOCKER=0
 check_docker() {
   if [ "$NO_DB" = 1 ]; then return; fi
   if docker info >/dev/null 2>&1; then DOCKER=1; else
-    warn "Docker is not running — skipping the database steps (db:up, migrate, seed, lab:reset)."
+    warn "Docker is not running — skipping the database steps (db:up, migrate, seed, lab:start/lab:cleanup)."
     warn "Start Docker Desktop (macOS) or the Docker daemon and rerun for the full stack."
     NO_DB=1
   fi
@@ -189,7 +189,7 @@ do_cleanup() {
   fi
   if [ -n "$(dirty_paths)" ]; then
     # Nothing is thrown away: staged, unstaged and untracked changes go to a stash (notes files stay in place).
-    local msg="lab.sh cleanup $NN $(date +%Y-%m-%d-%H%M%S)"
+    local msg="lab:session cleanup $NN $(date +%Y-%m-%d-%H%M%S)"
     step "stash working-tree changes${kept:+ (kept: $kept)}" git stash push -u -q -m "$msg" -- . ":(exclude)$NOTES_GLOB"
     info "restore later with: git stash list  →  git stash pop   ($msg)"
   fi
@@ -203,7 +203,7 @@ do_cleanup() {
   local others; others=$(git for-each-ref --format='%(refname:short)' "refs/heads/lab$NN/" | tr '\n' ' ')
   [ -z "$others" ] || warn "other lab$NN/* branches left in place (delete by hand if unwanted): $others"
   if [ "$NO_DB" = 0 ]; then
-    step "pnpm lab:reset -- $NN" pnpm lab:reset -- "$NN"
+    step "pnpm lab:cleanup -- $NN --keep-db --force" pnpm lab:cleanup -- "$NN" --keep-db --force
     [ "$DB_DOWN" = 1 ] && step "pnpm db:down" pnpm db:down
   fi
   local left; left=$(dirty_paths)
@@ -229,7 +229,7 @@ do_start() {
   step "pnpm labs:build" pnpm labs:build
 
   head_ "Lab $NN starting state"
-  [ "$NO_DB" = 0 ] && step "pnpm lab:reset -- $NN" pnpm lab:reset -- "$NN"
+  [ "$NO_DB" = 0 ] && step "pnpm lab:start -- $NN --force" pnpm lab:start -- "$NN" --force
   local h; h=$(handle_)
   local br="lab$NN/$h"
   step "throwaway branch $br" git checkout -q -b "$br"
@@ -263,7 +263,7 @@ do_start() {
   printf '  %-10s %s\n' "Notes" "$notes"
   [ -n "$INJECTED" ] && printf '  %-10s%s\n' "Injected" "$INJECTED"
   printf '  %-10s @skills:coach-%s-%s %s %s\n' "Coach" "$NN" "$SLUG" "$h" "${C_DIM}(voice call — Devin Cloud only)$C_0"
-  printf '  %-10s scripts/lab.sh cleanup %s\n' "Cleanup" "$NN"
+  printf '  %-10s pnpm lab:session -- cleanup %s\n' "Cleanup" "$NN"
   printf '  %-10s %s\n' "Log" "$LOG"
 }
 
