@@ -13,7 +13,6 @@ Runs the same steps the lab page lists under "Starting state", via `pnpm lab:sta
 2. Run `pnpm lab:start -- $1 --dry-run` and show the learner the plan.
 3. Run `pnpm lab:start -- $1`.
    - Exit 3 means uncommitted changes. Show the listed files and ask the learner whether to discard them. Only re-run with `--force` after they say yes. Never stash, commit or push for them.
-   - Exit 2 with a `DATABASE_URL` message means the database is not local. Tell the learner; never unset or change `DATABASE_URL` for them.
    - Any other non-zero exit: report the failing command and its last 20 lines. Do not retry blindly and do not edit lab files to make it pass.
 4. Check the printed clean state yourself, for example with `git status --short` and `git branch --show-current`. Tell the learner in two or three sentences that the lab is ready, or what is not clean yet.
 5. Stop there. Do not start the lab work, open the brief's answer or start the coach. The learner does that.

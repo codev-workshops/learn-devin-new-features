@@ -45,20 +45,12 @@ function parseStep(raw) {
 
 const steps = spec.scenarios.reset.map(parseStep);
 const needsDb = steps.some((s) => /\b(lab:reset|db:seed|db:migrate|db:up)\b/.test(s.cmd));
-if (needsDb && process.env.DATABASE_URL) {
-  let host = "";
-  try {
-    host = new URL(process.env.DATABASE_URL).hostname;
-  } catch {
-    host = "";
-  }
-  if (!["localhost", "127.0.0.1", "::1", "[::1]"].includes(host)) {
-    console.error(
-      `[lab:${mode} ${lab}] DATABASE_URL points at "${host || "?"}", not localhost; refusing to migrate and reseed it. Unset DATABASE_URL to use the local Compose database.`,
-    );
-    process.exit(2);
-  }
-}
+// Always target the local Compose database, never whatever DATABASE_URL points at.
+const e = process.env;
+const env = {
+  ...e,
+  DATABASE_URL: `postgres://${e.POSTGRES_USER ?? "harbourline"}:${e.POSTGRES_PASSWORD ?? "harbourline"}@localhost:${e.POSTGRES_PORT ?? "5432"}/${e.POSTGRES_DB ?? "harbourline"}`,
+};
 const plan = [];
 if (mode === "start" && !existsSync(join(root, "node_modules")))
   plan.push({ cmd: "pnpm install --frozen-lockfile" });
@@ -70,7 +62,8 @@ for (const s of steps) {
     plan.push({ ...s, skip: "optional step, run by lab:cleanup" });
   else if (!(s.cmd === "pnpm db:up" && needsDb)) plan.push(s);
 }
-if (mode === "cleanup" && !flags.has("--keep-db")) plan.push({ cmd: "pnpm db:down" });
+if (mode === "cleanup" && !flags.has("--keep-db"))
+  plan.push({ cmd: "pnpm db:down", tolerant: true });
 
 log(`${spec.title ?? labDirName}`);
 for (const p of plan) log(`${p.skip ? "skip" : "plan"}: ${p.cmd}${p.skip ? `  (${p.skip})` : ""}`);
@@ -94,8 +87,9 @@ if (dirty && !flags.has("--force")) {
 for (const p of plan) {
   if (p.skip) continue;
   log(`$ ${p.cmd}`);
-  const r = spawnSync("bash", ["-c", p.cmd], { cwd: root, stdio: "inherit", env: process.env });
-  if ((r.status ?? 1) !== 0) {
+  const r = spawnSync("bash", ["-c", p.cmd], { cwd: root, stdio: "inherit", env });
+  if ((r.status ?? 1) !== 0 && p.tolerant) log(`could not run ${p.cmd} (no Docker?) — continuing`);
+  else if ((r.status ?? 1) !== 0) {
     console.error(`[lab:${mode} ${lab}] step failed (exit ${r.status}): ${p.cmd}`);
     process.exit(r.status ?? 1);
   }
