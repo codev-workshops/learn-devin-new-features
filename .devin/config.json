@@ -12,6 +12,8 @@
       "Bash(pnpm labs:build*)",
       "Bash(pnpm coach:dryrun*)",
       "Bash(pnpm lab:reset*)",
+      "Bash(pnpm lab:start*)",
+      "Bash(pnpm lab:cleanup*)",
       "Bash(pnpm db:*)",
       "Bash(pnpm --filter *)",
       "Bash(pnpm exec *)",

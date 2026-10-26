@@ -1,5 +1,5 @@
 ---
-name: articulation-sample
+name: coach-00-sample
 description: Worked example of a per-lab articulation coach, for lab 00 (the sample lab). Use when the learner says "coach me on lab 00" or runs `pnpm coach:dryrun -- 00`.
 triggers: ["user"]
 argument-hint: "[--dry-run <transcript>]"
@@ -9,7 +9,7 @@ argument-hint: "[--dry-run <transcript>]"
 
 Follow `.devin/skills/articulation-base/SKILL.md` for protocol, timing, rubric, report and progress log. This file only supplies the lab-specific material.
 
-- **lab**: `00` · **coach**: `articulation-00-sample`
+- **lab**: `00` · **coach**: `coach-00-sample`
 - **answer**: `labs/00-sample/answer.md` · **transcripts** (dry-run): `labs/00-sample/transcripts/`
 - **Scenario the learner just finished**: `scenarios/oversell.sh` fired 20 concurrent checkouts at `LH-LAMP-03` (3 units on hand); 7 succeeded and `on_hand` went negative.
 

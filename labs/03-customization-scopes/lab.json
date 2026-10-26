@@ -79,7 +79,7 @@
   ],
   "coach": {
     "skill": "coach-03-customization-scopes",
-    "skill_path": ".devin/skills/articulation-03-customization-scopes/SKILL.md",
+    "skill_path": ".devin/skills/coach-03-customization-scopes/SKILL.md",
     "handle_hint": "<your-handle>",
     "segments": [
       { "id": "framing", "kind": "framing", "label": "60-second framing", "target_seconds": 60 },
