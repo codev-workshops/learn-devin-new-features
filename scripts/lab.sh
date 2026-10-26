@@ -60,6 +60,7 @@ step_out() {
 }
 
 # ---------------------------------------------------------------- arguments
+[ "${1:-}" = "--" ] && shift  # pnpm passes the separator through
 CMD="${1:-}"; [ $# -gt 0 ] && shift
 NN=""; HANDLE="${LAB_HANDLE:-}"; NO_INJ=0; NO_DB=0; NO_OPEN=0; DB_DOWN=0
 while [ $# -gt 0 ]; do
