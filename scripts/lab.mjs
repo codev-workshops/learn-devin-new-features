@@ -10,8 +10,8 @@
 //   cleanup : every reset command (restores the starting state, including steps marked
 //             "only if …"), then stops Postgres unless --keep-db.
 //
-// Options: --dry-run (print the plan, run nothing), --force (run even with uncommitted changes —
-// reset commands may discard them), --keep-db (cleanup only).
+// Options: --dry-run (print the plan, run nothing), --force (run even with uncommitted changes and
+// discard them: `git switch` steps become `git switch --discard-changes`), --keep-db (cleanup only).
 import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -60,7 +60,18 @@ if (needsDb) plan.push({ cmd: "pnpm db:up" }, { cmd: "pnpm db:migrate" });
 for (const s of steps) {
   if (s.optional && mode === "start")
     plan.push({ ...s, skip: "optional step, run by lab:cleanup" });
-  else if (!(s.cmd === "pnpm db:up" && needsDb)) plan.push(s);
+  else if (!(s.cmd === "pnpm db:up" && needsDb))
+    plan.push(
+      flags.has("--force")
+        ? {
+            ...s,
+            cmd: s.cmd.replace(
+              /\bgit switch (?!--discard-changes)/g,
+              "git switch --discard-changes ",
+            ),
+          }
+        : s,
+    );
 }
 if (mode === "cleanup" && !flags.has("--keep-db"))
   plan.push({ cmd: "pnpm db:down", tolerant: true });
