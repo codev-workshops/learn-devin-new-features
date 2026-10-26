@@ -15,7 +15,9 @@ pnpm db:migrate && pnpm db:seed
 pnpm gates              # test, lint, build, labs:build
 ```
 
-Before a lab: `pnpm lab:reset -- <nn>` (reseeds, then runs the lab's reset step). Labs that inject incidents also need the API and, for the payment-webhook and cart-sweeper injectors, the fulfilment worker:
+Two levels per lab: `pnpm lab:start -- <nn>` / `pnpm lab:cleanup -- <nn>` run the lab's own starting-state steps (`lab.json#scenarios.reset`, the list on the lab page; `@skills:lab-start <nn>` / `@skills:lab-cleanup <nn>` in Devin Cloud). `pnpm lab:session -- start <nn> --handle <you>` is the full bring-up on top of that: install, db, build, seed, `labs:build`, `lab:start`, the throwaway branch `lab<nn>/<handle>`, every injector, the uncommitted notes file and a Ready block with the coach command; `pnpm lab:session -- cleanup <nn>` stashes leftovers, returns to `main`, deletes that branch and runs `lab:cleanup`. If `start` finds an unclean tree or a leftover lab branch it runs the cleanup first and says so.
+
+By hand, before a lab: `pnpm lab:reset -- <nn>` (reseeds, then runs the lab's reset step). Labs that inject incidents also need the API and, for the payment-webhook and cart-sweeper injectors, the fulfilment worker:
 
 ```bash
 pnpm --filter @harbourline/api run dev                                   # http://localhost:3001

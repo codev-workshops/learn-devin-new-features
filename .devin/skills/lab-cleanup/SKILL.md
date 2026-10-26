@@ -14,6 +14,7 @@ Runs `pnpm lab:cleanup -- <nn>` (`scripts/lab.mjs`). It replays the lab's reset 
 3. After they confirm, run `pnpm lab:cleanup -- $1` and pass on any `--keep-db` they asked for.
    - Exit 3 means uncommitted changes. List them and only re-run with `--force` after the learner explicitly agrees to lose them: `--force` discards all uncommitted progress (`git switch --discard-changes`).
    - Any other failure: report the failing command and its last 20 lines.
+   - If the learner started with the session runner (they are on a `lab$1/<handle>` branch, or used `pnpm lab:session`), run `pnpm lab:session -- cleanup $1` instead (add `--db-down` to also stop Postgres). It reverts injectors, stashes (never discards) changes other than the notes file, returns to `main`, deletes only the current `lab$1/<handle>` branch and runs `pnpm lab:cleanup -- $1 --keep-db --force`.
 4. Confirm the printed clean state with `git status --short` and `git branch --list`, then report in two or three sentences.
 
 Never push, force-push or delete remote branches. Never fix a planted defect.
