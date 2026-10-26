@@ -37,9 +37,9 @@ const log = (m) => console.log(`[lab:${mode} ${lab}] ${m}`);
 
 // Lab pages annotate some commands for humans: "cmd (only if …)" and "cmd (must print nothing) — note".
 function parseStep(raw) {
-  let cmd = raw.replace(/\s+—\s.*$/, "");
-  const optional = /\(only if[^)]*\)/i.test(cmd);
-  cmd = cmd.replace(/\s*\((?:only if|must|if)\b[^)]*\)/gi, "").trim();
+  let cmd = raw.split(" — ")[0];
+  const optional = /\(only if/i.test(cmd);
+  cmd = cmd.replace(/\((?:only if|must|if)\b[^)]*\)/gi, "").trim();
   return { raw, cmd, optional };
 }
 
@@ -83,7 +83,7 @@ if (flags.has("--dry-run")) {
   process.exit(0);
 }
 
-const dirty = spawnSync("git", ["status", "--porcelain"], {
+const dirty = spawnSync("/usr/bin/git", ["status", "--porcelain"], {
   cwd: root,
   encoding: "utf8",
 }).stdout.trim();
@@ -98,7 +98,7 @@ if (dirty && !flags.has("--force")) {
 for (const p of plan) {
   if (p.skip) continue;
   log(`$ ${p.cmd}`);
-  const r = spawnSync("bash", ["-c", p.cmd], { cwd: root, stdio: "inherit", env });
+  const r = spawnSync("/bin/bash", ["-c", p.cmd], { cwd: root, stdio: "inherit", env });
   if ((r.status ?? 1) !== 0 && p.tolerant) log(`could not run ${p.cmd} (no Docker?) — continuing`);
   else if ((r.status ?? 1) !== 0) {
     console.error(`[lab:${mode} ${lab}] step failed (exit ${r.status}): ${p.cmd}`);
