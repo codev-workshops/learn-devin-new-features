@@ -10,14 +10,15 @@ A production-shaped but deliberately imperfect multi-brand e-commerce fixture us
 
 Node 22 + pnpm 10 workspaces (`apps/*`, `services/*`, `packages/*`, `labs`), Python 3.12 for `services/fulfilment-worker`, PostgreSQL 16 via `docker compose` (`mirror.gcr.io/library/postgres:16-alpine`).
 
-| Command                                                   | Does                                                                                 |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `pnpm db:up` / `db:down`                                  | Start (and wait for) / stop Postgres                                                 |
-| `pnpm db:migrate`, `pnpm db:seed`                         | Delegated to `services/api`; `db:seed -- --reset` rebuilds the seed-spec dataset     |
-| `pnpm lab:reset -- <nn>`                                  | Reseed, then `scenarios/lab-reset.sh <nn>` when present                              |
-| `pnpm lab:start -- <nn>` / `lab:cleanup -- <nn>`          | Run the lab's `lab.json#scenarios.reset` steps (`--dry-run`, `--force`, `--keep-db`) |
-| `pnpm test`, `pnpm lint`, `pnpm build`, `pnpm labs:build` | The four gates; `pnpm gates` runs all four                                           |
-| `pnpm coach:dryrun -- <nn>`                               | Transcript-driven articulation coach dry run                                         |
+| Command                                                   | Does                                                                                                                                                                                   |
+| --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm db:up` / `db:down`                                  | Start (and wait for) / stop Postgres                                                                                                                                                   |
+| `pnpm db:migrate`, `pnpm db:seed`                         | Delegated to `services/api`; `db:seed -- --reset` rebuilds the seed-spec dataset                                                                                                       |
+| `pnpm lab:reset -- <nn>`                                  | Reseed, then `scenarios/lab-reset.sh <nn>` when present                                                                                                                                |
+| `pnpm lab:start -- <nn>` / `lab:cleanup -- <nn>`          | Run the lab's `lab.json#scenarios.reset` steps (`--dry-run`, `--force`, `--keep-db`)                                                                                                   |
+| `pnpm lab:session -- start\|cleanup\|status <nn>`         | `scripts/lab.sh`: full bring-up (install, db, build, seed, labs:build), `lab:start`, throwaway branch `lab<nn>/<handle>`, injectors, notes file; cleanup stashes and returns to `main` |
+| `pnpm test`, `pnpm lint`, `pnpm build`, `pnpm labs:build` | The four gates; `pnpm gates` runs all four                                                                                                                                             |
+| `pnpm coach:dryrun -- <nn>`                               | Transcript-driven articulation coach dry run                                                                                                                                           |
 
 Root scripts are native pnpm: `pnpm -r --if-present run <script>` runs a script in every workspace that defines it and treats a workspace without it as "nothing to do", while `db:*`, `labs:build` and `coach:dryrun` use `pnpm --filter <pkg>`. Each workspace owns its real `test`, `lint` and `build` scripts. Python services must also pass `pytest -q` and `ruff check` locally; they are invoked from the workspace `test`/`lint` scripts, not from the root.
 
@@ -60,7 +61,7 @@ Never ask the user for credentials. Every live integration (PagerDuty, Datadog, 
 
 - `.devin/config.json` — project config (tool permissions).
 - `.devin/rules/*.md` — `repo-conventions` (always on) and `money-and-brands` (glob on services/apps/db).
-- `.devin/skills/` — `harbourline-dev` (bring-up and gates), `lab-start` / `lab-cleanup` (run a lab's `scenarios.reset` steps through `pnpm lab:start|lab:cleanup -- <nn>`), `articulation-base` (coach protocol), `coach-00-sample` … `coach-15-capstone` (one voice coach per lab).
+- `.devin/skills/` — `harbourline-dev` (bring-up and gates), `lab-start` / `lab-cleanup` (run a lab's `scenarios.reset` steps through `pnpm lab:start|lab:cleanup -- <nn>`; they can also drive the full `pnpm lab:session` runner), `articulation-base` (coach protocol), `coach-00-sample` … `coach-15-capstone` (one voice coach per lab).
 - `.devin/agents/sample-coach.md` — subagent definition for the lab 00 coach.
 - `.devin/hooks.v1.json` — intentionally empty (`{}`); labs that teach hooks add them on a throwaway branch.
 

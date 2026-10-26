@@ -14,6 +14,8 @@
       "Bash(pnpm lab:reset*)",
       "Bash(pnpm lab:start*)",
       "Bash(pnpm lab:cleanup*)",
+      "Bash(pnpm lab:session*)",
+      "Bash(bash scripts/lab.sh *)",
       "Bash(pnpm db:*)",
       "Bash(pnpm --filter *)",
       "Bash(pnpm exec *)",
